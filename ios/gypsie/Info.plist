@@ -51,5 +51,35 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>GIDClientID</key>
+	<string>240016316671-bbb96sgu5i31ahsdro89fi7va1dr50r5.apps.googleusercontent.com</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Fontisto.ttf</string>
+		<string>Octicons.ttf</string>
+		<string>Feather.ttf</string>
+		<string>Entypo.ttf</string>
+		<string>FontAwesome5_Brands.ttf</string>
+		<string>MaterialCommunityIcons.ttf</string>
+		<string>AntDesign.ttf</string>
+		<string>Foundation.ttf</string>
+		<string>Ionicons.ttf</string>
+		<string>FontAwesome5_Solid.ttf</string>
+		<string>FontAwesome5_Regular.ttf</string>
+		<string>FontAwesome.ttf</string>
+		<string>Zocial.ttf</string>
+		<string>EvilIcons.ttf</string>
+		<string>SimpleLineIcons.ttf</string>
+		<string>MaterialIcons.ttf</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.240016316671-bbb96sgu5i31ahsdro89fi7va1dr50r5</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>
