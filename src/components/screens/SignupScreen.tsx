@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { useState } from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import {
   GoogleSignin,
@@ -8,21 +8,26 @@ import {
 } from "@react-native-google-signin/google-signin";
 
 import type { AuthStackNavigatorParamList } from "../../utils/types/navigation";
-import GypsieButton from "../common/GypsieButton";
-import GypsieTextBox from "../common/GypsieTextBox";
 import LinkButton from "../common/LinkButton";
 import { GYPSIE_THEME } from "../../utils/constants/palette";
+import GypsieTextBox from "../common/GypsieTextBox";
+import GypsieButton from "../common/GypsieButton";
 
-type LoginScreenProps = NativeStackScreenProps<
+type SignupScreenProps = NativeStackScreenProps<
   AuthStackNavigatorParamList,
-  "login"
+  "signup"
 >;
 
-const LoginScreen = ({ navigation }: LoginScreenProps) => {
-  const [user, setUser] = useState<User | undefined>();
+const SignupScreen = ({ navigation }: SignupScreenProps) => {
+  const [user, setUser] = useState<User>();
+
   const [loading, setLoading] = useState<boolean>(false);
 
-  const googleSignIn = async () => {
+  const signup = () => {
+    console.warn("signed up!");
+  };
+
+  const googleSignUp = async () => {
     setLoading(true);
     try {
       await GoogleSignin.hasPlayServices();
@@ -45,14 +50,6 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
     setLoading(false);
   };
 
-  const login = async () => {
-    console.warn("Logging in");
-  };
-
-  useEffect(() => {
-    navigation.navigate("home", { user });
-  }, [user]);
-
   return (
     <View style={styles.root}>
       <Image
@@ -66,16 +63,15 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
         <GypsieButton
           customButtonStyles={styles.button}
           customTextStyles={styles.text}
-          text="Log in"
-          onPress={login}
+          text="Start Gypsing"
+          onPress={signup}
         />
         <View style={styles.linkButtonsContainer}>
-          <LinkButton text="Forgot password?" onPress={() => {}} />
           <LinkButton
             customLinkTextStyles={styles.primaryLinkTextStyle}
-            text="New to Gypsie?"
+            text="Have an account?"
             onPress={() => {
-              navigation.navigate("signup");
+              navigation.navigate("login");
             }}
           />
         </View>
@@ -85,7 +81,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
           customIconStyles={styles.googleIcon}
           text="Continue with Google"
           icon="google"
-          onPress={googleSignIn}
+          onPress={googleSignUp}
           loading={loading}
         />
       </View>
@@ -119,6 +115,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "700",
   },
+  linkButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginVertical: 8,
+  },
+  primaryLinkTextStyle: {
+    color: GYPSIE_THEME.PRIMARY,
+  },
   googleSigninButton: {
     height: 40,
     marginVertical: 8,
@@ -133,14 +137,6 @@ const styles = StyleSheet.create({
     color: GYPSIE_THEME.GOOGLE_PRIMARY,
     fontWeight: "500",
   },
-  linkButtonsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 8,
-  },
-  primaryLinkTextStyle: {
-    color: GYPSIE_THEME.PRIMARY,
-  },
 });
 
-export default LoginScreen;
+export default SignupScreen;
