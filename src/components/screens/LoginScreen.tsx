@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import {
@@ -12,6 +12,7 @@ import GypsieButton from "../common/GypsieButton";
 import GypsieTextBox from "../common/GypsieTextBox";
 import LinkButton from "../common/LinkButton";
 import { GYPSIE_THEME } from "../../utils/constants/palette";
+import { AuthContext } from "../../utils/contexts/AuthContext";
 
 type LoginScreenProps = NativeStackScreenProps<
   AuthStackNavigatorParamList,
@@ -19,39 +20,14 @@ type LoginScreenProps = NativeStackScreenProps<
 >;
 
 const LoginScreen = ({ navigation }: LoginScreenProps) => {
-  const [user, setUser] = useState<User | undefined>();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { user, loading, loginHandler, googleSigninHandler } =
+    useContext(AuthContext);
 
-  const googleSignIn = async () => {
-    setLoading(true);
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      setUser(userInfo);
-      console.log("USER: ", userInfo);
-      console.warn("Signed in");
-      //   setPhoto(userInfo.user.photo || "");
-    } catch (error: any) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation log in is in progress
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available
-      } else {
-        // some other error happened
-      }
-    }
-    setLoading(false);
-  };
-
-  const login = async () => {
-    console.warn("Logging in");
-  };
-
-  useEffect(() => {
-    navigation.navigate("home", { user });
-  }, [user]);
+  // useEffect(() => {
+  //   if (user?.idToken) {
+  //     navigation.navigate("home");
+  //   }
+  // }, [user]);
 
   return (
     <View style={styles.root}>
@@ -67,10 +43,15 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
           customButtonStyles={styles.button}
           customTextStyles={styles.text}
           text="Log in"
-          onPress={login}
+          onPress={loginHandler}
         />
         <View style={styles.linkButtonsContainer}>
-          <LinkButton text="Forgot password?" onPress={() => {}} />
+          <LinkButton
+            text="Forgot password?"
+            onPress={() => {
+              console.log("forgot password?");
+            }}
+          />
           <LinkButton
             customLinkTextStyles={styles.primaryLinkTextStyle}
             text="New to Gypsie?"
@@ -85,7 +66,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
           customIconStyles={styles.googleIcon}
           text="Continue with Google"
           icon="google"
-          onPress={googleSignIn}
+          onPress={googleSigninHandler}
           loading={loading}
         />
       </View>
