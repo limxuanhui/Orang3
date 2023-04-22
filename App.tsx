@@ -1,8 +1,4 @@
-import {
-  // SafeAreaView,
-  StatusBar,
-  useColorScheme,
-} from "react-native";
+import { StatusBar, useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
@@ -22,10 +18,8 @@ const App = (): JSX.Element => {
   return (
     <AuthContext.Provider value={authInfo}>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        {/* // <SafeAreaView> */}
         <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
         <RootNavigator />
-        {/* // </SafeAreaView> */}
       </GestureHandlerRootView>
     </AuthContext.Provider>
   );

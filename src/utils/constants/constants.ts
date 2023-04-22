@@ -1,0 +1,52 @@
+import { Dimensions } from "react-native";
+
+export const { height: DEVICE_HEIGHT, width: DEVICE_WIDTH } =
+  Dimensions.get("window");
+export const ASPECT_RATIO = DEVICE_WIDTH / DEVICE_HEIGHT;
+
+export const MAX_TRANSLATE_Y = -DEVICE_HEIGHT / 2;
+export const MAP_SCREEN_BOTTOM_SHEET_CONSTANTS = {
+  height: DEVICE_HEIGHT / 2,
+  width: DEVICE_WIDTH * 0.95,
+  maxTranslateY: -DEVICE_HEIGHT / 2,
+};
+
+export const LATITUDE_DELTA = 0.02;
+export const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+export const INITIAL_POSITION = {
+  latitude: 1.352451,
+  longitude: 103.9446732,
+  latitudeDelta: LATITUDE_DELTA,
+  longitudeDelta: LONGITUDE_DELTA,
+};
+export const INITIAL_POSITION_COORD = {
+  latitude: 1.352451,
+  longitude: 103.9446732,
+};
+
+export const COLOR_PALETTE = {
+  PRIMARY_PINK: "#f019ff",
+};
+
+export const API_KEY: string = "AIzaSyDLFxbxQyuOst6hzzaOKl8weOuQ5kKUZPY";
+
+export const GOOGLE_PLACES_AUTOCOMPLETE_QUERY_OPTIONS = {
+  key: API_KEY,
+  language: "en",
+};
+
+export const GOOGLE_PLACES_AUTOCOMPLETE_DETAILS_QUERY = {
+  fields: "place_id,name,formatted_address,opening_hours,geometry",
+};
+
+export const GOOGLE_PLACES_AUTOCOMPLETE_PLACEHOLDER = "Search for place";
+
+export const GOOGLE_PLACES_AUTOCOMPLETE_DEBOUNCE_RATE = 500;
+
+export const GOOGLE_PLACES_AUTOCOMPLETE_TEXT_INPUT_PROPS = {
+  returnKeyType: "search",
+  // currentLocation
+  // renderRow={() => {}}
+};
+
+export const HEADER_SHOWN_FALSE = { headerShown: false };

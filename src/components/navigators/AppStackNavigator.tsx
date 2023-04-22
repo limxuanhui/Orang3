@@ -1,20 +1,17 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { StyleSheet, Text, View } from "react-native";
 import { AppStackNavigatorParamList } from "../../utils/types/navigation";
-import HomeScreen from "../screens/HomeScreen";
+import BottomTabNavigator from "./BottomTabNavigator";
 
 const AppStack = createNativeStackNavigator<AppStackNavigatorParamList>();
 
 const AppStackNavigator = () => {
   return (
     <AppStack.Navigator
-      initialRouteName="home"
+      initialRouteName="bottom-tab"
       screenOptions={{ headerShown: false }}>
-      <AppStack.Screen name="home" component={HomeScreen} />
+      <AppStack.Screen name="bottom-tab" component={BottomTabNavigator} />
     </AppStack.Navigator>
   );
 };
 
 export default AppStackNavigator;
-
-const styles = StyleSheet.create({});

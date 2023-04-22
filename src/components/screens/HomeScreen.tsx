@@ -1,46 +1,77 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { useCallback, useContext, useState } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
-import { AppStackNavigatorParamList } from "../../utils/types/navigation";
+import { HomeScreenProps } from "../../utils/types/navigation";
 import { AuthContext } from "../../utils/contexts/AuthContext";
-import { useContext } from "react";
 
-type HomeScreenProps = NativeStackScreenProps<
-  AppStackNavigatorParamList,
-  "home"
->;
+import { DEVICE_HEIGHT } from "../../utils/constants/constants";
+import { DUMMY_POSTS } from "../../data/dummy-posts";
+import GypsiePost from "../post/GypsiePost";
+import useFeedManager from "../../utils/hooks/useFeedManager";
 
 const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
-  const { user, logoutHandler } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
+  const [homeScreenIsFocused, setHomeScreenIsFocused] = useState<boolean>(true);
+  const [activePostIndex, setActivePostIndex] = useState<number>(0);
+  const [activePostItemIndex, setActivePostItemIndex] = useState<number>(0);
+
+  const onViewableItemsChanged = useCallback(
+    // change type to more suitable one
+    ({ viewableItems, changed }: any) => {
+      console.log("onViewableItemsChanged called: ");
+      console.log("----- viewableItems : ", viewableItems);
+      console.log("----- changed: ", changed);
+      if (viewableItems && viewableItems?.length > 0) {
+        setActivePostIndex(viewableItems[0].index);
+        console.warn(viewableItems[0].index);
+      }
+    },
+    [],
+  );
+
+  // https://reactnavigation.org/docs/function-after-focusing-screen
+  // Consider using useFocusEffect
+  useFocusEffect(
+    useCallback(() => {
+      setHomeScreenIsFocused(true);
+      return () => setHomeScreenIsFocused(false);
+    }, []),
+  );
+
+  const { refreshing, refreshPostsHandler } = useFeedManager();
 
   return (
     <View style={styles.container}>
-      <Image
-        style={styles.avatar}
-        source={{
-          uri: user?.user.photo || "assets/images/logo-no-background.png",
+      <FlatList
+        data={DUMMY_POSTS}
+        renderItem={({ item, index }) => (
+          <GypsiePost
+            post={item}
+            inView={homeScreenIsFocused && index === activePostIndex}
+          />
+        )}
+        showsVerticalScrollIndicator={false}
+        snapToInterval={DEVICE_HEIGHT}
+        snapToAlignment="start"
+        decelerationRate={"fast"}
+        viewabilityConfig={{
+          viewAreaCoveragePercentThreshold: 100,
+          minimumViewTime: 200,
         }}
+        onViewableItemsChanged={onViewableItemsChanged}
+        refreshing={refreshing}
+        onRefresh={refreshPostsHandler}
       />
-      <Text>{JSON.stringify(user?.user, null, 4)}</Text>
-      <Pressable
-        style={{ borderWidth: 1, borderColor: "red" }}
-        onPress={logoutHandler}>
-        <Text>Log out</Text>
-      </Pressable>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    top: 100,
-    left: 40,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 2,
-    borderColor: "black",
-    width: "70%",
-    height: "50%",
   },
   avatar: { width: 40, height: 40, borderRadius: 20 },
 });

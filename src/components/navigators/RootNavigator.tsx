@@ -14,12 +14,15 @@ const RootNavigator = () => {
 
   return (
     <NavigationContainer>
-      <RootStack.Navigator screenOptions={{ headerShown: false }}>
+      {/* <RootStack.Navigator screenOptions={{ headerShown: false }}>
         {authInfo.user?.idToken ? (
           <RootStack.Screen name="app" component={AppStackNavigator} />
         ) : (
           <RootStack.Screen name="auth" component={AuthStackNavigator} />
-        )}
+        )} */}
+      {/* </RootStack.Navigator> */}
+      <RootStack.Navigator screenOptions={{ headerShown: false }}>
+        <RootStack.Screen name="app" component={AppStackNavigator} />
       </RootStack.Navigator>
     </NavigationContainer>
   );

@@ -1,22 +1,16 @@
 import { useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { Image, StyleSheet, View } from "react-native";
 import {
   GoogleSignin,
   statusCodes,
   User,
 } from "@react-native-google-signin/google-signin";
 
-import type { AuthStackNavigatorParamList } from "../../utils/types/navigation";
+import type { SignupScreenProps } from "../../utils/types/navigation";
 import LinkButton from "../common/LinkButton";
 import { GYPSIE_THEME } from "../../utils/constants/palette";
 import GypsieTextBox from "../common/GypsieTextBox";
 import GypsieButton from "../common/GypsieButton";
-
-type SignupScreenProps = NativeStackScreenProps<
-  AuthStackNavigatorParamList,
-  "signup"
->;
 
 const SignupScreen = ({ navigation }: SignupScreenProps) => {
   const [user, setUser] = useState<User>();

@@ -1,23 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { Image, StyleSheet, View } from "react-native";
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import {
-  GoogleSignin,
-  statusCodes,
-  User,
-} from "@react-native-google-signin/google-signin";
 
-import type { AuthStackNavigatorParamList } from "../../utils/types/navigation";
+import type { LoginScreenProps } from "../../utils/types/navigation";
 import GypsieButton from "../common/GypsieButton";
 import GypsieTextBox from "../common/GypsieTextBox";
 import LinkButton from "../common/LinkButton";
 import { GYPSIE_THEME } from "../../utils/constants/palette";
 import { AuthContext } from "../../utils/contexts/AuthContext";
-
-type LoginScreenProps = NativeStackScreenProps<
-  AuthStackNavigatorParamList,
-  "login"
->;
 
 const LoginScreen = ({ navigation }: LoginScreenProps) => {
   const { user, loading, loginHandler, googleSigninHandler } =
