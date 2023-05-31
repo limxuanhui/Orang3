@@ -4,9 +4,9 @@ export const { height: DEVICE_HEIGHT, width: DEVICE_WIDTH } =
   Dimensions.get("window");
 export const ASPECT_RATIO = DEVICE_WIDTH / DEVICE_HEIGHT;
 
-export const MAX_TRANSLATE_Y = -DEVICE_HEIGHT / 2;
+export const MAX_TRANSLATE_Y = -DEVICE_HEIGHT;
 export const MAP_SCREEN_BOTTOM_SHEET_CONSTANTS = {
-  height: DEVICE_HEIGHT / 2,
+  height: DEVICE_HEIGHT,
   width: DEVICE_WIDTH * 0.95,
   maxTranslateY: -DEVICE_HEIGHT / 2,
 };

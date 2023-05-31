@@ -122,7 +122,7 @@ const VlogReactionControls = ({
           {parseCount(reactionCounts.bookmarks)}
         </Text>
       </Pressable>
-      <Pressable style={onPressReactionControlStyle} onPress={onPressLike}>
+      <Pressable style={onPressReactionControlStyle} onPress={onPressLink}>
         <FontAwesome name="share" size={24} color="#ffffff" />
         <Text style={styles.reactionCount}>
           {parseCount(reactionCounts.shares)}

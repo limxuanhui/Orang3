@@ -1,20 +1,21 @@
 import { useCallback, useContext, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import useFeedManager from "../../../utils/hooks/useFeedManager";
 
-import { HomeScreenProps } from "../../utils/types/navigation";
-import { AuthContext } from "../../utils/contexts/AuthContext";
+import Feed from "../../feed/Feed";
+import { AuthContext } from "../../../utils/contexts/AuthContext";
+import type { HomeScreenProps } from "../../../utils/types/home";
 
-import { DEVICE_HEIGHT } from "../../utils/constants/constants";
-import { DUMMY_POSTS } from "../../data/dummy-posts";
-import GypsiePost from "../post/GypsiePost";
-import useFeedManager from "../../utils/hooks/useFeedManager";
+import { DEVICE_HEIGHT } from "../../../utils/constants/constants";
+import { DUMMY_POSTS } from "../../../data/dummy-posts";
 
 const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
   const { user } = useContext(AuthContext);
   const [homeScreenIsFocused, setHomeScreenIsFocused] = useState<boolean>(true);
   const [activePostIndex, setActivePostIndex] = useState<number>(0);
   const [activePostItemIndex, setActivePostItemIndex] = useState<number>(0);
+  const data = DUMMY_POSTS;
 
   const onViewableItemsChanged = useCallback(
     // change type to more suitable one
@@ -44,10 +45,10 @@ const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={DUMMY_POSTS}
+        data={data}
         renderItem={({ item, index }) => (
-          <GypsiePost
-            post={item}
+          <Feed
+            feed={item}
             inView={homeScreenIsFocused && index === activePostIndex}
           />
         )}

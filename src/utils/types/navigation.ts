@@ -1,10 +1,8 @@
 import { User } from "@react-native-google-signin/google-signin";
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { CompositeScreenProps } from "@react-navigation/native";
-import {
-  NativeStackScreenProps,
-  NativeStackNavigationProp,
-} from "@react-navigation/native-stack";
+import { AuthStackNavigatorParamList } from "./auth";
+import { HomeScreenProps } from "./home";
+import { MapStackNavigatorParamList } from "./map";
+import { ProfileScreenProps } from "./profile";
 
 export type GypsieUser = User | null;
 
@@ -13,46 +11,16 @@ export type RootStackNavigatorParamList = {
   app: AppStackNavigatorParamList;
 };
 
-export type AuthStackNavigatorParamList = {
-  login: undefined;
-  signup: undefined;
-};
-
 export type AppStackNavigatorParamList = {
   "bottom-tab": BottomTabNavigatorParamList;
+  "itinerary-planning": undefined;
+  "itinerary-view": undefined;
+  "place-search": undefined;
 };
-
-export type HomeScreenNavigationProp = NativeStackNavigationProp<
-  BottomTabNavigatorParamList,
-  "home"
->;
-
-export type HomeScreenProps = NativeStackScreenProps<
-  BottomTabNavigatorParamList,
-  "home"
->;
-
-export type ProfileScreenProps = NativeStackScreenProps<
-  BottomTabNavigatorParamList,
-  "profile"
->;
-// export type ProfileScreenProps = CompositeScreenProps<
-//   BottomTabScreenProps<BottomTabNavigatorParamList, "profile">,
-  
-// >
-
-export type LoginScreenProps = NativeStackScreenProps<
-  AuthStackNavigatorParamList,
-  "login"
->;
-
-export type SignupScreenProps = NativeStackScreenProps<
-  AuthStackNavigatorParamList,
-  "signup"
->;
 
 export type BottomTabNavigatorParamList = {
   home: HomeScreenProps;
   test: undefined;
+  "map-stack": MapStackNavigatorParamList;
   profile: ProfileScreenProps;
 };

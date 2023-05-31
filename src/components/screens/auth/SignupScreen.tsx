@@ -6,11 +6,11 @@ import {
   User,
 } from "@react-native-google-signin/google-signin";
 
-import type { SignupScreenProps } from "../../utils/types/navigation";
-import LinkButton from "../common/LinkButton";
-import { GYPSIE_THEME } from "../../utils/constants/palette";
-import GypsieTextBox from "../common/GypsieTextBox";
-import GypsieButton from "../common/GypsieButton";
+import LinkButton from "../../common/LinkButton";
+import GypsieTextBox from "../../common/GypsieTextBox";
+import GypsieButton from "../../common/GypsieButton";
+import type { SignupScreenProps } from "../../../utils/types/auth";
+import { GYPSIE_THEME } from "../../../utils/constants/palette";
 
 const SignupScreen = ({ navigation }: SignupScreenProps) => {
   const [user, setUser] = useState<User>();

@@ -8,17 +8,15 @@ import {
   View,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { GypsiePost, GypsiePostItem } from "../../utils/types/vlog";
+import { Feed, FeedItem, FeedThumbnailProps } from "../../utils/types/feed";
 import { createThumbnail, Thumbnail } from "react-native-create-thumbnail";
 
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
 
-type GypsiePostThumbnailProps = {
-  post: GypsiePost;
-};
 
-const GypsiePostThumbnail = ({ post }: GypsiePostThumbnailProps) => {
+
+const FeedThumbnail = ({ feed }: FeedThumbnailProps) => {
   const { height, width } = useWindowDimensions();
   const [uri, setUri] = useState<string>(
     "/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png",
@@ -86,13 +84,13 @@ const GypsiePostThumbnail = ({ post }: GypsiePostThumbnailProps) => {
       <Image
         style={styles.image}
         source={{
-          uri: post.items[0].type === "image" ? post.items[0].uri : uri,
+          uri: feed.items[0].type === "image" ? feed.items[0].uri : uri,
         }}
       />
       {/* <Text style={styles.placeholder}>{number}</Text> */}
-      {post.items.length > 1 && (
+      {feed.items.length > 1 && (
         <Ionicons
-          style={{ position: "absolute", zIndex: 1, bottom: 8, right: 8 }}
+          style={styles.stackIcon}
           name="albums-outline"
           size={14}
           color={PALETTE.WHITE}
@@ -107,10 +105,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: 100,
-    // width: "32%",
-    marginHorizontal: 1,
-    borderWidth: 1,
-    borderColor: PALETTE.LIGHTGREY,
+    margin: 0.5,
+    // borderWidth: 1,
+    // borderColor: PALETTE.LIGHTGREY,
     borderRadius: 4,
   },
   image: {
@@ -122,6 +119,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: "900",
   },
+  stackIcon: { position: "absolute", bottom: 8, right: 8 },
 });
 
-export default GypsiePostThumbnail;
+export default FeedThumbnail;

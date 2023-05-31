@@ -1,17 +1,14 @@
 import { useCallback, useRef, useState } from "react";
 import { Animated, Image, StyleSheet, Text, View } from "react-native";
 
-import Carousel from "react-native-reanimated-carousel";
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
-import { DUMMY_POSTS } from "../../utils/types/vlog";
-
-import type { GypsiePostProps } from "../../utils/types/vlog";
 import VlogDescription from "../vlog/VlogDescription";
 import VlogPlayer from "../vlog/VlogPlayer";
 import VlogReactionControls from "../vlog/VlogReactionControls";
-import Indicator from "../common/Indicator";
-import { FlatList } from "react-native-gesture-handler";
 import PageIndicator from "../common/PageIndicator";
+
+import type { FeedProps } from "../../utils/types/feed";
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
+import { PALETTE } from "../../utils/constants/palette";
 
 const DATA = [
   {
@@ -43,17 +40,18 @@ const DATA = [
   },
 ];
 
-const GypsiePost = ({ post, inView }: GypsiePostProps) => {
+const Feed = ({ feed, inView }: FeedProps) => {
   const {
     avatarUri,
     handle,
+    items,
     isLiked,
     isBookmarked,
     likes,
     comments,
     bookmarks,
     shares,
-  } = post;
+  } = feed;
   const [currIndex, setCurrIndex] = useState<number>(0);
 
   const scrollX = new Animated.Value(0);
@@ -73,7 +71,7 @@ const GypsiePost = ({ post, inView }: GypsiePostProps) => {
     <View style={styles.container}>
       <Animated.FlatList
         contentContainerStyle={{ paddingBottom: 100 }}
-        data={post.items}
+        data={items}
         horizontal
         showsHorizontalScrollIndicator={false}
         scrollEventThrottle={32}
@@ -108,10 +106,10 @@ const GypsiePost = ({ post, inView }: GypsiePostProps) => {
         //   [{ nativeEvent: { contentOffset: { x: scrollX } } }],
         //   { useNativeDriver: true })}
       />
-      <PageIndicator index={currIndex + 1} maxIndex={post.items.length} />
+      <PageIndicator index={currIndex + 1} maxIndex={feed.items.length} />
       <VlogDescription
         handle={handle}
-        caption={post.items[currIndex].caption}
+        caption={items[currIndex].caption}
         // soundTrack={soundTrack}
       />
       <VlogReactionControls
@@ -135,10 +133,8 @@ const styles = StyleSheet.create({
   image: {
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
-    // height: "100%",
-    // width: "100%",
-    backgroundColor: "#000000",
+    backgroundColor: PALETTE.BLACK,
   },
 });
 
-export default GypsiePost;
+export default Feed;

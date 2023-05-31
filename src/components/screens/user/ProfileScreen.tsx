@@ -1,6 +1,5 @@
 import { useCallback, useContext } from "react";
 import {
-  FlatList,
   Image,
   Pressable,
   StyleSheet,
@@ -9,18 +8,22 @@ import {
   View,
 } from "react-native";
 
-import { ProfileScreenProps } from "../../utils/types/navigation";
-import { AuthContext } from "../../utils/contexts/AuthContext";
-import { GYPSIE_THEME, PALETTE } from "../../utils/constants/palette";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import GypsiePostThumbnail from "../post/GypsiePostThumbnail";
-import useFeedManager from "../../utils/hooks/useFeedManager";
-import { DUMMY_POSTS } from "../../data/dummy-posts";
+import { ProfileScreenProps } from "../../../utils/types/profile";
+import { AuthContext } from "../../../utils/contexts/AuthContext";
+import Fontisto from "react-native-vector-icons/Fontisto";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { GYPSIE_THEME, PALETTE } from "../../../utils/constants/palette";
+import { DIMENSION } from "../../../utils/constants/dimensions";
+import { DUMMY_POSTS } from "../../../data/dummy-posts";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import MyPosts from "../../profile/MyPosts";
+import Reactions from "../../profile/Reactions";
+
+const Tab = createMaterialTopTabNavigator();
 
 const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
   const { height, width } = useWindowDimensions();
   const { user, logoutHandler } = useContext(AuthContext);
-  const { refreshing, refreshPostsHandler } = useFeedManager();
   const bannerUri =
     "/Users/limxuanhui/bluextech/gypsie/assets/images/sample1.jpg";
   const dummyAvatar =
@@ -69,20 +72,45 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
           {user?.user.email || "ordika.17@gmail.com"}
         </Text>
       </View>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={[1]}
-        refreshing={refreshing}
-        onRefresh={refreshPostsHandler}
-        renderItem={() => (
-          <View style={styles.postsGrid} key={Math.random().toString()}>
-            {data.map(post => (
-              // <Text>Hi</Text>
-              <GypsiePostThumbnail post={post} />
-            ))}
-          </View>
-        )}
-      />
+      <Tab.Navigator
+        initialRouteName="myposts"
+        screenOptions={{
+          // tabBarActiveTintColor: "#e91e63",
+          // tabBarLabelStyle: { fontSize: 12 },
+          tabBarStyle: { backgroundColor: PALETTE.WHITE, height: "8%" },
+          tabBarShowLabel: false,
+          tabBarIndicatorStyle: { backgroundColor: "orange" },
+        }}>
+        <Tab.Screen
+          name="myposts"
+          component={MyPosts}
+          options={{
+            tabBarLabel: "Posts",
+            tabBarIcon: ({ focused }) => (
+              <Ionicons
+                name={focused ? "grid" : "grid-outline"}
+                size={20}
+                color={focused ? "orange" : PALETTE.BLACK}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="reactions"
+          component={Reactions}
+          options={{
+            tabBarLabel: "Reactions",
+            tabBarIcon: ({ focused }) => (
+              <Fontisto
+                name={focused ? "open-mouth" : "zipper-mouth"}
+                size={20}
+                color={focused ? "orange" : PALETTE.BLACK}
+              />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+
       {/* <GypsieButton
         text="Log out"
         customButtonStyles={styles.logoutButton}
@@ -95,7 +123,7 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
 const styles = StyleSheet.create({
   container: {
     // justifyContent: "space-between",
-    alignItems: "center",
+    // alignItems: "center",
     // borderWidth: 2,
     // borderColor: "magenta",
     width: DIMENSION.HUNDRED_PERCENT,
@@ -115,6 +143,7 @@ const styles = StyleSheet.create({
   avatarContainer: {
     position: "absolute",
     top: DIMENSION.FIFTEEN_PERCENT,
+    alignSelf: "center",
     width: 100,
     height: 100,
     borderRadius: 50,
@@ -135,9 +164,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: 40,
+    height: "5%",
     width: DIMENSION.HUNDRED_PERCENT,
     paddingHorizontal: 20,
+    backgroundColor: PALETTE.WHITE,
     // borderBottomWidth: 1,
     // borderBottomColor: PALETTE.BLUE,
   },
@@ -145,17 +175,7 @@ const styles = StyleSheet.create({
     color: GYPSIE_THEME.PRIMARY,
     fontWeight: "bold",
   },
-  postsGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
-    // justifyContent: "space-evenly",
-    // height: 20,
-    width: DIMENSION.HUNDRED_PERCENT,
-    // backgroundColor: "red",
-    // borderWidth: 1,
-    // borderColor: "blue",
-  },
+
   logoutButton: {
     justifyContent: "center",
     alignItems: "center",
