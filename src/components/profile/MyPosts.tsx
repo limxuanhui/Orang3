@@ -21,6 +21,7 @@ const MyPosts = () => {
         refreshing={refreshing}
         onRefresh={refreshPostsHandler}
         renderItem={() => (
+          // change to unique key
           <View style={[styles.postsGrid]} key={Math.random().toString()}>
             {data.map(item => (
               <FeedThumbnail feed={item} />

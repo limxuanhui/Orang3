@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Image, StyleSheet, View } from "react-native";
 
 import type { LoginScreenProps } from "../../../utils/types/auth";
-import GypsieButton from "../../common/GypsieButton";
+import GypsieButton from "../../common/buttons/GypsieButton";
 import GypsieTextBox from "../../common/GypsieTextBox";
 import LinkButton from "../../common/LinkButton";
 import { GYPSIE_THEME } from "../../../utils/constants/palette";

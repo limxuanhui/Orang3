@@ -1,12 +1,5 @@
 import { useCallback } from "react";
-import {
-  FlatList,
-  Image,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, Image, Pressable, StyleSheet, View } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 
@@ -16,28 +9,29 @@ import { PALETTE } from "../../../utils/constants/palette";
 const ItineraryViewScreen = ({ navigation }: any) => {
   const data = [1, 2, 3, 4, 5, 6, 7];
 
+  const onExit = useCallback(() => {
+    navigation.goBack();
+  }, [navigation]);
+
   const onPressLinkedPost = useCallback(() => {
     console.warn("linkedPostPressed!");
+    navigation.push("feed");
   }, []);
 
   return (
     <View style={styles.container}>
-      <Pressable
-        style={styles.backButton}
-        onPress={() => {
-          navigation.goBack();
-        }}>
+      <Pressable style={styles.backButton} onPress={onExit}>
         <Ionicons name="arrow-back-circle" size={30} color={PALETTE.GREY} />
       </Pressable>
       <FlatList
-        style={styles.linkedVlogPosts}
-        contentContainerStyle={styles.linkedPostsContentContainer}
+        style={styles.linkedFeeds}
+        contentContainerStyle={styles.linkedFeedsContentContainer}
         data={data}
         renderItem={item => (
           <Pressable
             style={({ pressed }) => [
-              styles.linkedVlogPost,
-              { transform: [{ scale: pressed ? 0.98 : 1 }] },
+              styles.linkedFeed,
+              { transform: [{ scale: pressed ? 0.99 : 1 }] },
             ]}
             onPress={onPressLinkedPost}>
             <Image
@@ -68,25 +62,28 @@ const styles = StyleSheet.create({
     width: 32,
     zIndex: 2,
   },
-  linkedVlogPosts: {
+  linkedFeeds: {
     position: "absolute",
     height: 120 + getStatusBarHeight(),
     width: "100%",
-    backgroundColor: "#ffffffaa",
+    paddingBottom: 8,
+    // backgroundColor: "#ffffff",
     zIndex: 1,
   },
-  linkedPostsContentContainer: {
+  linkedFeedsContentContainer: {
     height: "70%",
     alignSelf: "flex-end",
   },
-  linkedVlogPost: {
+  linkedFeed: {
     width: 100,
     height: "100%",
     marginHorizontal: 8,
-    borderWidth: 1,
-    borderColor: PALETTE.LIGHTGREY,
     borderRadius: 8,
     backgroundColor: PALETTE.WHITE,
+    shadowColor: PALETTE.BLACK,
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 2,
   },
   imageStyle: { height: "100%", borderRadius: 8 },
 });

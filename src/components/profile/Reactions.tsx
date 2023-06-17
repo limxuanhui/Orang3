@@ -1,11 +1,12 @@
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+// import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
 
 const Reactions = () => {
-  const BOTTOM_TAB_BAR_HEIGHT = useBottomTabBarHeight();
+  // const BOTTOM_TAB_BAR_HEIGHT = useBottomTabBarHeight();
+  const BOTTOM_TAB_BAR_HEIGHT = 100;
   console.log("Window height: ", Dimensions.get("window").height);
   console.log("Screen height", Dimensions.get("screen").height);
   console.log((BOTTOM_TAB_BAR_HEIGHT / Dimensions.get("window").height) * 100);

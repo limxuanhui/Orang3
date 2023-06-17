@@ -21,16 +21,14 @@ import Reactions from "../../profile/Reactions";
 
 const Tab = createMaterialTopTabNavigator();
 
-const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
+const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
   const { height, width } = useWindowDimensions();
   const { user, logoutHandler } = useContext(AuthContext);
   const bannerUri =
     "/Users/limxuanhui/bluextech/gypsie/assets/images/sample1.jpg";
   const dummyAvatar =
-    "/Users/limxuanhui/bluextech/gypsie/assets/images/portrait1.jpg";
-  // const data = [
-  //   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-  // ];
+    "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg";
+
   const data = DUMMY_POSTS;
 
   // const onPressLogout = useCallback(({pressed}) => {
@@ -39,6 +37,11 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
 
   const onPressAvatar = useCallback(() => {
     console.warn("Avatar pressed");
+    // open up profile photo
+  }, []);
+
+  const onPressSettings = useCallback(() => {
+    navigation.push("Settings");
   }, []);
 
   return (
@@ -59,18 +62,18 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
           }}
         />
       </Pressable>
-      {/* <Text>{JSON.stringify(user?.user, null, 4)}</Text> */}
       <Pressable style={styles.banner}>
         <Image style={styles.bannerImage} source={{ uri: bannerUri }} />
+      </Pressable>
+      <Pressable style={styles.settingsButton} onPress={onPressSettings}>
+        <Ionicons name="settings" size={24} color={PALETTE.WHITE} />
       </Pressable>
       <View style={styles.userDetails}>
         <Text style={styles.userDetail}>
           {/* {(user?.user.givenName || "") + " " + (user?.user.familyName || "")} */}
-          {user?.user.name || "Joseph Lim"}
+          {user?.user.name || "Name"}
         </Text>
-        <Text style={styles.userDetail}>
-          {user?.user.email || "ordika.17@gmail.com"}
-        </Text>
+        <Text style={styles.userDetail}>{user?.user.email || "Email"}</Text>
       </View>
       <Tab.Navigator
         initialRouteName="myposts"
@@ -110,25 +113,16 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
           }}
         />
       </Tab.Navigator>
-
-      {/* <GypsieButton
-        text="Log out"
-        customButtonStyles={styles.logoutButton}
-        onPress={logoutHandler}
-      /> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    // justifyContent: "space-between",
-    // alignItems: "center",
-    // borderWidth: 2,
-    // borderColor: "magenta",
     width: DIMENSION.HUNDRED_PERCENT,
     height: DIMENSION.HUNDRED_PERCENT,
   },
+  settingsButton: { position: "absolute", top: 50, right: 20, zIndex: 3 },
   banner: {
     height: DIMENSION.TWENTYFIVE_PERCENT,
     width: DIMENSION.HUNDRED_PERCENT,
@@ -138,7 +132,6 @@ const styles = StyleSheet.create({
   bannerImage: {
     height: DIMENSION.HUNDRED_PERCENT,
     width: DIMENSION.HUNDRED_PERCENT,
-    // zIndex: 100,
   },
   avatarContainer: {
     position: "absolute",

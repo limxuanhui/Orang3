@@ -16,3 +16,8 @@ export enum VlogPlayerStatus {
   PAUSED,
   BUFFERING,
 }
+
+export type VlogPlayerSliderProps = {
+  value: number;
+  maxValue: number;
+};

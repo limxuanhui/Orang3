@@ -1,5 +1,5 @@
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useCallback } from "react";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -11,6 +11,11 @@ import { DEVICE_WIDTH } from "../../utils/constants/constants";
 const ItineraryFilter = ({ filter }: ItineraryFilterProps) => {
   const navigation = useNavigation<MapScreenNavigationProp>();
 
+  const onPressFilter = useCallback(
+    () => navigation.push("itinerary-view"),
+    [],
+  );
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -21,7 +26,7 @@ const ItineraryFilter = ({ filter }: ItineraryFilterProps) => {
               styles.filterTab,
               { opacity: pressed ? 0.7 : 1 },
             ]}
-            onPress={() => navigation.push("itinerary-view")}>
+            onPress={onPressFilter}>
             <Text style={styles.filterText}>{item.item}</Text>
           </Pressable>
         )}

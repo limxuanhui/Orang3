@@ -1,14 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
-import { Slider } from "@miblanchard/react-native-slider";
+import { StyleSheet, View } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-
-type VlogPlayerSliderProps = {
-  value: number;
-  maxValue: number;
-};
+import { Slider } from "@miblanchard/react-native-slider";
+import type { VlogPlayerSliderProps } from "../../utils/types/vlog";
 
 const VlogPlayerSlider = ({ value, maxValue }: VlogPlayerSliderProps) => {
-  const BOTTOM_TAB_BAR_HEIGHT = useBottomTabBarHeight();
+  // const BOTTOM_TAB_BAR_HEIGHT = useBottomTabBarHeight();
+  const BOTTOM_TAB_BAR_HEIGHT = 80;
 
   return (
     <View style={[styles.container, { bottom: BOTTOM_TAB_BAR_HEIGHT + 20 }]}>
@@ -29,17 +26,10 @@ const VlogPlayerSlider = ({ value, maxValue }: VlogPlayerSliderProps) => {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    // height: 20,
     width: "100%",
     zIndex: 999999,
-    // borderWidth: 1,
-    // borderColor: "green",
-    // backgroundColor: '#00ffff2e'
   },
   track: {
-    // zIndex: 10000,
-    // backgroundColor: "red",
-    // borderWidth: 1,
     borderColor: "blue",
   },
   thumb: {

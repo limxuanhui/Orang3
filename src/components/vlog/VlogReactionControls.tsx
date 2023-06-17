@@ -1,10 +1,11 @@
-import { useNavigation } from "@react-navigation/native";
 import { useCallback, useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+
+import type { HomeScreenNavigationProp } from "../../utils/types/home";
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
-import { HomeScreenNavigationProp } from "../../utils/types/navigation";
 
 type VlogReactionControlsProps = {
   avatarUri: string;
@@ -47,7 +48,13 @@ const VlogReactionControls = ({
 
   const onPressReactionControlStyle = useCallback(
     ({ pressed }: { pressed: boolean }) => {
-      return [styles.reactionControl, { opacity: pressed ? 0.4 : 1.0 }];
+      return [
+        styles.reactionControl,
+        {
+          opacity: pressed ? 0.9 : 1.0,
+          transform: [{ scale: pressed ? 0.98 : 1 }],
+        },
+      ];
     },
     [],
   );
@@ -100,18 +107,18 @@ const VlogReactionControls = ({
         <FontAwesome
           name="heart"
           size={24}
-          color={liked ? "#ff0000" : "#ffffff"}
+          color={liked ? PALETTE.RED : PALETTE.WHITE}
         />
         <Text style={styles.reactionCount}>
           {parseCount(reactionCounts.likes)}
         </Text>
       </Pressable>
-      <Pressable style={onPressReactionControlStyle} onPress={onPressComment}>
+      {/* <Pressable style={onPressReactionControlStyle} onPress={onPressComment}>
         <FontAwesome name="commenting" size={24} color={PALETTE.WHITE} />
         <Text style={styles.reactionCount}>
           {parseCount(reactionCounts.comments)}
         </Text>
-      </Pressable>
+      </Pressable> */}
       <Pressable style={onPressReactionControlStyle} onPress={onPressBookmark}>
         <FontAwesome
           name="bookmark"
@@ -122,12 +129,12 @@ const VlogReactionControls = ({
           {parseCount(reactionCounts.bookmarks)}
         </Text>
       </Pressable>
-      <Pressable style={onPressReactionControlStyle} onPress={onPressLink}>
+      {/* <Pressable style={onPressReactionControlStyle} onPress={onPressLink}>
         <FontAwesome name="share" size={24} color="#ffffff" />
         <Text style={styles.reactionCount}>
           {parseCount(reactionCounts.shares)}
         </Text>
-      </Pressable>
+      </Pressable> */}
     </View>
   );
 };

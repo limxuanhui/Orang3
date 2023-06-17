@@ -3,20 +3,19 @@ import {
   Image,
   Pressable,
   StyleSheet,
-  Text,
   useWindowDimensions,
-  View,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Feed, FeedItem, FeedThumbnailProps } from "../../utils/types/feed";
-import { createThumbnail, Thumbnail } from "react-native-create-thumbnail";
+import { FeedThumbnailProps } from "../../utils/types/feed";
+import { createThumbnail } from "react-native-create-thumbnail";
 
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
-
-
+import { useNavigation } from "@react-navigation/native";
+import { ProfileScreenProps } from "../../utils/types/profile";
 
 const FeedThumbnail = ({ feed }: FeedThumbnailProps) => {
+  const navigation = useNavigation<ProfileScreenProps>();
   const { height, width } = useWindowDimensions();
   const [uri, setUri] = useState<string>(
     "/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png",
@@ -67,7 +66,9 @@ const FeedThumbnail = ({ feed }: FeedThumbnailProps) => {
 
   const onPressThumbnail = useCallback(() => {
     console.warn("Thumbnail pressed");
+
     // To open up post with navigation
+    // navigation.navigate("home", {})
   }, []);
 
   return (
@@ -87,7 +88,6 @@ const FeedThumbnail = ({ feed }: FeedThumbnailProps) => {
           uri: feed.items[0].type === "image" ? feed.items[0].uri : uri,
         }}
       />
-      {/* <Text style={styles.placeholder}>{number}</Text> */}
       {feed.items.length > 1 && (
         <Ionicons
           style={styles.stackIcon}
@@ -106,8 +106,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 100,
     margin: 0.5,
-    // borderWidth: 1,
-    // borderColor: PALETTE.LIGHTGREY,
     borderRadius: 4,
   },
   image: {

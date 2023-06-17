@@ -8,7 +8,7 @@ import {
 
 import LinkButton from "../../common/LinkButton";
 import GypsieTextBox from "../../common/GypsieTextBox";
-import GypsieButton from "../../common/GypsieButton";
+import GypsieButton from "../../common/buttons/GypsieButton";
 import type { SignupScreenProps } from "../../../utils/types/auth";
 import { GYPSIE_THEME } from "../../../utils/constants/palette";
 

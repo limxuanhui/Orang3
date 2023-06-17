@@ -2,6 +2,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 export type MapStackNavigatorParamList = {
   map: undefined;
+  // "feed": undefined;
   "itinerary-feed": undefined;
   "itinerary-planning": undefined;
   "itinerary-view": undefined;

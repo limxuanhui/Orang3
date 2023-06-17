@@ -1,21 +1,25 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import ItineraryPlanningScreen from "../screens/ItineraryPlanningScreen";
 
-import { MapStackNavigatorParamList } from "../../utils/types/map";
-import PlaceSearchScreen from "../screens/PlaceSearchScreen";
 import ItineraryFeedScreen from "../screens/itinerary/ItineraryFeedScreen";
-import ItineraryViewScreen from "../screens/ItineraryViewScreen";
-import { PALETTE } from "../../utils/constants/palette";
-// import MapDashboardScreen from "../screens/map-stack/MapDashboardScreen";
-// import MapScreen from "../screens/map-stack/MapScreen";
 
-const MapStack = createNativeStackNavigator<MapStackNavigatorParamList>();
+import type { MapStackNavigatorParamList } from "../../utils/types/map";
+import { PALETTE } from "../../utils/constants/palette";
+import FeedScreen from "../screens/feed/FeedScreen";
+import ItineraryViewScreen from "../screens/itinerary/ItineraryViewScreen";
+import PlaceSearchScreen from "../screens/itinerary/PlaceSearchScreen";
+import { createStackNavigator } from "@react-navigation/stack";
+
+const MapStack = createStackNavigator<MapStackNavigatorParamList>();
 
 const MapStackNavigator = () => {
+
   return (
     <MapStack.Navigator
       initialRouteName="itinerary-feed"
-      screenOptions={{ headerShown: false }}>
+      screenOptions={({navigation, route}) => {
+        console.log(route.name);
+        return { headerShown: false };
+      }}>
       <MapStack.Screen
         name="itinerary-feed"
         component={ItineraryFeedScreen}
@@ -26,20 +30,6 @@ const MapStackNavigator = () => {
           headerTitleStyle: { color: PALETTE.WHITE, fontWeight: "bold" },
         }}
       />
-      {/* <MapStack.Screen
-        name="itinerary-view"
-        component={ItineraryViewScreen}
-        options={{
-          headerShown:false,
-          headerStyle: { backgroundColor: PALETTE.BLACK },
-          headerTitleStyle: { color: PALETTE.WHITE, fontWeight: "bold" },
-        }}
-      /> */}
-      {/* <MapStack.Screen
-        name="itinerary-planning"
-        component={ItineraryPlanningScreen}
-      />
-      <MapStack.Screen name="place-search" component={PlaceSearchScreen} /> */}
     </MapStack.Navigator>
   );
 };

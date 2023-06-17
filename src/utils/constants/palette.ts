@@ -7,6 +7,7 @@ export const GYPSIE_THEME = {
 
 export const PALETTE = {
   WHITE: "#ffffff",
+  OFFWHITE: "#f5f5f5",
   LIGHTGREY: "#cccccc",
   GREY: "#aaaaaa",
   DARKGREY: "#777777",

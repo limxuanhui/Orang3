@@ -1,14 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View } from "react-native";
+import Feed from "../../feed/Feed";
+import { DUMMY_POSTS } from "../../../data/dummy-posts";
 
-const FeedScreen = () => {
-  return (
-    <View>
-      <Text>FeedScreen</Text>
-    </View>
-  )
-}
+const FeedScreen = ({ navigation, route }: any) => {
+  const feed = DUMMY_POSTS[0];
 
-export default FeedScreen
+  return <Feed feed={feed} inView />;
+};
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
+
+export default FeedScreen;

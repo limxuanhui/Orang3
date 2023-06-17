@@ -1,4 +1,4 @@
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+// import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useState } from "react";
 import { Animated, StyleSheet, Text, View } from "react-native";
 import { interpolate, useAnimatedStyle } from "react-native-reanimated";
@@ -14,7 +14,8 @@ type IndicatorProps = {
 };
 
 const Indicator = ({ scrollX, dataCount, activeIndex }: IndicatorProps) => {
-  const BOTTOM_TAB_BAR_HEIGHT = useBottomTabBarHeight();
+  // const BOTTOM_TAB_BAR_HEIGHT = useBottomTabBarHeight();
+  const BOTTOM_TAB_BAR_HEIGHT = 100;
   // If dataCount == 6, we have 5 dots when (activeIndex <= 3  or activeIndex >= 4) and (anchor = 0)
   // When anchor = 0, we have first/last 3 dots of BIG size, second last MID, last SMALL
   // When anchor = 1, we have end dot become MID then SMALL then disappear

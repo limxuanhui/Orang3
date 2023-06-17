@@ -3,9 +3,9 @@ import { useCallback } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
-import { MapScreenNavigationProp } from "../../utils/types/map";
-import GooglePlacesInput from "../map/GooglePlacesInput";
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../../utils/constants/constants";
+import { MapScreenNavigationProp } from "../../../utils/types/map";
+import GooglePlacesInput from "../../map/GooglePlacesInput";
 
 const PlaceSearchScreen = ({ route }: any) => {
   const navigation = useNavigation<MapScreenNavigationProp>();

@@ -12,7 +12,9 @@ export type RootStackNavigatorParamList = {
 };
 
 export type AppStackNavigatorParamList = {
-  "bottom-tab": BottomTabNavigatorParamList;
+  "bottom-tab": undefined;
+  Splash: undefined;
+  feed: undefined;
   "itinerary-planning": undefined;
   "itinerary-view": undefined;
   "place-search": undefined;
@@ -22,5 +24,5 @@ export type BottomTabNavigatorParamList = {
   home: HomeScreenProps;
   test: undefined;
   "map-stack": MapStackNavigatorParamList;
-  profile: ProfileScreenProps;
+  Profile: ProfileScreenProps;
 };
