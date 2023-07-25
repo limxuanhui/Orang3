@@ -1,18 +1,20 @@
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-
-import { SettingsScreenProps } from "../../../utils/types/profile";
+import { AuthContext } from "../../../utils/contexts/AuthContext";
+import type { SettingsScreenProps } from "./types/types";
 import {
   DEVICE_HEIGHT,
   DEVICE_WIDTH,
 } from "../../../utils/constants/constants";
 import { PALETTE } from "../../../utils/constants/palette";
-import { ScrollView } from "react-native-gesture-handler";
 
 const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
+  const { logoutHandler } = useContext(AuthContext);
+
   const onPressAccount = useCallback(() => {
     navigation.push("Account");
   }, []);
@@ -23,7 +25,8 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
 
   const onPressLogout = useCallback(() => {
     console.warn("Log out pressed!");
-  }, []);
+    logoutHandler();
+  }, [logoutHandler]);
 
   return (
     <View style={styles.container}>

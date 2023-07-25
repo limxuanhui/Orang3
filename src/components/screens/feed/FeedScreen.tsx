@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import Feed from "../../feed/Feed";
-import { DUMMY_POSTS } from "../../../data/dummy-posts";
+import type { FeedScreenProps } from "./types/types";
+import { DUMMY_FEEDS } from "../../../data/feeds";
 
-const FeedScreen = ({ navigation, route }: any) => {
-  const feed = DUMMY_POSTS[0];
+const FeedScreen = ({ navigation, route }: FeedScreenProps) => {
+  const feed = DUMMY_FEEDS.filter(item => item.id === route.params.feedId)[0];
 
   return <Feed feed={feed} inView />;
 };

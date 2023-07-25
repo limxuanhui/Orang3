@@ -7,14 +7,10 @@ import { PALETTE } from "../../utils/constants/palette";
 const Reactions = () => {
   // const BOTTOM_TAB_BAR_HEIGHT = useBottomTabBarHeight();
   const BOTTOM_TAB_BAR_HEIGHT = 100;
-  console.log("Window height: ", Dimensions.get("window").height);
-  console.log("Screen height", Dimensions.get("screen").height);
-  console.log((BOTTOM_TAB_BAR_HEIGHT / Dimensions.get("window").height) * 100);
   const percentage =
     Math.round(
       100 - (BOTTOM_TAB_BAR_HEIGHT / Dimensions.get("window").height) * 100,
     ).toString() + "%";
-  console.log(percentage);
   const percentage2 = 0.62 * Dimensions.get("window").height;
   return (
     <View style={[styles.container, { height: percentage2 - 60 }]}>

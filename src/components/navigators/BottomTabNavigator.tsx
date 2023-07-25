@@ -1,53 +1,44 @@
-import Entypo from "react-native-vector-icons/Entypo";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
 import HomeScreen from "../screens/feed/HomeScreen";
-import ProfileScreen from "../screens/profile/ProfileScreen";
-import MapStackNavigator from "./MapStackNavigator";
-
-import type { BottomTabNavigatorParamList } from "../../utils/types/navigation";
-import { PALETTE } from "../../utils/constants/palette";
+import ItineraryStackNavigator from "./ItineraryStackNavigator";
 import ProfileStackNavigator from "./ProfileStackNavigator";
+import type { BottomTabNavigatorParamList } from "./types/types";
+import { PALETTE } from "../../utils/constants/palette";
 
 const BottomTab = createBottomTabNavigator<BottomTabNavigatorParamList>();
 
 const BottomTabNavigator = () => {
   return (
     <BottomTab.Navigator
-      initialRouteName="home"
+      initialRouteName="Home"
       screenOptions={({ navigation, route }) => {
-        console.log("navigation: ", navigation);
-        console.log("route: ", route);
         return {
           headerShown: false,
-          // tabBarVisible: false,
           tabBarStyle: {
-            // backgroundColor: getBackgroundColor(route.name),
             backgroundColor:
-              route.name === "Profile"
-                ? "white"
-                : route.name === "map-stack"
-                ? "#aaaaaa55"
-                : "transparent",
+              route.name === "ProfileStack"
+                ? PALETTE.OFFWHITE
+                : route.name === "ItineraryStack"
+                ? PALETTE.OFFWHITE
+                : PALETTE.TRANSPARENT,
             position: "absolute",
             bottom: 0,
             elevation: 0,
             borderTopWidth: 0,
           },
           tabBarShowLabel: false,
-          tabBarIconStyle: { color: route.name === "Profile" ? "orange" : "" },
         };
       }}>
       <BottomTab.Screen
-        name="home"
+        name="Home"
         component={HomeScreen}
         options={{
           tabBarShowLabel: false,
           tabBarIcon: ({ focused }) => (
-            <Entypo
-              // name={focused ? "home" : "home-outline"}
-              name="home"
+            <MaterialCommunityIcons
+              name="flower"
               size={24}
               color={focused ? PALETTE.ORANGE : PALETTE.GREY}
             />
@@ -55,8 +46,8 @@ const BottomTabNavigator = () => {
         }}
       />
       <BottomTab.Screen
-        name="map-stack"
-        component={MapStackNavigator}
+        name="ItineraryStack"
+        component={ItineraryStackNavigator}
         options={{
           tabBarShowLabel: false,
           tabBarIcon: ({ focused }) => (
@@ -69,19 +60,18 @@ const BottomTabNavigator = () => {
         }}
       />
       <BottomTab.Screen
-        name="Profile"
+        name="ProfileStack"
         component={ProfileStackNavigator}
         options={{
           tabBarShowLabel: false,
           tabBarIcon: ({ focused }) => (
-            <FontAwesome
-              name="user"
+            <MaterialCommunityIcons
+              name="brain"
               size={24}
               color={focused ? PALETTE.ORANGE : PALETTE.GREY}
             />
           ),
         }}
-        // getId={({ params}) => params.avatarUri}
       />
     </BottomTab.Navigator>
   );

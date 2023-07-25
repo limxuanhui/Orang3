@@ -1,33 +1,36 @@
+import { useContext } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
+import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs";
+import {
+  useSafeAreaFrame,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import useFeedManager from "../../utils/hooks/useFeedManager";
 import FeedThumbnail from "../feed/FeedThumbnail";
-
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { DEVICE_HEIGHT } from "../../utils/constants/constants";
-import { DUMMY_POSTS } from "../../data/dummy-posts";
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
+import { DUMMY_FEEDS } from "../../data/feeds";
 import { PALETTE } from "../../utils/constants/palette";
 
 const MyPosts = () => {
   const { refreshing, refreshPostsHandler } = useFeedManager();
-  const data = DUMMY_POSTS;
+  const data = DUMMY_FEEDS;
   const percentage = 0.62 * DEVICE_HEIGHT;
-  const height = percentage - Math.min(60, useBottomTabBarHeight());
+  const bh = useContext(BottomTabBarHeightContext) || 0;
+  const height = percentage - bh + 20;
+
+  const safeFrame = useSafeAreaFrame();
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.container, { height }]}>
+    // <View style={[styles.container, { height: percentage - insets.bottom }]}>
+    <View style={[styles.container, { height: height }]}>
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={[1]}
+        numColumns={3}
+        data={data}
         refreshing={refreshing}
         onRefresh={refreshPostsHandler}
-        renderItem={() => (
-          // change to unique key
-          <View style={[styles.postsGrid]} key={Math.random().toString()}>
-            {data.map(item => (
-              <FeedThumbnail feed={item} />
-            ))}
-          </View>
-        )}
+        renderItem={el => <FeedThumbnail feed={el.item} />}
       />
     </View>
   );
@@ -35,13 +38,7 @@ const MyPosts = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: PALETTE.BLACK,
-  },
-  postsGrid: {
-    flex: 1,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
+    // backgroundColor: PALETTE.RED,
   },
 });
 

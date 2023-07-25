@@ -9,7 +9,7 @@ import {
 import Icon from "react-native-vector-icons/FontAwesome";
 import FontIcon from "react-native-vector-icons/FontAwesome5";
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
-import { VlogPlayerStatus } from "../../utils/types/vlog";
+import { VlogPlayerStatus } from "./types/types";
 
 type VlogPlayerButtonProps = {
   status: VlogPlayerStatus;

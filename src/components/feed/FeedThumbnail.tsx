@@ -1,21 +1,20 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Image,
   Pressable,
   StyleSheet,
   useWindowDimensions,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { FeedThumbnailProps } from "../../utils/types/feed";
 import { createThumbnail } from "react-native-create-thumbnail";
-
+import type { FeedThumbnailProps } from "./types/types";
+import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
-import { useNavigation } from "@react-navigation/native";
-import { ProfileScreenProps } from "../../utils/types/profile";
 
 const FeedThumbnail = ({ feed }: FeedThumbnailProps) => {
-  const navigation = useNavigation<ProfileScreenProps>();
+  const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const { height, width } = useWindowDimensions();
   const [uri, setUri] = useState<string>(
     "/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png",
@@ -65,18 +64,20 @@ const FeedThumbnail = ({ feed }: FeedThumbnailProps) => {
   //       });
 
   const onPressThumbnail = useCallback(() => {
-    console.warn("Thumbnail pressed");
-
     // To open up post with navigation
-    // navigation.navigate("home", {})
-  }, []);
+    navigation.push("Modal", {
+      screen: "Feed",
+      params: {
+        feedId: feed.id,
+      },
+    });
+  }, [navigation]);
 
   return (
     <Pressable
       style={({ pressed }) => [
         styles.thumbnail,
         {
-          width: Math.round(width / 3) - 2,
           opacity: pressed ? 0.9 : 1,
           transform: [{ scale: pressed ? 0.99 : 1 }],
         },
@@ -102,6 +103,7 @@ const FeedThumbnail = ({ feed }: FeedThumbnailProps) => {
 
 const styles = StyleSheet.create({
   thumbnail: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     height: 100,

@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../../utils/constants/constants";
-import ItineraryFeed from "../../itinerary-feed/ItineraryFeed";
-import ItineraryFilter from "../../itinerary-feed/ItineraryFilter";
-import type { ItineraryFeedItem } from "../../../utils/types/map";
-
-import { DUMMY_FILTERS } from "../../../data/filters";
 import Divider from "../../common/Divider";
+import ItineraryFeed from "../../itinerary/ItineraryFeed";
+import ItineraryFilter from "../../itinerary/ItineraryFilter";
+import type { ItineraryFeedItem } from "../../itinerary/types/types";
+import {
+  DEVICE_HEIGHT,
+  DEVICE_WIDTH,
+} from "../../../utils/constants/constants";
+import { DUMMY_FILTERS } from "../../../data/filters";
+import { PALETTE } from "../../../utils/constants/palette";
 
 const ItineraryFeedScreen = () => {
   const [filter, setFilter] = useState<string[]>(DUMMY_FILTERS);
@@ -15,17 +18,17 @@ const ItineraryFeedScreen = () => {
   return (
     <View style={styles.container}>
       <ItineraryFilter filter={filter} />
-      <Divider thickness="thin" shade="light"/>
+      <Divider thickness="thin" shade="light" />
       <ItineraryFeed feed={feed} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {    
+  container: {
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
-    backgroundColor: "#222222"
+    backgroundColor: PALETTE.OFFWHITE,
   },
 });
 

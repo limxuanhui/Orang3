@@ -1,6 +1,5 @@
 import { Pressable, StyleSheet, Text } from "react-native";
-
-import type { LinkButtonProps } from "../../../utils/types/button";
+import type { LinkButtonProps } from "./types/types";
 import { GYPSIE_THEME } from "../../../utils/constants/palette";
 
 const LinkButton = ({

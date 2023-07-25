@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Slider } from "@miblanchard/react-native-slider";
-import type { VlogPlayerSliderProps } from "../../utils/types/vlog";
+import type { VlogPlayerSliderProps } from "./types/types";
 
 const VlogPlayerSlider = ({ value, maxValue }: VlogPlayerSliderProps) => {
   // const BOTTOM_TAB_BAR_HEIGHT = useBottomTabBarHeight();

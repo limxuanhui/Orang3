@@ -6,7 +6,7 @@ import {
   User,
 } from "@react-native-google-signin/google-signin";
 
-import LinkButton from "../../common/LinkButton";
+import LinkButton from "../../common/buttons/LinkButton";
 import GypsieTextBox from "../../common/GypsieTextBox";
 import GypsieButton from "../../common/buttons/GypsieButton";
 import type { SignupScreenProps } from "../../../utils/types/auth";
@@ -27,8 +27,7 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       setUser(userInfo);
-      console.log("USER: ", userInfo);
-      console.warn("Signed in");
+
       //   setPhoto(userInfo.user.photo || "");
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -48,7 +47,9 @@ const SignupScreen = ({ navigation }: SignupScreenProps) => {
     <View style={styles.root}>
       <Image
         style={styles.logo}
-        source={require("../../../assets/images/logo-no-background.png")}
+        source={{
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png",
+        }}
         resizeMode="contain"
       />
       <View style={styles.form}>

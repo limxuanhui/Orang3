@@ -4,7 +4,7 @@ import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 import { AuthContext } from "./src/utils/contexts/AuthContext";
 import useAuthManager from "./src/utils/hooks/useAuthManager";
-import RootNavigator from "./src/components/navigators/RootNavigator";
+import RootStackNavigator from "./src/components/navigators/RootStackNavigator";
 
 GoogleSignin.configure({
   iosClientId:
@@ -18,8 +18,8 @@ const App = (): JSX.Element => {
   return (
     <AuthContext.Provider value={authInfo}>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
-        <RootNavigator />
+        <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} hidden/>
+        <RootStackNavigator />
       </GestureHandlerRootView>
     </AuthContext.Provider>
   );

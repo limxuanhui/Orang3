@@ -6,8 +6,10 @@ export const GYPSIE_THEME = {
 };
 
 export const PALETTE = {
+  TRANSPARENT: "transparent",
   WHITE: "#ffffff",
   OFFWHITE: "#f5f5f5",
+  LIGHTERGREY: "#dddddd",
   LIGHTGREY: "#cccccc",
   GREY: "#aaaaaa",
   DARKGREY: "#777777",
@@ -15,5 +17,6 @@ export const PALETTE = {
   RED: "#ff0000",
   GREEN: "#00ff00",
   BLUE: "#0000ff",
+  NAVYBLUE: "#000080",
   ORANGE: "#ffa500",
 };

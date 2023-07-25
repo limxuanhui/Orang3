@@ -47,7 +47,6 @@ const BottomSheet = forwardRef<BottomSheetRefProps, BottomSheetProps>(
       .onUpdate(event => {
         translateY.value = event.translationY + context.value.y;
         translateY.value = Math.max(translateY.value, maxTranslateY);
-        console.log(translateY.value, maxTranslateY);
       })
       .onEnd(() => {
         if (translateY.value > -DEVICE_HEIGHT / 3) {
@@ -84,7 +83,6 @@ const BottomSheet = forwardRef<BottomSheetRefProps, BottomSheetProps>(
     });
 
     useEffect(() => {
-      console.log("Runnign useEcetc: ", -DEVICE_HEIGHT / 4);
       scrollTo(-DEVICE_HEIGHT / 4);
     }, []);
 

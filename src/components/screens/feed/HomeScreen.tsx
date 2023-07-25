@@ -1,37 +1,32 @@
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import { FlatList, Modal, StyleSheet, Text, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import useFeedManager from "../../../utils/hooks/useFeedManager";
-
 import Feed from "../../feed/Feed";
 import { AuthContext } from "../../../utils/contexts/AuthContext";
-import type { HomeScreenProps } from "../../../utils/types/home";
-
+import type { HomeScreenProps } from "./types/types";
 import {
   DEVICE_HEIGHT,
   DEVICE_WIDTH,
 } from "../../../utils/constants/constants";
-import { DUMMY_POSTS } from "../../../data/dummy-posts";
+import { DUMMY_FEEDS } from "../../../data/feeds";
 import BottomSheet from "../../common/BottomSheet";
 
-const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
+const HomeScreen = ({ navigation }: HomeScreenProps) => {
   const { user } = useContext(AuthContext);
   const [homeScreenIsFocused, setHomeScreenIsFocused] = useState<boolean>(true);
   const [activePostIndex, setActivePostIndex] = useState<number>(0);
   const [activePostItemIndex, setActivePostItemIndex] = useState<number>(0);
-  const [commentsModalIsOpen, setCommentsModalIsOpen] =
-    useState<boolean>(false);
-  const data = DUMMY_POSTS;
+  // const [commentsModalIsOpen, setCommentsModalIsOpen] =
+  //   useState<boolean>(false);
+  const data = DUMMY_FEEDS;
 
   const onViewableItemsChanged = useCallback(
     // change type to more suitable one
     ({ viewableItems, changed }: any) => {
-      console.log("onViewableItemsChanged called: ");
-      console.log("----- viewableItems : ", viewableItems);
-      console.log("----- changed: ", changed);
       if (viewableItems && viewableItems?.length > 0) {
         setActivePostIndex(viewableItems[0].index);
-        console.warn(viewableItems[0].index);
+        // console.warn(viewableItems[0].index);
       }
     },
     [],
@@ -47,15 +42,23 @@ const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
   );
 
   const { refreshing, refreshPostsHandler } = useFeedManager();
-  
-  const toggleCommentsModal = useCallback(() => {
-    setCommentsModalIsOpen(prev => !prev);
-  }, [commentsModalIsOpen]);
+  const viewabilityConfig = useMemo(
+    () => ({
+      viewAreaCoveragePercentThreshold: 100,
+      minimumViewTime: 200,
+    }),
+    [],
+  );
+
+  // const toggleCommentsModal = useCallback(() => {
+  //   setCommentsModalIsOpen(prev => !prev);
+  // }, [commentsModalIsOpen]);
 
   return (
     <View style={styles.container}>
       <FlatList
         data={data}
+        // initialNumToRender={2}
         renderItem={({ item, index }) => (
           <Feed
             feed={item}
@@ -66,15 +69,12 @@ const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
         snapToInterval={DEVICE_HEIGHT}
         snapToAlignment="start"
         decelerationRate={"fast"}
-        viewabilityConfig={{
-          viewAreaCoveragePercentThreshold: 100,
-          minimumViewTime: 200,
-        }}
+        viewabilityConfig={viewabilityConfig}
         onViewableItemsChanged={onViewableItemsChanged}
         refreshing={refreshing}
         onRefresh={refreshPostsHandler}
       />
-      <Modal
+      {/* <Modal
         transparent
         visible={commentsModalIsOpen}
         onRequestClose={() => {
@@ -96,13 +96,7 @@ const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
             </Text>
           </BottomSheet>
         </View>
-        {/* <RouteNameModal
-          initialValue={modalInitialValue}
-          onCancel={onCloseModal}
-          onAddRoute={onAddRoute}
-          onUpdateRouteName={onUpdateRouteName}
-        /> */}
-      </Modal>
+      </Modal> */}
     </View>
   );
 };

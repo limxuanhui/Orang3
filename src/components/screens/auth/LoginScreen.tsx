@@ -1,10 +1,10 @@
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { Image, StyleSheet, View } from "react-native";
 
 import type { LoginScreenProps } from "../../../utils/types/auth";
 import GypsieButton from "../../common/buttons/GypsieButton";
 import GypsieTextBox from "../../common/GypsieTextBox";
-import LinkButton from "../../common/LinkButton";
+import LinkButton from "../../common/buttons/LinkButton";
 import { GYPSIE_THEME } from "../../../utils/constants/palette";
 import { AuthContext } from "../../../utils/contexts/AuthContext";
 
@@ -18,11 +18,19 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
   //   }
   // }, [user]);
 
+  const onPressForgotPassword = useCallback(() => {}, []);
+
+  const onPressNewAccount = useCallback(() => {
+    navigation.navigate("signup");
+  }, [navigation]);
+
   return (
     <View style={styles.root}>
       <Image
         style={styles.logo}
-        source={require("../../../assets/images/logo-no-background.png")}
+        source={{
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png",
+        }}
         resizeMode="contain"
       />
       <View style={styles.form}>
@@ -35,18 +43,11 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
           onPress={loginHandler}
         />
         <View style={styles.linkButtonsContainer}>
-          <LinkButton
-            text="Forgot password?"
-            onPress={() => {
-              console.log("forgot password?");
-            }}
-          />
+          <LinkButton text="Forgot password?" onPress={onPressForgotPassword} />
           <LinkButton
             customLinkTextStyles={styles.primaryLinkTextStyle}
             text="New to Gypsie?"
-            onPress={() => {
-              navigation.navigate("signup");
-            }}
+            onPress={onPressNewAccount}
           />
         </View>
         <GypsieButton

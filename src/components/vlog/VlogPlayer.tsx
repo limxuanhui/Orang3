@@ -3,11 +3,11 @@ import { StyleSheet, Text, View } from "react-native";
 import Video from "react-native-video";
 
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
-import { VlogPlayerProps, VlogPlayerStatus } from "../../utils/types/vlog";
-import VlogDescription from "./VlogDescription";
+import { VlogPlayerProps, VlogPlayerStatus } from "./types/types";
+import VlogDescription from "../feed/FeedDescription";
 import VlogPlayerButton from "./VlogPlayerButton";
 import VlogPlayerSlider from "./VlogPlayerSlider";
-import VlogReactionControls from "./VlogReactionControls";
+import VlogReactionControls from "../feed/FeedReactionControls";
 
 const VlogPlayer = ({ vlog, shouldPlay }: VlogPlayerProps) => {
   const { uri } = vlog;
@@ -38,7 +38,6 @@ const VlogPlayer = ({ vlog, shouldPlay }: VlogPlayerProps) => {
         // muted
         resizeMode="contain"
         onProgress={data => {
-          console.log(data);
           setValue(data.currentTime);
           // find a better way to fix max duration
           setMaxValue(data.playableDuration);

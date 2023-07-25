@@ -24,7 +24,7 @@ const AnimatedDot = ({
     ];
     range.outputRange = [0, 1, 0];
   }
-  console.log("RANGE: ",range);
+
   return (
     <Animated.View
       style={[

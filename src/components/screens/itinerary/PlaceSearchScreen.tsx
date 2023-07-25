@@ -1,53 +1,52 @@
-import { useNavigation } from "@react-navigation/native";
 import { useCallback } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { RouteProp, useNavigation } from "@react-navigation/native";
+import { GooglePlaceDetail } from "react-native-google-places-autocomplete";
 import { getStatusBarHeight } from "react-native-status-bar-height";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../../utils/constants/constants";
-import { MapScreenNavigationProp } from "../../../utils/types/map";
-import GooglePlacesInput from "../../map/GooglePlacesInput";
+import GooglePlacesInput from "../../itinerary/GooglePlacesInput";
+import type { RouteNodeInfo } from "../../itinerary/types/types";
+import type { PlaceSearchScreenProps } from "./types/types";
+import type { ModalNavigatorNavigationProp } from "../../navigators/types/types";
+import {
+  DEVICE_HEIGHT,
+  DEVICE_WIDTH,
+} from "../../../utils/constants/constants";
+import { DIMENSION } from "../../../utils/constants/dimensions";
+import { PALETTE } from "../../../utils/constants/palette";
 
-const PlaceSearchScreen = ({ route }: any) => {
-  const navigation = useNavigation<MapScreenNavigationProp>();
+const PlaceSearchScreen = ({ route }: PlaceSearchScreenProps) => {
+  const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const { onAddPlace } = route.params;
 
   const onExit = useCallback(() => {
     navigation.goBack();
-  }, []);
+  }, [navigation]);
 
-  const onReceiveResults = (details: any) => {
-    const location = details.geometry.location;
-    console.log("details of capitaspring", details);
-    console.log(
-      "details of capitaspring",
-      details?.opening_hours?.open_now === false,
-    );
-    const newRouteNode = {
-      placeId: details.place_id,
-      name: details.name,
-      address: details.formatted_address,
-      openNow: details?.opening_hours?.open_now,
-      coord: { latitude: location?.lat, longitude: location?.lng },
-    };
-    onAddPlace(newRouteNode);
-    onExit();
-  };
+  const onReceiveResults = useCallback(
+    (details: GooglePlaceDetail | null) => {
+      if (details === null) {
+        onExit();
+        return;
+      }
+
+      const location = details.geometry.location;
+      const newRouteNode: RouteNodeInfo = {
+        placeId: details.place_id,
+        name: details.name,
+        address: details.formatted_address,
+        // openNow: details.opening_hours?.open_now,
+        coord: { latitude: location.lat, longitude: location.lng },
+      };
+      onAddPlace(newRouteNode);
+      onExit();
+    },
+    [onAddPlace, onExit],
+  );
 
   return (
     <View style={styles.container}>
-      <Pressable
-        style={({ pressed }) => [
-          styles.backButton,
-          { opacity: pressed ? 0.7 : 1 },
-        ]}
-        onPress={onExit}>
-        <Ionicons name="arrow-back-circle" size={32} color="#000000" />
-      </Pressable>
       <View style={styles.googlePlacesInputBox}>
-        <GooglePlacesInput
-          onAddPlace={route.params.onAddPlace}
-          onReceiveResults={onReceiveResults}
-        />
+        <GooglePlacesInput onReceiveResults={onReceiveResults} />
       </View>
     </View>
   );
@@ -56,25 +55,14 @@ const PlaceSearchScreen = ({ route }: any) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
-    padding: 20,
+    padding: 30,
     paddingTop: getStatusBarHeight() + 10,
-    backgroundColor: "#ffffff",
-  },
-  backButton: {
-    position: "absolute",
-    top: getStatusBarHeight() + 20,
-    left: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    height: 32,
-    width: 32,
+    backgroundColor: PALETTE.WHITE,
   },
   googlePlacesInputBox: {
-    width: "90%",
+    width: DIMENSION.HUNDRED_PERCENT,
   },
 });
 

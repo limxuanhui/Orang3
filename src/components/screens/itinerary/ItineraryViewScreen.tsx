@@ -1,51 +1,51 @@
-import { useCallback } from "react";
-import { FlatList, Image, Pressable, StyleSheet, View } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { StyleSheet, View } from "react-native";
 import { getStatusBarHeight } from "react-native-status-bar-height";
+import ItineraryPlanner from "../../itinerary/ItineraryPlanner";
+import LinkedFeedsList from "../../itinerary/LinkedFeedsList";
+import type { LinkedFeedsListItem } from "../../itinerary/types/types";
+import type { ItineraryViewScreenProps } from "./types/types";
 
-import ItineraryPlanningScreen from "./ItineraryPlanningScreen";
-import { PALETTE } from "../../../utils/constants/palette";
+const ItineraryViewScreen = ({ navigation }: ItineraryViewScreenProps) => {
+  const data: LinkedFeedsListItem[] = [
+    {
+      feedId: 10001,
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-gbtb.jpg",
+    },
+    {
+      feedId: 2,
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample2.jpg",
+    },
+    {
+      feedId: 3,
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample3.jpg",
+    },
+    {
+      feedId: 4,
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample1.jpg",
+    },
+    {
+      feedId: 5,
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample2.jpg",
+    },
+    {
+      feedId: 6,
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample3.jpg",
+    },
+    {
+      feedId: 7,
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample1.jpg",
+    },
+  ];
+  const isOwner = true;
 
-const ItineraryViewScreen = ({ navigation }: any) => {
-  const data = [1, 2, 3, 4, 5, 6, 7];
+  // if user is owner of Itinerary (Read/Write access), show edit functionality
 
-  const onExit = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
-
-  const onPressLinkedPost = useCallback(() => {
-    console.warn("linkedPostPressed!");
-    navigation.push("feed");
-  }, []);
+  // if user is not owner of Itinerary (Read access), only show existing state and clone functionality
 
   return (
     <View style={styles.container}>
-      <Pressable style={styles.backButton} onPress={onExit}>
-        <Ionicons name="arrow-back-circle" size={30} color={PALETTE.GREY} />
-      </Pressable>
-      <FlatList
-        style={styles.linkedFeeds}
-        contentContainerStyle={styles.linkedFeedsContentContainer}
-        data={data}
-        renderItem={item => (
-          <Pressable
-            style={({ pressed }) => [
-              styles.linkedFeed,
-              { transform: [{ scale: pressed ? 0.99 : 1 }] },
-            ]}
-            onPress={onPressLinkedPost}>
-            <Image
-              source={{
-                uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample1.jpg",
-              }}
-              style={styles.imageStyle}
-            />
-          </Pressable>
-        )}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-      <ItineraryPlanningScreen />
+      <LinkedFeedsList data={data} />
+      <ItineraryPlanner />
     </View>
   );
 };
@@ -62,30 +62,6 @@ const styles = StyleSheet.create({
     width: 32,
     zIndex: 2,
   },
-  linkedFeeds: {
-    position: "absolute",
-    height: 120 + getStatusBarHeight(),
-    width: "100%",
-    paddingBottom: 8,
-    // backgroundColor: "#ffffff",
-    zIndex: 1,
-  },
-  linkedFeedsContentContainer: {
-    height: "70%",
-    alignSelf: "flex-end",
-  },
-  linkedFeed: {
-    width: 100,
-    height: "100%",
-    marginHorizontal: 8,
-    borderRadius: 8,
-    backgroundColor: PALETTE.WHITE,
-    shadowColor: PALETTE.BLACK,
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 2,
-  },
-  imageStyle: { height: "100%", borderRadius: 8 },
 });
 
 export default ItineraryViewScreen;

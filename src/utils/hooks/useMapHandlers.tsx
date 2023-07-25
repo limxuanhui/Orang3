@@ -1,8 +1,12 @@
 import { useCallback, useState } from "react";
 // import { LatLng, MapEvent, Region } from "react-native-maps";
+import axios from "axios";
 import Polyline from "@mapbox/polyline";
-
-import { RouteInfo, RouteNodeCoord, RouteNodeInfo } from "../types/route";
+import type {
+  RouteInfo,
+  RouteNodeCoord,
+  RouteNodeInfo,
+} from "../../components/itinerary/types/types";
 
 const useMapHandlers = (navigation: { goBack: () => void }) => {
   const [routes, setRoutes] = useState<RouteInfo[]>([
@@ -15,59 +19,66 @@ const useMapHandlers = (navigation: { goBack: () => void }) => {
   ]);
   const [selectedRouteId, setSelectedRouteId] = useState<string>(routes[0].id);
   const selectedRoute = routes.filter(
-    (route: RouteInfo) => route.id === selectedRouteId
+    (route: RouteInfo) => route.id === selectedRouteId,
   )[0];
-
-  const [polylines, setPolylines] = useState<Array<RouteNodeCoord>>([]);
-
+  const [polylines, setPolylines] = useState<RouteNodeCoord[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [modalInitialValue, setModalInitialValue] = useState<string>(
-    selectedRoute.name
+    selectedRoute.name,
   );
 
-  const onAddRoute = useCallback((name: string) => {
-    // Change to uuid
-    const newId = Math.random().toString();
-    setRoutes((prevRoutes) => [
-      { id: newId, name, routeNodes: [], isRouted: false },
-      ...prevRoutes,
-    ]);
-    setModalIsOpen(false);
-    setSelectedRouteId(newId);
-  }, []);
+  const onAddRoute = useCallback(
+    (name: string) => {
+      // Change to uuid
+      const newId = Math.random().toString();
+      setRoutes(prevRoutes => [
+        { id: newId, name, routeNodes: [], isRouted: false },
+        ...prevRoutes,
+      ]);
+      setModalIsOpen(false);
+      setSelectedRouteId(newId);
+    },
+    [setModalIsOpen, setRoutes, setSelectedRouteId],
+  );
 
   const onClearRoute = useCallback(() => {
-    setRoutes((prevRoutes) =>
-      prevRoutes.map((route) => {
+    setRoutes(prevRoutes =>
+      prevRoutes.map(route => {
         if (route.id === selectedRouteId) {
           return { ...route, routeNodes: [] };
         }
         return route;
-      })
+      }),
     );
-  }, [selectedRouteId]);
+  }, [selectedRouteId, setRoutes]);
 
   const onDeleteRoute = useCallback(() => {
     if (routes.length > 1) {
       const filteredRoutes = routes.filter(
-        (route) => route.id !== selectedRouteId
+        route => route.id !== selectedRouteId,
       );
 
       setRoutes(filteredRoutes);
       setSelectedRouteId(filteredRoutes[0].id);
     }
-  }, [routes, selectedRouteId]);
+  }, [routes, selectedRouteId, setRoutes, setSelectedRouteId]);
 
-  const onHoldRoute = useCallback((routeName: string) => {
-    setModalInitialValue(routeName);
-    setModalIsOpen(true);
-  }, []);
+  const onHoldRoute = useCallback(
+    (routeName: string) => {
+      setModalInitialValue(routeName);
+      setModalIsOpen(true);
+    },
+    [setModalInitialValue, setModalIsOpen],
+  );
 
-  const onSelectRoute = useCallback((routeId: string): void => {
-    setSelectedRouteId(routeId);
+  const onSelectRoute = useCallback(
+    (routeId: string): void => {
+      setSelectedRouteId(routeId);
 
-    // Animate camera to birds eye view of all pins
-  }, []);
+      // Animate camera to birds eye view of all pins
+    },
+    [setSelectedRouteId],
+  );
 
   // Optimise ui performance since adding marker will have short delay before marker appears
   const onAddMarker = useCallback(
@@ -75,12 +86,12 @@ const useMapHandlers = (navigation: { goBack: () => void }) => {
       placeId: string,
       name: string,
       address: string = "nil",
-      openNow: boolean,
-      coord: RouteNodeCoord
+      coord: RouteNodeCoord,
+      openNow?: boolean,
     ): void => {
       const newRouteNode = { placeId, name, address, openNow, coord };
-      setRoutes((prevRoutes) =>
-        prevRoutes.map((route) => {
+      setRoutes(prevRoutes =>
+        prevRoutes.map(route => {
           if (route.id === selectedRouteId) {
             return {
               ...route,
@@ -89,30 +100,30 @@ const useMapHandlers = (navigation: { goBack: () => void }) => {
             };
           }
           return route;
-        })
+        }),
       );
     },
-    [selectedRouteId]
+    [selectedRouteId, setRoutes],
   );
 
   const onDeleteMarker = useCallback(
     (placeId: string): void => {
-      setRoutes((prevRoutes) =>
-        prevRoutes.map((route) => {
+      setRoutes(prevRoutes =>
+        prevRoutes.map(route => {
           if (route.id === selectedRouteId) {
             return {
               ...route,
               routeNodes: route.routeNodes.filter(
-                (routeNode) => routeNode.placeId !== placeId // Comparison
+                (routeNode: RouteNodeInfo) => routeNode.placeId !== placeId, // Comparison
               ),
               isRouted: false,
             };
           }
           return route;
-        })
+        }),
       );
     },
-    [selectedRouteId]
+    [selectedRouteId, setRoutes],
   );
 
   const onAddPlace = useCallback(
@@ -121,18 +132,18 @@ const useMapHandlers = (navigation: { goBack: () => void }) => {
         routeNode.placeId,
         routeNode.name,
         routeNode.address,
+        routeNode.coord,
         routeNode.openNow,
-        routeNode.coord
       );
     },
-    [onAddMarker]
+    [onAddMarker],
   );
 
   const onDeletePlace = useCallback(
     (placeId: string) => {
       onDeleteMarker(placeId);
     },
-    [onDeleteMarker]
+    [onDeleteMarker],
   );
 
   const onMapPress = useCallback(
@@ -142,24 +153,24 @@ const useMapHandlers = (navigation: { goBack: () => void }) => {
 
       // Can make HTTP request to backend for fetching details based on coordinates pressed.
 
-      onAddMarker("", "", "", false, event.nativeEvent.coordinate); // Look into autogenerated placeId
+      onAddMarker("", "", "", event.nativeEvent.coordinate, false); // Look into autogenerated placeId
     },
-    [onAddMarker]
+    [onAddMarker],
   );
 
   const onUpdateRouteName = useCallback(
     (name: string) => {
-      setRoutes((prevRoutes) =>
-        prevRoutes.map((route) => {
+      setRoutes(prevRoutes =>
+        prevRoutes.map(route => {
           if (route.id === selectedRouteId) {
             return { ...route, name };
           }
           return route;
-        })
+        }),
       );
       setModalIsOpen(false);
     },
-    [selectedRouteId]
+    [selectedRouteId, setModalIsOpen, setRoutes],
   );
 
   const onStartRouting = useCallback(async () => {
@@ -177,9 +188,10 @@ const useMapHandlers = (navigation: { goBack: () => void }) => {
     // );
     // const url = "http://192.168.1.20:8080/directions";
     const url = "http://localhost:8080/directions";
-    console.log(JSON.stringify(routes, null, 4));
 
-    const data = selectedRoute.routeNodes.map((routeNode) => routeNode.coord);
+    const data = selectedRoute.routeNodes.map(
+      (routeNode: RouteNodeInfo) => routeNode.coord,
+    );
 
     const options = {
       method: "POST",
@@ -191,12 +203,16 @@ const useMapHandlers = (navigation: { goBack: () => void }) => {
     };
 
     try {
+      // Use axios
+      // const directionsReponse = await axios.post(url, JSON.stringify(data), {headers: {
+      //   Accept: "application/json",
+      //   "Content-Type": "application/json",
+      // }})
       const response = await fetch(url, options);
       const directionsResponse = await response.json();
-      console.log("DIRECTIONS RESPONSE: ", directionsResponse); 
-      
-      setRoutes((prevRoutes) =>
-        prevRoutes.map((route) => {
+
+      setRoutes(prevRoutes =>
+        prevRoutes.map(route => {
           if (route.id === selectedRouteId) {
             const orderedRouteNodes: RouteNodeInfo[] = [];
 
@@ -206,16 +222,11 @@ const useMapHandlers = (navigation: { goBack: () => void }) => {
                 orderedRouteNodes.push(currentNode);
               }
             });
-            console.log("ORDERED ROUTE NODES: ", orderedRouteNodes);
             return { ...route, routeNodes: orderedRouteNodes, isRouted: true }; // Add ordered coords to this object
           }
           return route;
-        })
+        }),
       );
-
-      //   console.log();
-      //   console.log(JSON.stringify(directionsResponse, null, 4));
-      //   console.log();
 
       // An array which contains information about a leg of the route, between two locations within the given route.
       // A separate leg will be present for each waypoint or destination specified.
@@ -229,28 +240,28 @@ const useMapHandlers = (navigation: { goBack: () => void }) => {
           routes: { overviewPolyline: { encodedPath: string } }[];
         }) => {
           const directionCoords = Polyline.decode(
-            direction.routes[0].overviewPolyline.encodedPath
+            direction.routes[0].overviewPolyline.encodedPath,
           ).map((coord: any[]) => ({
             latitude: coord[0],
             longitude: coord[1],
           }));
           lines = lines.concat(directionCoords);
-        }
+        },
       );
 
       setPolylines(lines);
     } catch (e) {
       console.log(e);
     }
-  }, [selectedRoute]);
+  }, [Polyline, selectedRoute, setRoutes, setPolylines]);
 
   const onCloseModal = useCallback(() => {
     setModalIsOpen(false);
-  }, []);
+  }, [setModalIsOpen]);
 
-  const onExit = () => {
+  const onExit = useCallback(() => {
     navigation.goBack();
-  };
+  }, [navigation]);
 
   return {
     routes,

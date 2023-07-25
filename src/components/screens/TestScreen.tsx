@@ -48,9 +48,6 @@ const TestScreen = () => {
   const onViewableItemsChanged = useCallback(
     ({ viewableItems, itemsChanged }: any) => {
       if (viewableItems && viewableItems.length > 0) {
-        console.log("Length: ", viewableItems[0].length);
-        console.log("Active: ", viewableItems[0].index);
-        console.log(viewableItems);
         setActiveIndex(viewableItems[0].index);
       }
     },
@@ -66,7 +63,6 @@ const TestScreen = () => {
         showsHorizontalScrollIndicator={false}
         scrollEventThrottle={32}
         onScroll={e => {
-          console.log("EVENT: ", e);
           Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], {
             useNativeDriver: false,
           });

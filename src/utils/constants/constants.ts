@@ -1,3 +1,4 @@
+import type { StackNavigationOptions } from "@react-navigation/stack";
 import { Dimensions } from "react-native";
 
 export const { height: DEVICE_HEIGHT, width: DEVICE_WIDTH } =
@@ -50,3 +51,5 @@ export const GOOGLE_PLACES_AUTOCOMPLETE_TEXT_INPUT_PROPS = {
 };
 
 export const HEADER_SHOWN_FALSE = { headerShown: false };
+
+export const SCREEN_OPTIONS: StackNavigationOptions = { headerShown: false };

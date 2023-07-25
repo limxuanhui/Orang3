@@ -1,6 +1,6 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import type { GypsieButtonProps } from "../../../utils/types/button";
+import type { GypsieButtonProps } from "./types/types";
 
 const GypsieButton = ({
   customButtonStyles,
