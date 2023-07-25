@@ -17,14 +17,13 @@ import {
 } from "../../utils/constants/constants";
 import { PALETTE } from "../../utils/constants/palette";
 
-const ItineraryPlanner = ({ navigation }: any) => {
+const ItineraryPlanner = () => {
   const mapRef = useRef<MapView | null>(null);
   const provider = PROVIDER_GOOGLE;
   const {
     routes,
     selectedRouteId,
     selectedRoute,
-    polylines,
     modalIsOpen,
     modalInitialValue,
     onAddRoute,
@@ -39,14 +38,15 @@ const ItineraryPlanner = ({ navigation }: any) => {
     onMapPress,
     onUpdateRouteName,
     onStartRouting,
-    onExit,
     onCloseModal,
-  } = useMapHandlers(navigation);
+  } = useMapHandlers();
 
   useEffect(() => {
     // Add animation to a certain location without places added
+    console.log("Selected route: ", selectedRoute);
 
     if (selectedRoute.routeNodes.length === 1) {
+      // Modify to use average of all routeNodes as region
       const { latitude, longitude } = selectedRoute.routeNodes[0].coord;
       const region: Region = {
         latitude,
@@ -84,16 +84,16 @@ const ItineraryPlanner = ({ navigation }: any) => {
         />
       </Modal>
       <MapView
+        style={styles.map}
         ref={mapRef}
         provider={provider}
-        style={styles.map}
         region={INITIAL_POSITION}>
         {selectedRoute.routeNodes.map((routeNode: RouteNodeInfo) => (
           <MapPin routeNode={routeNode} onDeleteMarker={onDeleteMarker} />
         ))}
-        {selectedRoute.isRouted && (
+        {selectedRoute.isRouted && selectedRoute.polyline.length > 1 && (
           <Polyline
-            coordinates={polylines}
+            coordinates={selectedRoute.polyline}
             strokeColor={PALETTE.ORANGE}
             strokeWidth={6}
             lineJoin="round"
@@ -126,11 +126,8 @@ const ItineraryPlanner = ({ navigation }: any) => {
 
 const styles = StyleSheet.create({
   container: {
-    // ...StyleSheet.absoluteFillObject,
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
-    // justifyContent: "flex-end",
-    // alignItems: "center",
   },
   map: {
     ...StyleSheet.absoluteFillObject,

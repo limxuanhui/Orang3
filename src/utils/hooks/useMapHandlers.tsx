@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 // import { LatLng, MapEvent, Region } from "react-native-maps";
 import axios from "axios";
 import Polyline from "@mapbox/polyline";
@@ -8,20 +8,20 @@ import type {
   RouteNodeInfo,
 } from "../../components/itinerary/types/types";
 
-const useMapHandlers = (navigation: { goBack: () => void }) => {
+const useMapHandlers = () => {
   const [routes, setRoutes] = useState<RouteInfo[]>([
     {
       id: "1", // to change to uuid
       name: "Day 1",
       routeNodes: [],
       isRouted: false,
+      polyline: [],
     },
   ]);
   const [selectedRouteId, setSelectedRouteId] = useState<string>(routes[0].id);
   const selectedRoute = routes.filter(
     (route: RouteInfo) => route.id === selectedRouteId,
   )[0];
-  const [polylines, setPolylines] = useState<RouteNodeCoord[]>([]);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [modalInitialValue, setModalInitialValue] = useState<string>(
     selectedRoute.name,
@@ -32,7 +32,7 @@ const useMapHandlers = (navigation: { goBack: () => void }) => {
       // Change to uuid
       const newId = Math.random().toString();
       setRoutes(prevRoutes => [
-        { id: newId, name, routeNodes: [], isRouted: false },
+        { id: newId, name, routeNodes: [], isRouted: false, polyline: [] },
         ...prevRoutes,
       ]);
       setModalIsOpen(false);
@@ -42,10 +42,11 @@ const useMapHandlers = (navigation: { goBack: () => void }) => {
   );
 
   const onClearRoute = useCallback(() => {
+    console.log("onClearRoute");
     setRoutes(prevRoutes =>
       prevRoutes.map(route => {
         if (route.id === selectedRouteId) {
-          return { ...route, routeNodes: [] };
+          return { ...route, routeNodes: [], polyline: [] };
         }
         return route;
       }),
@@ -178,15 +179,6 @@ const useMapHandlers = (navigation: { goBack: () => void }) => {
     // Backend receives distance matrix of the given coordinates and travel mode.
     // Determine order of travelling in backend.
     // Return ordered route nodes.
-    // setRoutes((prevRoutes) =>
-    //   prevRoutes.map((route) => {
-    //     if (route.id === selectedRouteId) {
-    //       return { ...route, isRouted: true }; // Add ordered coords to this object
-    //     }
-    //     return route;
-    //   })
-    // );
-    // const url = "http://192.168.1.20:8080/directions";
     const url = "http://localhost:8080/directions";
 
     const data = selectedRoute.routeNodes.map(
@@ -222,52 +214,48 @@ const useMapHandlers = (navigation: { goBack: () => void }) => {
                 orderedRouteNodes.push(currentNode);
               }
             });
-            return { ...route, routeNodes: orderedRouteNodes, isRouted: true }; // Add ordered coords to this object
+
+            // An array which contains information about a leg of the route, between two locations within the given route.
+            // A separate leg will be present for each waypoint or destination specified.
+            // (A route with no waypoints will contain exactly one leg within the legs array.) Each leg consists of a series of steps.
+            let polyline: RouteNodeCoord[] = [];
+            directionsResponse.directionsResultList.forEach(
+              (direction: {
+                routes: { overviewPolyline: { encodedPath: string } }[];
+              }) => {
+                const directionCoords = Polyline.decode(
+                  direction.routes[0].overviewPolyline.encodedPath,
+                ).map((coord: any[]) => ({
+                  latitude: coord[0],
+                  longitude: coord[1],
+                }));
+                polyline = polyline.concat(directionCoords);
+              },
+            );
+
+            return {
+              ...route,
+              routeNodes: orderedRouteNodes,
+              isRouted: true,
+              polyline,
+            };
           }
           return route;
         }),
       );
-
-      // An array which contains information about a leg of the route, between two locations within the given route.
-      // A separate leg will be present for each waypoint or destination specified.
-      // (A route with no waypoints will contain exactly one leg within the legs array.) Each leg consists of a series of steps.
-
-      // array of RouteNodeCoord objects
-
-      let lines: RouteNodeCoord[] = [];
-      directionsResponse.directionsResultList.forEach(
-        (direction: {
-          routes: { overviewPolyline: { encodedPath: string } }[];
-        }) => {
-          const directionCoords = Polyline.decode(
-            direction.routes[0].overviewPolyline.encodedPath,
-          ).map((coord: any[]) => ({
-            latitude: coord[0],
-            longitude: coord[1],
-          }));
-          lines = lines.concat(directionCoords);
-        },
-      );
-
-      setPolylines(lines);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
-  }, [Polyline, selectedRoute, setRoutes, setPolylines]);
+  }, [Polyline, selectedRoute, setRoutes]);
 
   const onCloseModal = useCallback(() => {
     setModalIsOpen(false);
   }, [setModalIsOpen]);
 
-  const onExit = useCallback(() => {
-    navigation.goBack();
-  }, [navigation]);
-
   return {
     routes,
     selectedRouteId,
     selectedRoute,
-    polylines,
     modalIsOpen,
     modalInitialValue,
     onAddRoute,
@@ -282,7 +270,6 @@ const useMapHandlers = (navigation: { goBack: () => void }) => {
     onMapPress,
     onUpdateRouteName,
     onStartRouting,
-    onExit,
     onCloseModal,
   };
 };

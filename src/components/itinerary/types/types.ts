@@ -61,6 +61,7 @@ export type RouteInfo = {
   name: string;
   routeNodes: RouteNodeInfo[];
   isRouted: boolean;
+  polyline: RouteNodeCoord[];
 };
 
 export type RouteNodeCoord = LatLng;
