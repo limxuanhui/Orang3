@@ -81,5 +81,11 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Sunday wants to access your photo gallery.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Sunday wants to access your camera.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Sunday wants to access your microphone.</string>	 
 </dict>
 </plist>

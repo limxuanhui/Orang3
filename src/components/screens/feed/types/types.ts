@@ -24,6 +24,10 @@ export type HomeScreenNavigationProp = StackNavigationProp<
 >;
 
 // --------------------------- FeedScreen ---------------------------
+export type FeedScreenParams = {
+  feedId: string;
+};
+
 export type FeedScreenProps = {
   navigation: FeedScreenNavigationProp;
   route: FeedScreenRouteProp;

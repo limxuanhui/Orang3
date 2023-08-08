@@ -1,7 +1,17 @@
 import { useCallback, useState } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  Pressable,
+  PressableStateCallbackType,
+  StyleSheet,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import AuxiliaryControls from "../common/AuxiliaryControls";
+import BookmarkIcon from "../common/icons/BookmarkIcon";
+import CommentIcon from "../common/icons/CommentIcon";
+import GypsieButton from "../common/buttons/GypsieButton";
+import HeartIcon from "../common/icons/HeartIcon";
+import ShareIcon from "../common/icons/ShareIcon";
 import type { FeedReactionControlsProps } from "./types/types";
 import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
 import { DIMENSION } from "../../utils/constants/dimensions";
@@ -38,7 +48,7 @@ const FeedReactionControls = ({
   }, []);
 
   const onPressReactionControlStyle = useCallback(
-    ({ pressed }: { pressed: boolean }) => {
+    ({ pressed }: PressableStateCallbackType) => {
       return [
         styles.reactionControl,
         {
@@ -67,9 +77,9 @@ const FeedReactionControls = ({
   }, [liked, setLiked, setReactionCounts]);
 
   const onPressComment = useCallback(() => {
-    navigation.getParent()?.navigate("comments", {
-      count: parseCount(reactionCounts.comments),
-    });
+    // navigation.getParent()?.navigate("comments", {
+    //   count: parseCount(reactionCounts.comments),
+    // });
   }, [navigation]);
 
   const onPressBookmark = useCallback(() => {
@@ -88,7 +98,7 @@ const FeedReactionControls = ({
   // }, [reactionCounts])
 
   return (
-    <View style={styles.reactionControls}>
+    <AuxiliaryControls>
       <Pressable style={onPressReactionControlStyle} onPress={onPressAvatar}>
         <Image
           style={styles.avatar}
@@ -97,55 +107,63 @@ const FeedReactionControls = ({
           }}
         />
       </Pressable>
-      <Pressable style={onPressReactionControlStyle} onPress={onPressLike}>
-        <FontAwesome
-          name="heart"
-          size={24}
-          color={liked ? PALETTE.RED : PALETTE.WHITE}
-        />
-        <Text style={styles.reactionCount}>
-          {parseCount(reactionCounts.likes)}
-        </Text>
-      </Pressable>
-      {/* <Pressable style={onPressReactionControlStyle} onPress={onPressComment}>
-        <FontAwesome name="commenting" size={24} color={PALETTE.WHITE} />
-        <Text style={styles.reactionCount}>
-          {parseCount(reactionCounts.comments)}
-        </Text>
-      </Pressable> */}
-      <Pressable style={onPressReactionControlStyle} onPress={onPressBookmark}>
-        <FontAwesome
-          name="bookmark"
-          size={24}
-          color={bookmarked ? "orange" : "#ffffff"}
-        />
-        <Text style={styles.reactionCount}>
-          {parseCount(reactionCounts.bookmarks)}
-        </Text>
-      </Pressable>
-      {/* <Pressable style={onPressReactionControlStyle} onPress={onPressLink}>
-        <FontAwesome name="share" size={24} color="#ffffff" />
-        <Text style={styles.reactionCount}>
-          {parseCount(reactionCounts.shares)}
-        </Text>
-      </Pressable> */}
-    </View>
+      <GypsieButton
+        customButtonStyles={onPressReactionControlStyle}
+        customIconStyles={[
+          styles.reactionIcon,
+          {
+            color: liked ? PALETTE.RED : PALETTE.WHITE,
+          },
+        ]}
+        customTextStyles={styles.reactionCount}
+        Icon={HeartIcon}
+        text={parseCount(reactionCounts.likes)}
+        onPress={onPressLike}
+      />
+      <GypsieButton
+        customButtonStyles={onPressReactionControlStyle}
+        customIconStyles={[
+          styles.reactionIcon,
+          {
+            color: bookmarked ? PALETTE.ORANGE : PALETTE.WHITE,
+          },
+        ]}
+        customTextStyles={styles.reactionCount}
+        Icon={BookmarkIcon}
+        text={parseCount(reactionCounts.bookmarks)}
+        onPress={onPressBookmark}
+      />
+      <GypsieButton
+        customButtonStyles={onPressReactionControlStyle}
+        customIconStyles={[
+          styles.reactionIcon,
+          {
+            color: PALETTE.WHITE,
+          },
+        ]}
+        customTextStyles={styles.reactionCount}
+        Icon={CommentIcon}
+        text={parseCount(reactionCounts.comments)}
+        onPress={onPressComment}
+      />
+      <GypsieButton
+        customButtonStyles={onPressReactionControlStyle}
+        customIconStyles={[
+          styles.reactionIcon,
+          {
+            color: PALETTE.WHITE,
+          },
+        ]}
+        customTextStyles={styles.reactionCount}
+        Icon={ShareIcon}
+        text={parseCount(reactionCounts.shares)}
+        onPress={onPressLink}
+      />
+    </AuxiliaryControls>
   );
 };
 
 const styles = StyleSheet.create({
-  reactionControls: {
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    position: "absolute",
-    right: 0,
-    bottom: DIMENSION.THIRTY_PERCENT,
-    marginRight: 8,
-    height: DIMENSION.FORTY_PERCENT,
-    width: DIMENSION.TEN_PERCENT,
-    borderRadius: 8,
-    zIndex: 100,
-  },
   avatar: {
     height: 40,
     width: DIMENSION.HUNDRED_PERCENT,
@@ -156,8 +174,11 @@ const styles = StyleSheet.create({
   reactionControl: {
     justifyContent: "center",
     alignItems: "center",
-    height: DIMENSION.FIFTEEN_PERCENT,
-    width: DIMENSION.HUNDRED_PERCENT,
+    height: 40,
+    width: 40,
+  },
+  reactionIcon: {
+    fontSize: 24,
   },
   reactionCount: {
     marginTop: 2,

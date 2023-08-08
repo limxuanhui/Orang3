@@ -1,12 +1,15 @@
-import { StyleProp, TextStyle, ViewStyle } from "react-native";
+import { ComponentType } from "react";
+import { PressableStateCallbackType, StyleProp, TextStyle, ViewStyle } from "react-native";
+import { IconProps } from "../../icons/types/types";
 
 export type GypsieButtonProps = {
-  customButtonStyles?: StyleProp<ViewStyle>;
+  customButtonStyles?: StyleProp<ViewStyle> | ((state: PressableStateCallbackType) => StyleProp<ViewStyle>);
   customTextStyles?: StyleProp<TextStyle>;
   customIconStyles?: StyleProp<TextStyle>;
-  icon?: string;
+  Icon?: ComponentType<IconProps>;
   text?: string;
   loading?: boolean;
+  disabled?: boolean;
   onPress: () => void;
 };
 

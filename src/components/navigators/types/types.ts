@@ -1,7 +1,7 @@
 import { NavigatorScreenParams } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { User } from "@react-native-google-signin/google-signin";
-import type { FeedScreenParams } from "../../feed/types/types";
+import type { FeedScreenParams } from "../../screens/feed/types/types";
 import type { AuthStackNavigatorParamList } from "../../screens/auth/types/types";
 import type { PlaceSearchScreenParams } from "../../screens/itinerary/types/types";
 import type {
@@ -40,8 +40,10 @@ export type AppStackNavigatorParamList = {
 
 export type BottomTabNavigatorParamList = {
   Home: undefined;
-  test: undefined;
+  // test: undefined;
   ItineraryStack: undefined;
+  Post: undefined;
+  DriverStack: undefined;
   ProfileStack: ProfileScreenParams;
 };
 
@@ -52,7 +54,7 @@ export type ModalNavigatorNavigationProp = StackNavigationProp<
 >;
 
 export type ModalNavigatorParamList = {
-  Splash: undefined;
+  NewFeedPost: undefined;
   Avatar: AvatarScreenParams;
   Feed: FeedScreenParams;
   ItineraryView: undefined;

@@ -6,7 +6,7 @@ import type { StackNavigationProp } from "@react-navigation/stack";
 import type { AppStackNavigatorParamList, ModalNavigatorParamList } from "../../../navigators/types/types";
 
 export type ProfileScreenParams = {
-  userId?: number;
+  userId?: string;
   avatarUri?: string;
 };
 

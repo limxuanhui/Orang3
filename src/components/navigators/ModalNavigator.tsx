@@ -1,4 +1,7 @@
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  StackCardInterpolationProps,
+  createStackNavigator,
+} from "@react-navigation/stack";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 import AvatarScreen from "../screens/profile/AvatarScreen";
 import FeedScreen from "../screens/feed/FeedScreen";
@@ -9,6 +12,8 @@ import SplashScreen from "../screens/auth/SplashScreen";
 import type { ModalNavigatorParamList } from "./types/types";
 import { PALETTE } from "../../utils/constants/palette";
 import { useEffect } from "react";
+import NewFeedPostScreen from "../screens/post/NewFeedPostScreen";
+import { Text } from "react-native";
 
 const Modal = createStackNavigator<ModalNavigatorParamList>();
 
@@ -28,8 +33,12 @@ const ModalNavigator = () => {
     headerTransparent: true,
     headerTintColor: PALETTE.OFFWHITE,
     headerShadowVisible: false,
-    // useNativeDriver: true,
+    useNativeDriver: true,
   };
+
+  // const navigationOptions = ({navigation}) => {
+  //   return <HeaderBack
+  // }
 
   useEffect(() => {
     console.log("ModalNavigator mounted");
@@ -48,7 +57,16 @@ const ModalNavigator = () => {
         cardOverlayEnabled: true,
         cardStyle: { backgroundColor: PALETTE.TRANSPARENT },
       }}>
-      {/* <Modal.Screen name="Splash" component={SplashScreen} /> */}
+      <Modal.Screen
+        name="NewFeedPost"
+        component={NewFeedPostScreen}
+        options={{
+          ...options,
+          // headerTransparent: false,
+          // headerTitle: "New post",
+          // headerTintColor: PALETTE.BLACK
+        }}
+      />
       <Modal.Screen
         name="Avatar"
         component={AvatarScreen}
@@ -120,34 +138,6 @@ const ModalNavigator = () => {
         component={PlaceSearchScreen}
         options={options}
       />
-
-      {/* <Modal.Screen
-        name="itinerary-planning"
-        component={ItineraryPlanningScreen}
-        options={{
-          transitionSpec: {
-            open: { animation: "spring", config },
-            close: {
-              animation: "spring",
-              config,
-            },
-          },
-          cardStyleInterpolator: ({
-            current,
-            next,
-            index,
-            closing,
-            layouts,
-          }) => ({
-            containerStyle: {},
-            cardStyle: {
-              transform: [{ scale: current.progress }],
-            },
-            overlayStyle: {},
-            shadowStyle: {},
-          }),
-        }}
-      /> */}
     </Modal.Navigator>
   );
 };

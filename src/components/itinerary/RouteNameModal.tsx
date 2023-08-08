@@ -31,6 +31,7 @@ const RouteNameModal = ({
           style={styles.modalTextInput}
           placeholder="Enter route name"
           value={name}
+          autoFocus
           onChangeText={text => setName(text)}
         />
         <View style={styles.modalControls}>

@@ -1,21 +1,19 @@
 import { useCallback, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet,View } from "react-native";
 import Video from "react-native-video";
-
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
-import { VlogPlayerProps, VlogPlayerStatus } from "./types/types";
-import VlogDescription from "../feed/FeedDescription";
 import VlogPlayerButton from "./VlogPlayerButton";
 import VlogPlayerSlider from "./VlogPlayerSlider";
-import VlogReactionControls from "../feed/FeedReactionControls";
+import { type VlogPlayerProps, VlogPlayerStatus } from "./types/types";
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
+import { DIMENSION } from "../../utils/constants/dimensions";
+import { PALETTE } from "../../utils/constants/palette";
 
 const VlogPlayer = ({ vlog, shouldPlay }: VlogPlayerProps) => {
-  const { uri } = vlog;
-
+  const { media } = vlog;
+  console.log("Vlog player: ", media )
   const [status, setStatus] = useState<VlogPlayerStatus>(
     VlogPlayerStatus.PLAYING,
   );
-
   const [value, setValue] = useState<number>(0);
   const [maxValue, setMaxValue] = useState<number>(0);
 
@@ -31,7 +29,7 @@ const VlogPlayer = ({ vlog, shouldPlay }: VlogPlayerProps) => {
     <View style={styles.container}>
       <Video
         style={styles.video}
-        source={{ uri }}
+        source={{ uri: media?.uri }}
         paused={!shouldPlay || status === VlogPlayerStatus.PAUSED}
         controls={false}
         repeat
@@ -58,9 +56,9 @@ const styles = StyleSheet.create({
     width: DEVICE_WIDTH,
   },
   video: {
-    height: "100%",
-    width: "100%",
-    backgroundColor: "#000000",
+    height: DIMENSION.HUNDRED_PERCENT,
+    width: DIMENSION.HUNDRED_PERCENT,
+    backgroundColor: PALETTE.BLACK,
   },
 });
 

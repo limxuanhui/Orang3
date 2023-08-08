@@ -1,12 +1,11 @@
-export type FeedProps = {
-  feed: Feed;
-  inView: boolean;
+// Data types
+export type BaseFeed = {
+  id: string;
+  userId: string;
+  items: FeedItem[];
 };
 
-export type Feed = {
-  id: number;
-  items: Array<FeedItem>;
-  userId: number;
+export type Feed = BaseFeed & {
   avatarUri: string;
   handle: string;
   isLiked: boolean;
@@ -17,20 +16,28 @@ export type Feed = {
   shares: number;
 };
 
+export type MediaType = "image" | "video/mp4" | "video";
+export type Media = {
+  type: MediaType;
+  uri: string
+}
+
+
 export type FeedItem = {
-  id: number;
-  type: string;
-  uri: string;
+  id: string;
+  media?: Media
   caption?: string;
-  maplink?: string;
+  mapLink?: string;
+};
+
+// Component properties
+export type FeedDisplayProps = {
+  data: Feed;
+  inView: boolean;
 };
 
 export type FeedThumbnailProps = {
   feed: Feed;
-};
-
-export type FeedScreenParams = {
-  feedId: number;
 };
 
 export type FeedDescriptionProps = {
@@ -39,7 +46,7 @@ export type FeedDescriptionProps = {
 };
 
 export type FeedReactionControlsProps = {
-  userId: number;
+  userId: string;
   avatarUri: string;
   isLiked: boolean;
   isBookmarked: boolean;
@@ -47,4 +54,10 @@ export type FeedReactionControlsProps = {
   comments: number;
   bookmarks: number;
   shares: number;
+};
+
+export type FeedCarouselProps = {
+  handle: string;
+  items: FeedItem[];
+  inView: boolean;
 };

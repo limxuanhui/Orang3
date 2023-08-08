@@ -7,6 +7,7 @@ import type {
   RouteNodeCoord,
   RouteNodeInfo,
 } from "../../components/itinerary/types/types";
+import useModalHandler from "./useModalHandler";
 
 const useMapHandlers = () => {
   const [routes, setRoutes] = useState<RouteInfo[]>([
@@ -22,10 +23,10 @@ const useMapHandlers = () => {
   const selectedRoute = routes.filter(
     (route: RouteInfo) => route.id === selectedRouteId,
   )[0];
-  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [modalInitialValue, setModalInitialValue] = useState<string>(
     selectedRoute.name,
   );
+  const { modalIsOpen, closeModal, openModal } = useModalHandler();
 
   const onAddRoute = useCallback(
     (name: string) => {
@@ -35,10 +36,10 @@ const useMapHandlers = () => {
         { id: newId, name, routeNodes: [], isRouted: false, polyline: [] },
         ...prevRoutes,
       ]);
-      setModalIsOpen(false);
+      closeModal();
       setSelectedRouteId(newId);
     },
-    [setModalIsOpen, setRoutes, setSelectedRouteId],
+    [closeModal, setRoutes, setSelectedRouteId],
   );
 
   const onClearRoute = useCallback(() => {
@@ -67,9 +68,9 @@ const useMapHandlers = () => {
   const onHoldRoute = useCallback(
     (routeName: string) => {
       setModalInitialValue(routeName);
-      setModalIsOpen(true);
+      openModal();
     },
-    [setModalInitialValue, setModalIsOpen],
+    [openModal, setModalInitialValue],
   );
 
   const onSelectRoute = useCallback(
@@ -169,9 +170,9 @@ const useMapHandlers = () => {
           return route;
         }),
       );
-      setModalIsOpen(false);
+      closeModal();
     },
-    [selectedRouteId, setModalIsOpen, setRoutes],
+    [selectedRouteId, closeModal, setRoutes],
   );
 
   const onStartRouting = useCallback(async () => {
@@ -249,8 +250,8 @@ const useMapHandlers = () => {
   }, [Polyline, selectedRoute, setRoutes]);
 
   const onCloseModal = useCallback(() => {
-    setModalIsOpen(false);
-  }, [setModalIsOpen]);
+    closeModal();
+  }, [closeModal]);
 
   return {
     routes,

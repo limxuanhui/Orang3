@@ -1,14 +1,15 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
 import type { GypsieButtonProps } from "./types/types";
+import { DIMENSION } from "../../../utils/constants/dimensions";
 
 const GypsieButton = ({
   customButtonStyles,
-  customTextStyles,
   customIconStyles,
-  loading,
-  icon,
+  customTextStyles,
+  Icon,
   text,
+  loading = false,
+  disabled = false,
   onPress,
 }: GypsieButtonProps) => {
   return (
@@ -16,18 +17,18 @@ const GypsieButton = ({
       style={({ pressed }) => [
         { opacity: pressed ? 0.7 : 1 },
         styles.defaultButtonStyles,
-        customButtonStyles,
+        typeof customButtonStyles === "function"
+          ? customButtonStyles({ pressed })
+          : customButtonStyles,
       ]}
-      disabled={loading}
+      disabled={disabled || loading}
       onPress={onPress}>
-      {icon && (
-        <Icon name={icon} style={[styles.icon, customIconStyles]} size={20} />
-      )}
+      {!loading && Icon ? <Icon style={customIconStyles} /> : null}
       {loading ? (
         <ActivityIndicator />
-      ) : (
+      ) : text ? (
         <Text style={[styles.defaultTextStyles, customTextStyles]}>{text}</Text>
-      )}
+      ) : null}
     </Pressable>
   );
 };
@@ -36,16 +37,11 @@ const styles = StyleSheet.create({
   defaultButtonStyles: {
     justifyContent: "center",
     alignItems: "center",
-    width: "100%",
+    width: DIMENSION.HUNDRED_PERCENT,
     borderRadius: 4,
   },
+  defaultIconStyles: {},
   defaultTextStyles: {},
-  icon: {
-    position: "absolute",
-    top: 10,
-    left: 20,
-    zIndex: 1,
-  },
 });
 
 export default GypsieButton;

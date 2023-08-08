@@ -8,7 +8,7 @@ const FeedDescription = ({ handle, caption }: FeedDescriptionProps) => {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.descriptionBox, { bottom: insets.bottom + 50 }]}>
+    <View style={[styles.descriptionBox, { bottom: insets.bottom + 60 }]}>
       <View style={styles.handleBox}>
         <Text style={styles.handle}>{handle}</Text>
       </View>
@@ -27,8 +27,6 @@ const styles = StyleSheet.create({
     width: DIMENSION.SEVENTY_PERCENT,
     paddingHorizontal: 16,
     zIndex: 1,
-    // borderWidth: 1,
-    // borderColor: 'red'
   },
   handleBox: {},
   handle: {
@@ -39,14 +37,6 @@ const styles = StyleSheet.create({
   captionBox: {},
   caption: {
     color: PALETTE.OFFWHITE,
-  },
-  soundTrackBox: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
-  },
-  soundTrack: {
-    color: PALETTE.WHITE,
   },
 });
 

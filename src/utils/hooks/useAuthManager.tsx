@@ -8,6 +8,7 @@ import EncryptedStorage from "react-native-encrypted-storage";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import type { GypsieUser } from "../../components/navigators/types/types";
+import { printPrettyJson } from "../helpers/functions";
 
 type GoogleIdToken = {
   iss: string;
@@ -143,11 +144,10 @@ const useAuthManager = () => {
 
     try {
       await GoogleSignin.hasPlayServices();
-      console.log("Awaiting google signin")
+      console.log("Awaiting google signin");
       const userInfo = await GoogleSignin.signIn();
-      console.log("google signin complete: " + userInfo);
-      // Send idToken to backend for verification
-      // let responseData;
+      console.log("Google signin complete: " + userInfo);
+
       if (userInfo.idToken) {
         const { sub, name, email, picture } = decodeIdToken(userInfo.idToken);
         const requestBody = {
@@ -157,15 +157,13 @@ const useAuthManager = () => {
         console.log(JSON.stringify(requestBody, null, 4));
         const response = await axios.post(url, requestBody, {});
 
-        // const responseData = await verifyIdTokenValidity(userInfo.idToken);
-        // return response.data;
         if (response.data) {
           await storeUserIdToken(userInfo.idToken);
           await storeUserData(response.data);
           setUser(response.data);
           setIsLoggedIn(true);
         }
-        console.log("Response: " + JSON.stringify(response.data, null, 4));
+        printPrettyJson(response.data);
       }
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -186,10 +184,17 @@ const useAuthManager = () => {
           error,
         );
       }
+      setLoading(false);
     }
-
     setLoading(false);
-  }, [GoogleSignin, setLoading, setUser, storeUserIdToken, storeUserData]);
+  }, [
+    GoogleSignin,
+    printPrettyJson,
+    setLoading,
+    setUser,
+    storeUserIdToken,
+    storeUserData,
+  ]);
 
   const logoutHandler = useCallback(async () => {
     // Remove token
@@ -217,7 +222,7 @@ const useAuthManager = () => {
         console.log("Token expires at: ", decodedIdToken.exp);
         console.log("Time now: ", currentTime);
         console.log("Time left: ", decodedIdToken.exp - currentTime);
-        return currentTime > decodedIdToken.exp;
+        return currentTime < decodedIdToken.exp;
       }
       return false;
     },
@@ -229,9 +234,9 @@ const useAuthManager = () => {
     const checkUserLoggedIn = async () => {
       // Check for existence of valid id token
       const idToken = await retrieveUserIdToken();
-      const tokenIsValid = await checkIfIdTokenIsValid(idToken);      
-      if (!tokenIsValid) {    
-        setUser(null);    
+      const tokenIsValid = await checkIfIdTokenIsValid(idToken);
+      if (!tokenIsValid) {
+        setUser(null);
         setIsLoggedIn(false);
         await removeUserIdToken();
         await removeUserData();

@@ -1,21 +1,53 @@
 import { GooglePlaceDetail } from "react-native-google-places-autocomplete";
 import { LatLng } from "react-native-maps";
 
-export type ItineraryFeedProps = {
-  feed: ItineraryFeedItem[];
-};
-
+// Data types
 export type ItineraryFeedItem = {
   name: string;
-};
-
-export type ItineraryFilterProps = {
-  filter: string[];
 };
 
 export type LinkedFeedsListItem = {
   feedId: number;
   uri: string;
+};
+
+export type RouteNodeInfo = {
+  placeId: string;
+  name: string;
+  address: string;
+  coord: RouteNodeCoord;
+  openNow?: boolean;
+};
+
+export type RouteInfo = {
+  id: string;
+  name: string;
+  routeNodes: RouteNodeInfo[];
+  isRouted: boolean;
+  polyline: RouteNodeCoord[];
+};
+
+export type RouteNodeCoord = LatLng;
+
+export type Itinerary = {
+  id: number;
+  routes: RouteNodeInfo[];
+  linkedFeeds: LinkedFeedsListItem[];
+};
+
+export type ItineraryFeedThumbnailInfo = {
+  id: string;
+  imageUri: string;
+  caption: string;
+};
+
+// Component properties
+export type ItineraryFeedProps = {
+  feed: ItineraryFeedItem[];
+};
+
+export type ItineraryFilterProps = {
+  filter: string[];
 };
 
 export type LinkedFeedsListProps = {
@@ -43,28 +75,10 @@ export type RouteButtonProps = {
   onHoldRoute: (routeName: string) => void;
 };
 
-export type RouteNodeInfo = {
-  placeId: string;
-  name: string;
-  address: string;
-  coord: RouteNodeCoord;
-  openNow?: boolean;
-};
-
 export type RouteNodeProps = {
   routeNode: RouteNodeInfo;
   onDeletePlace: (placeId: string) => void;
 };
-
-export type RouteInfo = {
-  id: string;
-  name: string;
-  routeNodes: RouteNodeInfo[];
-  isRouted: boolean;
-  polyline: RouteNodeCoord[];
-};
-
-export type RouteNodeCoord = LatLng;
 
 export type RouteConnectorProps = {
   horizontal: boolean;
