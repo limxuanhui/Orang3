@@ -22,7 +22,6 @@ const RootStackNavigator = () => {
         ) : (
           <RootStack.Screen name="Auth" component={AuthStackNavigator} />
         )}
-        {/* <RootStack.Screen name="App" component={AppStackNavigator} /> */}
       </RootStack.Navigator>
     </NavigationContainer>
   );

@@ -1,4 +1,22 @@
-export const DIMENSION = {
+import { DimensionValue } from "react-native";
+
+type DimensionType = {
+  TEN_PERCENT: DimensionValue;
+  FIFTEEN_PERCENT: DimensionValue;
+  EIGHTEEN_PERCENT: DimensionValue;
+  TWENTY_PERCENT: DimensionValue;
+  TWENTYFIVE_PERCENT: DimensionValue;
+  THIRTY_PERCENT: DimensionValue;
+  FORTY_PERCENT: DimensionValue;
+  FIFTY_PERCENT: DimensionValue;
+  SIXTY_PERCENT: DimensionValue;
+  SEVENTY_PERCENT: DimensionValue;
+  EIGHTY_PERCENT: DimensionValue;
+  NINETY_PERCENT: DimensionValue;
+  HUNDRED_PERCENT: DimensionValue;
+};
+
+export const DIMENSION: DimensionType = {
   TEN_PERCENT: "10%",
   FIFTEEN_PERCENT: "15%",
   EIGHTEEN_PERCENT: "18%",

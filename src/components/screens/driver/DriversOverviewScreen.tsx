@@ -1,30 +1,37 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, SectionList, StyleSheet, Text, View } from "react-native";
 import DriverNamecard from "../../driver/DriverNamecard";
 import { launchImageLibrary } from "react-native-image-picker";
+import { Skeleton, SocialMediaType } from "@rneui/themed";
+import GypsieSkeleton from "../../common/GypsieSkeleton";
+import { Divider } from "react-native-paper";
 
 type ContactInfo = {
-  platform: "Whatsapp";
-  contactNumber: number;
-  handle: string;
+  platform: SocialMediaType;
+  contact: string;
+  name: string;
 };
 
-type DriverNamecardInfo = {
+export type DriverNamecardInfo = {
+  title: string;
   name: string;
   contacts: ContactInfo[];
   portfolio: string[];
+  avatarUri?: string;
 };
 
 const DATA: DriverNamecardInfo[] = [
   {
-    name: "Jackson",
+    title: "The Jeju Expert",
+    name: "Joseph Lim",
     contacts: [
       {
-        platform: "Whatsapp",
-        contactNumber: 12345678,
-        handle: "jacksonnny",
+        platform: "whatsapp",
+        contact: "+6512345678",
+        name: "Joseph Lim",
       },
     ],
-    portfolio: ["woaejowajcb", "oawjaeoabnc"],
+    portfolio: ["@jason/memotrip", "@jennie/memotrip2"],
+    avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/joseph.jpg",
   },
 ];
 
@@ -34,8 +41,22 @@ const DriversOverviewScreen = () => {
   return (
     <View style={styles.container}>
       {data.map(el => (
-        <DriverNamecard />
-      ))}    
+        <DriverNamecard data={el} />
+      ))}
+      <View
+        style={{ width: 200, height: 300, borderWidth: 0, borderColor: "red" }}>
+        <GypsieSkeleton />
+      </View>
+      <SectionList
+        sections={[
+          { title: "a", data: [1, 2, 3] },
+          { title: "b", data: [4, 5, 6] },
+        ]}
+        renderItem={el => <Text>{el.item}</Text>}
+        ItemSeparatorComponent={Divider}
+      />
+
+      {/* <Skeleton /> */}
     </View>
   );
 };
@@ -44,7 +65,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "skyblue",
+    // backgroundColor: "skyblue",
   },
 });
 

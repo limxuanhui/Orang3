@@ -1,24 +1,41 @@
+import { useCallback, useContext } from "react";
+import { Image, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import DriversOverviewScreen from "../screens/driver/DriversOverviewScreen";
 import HomeScreen from "../screens/feed/HomeScreen";
-import NewFeedPostScreen from "../screens/post/NewFeedPostScreen";
 import ItineraryStackNavigator from "./ItineraryStackNavigator";
 import ProfileStackNavigator from "./ProfileStackNavigator";
 import type { BottomTabNavigatorParamList } from "./types/types";
 import { PALETTE } from "../../utils/constants/palette";
 import TestScreen from "../screens/TestScreen";
+import { AuthContext } from "../../utils/contexts/AuthContext";
+import BottomSheet from "../common/BottomSheet";
+import {
+  DEVICE_HEIGHT,
+  DEVICE_WIDTH,
+  MAX_TRANSLATE_Y,
+} from "../../utils/constants/constants";
+import { Text } from "react-native";
+import NewPostOptions from "../post/NewPostOptions";
 
 const BottomTab = createBottomTabNavigator<BottomTabNavigatorParamList>();
 
 const BottomTabNavigator = () => {
+  const { user } = useContext(AuthContext);
+
+  const Placeholder = useCallback(() => {
+    return null;
+  }, []);
+
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
       screenOptions={({ navigation, route }) => {
         return {
+          animationEnabled: false,
           headerShown: false,
           tabBarStyle: {
             backgroundColor:
@@ -65,24 +82,17 @@ const BottomTabNavigator = () => {
       />
       <BottomTab.Screen
         name="Post"
-        component={TestScreen}
+        component={Placeholder}
         options={{
           tabBarShowLabel: false,
-          tabBarIcon: ({ focused }) => (
-            <FontAwesome
-              name="plus-circle"
-              size={40}
-              color={focused ? PALETTE.ORANGE : PALETTE.ORANGE}
-            />
-          ),
-            
-        }}    
-        listeners={({ navigation }) => ({
-          tabPress: (event) => {
-            event.preventDefault();
-            navigation.navigate("Modal", { screen: "NewFeedPost" });
-          },
-        })}
+          tabBarButton: () => <NewPostOptions />,
+        }}
+        // listeners={({ navigation }) => ({
+        //   tabPress: event => {
+        //     event.preventDefault();
+        //     navigation.navigate("Modal", { screen: "NewPostOptions" });
+        //   },
+        // })}
       />
       <BottomTab.Screen
         name="DriverStack"
@@ -105,17 +115,39 @@ const BottomTabNavigator = () => {
         component={ProfileStackNavigator}
         options={{
           tabBarShowLabel: false,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="brain"
-              size={24}
-              color={focused ? PALETTE.ORANGE : PALETTE.GREY}
-            />
-          ),
+          tabBarIcon: ({ focused }) =>
+            user?.picture ? (
+              <Image
+                style={[
+                  styles.avatar,
+                  {
+                    borderColor: focused ? PALETTE.ORANGE : PALETTE.LIGHTGREY,
+                    height: focused ? 32 : 24,
+                    width: focused ? 32 : 24,
+                  },
+                ]}
+                source={{
+                  uri: user.picture,
+                }}
+              />
+            ) : (
+              <MaterialCommunityIcons
+                name="brain"
+                size={24}
+                color={focused ? PALETTE.ORANGE : PALETTE.GREY}
+              />
+            ),
         }}
       />
     </BottomTab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  avatar: {
+    borderWidth: 2,
+    borderRadius: 20,
+  },
+});
 
 export default BottomTabNavigator;

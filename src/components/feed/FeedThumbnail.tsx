@@ -1,12 +1,8 @@
 import { useCallback, useState } from "react";
-import {
-  Image,
-  Pressable,
-  StyleSheet,
-  useWindowDimensions,
-} from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { Image, Skeleton } from "@rneui/themed";
 import { createThumbnail } from "react-native-create-thumbnail";
 import type { FeedThumbnailProps } from "./types/types";
 import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
@@ -15,7 +11,6 @@ import { PALETTE } from "../../utils/constants/palette";
 
 const FeedThumbnail = ({ feed }: FeedThumbnailProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
-  const { height, width } = useWindowDimensions();
   const [uri, setUri] = useState<string>(
     "/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png",
   );
@@ -84,19 +79,24 @@ const FeedThumbnail = ({ feed }: FeedThumbnailProps) => {
       ]}
       onPress={onPressThumbnail}>
       <Image
+        containerStyle={styles.imageContainer}
         style={styles.image}
         source={{
-          uri: feed.items[0].type === "image" ? feed.items[0].uri : uri,
+          uri:
+            feed.items[0].media?.type === "image"
+              ? feed.items[0].media.uri
+              : uri,
         }}
+        PlaceholderContent={<Skeleton style={{ flex: 1 }} animation="pulse" />}
       />
-      {feed.items.length > 1 && (
+      {feed.items.length > 1 ? (
         <Ionicons
           style={styles.stackIcon}
           name="albums-outline"
           size={14}
           color={PALETTE.WHITE}
         />
-      )}
+      ) : null}
     </Pressable>
   );
 };
@@ -110,14 +110,10 @@ const styles = StyleSheet.create({
     margin: 0.5,
     borderRadius: 4,
   },
+  imageContainer: { width: DIMENSION.HUNDRED_PERCENT },
   image: {
     height: DIMENSION.HUNDRED_PERCENT,
     width: DIMENSION.HUNDRED_PERCENT,
-  },
-  placeholder: {
-    color: PALETTE.GREY,
-    fontSize: 40,
-    fontWeight: "900",
   },
   stackIcon: { position: "absolute", bottom: 8, right: 8 },
 });

@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -10,6 +10,7 @@ import Reactions from "../../profile/Reactions";
 import type { ProfileScreenProps } from "./types/types";
 import { GYPSIE_THEME, PALETTE } from "../../../utils/constants/palette";
 import { DIMENSION } from "../../../utils/constants/dimensions";
+import { Avatar, Image, Skeleton } from "@rneui/themed";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -18,11 +19,12 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
   console.log("--------");
   console.log("--------");
   console.log("--------" + "rendered ProfileScreen");
-  let userId: number | undefined;
+  let userId: string | undefined;
   let avatarUri: string | undefined;
   if (route.params) {
     userId = route.params.userId;
     avatarUri = route.params.avatarUri;
+    console.log("AVATAR:", avatarUri);
   } else {
   }
 
@@ -51,12 +53,18 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
           source={{
             uri: avatarUri,
           }}
+          PlaceholderContent={
+            <Skeleton style={{ flex: 1 }} animation="pulse" />
+          }
         />
       </Pressable>
       <Pressable style={styles.banner}>
         <Image
           style={styles.bannerImage}
           source={{ uri: userData.bannerUri }}
+          PlaceholderContent={
+            <Skeleton style={{ flex: 1 }} animation="pulse" />
+          }
         />
       </Pressable>
       <Pressable style={styles.settingsButton} onPress={onPressSettings}>
@@ -114,8 +122,6 @@ const styles = StyleSheet.create({
     backgroundColor: PALETTE.BLUE,
   },
   sceneContainer: {
-    // borderWidth: 10,
-    // borderColor: "green",
     backgroundColor: PALETTE.OFFWHITE,
   },
   settingsButton: { position: "absolute", top: 50, right: 20, zIndex: 3 },
@@ -136,7 +142,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: PALETTE.RED,
+    backgroundColor: PALETTE.WHITE,
     shadowOffset: { width: 0, height: 10 },
     shadowColor: PALETTE.GREY,
     shadowOpacity: 0.2,
@@ -146,14 +152,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   avatar: {
-    ...StyleSheet.absoluteFillObject,
-    height: undefined,
-    width: undefined,
-    resizeMode: "cover",
-    borderRadius: 8,
-    // height: DIMENSION.HUNDRED_PERCENT,
-    // width: DIMENSION.HUNDRED_PERCENT,
-    // borderRadius: 50,
+    height: DIMENSION.HUNDRED_PERCENT,
+    width: DIMENSION.HUNDRED_PERCENT,
   },
   userDetails: {
     flexDirection: "row",

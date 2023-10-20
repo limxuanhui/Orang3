@@ -7,7 +7,7 @@ export type ItineraryFeedItem = {
 };
 
 export type LinkedFeedsListItem = {
-  feedId: number;
+  feedId: string;
   uri: string;
 };
 

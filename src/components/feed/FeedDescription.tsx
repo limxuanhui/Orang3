@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
   },
   handleBox: {},
   handle: {
+    fontFamily: "Lilita One",
     fontSize: 16,
     fontWeight: "600",
     color: PALETTE.WHITE,

@@ -1,13 +1,11 @@
 import type { RouteProp } from "@react-navigation/native";
 import type { StackNavigationProp } from "@react-navigation/stack";
 import type { RouteNodeInfo } from "../../../itinerary/types/types";
-import type {
-  AppStackNavigatorParamList,
-  ModalNavigatorParamList,
-} from "../../../navigators/types/types";
+import type { ModalNavigatorParamList } from "../../../navigators/types/types";
 
 export type ItineraryStackNavigatorParamList = {
   ItineraryFeed: undefined;
+  NewPostOptions: undefined;
 };
 
 // --------------------------- ItineraryViewScreen ---------------------------

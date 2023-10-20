@@ -18,5 +18,18 @@ export const PALETTE = {
   GREEN: "#00ff00",
   BLUE: "#0000ff",
   NAVYBLUE: "#000080",
+  GREYISHBLUE: "#192d36",
   ORANGE: "#ffa500",
+};
+
+export const SHADOW = {
+  CHIP: {
+    shadowColor: PALETTE.BLACK,
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    shadowOffset: {
+      height: 2,
+      width: 0,
+    },
+  },
 };

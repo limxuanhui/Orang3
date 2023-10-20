@@ -22,7 +22,7 @@ const ItineraryFeedThumbnail = ({
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
 
   const onPressFeed = useCallback(() => {
-    navigation.push("Modal", { screen: "ItineraryView" });
+    navigation.push("Modal", { screen: "ItineraryPostView" });
   }, [navigation]);
 
   return (

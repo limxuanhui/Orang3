@@ -7,6 +7,7 @@ import useAuthManager from "./src/utils/hooks/useAuthManager";
 import RootStackNavigator from "./src/components/navigators/RootStackNavigator";
 import { Provider } from "react-redux";
 import store from "./src/utils/redux/store";
+import { PortalProvider } from "@gorhom/portal";
 
 GoogleSignin.configure({
   iosClientId:
@@ -22,11 +23,13 @@ const App = (): JSX.Element => {
       <Provider store={store}>
         <AuthContext.Provider value={authInfo}>
           <GestureHandlerRootView style={{ flex: 1 }}>
+            <PortalProvider>
             <StatusBar
               barStyle={isDarkMode ? "light-content" : "dark-content"}
               hidden
             />
             <RootStackNavigator />
+            </PortalProvider>
           </GestureHandlerRootView>
         </AuthContext.Provider>
       </Provider>

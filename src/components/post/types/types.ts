@@ -10,3 +10,14 @@ export type NewFeedPostSideControlsProps = {
 export type NewFeedPostCarouselProps = {
   items: FeedItem[];
 };
+
+// Itinerary
+export type ItineraryRow = {
+  title: string;
+  places: string[];
+};
+
+export type ItineraryTableProps = {
+  data: ItineraryRow[];
+  clearDataHandler?: () => void;
+};

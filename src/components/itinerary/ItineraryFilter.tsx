@@ -1,6 +1,8 @@
 import { useCallback } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import type { ItineraryFilterProps } from "./types/types";
+import { DIMENSION } from "../../utils/constants/dimensions";
+import { PALETTE } from "../../utils/constants/palette";
 
 const ItineraryFilter = ({ filter }: ItineraryFilterProps) => {
   const onPressFilter = useCallback((item: string) => {
@@ -30,7 +32,7 @@ const ItineraryFilter = ({ filter }: ItineraryFilterProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
+    width: DIMENSION.HUNDRED_PERCENT,
     marginVertical: 10,
   },
   filterTab: {
@@ -41,8 +43,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     padding: 4,
     borderRadius: 8,
-    backgroundColor: "orange",
-    shadowColor: "#cccccc",
+    backgroundColor: PALETTE.ORANGE,
+    shadowColor: PALETTE.LIGHTGREY,
     shadowOpacity: 0.5,
     shadowRadius: 2,
     shadowOffset: { height: 0, width: 0 },

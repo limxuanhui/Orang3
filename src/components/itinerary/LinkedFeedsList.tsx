@@ -12,7 +12,7 @@ const LinkedFeedsList = ({ data }: LinkedFeedsListProps) => {
   const insets = useSafeAreaInsets();
 
   const onPressLinkedPost = useCallback(
-    (feedId: number) => {
+    (feedId: string) => {
       navigation.navigate("Modal", { screen: "Feed", params: { feedId } });
     },
     [navigation],

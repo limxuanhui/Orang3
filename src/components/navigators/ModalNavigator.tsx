@@ -1,19 +1,18 @@
-import {
-  StackCardInterpolationProps,
-  createStackNavigator,
-} from "@react-navigation/stack";
+import { useCallback, useEffect } from "react";
+import { createStackNavigator } from "@react-navigation/stack";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 import AvatarScreen from "../screens/profile/AvatarScreen";
 import FeedScreen from "../screens/feed/FeedScreen";
 import ItineraryViewScreen from "../screens/itinerary/ItineraryViewScreen";
 import PlaceSearchScreen from "../screens/itinerary/PlaceSearchScreen";
 import ProfileScreen from "../screens/profile/ProfileScreen";
-import SplashScreen from "../screens/auth/SplashScreen";
 import type { ModalNavigatorParamList } from "./types/types";
 import { PALETTE } from "../../utils/constants/palette";
-import { useEffect } from "react";
 import NewFeedPostScreen from "../screens/post/NewFeedPostScreen";
-import { Text } from "react-native";
+import ItineraryPostEditScreen from "../screens/post/ItineraryPostEditScreen";
+import OptionsIcon from "../common/icons/OptionsIcon";
+import GypsieButton from "../common/buttons/GypsieButton";
+import ItineraryPostViewScreen from "../screens/post/ItineraryPostViewScreen";
 
 const Modal = createStackNavigator<ModalNavigatorParamList>();
 
@@ -36,9 +35,9 @@ const ModalNavigator = () => {
     useNativeDriver: true,
   };
 
-  // const navigationOptions = ({navigation}) => {
-  //   return <HeaderBack
-  // }
+  const onPressOptions = useCallback(() => {
+    console.log("Open share options");
+  }, []);
 
   useEffect(() => {
     console.log("ModalNavigator mounted");
@@ -49,13 +48,12 @@ const ModalNavigator = () => {
 
   return (
     <Modal.Navigator
-      // initialRouteName="Avatar"
       screenOptions={{
         headerShown: false,
-        // animationEnabled: true,
         gestureEnabled: false,
         cardOverlayEnabled: true,
         cardStyle: { backgroundColor: PALETTE.TRANSPARENT },
+        // animationEnabled: false,
       }}>
       <Modal.Screen
         name="NewFeedPost"
@@ -63,8 +61,48 @@ const ModalNavigator = () => {
         options={{
           ...options,
           // headerTransparent: false,
-          // headerTitle: "New post",
-          // headerTintColor: PALETTE.BLACK
+        }}
+      />
+      <Modal.Screen
+        name="ItineraryPostEdit"
+        component={ItineraryPostEditScreen}
+        options={{
+          ...options,
+          // headerTransparent: false,
+          headerTintColor: PALETTE.GREY,
+          headerRight: () => (
+            <GypsieButton
+              customButtonStyles={{
+                backgroundColor: "transparent",
+                width: "auto",
+                right: 16,
+              }}
+              customIconStyles={{ fontSize: 24, color: PALETTE.GREY }}
+              Icon={OptionsIcon}
+              onPress={onPressOptions}
+            />
+          ),
+        }}
+      />
+      <Modal.Screen
+        name="ItineraryPostView"
+        component={ItineraryPostViewScreen}
+        options={{
+          ...options,
+          // headerTransparent: false,
+          headerTintColor: PALETTE.GREY,
+          headerRight: () => (
+            <GypsieButton
+              customButtonStyles={{
+                backgroundColor: "transparent",
+                width: "auto",
+                right: 16,
+              }}
+              customIconStyles={{ fontSize: 24, color: PALETTE.GREY }}
+              Icon={OptionsIcon}
+              onPress={onPressOptions}
+            />
+          ),
         }}
       />
       <Modal.Screen
@@ -72,17 +110,6 @@ const ModalNavigator = () => {
         component={AvatarScreen}
         options={{
           ...options,
-          // gestureEnabled: false,
-          // gestureDirection: "vertical",
-          // animationEnabled: false,
-          // animationTypeForReplace: "pop",
-          // transitionSpec: {
-          //   open: { animation: "spring", config },
-          //   close: { animation: "spring", config },
-          // },
-          // cardOverlayEnabled: true,
-          // cardStyle: { backgroundColor: PALETTE.TRANSPARENT },
-          // presentation: "card",
         }}
       />
       <Modal.Screen
@@ -100,38 +127,7 @@ const ModalNavigator = () => {
         component={FeedScreen}
         options={{
           ...options,
-
-          // gestureEnabled:true,
-          // gestureDirection: "vertical",
-          // transitionSpec: {
-          //   open: { animation: "spring", config },
-          //   close: {
-          //     animation: "spring",
-          //     config,
-          //   },
-          // },
-          // cardStyleInterpolator: ({
-          //   current,
-          //   next,
-          //   index,
-          //   closing,
-          //   layouts,
-          // }) => ({
-          //   containerStyle: {},
-          //   cardStyle: {
-          //     transform: [{ scale: current.progress }],
-          //   },
-          //   overlayStyle: {},
-          //   shadowStyle: {},
-          // }),
         }}
-        // sharedElements={(route, otherRoute, showing) => {
-        //   if (otherRoute.name === "ItineraryView" && showing) {
-        //     const { feedId } = route.params;
-        //     console.warn("reached: " + feedId);
-        //     return [`feed-${feedId}`];
-        //   }
-        // }}
       />
       <Modal.Screen
         name="PlaceSearch"

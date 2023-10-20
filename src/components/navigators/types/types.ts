@@ -18,13 +18,12 @@ import type {
 export type GypsieUser =
   // | User
   {
-      id: string;
-      name: string;
-      handle: string;
-      email: string;
-      picture?: string;
-    }
-  | null;
+    id: string;
+    name: string;
+    handle: string;
+    email: string;
+    picture?: string;
+  } | null;
 
 export type RootStackNavigatorParamList = {
   Auth: AuthStackNavigatorParamList | undefined;
@@ -55,6 +54,8 @@ export type ModalNavigatorNavigationProp = StackNavigationProp<
 
 export type ModalNavigatorParamList = {
   NewFeedPost: undefined;
+  ItineraryPostEdit: undefined;
+  ItineraryPostView: undefined;
   Avatar: AvatarScreenParams;
   Feed: FeedScreenParams;
   ItineraryView: undefined;
