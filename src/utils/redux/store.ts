@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import newFeedPostReducer from "./reducers/newFeedPostSlice";
+import newItineraryPostReducer from "./reducers/newItineraryPostSlice";
 
 const rootReducer = combineReducers({
   newFeedPost: newFeedPostReducer,
+  newItineraryPost: newItineraryPostReducer,
 });
 
 const store = configureStore({

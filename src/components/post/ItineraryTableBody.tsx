@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { DataTable } from "react-native-paper";
 import GypsieButton from "../common/buttons/GypsieButton";
-import AddIcon from "../common/icons/AddIcon";
+import AddCircleIcon from "../common/icons/AddCircleIcon";
 import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
 import { PALETTE, SHADOW } from "../../utils/constants/palette";
 import { RouteNodeInfo } from "../itinerary/types/types";
@@ -47,7 +47,7 @@ const ItineraryTableBody = ({ data }: ItineraryTableBodyProps) => {
               <GypsieButton
                 customButtonStyles={styles.addButton}
                 customIconStyles={styles.addButtonIcon}
-                Icon={AddIcon}
+                Icon={AddCircleIcon}
                 onPress={onPressAddPlace}
               />
             </View>

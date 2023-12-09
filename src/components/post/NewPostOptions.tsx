@@ -1,17 +1,16 @@
 import { useCallback, useMemo, useRef } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import BottomSheet, {
   BottomSheetBackdrop,
-  BottomSheetModal,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
-import AddIcon from "../common/icons/AddIcon";
 import { Portal, PortalHost } from "@gorhom/portal";
-import { PALETTE } from "../../utils/constants/palette";
+import AddCircleIcon from "../common/icons/AddCircleIcon";
 import type { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
-import { useNavigation } from "@react-navigation/native";
-import { ModalNavigatorNavigationProp } from "../navigators/types/types";
+import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
 import { DIMENSION } from "../../utils/constants/dimensions";
+import { PALETTE } from "../../utils/constants/palette";
 
 const NewPostOptions = () => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
@@ -37,7 +36,7 @@ const NewPostOptions = () => {
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (
       <BottomSheetBackdrop
-        {...props}        
+        {...props}
         disappearsOnIndex={0}
         appearsOnIndex={1}
       />
@@ -52,13 +51,13 @@ const NewPostOptions = () => {
 
   const onPressWriteMemory = useCallback(() => {
     bottomSheetRef?.current?.close();
-    navigation.navigate("Modal", { screen: "ItineraryPostEdit" });
+    navigation.navigate("Modal", { screen: "NewItineraryPost" });
   }, [bottomSheetRef, navigation]);
 
   return (
     <View style={styles.container}>
       <Pressable onPress={onPressAddButton}>
-        <AddIcon style={{ fontSize: 40, color: PALETTE.ORANGE }} />
+        <AddCircleIcon style={{ fontSize: 40, color: PALETTE.ORANGE }} />
       </Pressable>
       <Portal>
         <BottomSheet

@@ -2,9 +2,9 @@ import { StyleSheet, View } from "react-native";
 import ItineraryTableHeader from "./ItineraryTableHeader";
 import ItineraryTableBody from "./ItineraryTableBody";
 import ItineraryTableFooter from "./ItineraryTableFooter";
+import type { ItineraryTableProps } from "./types/types";
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
-import { ItineraryTableProps } from "./types/types";
 
 const ItineraryTable = ({ data, clearDataHandler }: ItineraryTableProps) => {
   return (

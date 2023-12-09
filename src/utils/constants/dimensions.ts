@@ -1,4 +1,4 @@
-import { DimensionValue } from "react-native";
+type DimensionValue = number | string | undefined;
 
 type DimensionType = {
   TEN_PERCENT: DimensionValue;

@@ -44,7 +44,7 @@ const ItineraryViewScreen = ({ navigation }: ItineraryViewScreenProps) => {
 
   return (
     <View style={styles.container}>
-      <LinkedFeedsList data={data} />
+      {/* <LinkedFeedsList data={data} /> */}
       <ItineraryPlanner />
     </View>
   );

@@ -4,6 +4,10 @@ import { Dimensions } from "react-native";
 export const { height: DEVICE_HEIGHT, width: DEVICE_WIDTH } =
   Dimensions.get("window");
 export const ASPECT_RATIO = DEVICE_WIDTH / DEVICE_HEIGHT;
+export const FULL_SCREEN = {
+  height: DEVICE_HEIGHT,
+  width: DEVICE_WIDTH,
+};
 
 export const MAX_TRANSLATE_Y = -DEVICE_HEIGHT;
 export const MAP_SCREEN_BOTTOM_SHEET_CONSTANTS = {

@@ -1,7 +1,6 @@
 // import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
 
 const Reactions = () => {

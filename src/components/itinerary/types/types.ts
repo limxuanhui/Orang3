@@ -1,3 +1,4 @@
+import { StyleProp, ViewStyle } from "react-native";
 import { GooglePlaceDetail } from "react-native-google-places-autocomplete";
 import { LatLng } from "react-native-maps";
 
@@ -50,8 +51,9 @@ export type ItineraryFilterProps = {
   filter: string[];
 };
 
-export type LinkedFeedsListProps = {
+export type LinkedFeedsListProps = {  
   data: LinkedFeedsListItem[];
+  style?: StyleProp<ViewStyle>;
 };
 
 export type MapPinProps = {

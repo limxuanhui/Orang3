@@ -1,8 +1,8 @@
+import { useCallback } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-import React, { useCallback } from "react";
-import { PALETTE } from "../../utils/constants/palette";
+import AddCircleIcon from "../common/icons/AddCircleIcon";
 import GypsieButton from "../common/buttons/GypsieButton";
-import AddIcon from "../common/icons/AddIcon";
+import { PALETTE } from "../../utils/constants/palette";
 
 type NewItineraryPostHandleBarProps = {
   avatarUri: string;
@@ -29,7 +29,7 @@ const NewItineraryPostHandleBar = ({
         customButtonStyles={styles.followButton}
         customIconStyles={styles.followButtonIcon}
         customTextStyles={styles.followButtonText}
-        Icon={AddIcon}
+        Icon={AddCircleIcon}
         text="Follow"
         onPress={onPressFollow}
       />

@@ -1,53 +1,63 @@
-import { SectionList, StyleProp, TextStyle } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
-import { LinkedFeedsListItem } from "../itinerary/types/types";
-import Divider from "../common/Divider";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet";
-
-export type StoryText = {
-  text: string;
-  style: StyleProp<TextStyle>;
-};
-
-type StoryMedia = LinkedFeedsListItem[];
-
-export type StorySection = {
-  title: string;
-  data: StoryText[];
-};
-
-type ItineraryStoryProps = {
-  data: StorySection[];
-};
+import LinkedFeedsList from "../itinerary/LinkedFeedsList";
+import { StorySectionItemType, type ItineraryStoryProps } from "./types/types";
 
 const ItineraryStory = ({ data }: ItineraryStoryProps) => {
+  const insets = useSafeAreaInsets();
+
   return (
     <BottomSheetSectionList
-      style={{ borderWidth: 1, borderColor: "green", marginTop: 8 }}
+      style={[styles.container, { marginBottom: insets.bottom + 48 }]}
+      showsVerticalScrollIndicator={false}
       sections={data}
       renderSectionHeader={el => (
-        <Text style={{ backgroundColor: "grey" }}>{el.section.title}</Text>
+        <View style={{ marginBottom: 8 }}>
+          <Text style={el.section.title.style}>{el.section.title.text}</Text>
+        </View>
       )}
-      renderItem={el => <Text style={el.item.style}>{el.item.text}</Text>}
-      ItemSeparatorComponent={({leadingItem, separator}) => {
-        console.log("FUCK", leadingItem);
-
-        return <Divider shade="dark"/>;
+      renderItem={el => {
+        if (el.item.type === StorySectionItemType.Text) {
+          return (
+            <View style={{ marginVertical: 12 }}>
+              <Text style={el.item.style}>{el.item.text}</Text>
+            </View>
+          );
+        } else {
+          return (
+            <View style={{ marginVertical: 12 }}>
+              <LinkedFeedsList data={el.item.data} />
+            </View>
+          );
+        }
       }}
-      SectionSeparatorComponent={() => (
-        <View
-          style={{
-            width: 100,
-            height: 2,
-            backgroundColor: "red",
-            marginTop: 16,
-          }}
-        />
-      )}
+      // ItemSeparatorComponent={({ leadingItem, separator }) => {
+      //   console.log("leadingItem ------ ", leadingItem);
+      //   console.log("separator ------ ", separator);
+
+      //   return <Divider style={{ marginVertical: 8 }} shade="light" />;
+      // }}
+      // SectionSeparatorComponent={() => (
+      //   <View
+      //     style={{
+      //       height: 4,
+      //       width: 100,
+      //       backgroundColor: PALETTE.ORANGE,
+      //       borderRadius: 4,
+      //     }}
+      //   />
+      // )}
     />
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 8,
+    borderWidth: 0,
+    borderColor: "green",
+  },
+});
 
 export default ItineraryStory;

@@ -1,4 +1,4 @@
-import Icon from "react-native-vector-icons/FontAwesome";
+import Icon from "react-native-vector-icons/Ionicons";
 import type { IconProps } from "./types/types";
 
 const CameraIcon = ({ style }: IconProps) => {

@@ -54,7 +54,7 @@ export type ModalNavigatorNavigationProp = StackNavigationProp<
 
 export type ModalNavigatorParamList = {
   NewFeedPost: undefined;
-  ItineraryPostEdit: undefined;
+  NewItineraryPost: undefined;
   ItineraryPostView: undefined;
   Avatar: AvatarScreenParams;
   Feed: FeedScreenParams;

@@ -2,12 +2,12 @@ import { StatusBar, useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { KeyboardProvider } from "react-native-keyboard-controller";
+import { Provider } from "react-redux";
+import { PortalProvider } from "@gorhom/portal";
 import { AuthContext } from "./src/utils/contexts/AuthContext";
 import useAuthManager from "./src/utils/hooks/useAuthManager";
 import RootStackNavigator from "./src/components/navigators/RootStackNavigator";
-import { Provider } from "react-redux";
 import store from "./src/utils/redux/store";
-import { PortalProvider } from "@gorhom/portal";
 
 GoogleSignin.configure({
   iosClientId:

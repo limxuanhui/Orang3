@@ -1,19 +1,23 @@
 import { useMemo } from "react";
-import { BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
+import type { BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
 import Animated, {
   Extrapolate,
   interpolate,
   useAnimatedStyle,
 } from "react-native-reanimated";
 
-const ItineraryPostBackdrop = ({ animatedIndex, style, ...props }: BottomSheetBackdropProps) => {
+const ItineraryPostBackdrop = ({
+  animatedIndex,
+  style,
+  ...props
+}: BottomSheetBackdropProps) => {
   // animated variables
   const containerAnimatedStyle = useAnimatedStyle(() => ({
     opacity: interpolate(
       animatedIndex.value,
       [0.5, 1],
       [0, 1],
-      Extrapolate.CLAMP
+      Extrapolate.CLAMP,
     ),
   }));
 
@@ -26,10 +30,10 @@ const ItineraryPostBackdrop = ({ animatedIndex, style, ...props }: BottomSheetBa
       },
       containerAnimatedStyle,
     ],
-    [style, containerAnimatedStyle]
+    [style, containerAnimatedStyle],
   );
 
-  return <Animated.View style={containerStyle} {...props}/>;
+  return <Animated.View style={containerStyle} {...props} />;
 };
 
 export default ItineraryPostBackdrop;

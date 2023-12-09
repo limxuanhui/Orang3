@@ -9,7 +9,7 @@ import ProfileScreen from "../screens/profile/ProfileScreen";
 import type { ModalNavigatorParamList } from "./types/types";
 import { PALETTE } from "../../utils/constants/palette";
 import NewFeedPostScreen from "../screens/post/NewFeedPostScreen";
-import ItineraryPostEditScreen from "../screens/post/ItineraryPostEditScreen";
+import NewItineraryPostScreen from "../screens/post/NewItineraryPostScreen";
 import OptionsIcon from "../common/icons/OptionsIcon";
 import GypsieButton from "../common/buttons/GypsieButton";
 import ItineraryPostViewScreen from "../screens/post/ItineraryPostViewScreen";
@@ -64,8 +64,8 @@ const ModalNavigator = () => {
         }}
       />
       <Modal.Screen
-        name="ItineraryPostEdit"
-        component={ItineraryPostEditScreen}
+        name="NewItineraryPost"
+        component={NewItineraryPostScreen}
         options={{
           ...options,
           // headerTransparent: false,

@@ -28,12 +28,19 @@ import { VIEWABILITY_CONFIG } from "../../../utils/constants/feed";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import FeedCarousel from "../../feed/FeedCarousel";
 import ItineraryPostBackdrop from "../../post/ItineraryPostBackdrop";
-import AddIcon from "../../common/icons/AddIcon";
+import AddCircleIcon from "../../common/icons/AddCircleIcon";
 import CloneIcon from "../../common/icons/CloneIcon";
 import SearchIcon from "../../common/icons/SearchIcon";
-import { ItineraryRow } from "../../post/types/types";
+import {
+  type ItineraryRow,
+  type Story,
+  StoryItemType,
+} from "../../post/types/types";
+import type { ItineraryPostViewScreenProps } from "./types/types";
 import DeleteIcon from "../../common/icons/DeleteIcon";
-import ItineraryStory, { StorySection } from "../../post/ItineraryStory";
+import ItineraryStory from "../../post/ItineraryStory";
+import ItineraryMapOverview from "../../post/ItineraryMapOverview";
+import { storyBodyStyle, storyTitleStyle } from "../../../utils/constants/text";
 
 const dummyItineraryData: ItineraryRow[] = [
   { title: "day 1", places: ["Jewel", "Merlion city"] },
@@ -50,53 +57,96 @@ const dummyItineraryData: ItineraryRow[] = [
   },
 ];
 
-const titleStyle: StyleProp<TextStyle> = {
-  fontSize: 24,
-  fontWeight: "bold",
-  color: PALETTE.GREYISHBLUE,
-};
-
-const bodyStyle: StyleProp<TextStyle> = {
-  fontSize: 16,
-  fontWeight: "normal",
-  color: PALETTE.GREYISHBLUE,
-};
-
-const storyData: StorySection[] = [
-  {   
-    title: "This is the craziest trip ever!",
+export const storyData: Story = [
+  {
+    type: StoryItemType.Text,
+    text: "This is the craziest trip ever!",
+    style: storyTitleStyle,
+  },
+  {
+    type: StoryItemType.Text,
+    text: "The weather here was amazing. Elit quis sit commodo officia nisi. Irure dolor ad aute amet excepteur elit sit.",
+    style: storyBodyStyle,
+  },
+  {
+    type: StoryItemType.Text,
+    text: "The weather here was amazing. Elit quis sit commodo officia nisi. Irure dolor ad aute amet excepteur elit sit.",
+    style: storyBodyStyle,
+  },
+  {
+    type: StoryItemType.Text,
+    text: "Day 2 - Jeju Hallabong Farm",
+    style: storyTitleStyle,
+  },
+  {
+    type: StoryItemType.Media,
     data: [
       {
-        text: "The weather here was amazing. Elit quis sit commodo officia nisi. Irure dolor ad aute amet excepteur elit sit.",
-        style: bodyStyle,
+        feedId: "Nulla labore labore fugiat officia.",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
       },
       {
-        text: "The weather here was amazing. Elit quis sit commodo officia nisi. Irure dolor ad aute amet excepteur elit sit.",
-        style: bodyStyle,
+        feedId: "Nulla labore labore fugiat officia.",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-satay.jpeg",
+      },
+      {
+        feedId: "Nulla labore labore fugiat officia.",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-beach.jpeg",
+      },
+      {
+        feedId: "Nulla labore labore fugiat officia.",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-uss.jpg",
       },
     ],
   },
-  {    
-    title: "Day 2 - Jeju Hallabong Farm",
+  {
+    type: StoryItemType.Text,
+    text: "The weather here was amazing. Elit quis sit commodo officia nisi. Irure dolor ad aute amet excepteur elit sit.",
+    style: storyBodyStyle,
+  },
+  {
+    type: StoryItemType.Text,
+    text: "Day 3 - Jeju Abalone stew",
+    style: storyTitleStyle,
+  },
+  {
+    type: StoryItemType.Text,
+    text: "The weather here was amazing. Elit quis sit commodo officia nisi. Irure dolor ad aute amet excepteur elit sit.",
+    style: storyBodyStyle,
+  },
+  {
+    type: StoryItemType.Media,
     data: [
       {
-        text: "Non eiusmod excepteur ea Lorem Lorem ex nostrud. Ut id velit laborum quis et cupidatat ex enim occaecat minim fugiat amet irure. Adipisicing ut enim id labore deserunt occaecat.",
-        style: bodyStyle,
+        feedId: "Nulla labore labore fugiat officia.",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
+      },
+      {
+        feedId: "Nulla labore labore fugiat officia.",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-satay.jpeg",
+      },
+      {
+        feedId: "Nulla labore labore fugiat officia.",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-beach.jpeg",
+      },
+      {
+        feedId: "Nulla labore labore fugiat officia.",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-uss.jpg",
       },
     ],
   },
 ];
 
-const ItineraryPostViewScreen = ({ navigation }: any) => {
+const ItineraryPostViewScreen = ({
+  navigation,
+}: ItineraryPostViewScreenProps) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const insets = useSafeAreaInsets();
-  const title = "12345678901234567890";
+  const title = "12345678901234567890 - ItineraryPostViewScreen";
   const avatarUri =
     "/Users/limxuanhui/bluextech/gypsie/assets/avatars/yoona.jpeg";
   const name = "@Joseph";
-  const [itineraryData, setItineraryData] = useState<ItineraryRow[] | null>(
-    null,
-  );
+  const [itineraryData, setItineraryData] = useState<ItineraryRow[]>([]);
   const feedData = DUMMY_FEEDS.map(el => el.items);
 
   const onPressExpandBottomSheet = useCallback(() => {
@@ -150,25 +200,6 @@ const ItineraryPostViewScreen = ({ navigation }: any) => {
     (props: BottomSheetFooterProps) => (
       <BottomSheetFooter {...props} bottomInset={insets.bottom}>
         <View style={styles.footerContainer}>
-          {/* {itineraryData === null ? (
-            <GypsieButton
-              customButtonStyles={styles.footerButton}
-              customIconStyles={styles.footerButtonIcon}
-              customTextStyles={styles.footerButtonText}
-              Icon={AddIcon}
-              text={"Add plan"}
-              onPress={onPressAddPlan}
-            />
-          ) : (
-            <GypsieButton
-              customButtonStyles={styles.footerButton}
-              customIconStyles={styles.footerButtonIcon}
-              customTextStyles={styles.footerButtonText}
-              Icon={DeleteIcon}
-              text={"Clear plan"}
-              onPress={onPressClearPlan}
-            />
-          )} */}
           <GypsieButton
             customButtonStyles={styles.footerButton}
             customIconStyles={styles.footerButtonIcon}
@@ -221,22 +252,24 @@ const ItineraryPostViewScreen = ({ navigation }: any) => {
         handleComponent={null}
         index={0}
         backdropComponent={renderBackdrop}
-        footerComponent={renderFooter}
+        // footerComponent={renderFooter}
         topInset={insets.top}
         snapPoints={snapPoints}
         enablePanDownToClose
         // onAnimate={() => console.log("animating bottomsheet")}
         // onChange={() => console.log("moving bottomsheet")}
       >
+        {/* To be changed (NewItineraryPostHandlerBar) */}
         <NewItineraryPostHandleBar avatarUri={avatarUri} name={name} />
         {/* <BottomSheetScrollView> */}
-          {itineraryData !== null ? (
-            <ItineraryTable
-              data={itineraryData}
-              // clearDataHandler={onPressClearPlan}
-            />
-          ) : null}
-          <ItineraryStory data={storyData} />
+        {/* {itineraryData !== null ? (
+          <ItineraryTable
+            data={itineraryData}
+            // clearDataHandler={onPressClearPlan}
+          />
+        ) : null} */}
+        <ItineraryMapOverview data={itineraryData} />
+        <ItineraryStory data={storyData} />
         {/* </BottomSheetScrollView> */}
       </BottomSheet>
     </View>

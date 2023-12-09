@@ -10,6 +10,7 @@ import {
   DEVICE_HEIGHT,
   DEVICE_WIDTH,
 } from "../../../utils/constants/constants";
+import GoogleIcon from "../../common/icons/GoogleIcon";
 
 const SplashScreen = ({ navigation }: SplashScreenProps) => {
   const {
@@ -40,13 +41,12 @@ const SplashScreen = ({ navigation }: SplashScreenProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sunday</Text>
-      <ActivityIndicator />
       <GypsieButton
         customButtonStyles={styles.googleSigninButton}
         customTextStyles={styles.googleText}
         customIconStyles={styles.googleIcon}
         text="Continue with Google"
-        icon="google"
+        Icon={GoogleIcon}
         onPress={googleSigninHandler}
         loading={loading}
       />
@@ -68,14 +68,17 @@ const styles = StyleSheet.create({
     backgroundColor: PALETTE.OFFWHITE,
   },
   title: {
+    margin: 16,
     fontFamily: "Futura",
     fontSize: 50,
     fontWeight: "700",
     color: PALETTE.ORANGE,
   },
   googleSigninButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
     height: 40,
-    width: "80%",
+    width: "50%",
     marginVertical: 8,
     backgroundColor: GYPSIE_THEME.GOOGLE_SECONDARY,
   },

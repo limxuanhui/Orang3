@@ -1,7 +1,7 @@
 import { useCallback, useContext } from "react";
 import { Image, StyleSheet, View } from "react-native";
 
-import type { LoginScreenProps } from "../../../utils/types/auth";
+import type { LoginScreenProps } from "./types/types";
 import GypsieButton from "../../common/buttons/GypsieButton";
 import GypsieTextBox from "../../common/GypsieTextBox";
 import LinkButton from "../../common/buttons/LinkButton";

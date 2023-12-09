@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { useAppSelector } from "../../utils/redux/hooks";
 import AuxiliaryControls from "../common/AuxiliaryControls";
 import AddMoreIcon from "../common/icons/AddMoreIcon";
 import DeleteOutlineIcon from "../common/icons/DeleteOutlineIcon";
@@ -6,7 +7,6 @@ import EditIcon from "../common/icons/EditIcon";
 import GypsieButton from "../common/buttons/GypsieButton";
 import type { NewFeedPostSideControlsProps } from "./types/types";
 import { PALETTE } from "../../utils/constants/palette";
-import { useAppSelector } from "../../utils/redux/hooks";
 
 const NewFeedPostSideControls = ({
   onPressAdd,

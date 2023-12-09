@@ -7,20 +7,21 @@ import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
 import { PALETTE } from "../../utils/constants/palette";
 import { DIMENSION } from "../../utils/constants/dimensions";
 
-const LinkedFeedsList = ({ data }: LinkedFeedsListProps) => {
-  const navigation = useNavigation<ModalNavigatorNavigationProp>();
-  const insets = useSafeAreaInsets();
+const LinkedFeedsList = ({ data, style }: LinkedFeedsListProps) => {
+  // const navigation = useNavigation<ModalNavigatorNavigationProp>();
+  // const insets = useSafeAreaInsets();
 
   const onPressLinkedPost = useCallback(
     (feedId: string) => {
-      navigation.navigate("Modal", { screen: "Feed", params: { feedId } });
+      // navigation.navigate("Modal", { screen: "Feed", params: { feedId } });
     },
-    [navigation],
+    [],
+    // [navigation],
   );
 
   return (
     <FlatList
-      style={[styles.linkedFeeds, { top: insets.top }]}
+      style={[styles.linkedFeeds, style]}
       contentContainerStyle={styles.linkedFeedsContentContainer}
       data={data}
       renderItem={el => (
@@ -31,10 +32,10 @@ const LinkedFeedsList = ({ data }: LinkedFeedsListProps) => {
           ]}
           onPress={() => onPressLinkedPost(el.item.feedId)}>
           <Image
+            style={styles.imageStyle}
             source={{
               uri: el.item.uri,
             }}
-            style={styles.imageStyle}
           />
         </Pressable>
       )}
@@ -45,27 +46,25 @@ const LinkedFeedsList = ({ data }: LinkedFeedsListProps) => {
 };
 
 const styles = StyleSheet.create({
-  linkedFeeds: {
-    position: "absolute",
-    height: 120,
-    width: DIMENSION.HUNDRED_PERCENT,
+  linkedFeeds: {    
     zIndex: 1,
   },
   linkedFeedsContentContainer: {
-    height: DIMENSION.HUNDRED_PERCENT,
+    alignSelf: "center",
+    height: 120,
   },
   linkedFeed: {
+    height: DIMENSION.HUNDRED_PERCENT,
     width: 100,
-    height: "100%",
     marginHorizontal: 8,
     borderRadius: 8,
     backgroundColor: PALETTE.WHITE,
     shadowColor: PALETTE.BLACK,
     shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: { height: 4, width: 0 },
     shadowRadius: 2,
   },
-  imageStyle: { height: "100%", borderRadius: 8 },
+  imageStyle: { height: DIMENSION.HUNDRED_PERCENT, borderRadius: 8 },
 });
 
 export default LinkedFeedsList;
