@@ -1,55 +1,29 @@
-import { ReactNode, useCallback, useMemo, useRef, useState } from "react";
+import { Image } from "react-native";
+import { useCallback, useMemo, useRef, useState } from "react";
 import {
-  FlatList,
   GestureResponderHandlers,
-  ImageBackground,
-  InputAccessoryView,
-  Keyboard,
-  KeyboardAvoidingView,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  Platform,
-  Pressable,
-  ScrollView,
   StyleSheet,
-  Text,
   TextInput,
   TextInputKeyPressEventData,
   View,
 } from "react-native";
-import {
-  Asset,
-  ImageLibraryOptions,
-  launchImageLibrary,
-} from "react-native-image-picker";
-import axios from "axios";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import GypsieButton from "../../common/buttons/GypsieButton";
-import { PALETTE, SHADOW } from "../../../utils/constants/palette";
-import {
-  DEVICE_HEIGHT,
-  DEVICE_WIDTH,
-  FULL_SCREEN,
-} from "../../../utils/constants/constants";
-import { Image } from "react-native";
-import CheckIcon from "../../common/icons/CheckIcon";
-import useMediaPicker from "../../../utils/hooks/useMediaPicker";
-import ItineraryMapOverview from "../../post/ItineraryMapOverview";
-import TitleIcon from "../../common/icons/TitleIcon";
-import { storyData as STORY_DATA } from "./ItineraryPostViewScreen";
+import { Asset, ImageLibraryOptions } from "react-native-image-picker";
 import Video from "react-native-video";
-import AuxiliaryControls from "../../common/AuxiliaryControls";
-import DeleteIcon from "../../common/icons/DeleteIcon";
-import DeleteOutlineIcon from "../../common/icons/DeleteOutlineIcon";
-import ChangeSwapIcon from "../../common/icons/ChangeSwapIcon";
-import ParagraphIcon from "../../common/icons/ParagraphIcon";
-import FolderImagesIcon from "../../common/icons/FolderImagesIcon";
-import { useKeyboardHandler } from "react-native-keyboard-controller";
-import useKeyboardManager from "../../../utils/hooks/useKeyboardManager";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { KeyboardAccessoryView } from "@flyerhq/react-native-keyboard-accessory-view";
-import CameraIcon from "../../common/icons/CameraIcon";
-import CameraOutlineIcon from "../../common/icons/CameraOutlineIcon";
+import axios from "axios";
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetScrollView,
+} from "@gorhom/bottom-sheet";
+import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
+import { Portal, PortalHost } from "@gorhom/portal";
+
+import useKeyboardManager from "../../../utils/hooks/useKeyboardManager";
+import useMediaPicker from "../../../utils/hooks/useMediaPicker";
 import { useAppDispatch, useAppSelector } from "../../../utils/redux/hooks";
 import {
   setCoverMedia,
@@ -58,19 +32,27 @@ import {
   addStoryItem,
   setPosting,
 } from "../../../utils/redux/reducers/newItineraryPostSlice";
+
+import AuxiliaryControls from "../../common/AuxiliaryControls";
+import GypsieButton from "../../common/buttons/GypsieButton";
+import ItineraryMapOverview from "../../post/ItineraryMapOverview";
+import LinkedFeedsList from "../../itinerary/LinkedFeedsList";
+
+import AddIcon from "../../common/icons/AddIcon";
+import CameraOutlineIcon from "../../common/icons/CameraOutlineIcon";
+import ChangeSwapIcon from "../../common/icons/ChangeSwapIcon";
+import CheckIcon from "../../common/icons/CheckIcon";
+import DeleteLeftIcon from "../../common/icons/DeleteLeftIcon";
+import DeleteOutlineIcon from "../../common/icons/DeleteOutlineIcon";
+import FolderImagesIcon from "../../common/icons/FolderImagesIcon";
+import ParagraphIcon from "../../common/icons/ParagraphIcon";
+import TitleIcon from "../../common/icons/TitleIcon";
+
 import type { NewItineraryPostScreenProps } from "./types/types";
 import { Story, StoryItem, StoryItemType } from "../../post/types/types";
 import { storyBodyStyle, storyTitleStyle } from "../../../utils/constants/text";
-import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetScrollView,
-  BottomSheetView,
-} from "@gorhom/bottom-sheet";
-import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
-import { Portal, PortalHost } from "@gorhom/portal";
-import LinkedFeedsList from "../../itinerary/LinkedFeedsList";
-import AddIcon from "../../common/icons/AddIcon";
-import DeleteLeftIcon from "../../common/icons/DeleteLeftIcon";
+import { DEVICE_HEIGHT, FULL_SCREEN } from "../../../utils/constants/constants";
+import { PALETTE } from "../../../utils/constants/palette";
 
 const imageLibraryOptions: ImageLibraryOptions = {
   mediaType: "mixed",
