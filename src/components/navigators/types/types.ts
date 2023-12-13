@@ -31,10 +31,8 @@ export type RootStackNavigatorParamList = {
 };
 
 export type AppStackNavigatorParamList = {
-  // BottomTabs: undefined;
   BottomTabs: NavigatorScreenParams<BottomTabNavigatorParamList>;
   Modal: NavigatorScreenParams<ModalNavigatorParamList>;
-  // Modal: undefined;
 };
 
 export type BottomTabNavigatorParamList = {

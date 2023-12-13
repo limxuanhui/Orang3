@@ -5,15 +5,19 @@ import GypsieButton from "../common/buttons/GypsieButton";
 import type { ItineraryMapOverviewProps } from "./types/types";
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
+import { ModalNavigatorNavigationProp } from "../navigators/types/types";
+import { useNavigation } from "@react-navigation/native";
 
 const ItineraryMapOverview = ({
   data,
   onPressClearPlan,
 }: ItineraryMapOverviewProps) => {
   // Pass itinerary data into navigation options parameters. If null/empty, then it is new plan
-  //   const navigation = useNavigation<>();
+  const navigation = useNavigation<ModalNavigatorNavigationProp>();
 
-  const onPressOverview = useCallback(() => {}, []);
+  const onPressOverview = useCallback(() => {
+    navigation.push("Modal", { screen: "ItineraryView" });
+  }, [navigation]);
 
   return (
     <Pressable

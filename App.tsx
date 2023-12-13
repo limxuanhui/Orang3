@@ -3,7 +3,6 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import { Provider } from "react-redux";
-import { PortalProvider } from "@gorhom/portal";
 import { AuthContext } from "./src/utils/contexts/AuthContext";
 import useAuthManager from "./src/utils/hooks/useAuthManager";
 import RootStackNavigator from "./src/components/navigators/RootStackNavigator";
@@ -23,13 +22,11 @@ const App = (): JSX.Element => {
       <Provider store={store}>
         <AuthContext.Provider value={authInfo}>
           <GestureHandlerRootView style={{ flex: 1 }}>
-            <PortalProvider>
             <StatusBar
               barStyle={isDarkMode ? "light-content" : "dark-content"}
               hidden
             />
             <RootStackNavigator />
-            </PortalProvider>
           </GestureHandlerRootView>
         </AuthContext.Provider>
       </Provider>

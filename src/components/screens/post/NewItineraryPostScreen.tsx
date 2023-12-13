@@ -6,32 +6,14 @@ import {
   NativeSyntheticEvent,
   StyleSheet,
   TextInput,
-  TextInputKeyPressEventData,
   View,
 } from "react-native";
-import { Asset, ImageLibraryOptions } from "react-native-image-picker";
 import Video from "react-native-video";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { KeyboardAccessoryView } from "@flyerhq/react-native-keyboard-accessory-view";
-import axios from "axios";
-import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetScrollView,
-} from "@gorhom/bottom-sheet";
-import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
+import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Portal, PortalHost } from "@gorhom/portal";
-
-import useKeyboardManager from "../../../utils/hooks/useKeyboardManager";
-import useMediaPicker from "../../../utils/hooks/useMediaPicker";
-import { useAppDispatch, useAppSelector } from "../../../utils/redux/hooks";
-import {
-  setCoverMedia,
-  setTitle,
-  setItineraryData,
-  addStoryItem,
-  setPosting,
-} from "../../../utils/redux/reducers/newItineraryPostSlice";
 
 import AuxiliaryControls from "../../common/AuxiliaryControls";
 import GypsieButton from "../../common/buttons/GypsieButton";
@@ -42,217 +24,50 @@ import AddIcon from "../../common/icons/AddIcon";
 import CameraOutlineIcon from "../../common/icons/CameraOutlineIcon";
 import ChangeSwapIcon from "../../common/icons/ChangeSwapIcon";
 import CheckIcon from "../../common/icons/CheckIcon";
-import DeleteLeftIcon from "../../common/icons/DeleteLeftIcon";
 import DeleteOutlineIcon from "../../common/icons/DeleteOutlineIcon";
 import FolderImagesIcon from "../../common/icons/FolderImagesIcon";
 import ParagraphIcon from "../../common/icons/ParagraphIcon";
+import SquaredCrossIcon from "../../common/icons/SquaredCrossIcon";
 import TitleIcon from "../../common/icons/TitleIcon";
 
+import type { LinkedFeedsListItem } from "../../itinerary/types/types";
 import type { NewItineraryPostScreenProps } from "./types/types";
-import { Story, StoryItem, StoryItemType } from "../../post/types/types";
-import { storyBodyStyle, storyTitleStyle } from "../../../utils/constants/text";
+import { StoryItemType } from "../../post/types/types";
 import { DEVICE_HEIGHT, FULL_SCREEN } from "../../../utils/constants/constants";
 import { PALETTE } from "../../../utils/constants/palette";
-
-const imageLibraryOptions: ImageLibraryOptions = {
-  mediaType: "mixed",
-  presentationStyle: "fullScreen",
-  selectionLimit: 1,
-};
-
-const userLinkedFeedList = [
-  [
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-satay.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-beach.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-uss.jpg",
-    },
-  ],
-  [
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-satay.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-beach.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-uss.jpg",
-    },
-  ],
-  [
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-satay.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-beach.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-uss.jpg",
-    },
-  ],
-];
+import useNewStoryManager from "../../../utils/hooks/useNewStoryManager";
+import { nanoid } from "@reduxjs/toolkit";
 
 const NewItineraryPostScreen = ({
   navigation,
 }: NewItineraryPostScreenProps) => {
   const insets = useSafeAreaInsets();
-  // Creates a reference to the DOM element that we can interact with
-  const bottomSheetRef = useRef<BottomSheet>(null);
-  const { keyboardIsVisible, closeKeyboard } = useKeyboardManager();
-  const { openGallery } = useMediaPicker({ imageLibraryOptions });
-  const { coverMedia, title, itineraryData, storyData, posting } =
-    useAppSelector(state => state.newItineraryPost);
-  const dispatch = useAppDispatch();
 
-  const onPressAddCoverMedia = useCallback(async () => {
-    const coverMediaResponse = await openGallery();
-    let pickedCoverMedia;
-    if (coverMediaResponse.assets && coverMediaResponse.assets.length > 0) {
-      pickedCoverMedia = coverMediaResponse.assets[0];
-      dispatch(setCoverMedia(pickedCoverMedia));
-    }
-  }, [coverMedia, dispatch, openGallery]);
+  const {
+    bottomSheetRef,
+    snapPoints,
+    keyboardIsVisible,
+    coverMedia,
+    title,
+    itineraryData,
+    storyData,
+    posting,
+    userLinkedFeedList,
+    closeKeyboard,
+    renderBackdrop,
+    onPressAddCoverMedia,
+    onPressClearCoverMedia,
+    onPressClearPlan,
+    onTitleChange,
+    onStoryItemTextChange,
+    onPressAddTitle,
+    onPressAddParagraph,
+    onPressAddLinkedFeeds,
+    onPressAddLinkedFeed,
+    onPressDeleteLinkedFeed,
+    onSubmitPost,
+  } = useNewStoryManager();
 
-  const onPressClearCoverMedia = useCallback(() => {
-    dispatch(setCoverMedia(null));
-  }, [setCoverMedia, dispatch]);
-
-  const onPressClearPlan = useCallback(() => {
-    dispatch(setItineraryData([]));
-  }, [setItineraryData]);
-
-  const onTitleChange = useCallback(
-    (text: string) => {
-      dispatch(setTitle(text));
-    },
-    [setTitle, dispatch],
-  );
-
-  const onPressMap = useCallback(() => {
-    navigation.navigate("ItineraryView");
-  }, [navigation]);
-
-  const onPressAddTitle = useCallback(() => {
-    const newStoryItem: StoryItem = {
-      type: StoryItemType.Text,
-      text: "",
-      style: storyTitleStyle,
-    };
-    dispatch(addStoryItem({ newStoryItem }));
-  }, [addStoryItem, dispatch]);
-
-  const onPressAddParagraph = useCallback(() => {
-    const newStoryItem: StoryItem = {
-      type: StoryItemType.Text,
-      text: "",
-      style: storyBodyStyle,
-    };
-    dispatch(addStoryItem({ newStoryItem }));
-  }, [addStoryItem, dispatch]);
-
-  const onPressAddLinkedFeeds = useCallback(() => {
-    // Close keyboard if open
-    if (keyboardIsVisible) {
-      closeKeyboard();
-    }
-
-    // Open bottomsheet displaying linkedFeed
-    bottomSheetRef.current?.expand();
-  }, [bottomSheetRef, keyboardIsVisible, closeKeyboard]);
-
-  const onPressAddLinkedFeed = useCallback(() => {
-    const selectedLinkedFeedId = 0;
-    const selectedLinkedFeed = userLinkedFeedList[selectedLinkedFeedId];
-    console.log(selectedLinkedFeed);
-    dispatch(
-      addStoryItem({
-        newStoryItem: { type: StoryItemType.Media, data: selectedLinkedFeed },
-      }),
-    );
-
-    // Close bottomsheet
-    bottomSheetRef.current?.close();
-    return selectedLinkedFeedId;
-  }, [bottomSheetRef]);
-
-  const onSubmitPost = useCallback(async () => {
-    setPosting(true);
-    // const url = "http://localhost:8080/itinerary/post";
-    const data: {
-      coverMedia: Asset | null;
-      title: string;
-      storyData: Story;
-    } = {
-      coverMedia,
-      title,
-      storyData,
-    };
-
-    // Get secure url from backend for uploading media to s3
-    const apiGatewayUrl =
-      "https://i0p8qk0h9a.execute-api.ap-southeast-1.amazonaws.com/default/getPresignedUrl";
-    const secureS3UrlResponse = await axios.get(apiGatewayUrl, {
-      headers: { mediaType: data.coverMedia?.type },
-    });
-    console.log("TYPE: ", data.coverMedia?.type);
-    const blobResponse = await fetch(
-      data.coverMedia?.uri?.replace("file:///", "file:/") ||
-        "/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png",
-    );
-    // console.log("BLOB response: ", blobResponse);
-    const blob = await blobResponse.blob();
-
-    // If failed to get secure s3 url
-    if (secureS3UrlResponse.status !== 200) {
-      console.error("Failed to get secure S3 url for uploading media");
-      setPosting(false);
-      return;
-    }
-
-    // Upload media to s3 buckets
-    // const response = await fetch(secureS3UrlResponse.data, {
-    //   method: "PUT",
-    //   body: blob,
-    // });
-    const response = await axios.put(secureS3UrlResponse.data, blob, {
-      // Ensure blob data is not transformed (stringified) by axios in transformRequest
-      // Refer to this link for more details: https://github.com/axios/axios/issues/2677
-      transformRequest: data => data,
-      headers: {
-        "Content-Type": data.coverMedia?.type,
-      },
-    });
-
-    console.log("RESPONSE: ", response);
-    setPosting(false);
-  }, [coverMedia, title, storyData, posting]);
-
-  // const [scrollEnabled, setScrollEnabled] = useState<boolean>(false);
   const [currScrollPosition, setCurrScrollPosition] = useState<number>(0);
   const [prevHeight, setPrevHeight] = useState<number>(DEVICE_HEIGHT);
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
@@ -281,36 +96,21 @@ const NewItineraryPostScreen = ({
     [scrollViewRef, currScrollPosition, prevHeight, setPrevHeight],
   );
 
-  const [focusedText, setFocusedText] = useState<String>();
-  const onBackspace = useCallback(
-    (e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
-      if (e.nativeEvent.key === "Backspace") {
-        console.log(
-          "backspaced: ",
-          // JSON.stringify(e., null, 4),
-        );
+  // const [focusedText, setFocusedText] = useState<String>();
+  // const onBackspace = useCallback(
+  //   (e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+  //     if (e.nativeEvent.key === "Backspace") {
+  //       console.log(
+  //         "backspaced: ",
+  //         // JSON.stringify(e., null, 4),
+  //       );
 
-        if (focusedText) {
-        }
-      }
-    },
-    [focusedText],
-  );
-
-  const onPressDeleteLinkedFeed = useCallback((index: number) => {}, []);
-
-  const renderBackdrop = useCallback(
-    (props: BottomSheetDefaultBackdropProps) => (
-      <BottomSheetBackdrop
-        {...props}
-        disappearsOnIndex={0}
-        appearsOnIndex={1}
-      />
-    ),
-    [],
-  );
-
-  const snapPoints = useMemo(() => [1, "50%"], []);
+  //       if (focusedText) {
+  //       }
+  //     }
+  //   },
+  //   [focusedText],
+  // );
 
   return (
     <KeyboardAccessoryView
@@ -397,26 +197,56 @@ const NewItineraryPostScreen = ({
               <View style={{}}>
                 {storyData.map((el, index) => {
                   if (el.type === StoryItemType.Text) {
-                    console.log("EL TYPE: ", el);
                     return (
-                      <TextInput
-                        style={[styles.storySectionInput, el.style]}
-                        key={index}
-                        placeholder={index === 0 ? "Write a story..." : ""}
-                        // onKeyPress={}
-                        // onFocus={e => {
-                        //   console.log(e.nativeEvent.text);
-                        //   setFocusedText(e.nativeEvent.text);
-                        // }}
-                        onChangeText={text => setFocusedText(text)}
-                        autoFocus
-                        multiline
-                        selectionColor={PALETTE.ORANGE}
-                        scrollEnabled={false}
-                      />
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          // borderWidth: 1,
+                          // borderColor: "red",
+                        }}
+                        key={el.id}>
+                        <TextInput
+                          style={[styles.storySectionInput, el.style]}
+                          // key={index}
+                          // placeholder={index === 0 ? "Write a story..." : ""}
+                          // onKeyPress={}
+                          // onFocus={e => {
+                          //   console.log(e.nativeEvent.text);
+                          //   setFocusedText(e.nativeEvent.text);
+                          // }}
+                          // value={el.text}
+                          onChangeText={text =>
+                            onStoryItemTextChange(el.id, text)
+                          }
+                          autoFocus
+                          multiline
+                          selectionColor={PALETTE.ORANGE}
+                          scrollEnabled={false}
+                        />
+                        <GypsieButton
+                          customButtonStyles={{
+                            position: "absolute",
+                            top: 0,
+                            right: 0,
+                            height: 24,
+                            width: 24,
+                            // backgroundColor: PALETTE.LIGHTERGREY,
+                            shadowColor: PALETTE.GREY,
+                            shadowOffset: {height:0,width: 0},
+                            shadowOpacity: 0.2,
+                            shadowRadius: 2,
+                            zIndex: 1,
+                          }}
+                          customIconStyles={{
+                            fontSize: 24,
+                            color: PALETTE.RED,
+                          }}
+                          Icon={SquaredCrossIcon}
+                          onPress={() => onPressDeleteLinkedFeed(index)}
+                        />
+                      </View>
                     );
                   } else if (el.type === StoryItemType.Media) {
-                    console.log(el.data);
                     return (
                       <View
                         style={{
@@ -424,21 +254,24 @@ const NewItineraryPostScreen = ({
                           justifyContent: "center",
                           alignItems: "center",
                           marginVertical: 16,
-                        }}>
+                        }}
+                        key={el.id}>
                         <LinkedFeedsList data={el.data} />
                         <GypsieButton
                           customButtonStyles={{
-                            marginHorizontal: 8,
-                            height: 48,
-                            width: 48,
-                            // borderRadius: 24,
-                            // backgroundColor: "orange",
+                            position: "absolute",
+                            top: 0,
+                            right: 0,
+                            height: 24,
+                            width: 24,
+                            backgroundColor: PALETTE.LIGHTERGREY,
+                            zIndex: 1,
                           }}
                           customIconStyles={{
                             fontSize: 24,
-                            color: PALETTE.GREY,
+                            color: PALETTE.RED,
                           }}
-                          Icon={DeleteLeftIcon}
+                          Icon={SquaredCrossIcon}
                           onPress={() => onPressDeleteLinkedFeed(index)}
                         />
                       </View>
@@ -455,13 +288,9 @@ const NewItineraryPostScreen = ({
               index={-1}
               snapPoints={snapPoints}>
               <BottomSheetScrollView
-                style={
-                  {
-                    // height: "80%",
-                    // width: "100%",
-                    // backgroundColor: "skyblue",
-                  }
-                }>
+                style={{
+                  padding: 8,
+                }}>
                 {userLinkedFeedList.map(el => (
                   <View
                     style={{
@@ -491,7 +320,7 @@ const NewItineraryPostScreen = ({
               </BottomSheetScrollView>
             </BottomSheet>
           </Portal>
-          <PortalHost name="NewItineraryPost_ShowLinkedFeedList-host" />
+          <PortalHost name="NewItineraryPost_ShowLinkedFeedsList-host" />
         </View>
       )}>
       <View style={styles.bottomControls}>
@@ -592,9 +421,13 @@ const styles = StyleSheet.create({
     borderBottomColor: PALETTE.LIGHTERGREY,
   },
   storySectionInput: {
+    height: "100%",
+    width: "100%",
     marginBottom: 8,
     borderBottomWidth: 1,
     borderColor: PALETTE.LIGHTERGREY,
+    // borderWidth: 2,
+    // borderColor: PALETTE.GREEN,
   },
   bottomControls: {
     flexDirection: "row",

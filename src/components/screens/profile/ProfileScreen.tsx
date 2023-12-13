@@ -36,7 +36,7 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
     }
   }, [avatarUri, navigation]);
 
-  const onPressSettings = useCallback(() => {
+  const onPressSettings = useCallback(() => {    
     navigation.push("Settings");
   }, [navigation]);
 
@@ -67,6 +67,7 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
           }
         />
       </Pressable>
+      {/* Check if profile is current user's. If not, hide settings button. */}
       <Pressable style={styles.settingsButton} onPress={onPressSettings}>
         <Ionicons name="settings" size={24} color={PALETTE.OFFWHITE} />
       </Pressable>

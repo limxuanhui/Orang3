@@ -1,7 +1,8 @@
 import React, { useContext } from "react";
-import { StatusBar, useColorScheme } from "react-native";
+import { useColorScheme } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { PortalProvider } from "@gorhom/portal";
 import { AuthContext } from "../../utils/contexts/AuthContext";
 import AppStackNavigator from "./AppStackNavigator";
 import AuthStackNavigator from "./AuthStackNavigator";
@@ -12,17 +13,18 @@ const RootStack = createStackNavigator<RootStackNavigatorParamList>();
 
 const RootStackNavigator = () => {
   const { isLoggedIn } = useContext(AuthContext);
-  const isDarkMode = useColorScheme() === "dark";
 
   return (
     <NavigationContainer>
-      <RootStack.Navigator screenOptions={SCREEN_OPTIONS}>
-        {isLoggedIn ? (
-          <RootStack.Screen name="App" component={AppStackNavigator} />
-        ) : (
-          <RootStack.Screen name="Auth" component={AuthStackNavigator} />
-        )}
-      </RootStack.Navigator>
+      <PortalProvider>
+        <RootStack.Navigator screenOptions={SCREEN_OPTIONS}>
+          {isLoggedIn ? (
+            <RootStack.Screen name="App" component={AppStackNavigator} />
+          ) : (
+            <RootStack.Screen name="Auth" component={AuthStackNavigator} />
+          )}
+        </RootStack.Navigator>
+      </PortalProvider>
     </NavigationContainer>
   );
 };

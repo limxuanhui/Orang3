@@ -25,12 +25,12 @@ const MyPosts = () => {
     // <View style={[styles.container, { height: percentage - insets.bottom }]}>
     <View style={[styles.container, { height: height }]}>
       <FlatList
-        showsVerticalScrollIndicator={false}
-        numColumns={3}
         data={data}
+        renderItem={el => <FeedThumbnail feed={el.item} />}
+        numColumns={3}
+        showsVerticalScrollIndicator={false}
         refreshing={refreshing}
         onRefresh={refreshPostsHandler}
-        renderItem={el => <FeedThumbnail feed={el.item} />}
       />
     </View>
   );

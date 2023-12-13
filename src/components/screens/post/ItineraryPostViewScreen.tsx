@@ -269,7 +269,7 @@ const ItineraryPostViewScreen = ({
           />
         ) : null} */}
         <ItineraryMapOverview data={itineraryData} />
-        <ItineraryStory data={storyData} />
+        {/* <ItineraryStory data={storyData} /> */}
         {/* </BottomSheetScrollView> */}
       </BottomSheet>
     </View>

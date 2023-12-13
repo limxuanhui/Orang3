@@ -31,12 +31,14 @@ export type ItineraryMapOverviewProps = {
 };
 
 export type StoryText = {
+  id: string;
   type: StoryItemType.Text;
   text: string;
   style: StyleProp<TextStyle>;
 };
 
 export type StoryMedia = {
+  id: string;
   type: StoryItemType.Media;
   data: LinkedFeedsListItem[];
 };

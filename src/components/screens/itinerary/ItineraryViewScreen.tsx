@@ -8,31 +8,31 @@ import type { ItineraryViewScreenProps } from "./types/types";
 const ItineraryViewScreen = ({ navigation }: ItineraryViewScreenProps) => {
   const data: LinkedFeedsListItem[] = [
     {
-      feedId: 10001,
+      feedId: "10001",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-gbtb.jpg",
     },
     {
-      feedId: 2,
+      feedId: "10002",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample2.jpg",
     },
     {
-      feedId: 3,
+      feedId: "10003",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample3.jpg",
     },
     {
-      feedId: 4,
+      feedId: "10004",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample1.jpg",
     },
     {
-      feedId: 5,
+      feedId: "10005",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample2.jpg",
     },
     {
-      feedId: 6,
+      feedId: "10006",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample3.jpg",
     },
     {
-      feedId: 7,
+      feedId: "10007",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample1.jpg",
     },
   ];
