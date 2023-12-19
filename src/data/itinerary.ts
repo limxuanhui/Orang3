@@ -34,7 +34,7 @@ export const DUMMY_ITINERARIES: Itinerary[] = [
     routes: [],
     linkedFeeds: [
       {
-        feedId: 1,
+        feedId: "1",
         uri: "",
       },
     ],

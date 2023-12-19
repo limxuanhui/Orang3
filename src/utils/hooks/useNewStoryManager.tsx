@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { Asset, ImageLibraryOptions } from "react-native-image-picker";
-import {
+import newItineraryPostSlice, {
   setCoverMedia,
   setTitle,
   setItineraryData,
@@ -9,6 +9,7 @@ import {
   deleteStoryItem,
   setStoryItemText,
   setPosting,
+  fetchUserLinkedFeedsList,
 } from "../../utils/redux/reducers/newItineraryPostSlice";
 import useMediaPicker from "./useMediaPicker";
 import {
@@ -23,63 +24,6 @@ import useBottomSheetHandler from "./useBottomSheetHandler";
 import { LinkedFeedsListItem } from "../../components/itinerary/types/types";
 import { nanoid } from "@reduxjs/toolkit";
 
-const userLinkedFeedList: LinkedFeedsListItem[][] = [
-  [
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-satay.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-beach.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-uss.jpg",
-    },
-  ],
-  [
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-satay.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-beach.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-uss.jpg",
-    },
-  ],
-  [
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-satay.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-beach.jpeg",
-    },
-    {
-      feedId: "Nulla labore labore fugiat officia.",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-uss.jpg",
-    },
-  ],
-];
-
 const imageLibraryOptions: ImageLibraryOptions = {
   mediaType: "mixed",
   presentationStyle: "fullScreen",
@@ -93,8 +37,14 @@ const useNewStoryManager = () => {
     snapPointsArr: [1, "50%"],
   });
   const dispatch = useAppDispatch();
-  const { coverMedia, title, itineraryData, storyData, posting } =
-    useAppSelector(state => state.newItineraryPost);
+  const {
+    coverMedia,
+    title,
+    itineraryData,
+    storyData,
+    linkedFeedsList,
+    posting,
+  } = useAppSelector(state => state.newItineraryPost);
 
   const onPressAddCoverMedia = useCallback(async () => {
     const coverMediaResponse = await openGallery();
@@ -159,7 +109,7 @@ const useNewStoryManager = () => {
 
   const onPressAddLinkedFeed = useCallback(() => {
     const selectedLinkedFeedId = 0;
-    const selectedLinkedFeed = userLinkedFeedList[selectedLinkedFeedId];
+    const selectedLinkedFeed = linkedFeedsList.data[selectedLinkedFeedId];
     console.log(selectedLinkedFeed);
     dispatch(
       addStoryItem({
@@ -174,7 +124,7 @@ const useNewStoryManager = () => {
     // Close bottomsheet
     bottomSheetRef.current?.close();
     return selectedLinkedFeedId;
-  }, [addStoryItem, bottomSheetRef, userLinkedFeedList, dispatch]);
+  }, [addStoryItem, bottomSheetRef, linkedFeedsList, dispatch]);
 
   const onPressDeleteLinkedFeed = useCallback(
     (index: number) => {
@@ -239,8 +189,13 @@ const useNewStoryManager = () => {
   }, [coverMedia, title, storyData, posting]);
 
   useEffect(() => {
-    // Fetch current user's linked feeds list
-  }, []);
+    // Fetch current user's linked feeds list    
+    console.log("status: ", linkedFeedsList.status);
+    if (linkedFeedsList.status === "idle") {
+      console.log("in useEffect for loading linked feeds list")
+      dispatch(fetchUserLinkedFeedsList("random user id "));
+    }
+  }, [linkedFeedsList, fetchUserLinkedFeedsList, dispatch]);
 
   return {
     bottomSheetRef,
@@ -251,7 +206,7 @@ const useNewStoryManager = () => {
     itineraryData,
     storyData,
     posting,
-    userLinkedFeedList,
+    linkedFeedsList,
     closeKeyboard,
     renderBackdrop,
     onPressAddCoverMedia,

@@ -1,4 +1,4 @@
-import { Image } from "react-native";
+import { Image, Text } from "react-native";
 import { useCallback, useMemo, useRef, useState } from "react";
 import {
   GestureResponderHandlers,
@@ -37,6 +37,8 @@ import { DEVICE_HEIGHT, FULL_SCREEN } from "../../../utils/constants/constants";
 import { PALETTE } from "../../../utils/constants/palette";
 import useNewStoryManager from "../../../utils/hooks/useNewStoryManager";
 import { nanoid } from "@reduxjs/toolkit";
+import NewStoryItem from "../../post/NewStoryItem";
+import { ActivityIndicator } from "react-native-paper";
 
 const NewItineraryPostScreen = ({
   navigation,
@@ -52,7 +54,7 @@ const NewItineraryPostScreen = ({
     itineraryData,
     storyData,
     posting,
-    userLinkedFeedList,
+    linkedFeedsList,
     closeKeyboard,
     renderBackdrop,
     onPressAddCoverMedia,
@@ -181,6 +183,7 @@ const NewItineraryPostScreen = ({
               ]}>
               <TextInput
                 style={styles.titleInput}
+                value={title}
                 multiline
                 placeholder="Write a title"
                 placeholderTextColor={PALETTE.LIGHTERGREY}
@@ -195,89 +198,16 @@ const NewItineraryPostScreen = ({
                 onPressClearPlan={onPressClearPlan}
               />
               <View style={{}}>
-                {storyData.map((el, index) => {
-                  if (el.type === StoryItemType.Text) {
-                    return (
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          // borderWidth: 1,
-                          // borderColor: "red",
-                        }}
-                        key={el.id}>
-                        <TextInput
-                          style={[styles.storySectionInput, el.style]}
-                          // key={index}
-                          // placeholder={index === 0 ? "Write a story..." : ""}
-                          // onKeyPress={}
-                          // onFocus={e => {
-                          //   console.log(e.nativeEvent.text);
-                          //   setFocusedText(e.nativeEvent.text);
-                          // }}
-                          // value={el.text}
-                          onChangeText={text =>
-                            onStoryItemTextChange(el.id, text)
-                          }
-                          autoFocus
-                          multiline
-                          selectionColor={PALETTE.ORANGE}
-                          scrollEnabled={false}
-                        />
-                        <GypsieButton
-                          customButtonStyles={{
-                            position: "absolute",
-                            top: 0,
-                            right: 0,
-                            height: 24,
-                            width: 24,
-                            // backgroundColor: PALETTE.LIGHTERGREY,
-                            shadowColor: PALETTE.GREY,
-                            shadowOffset: {height:0,width: 0},
-                            shadowOpacity: 0.2,
-                            shadowRadius: 2,
-                            zIndex: 1,
-                          }}
-                          customIconStyles={{
-                            fontSize: 24,
-                            color: PALETTE.RED,
-                          }}
-                          Icon={SquaredCrossIcon}
-                          onPress={() => onPressDeleteLinkedFeed(index)}
-                        />
-                      </View>
-                    );
-                  } else if (el.type === StoryItemType.Media) {
-                    return (
-                      <View
-                        style={{
-                          flexDirection: "row",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          marginVertical: 16,
-                        }}
-                        key={el.id}>
-                        <LinkedFeedsList data={el.data} />
-                        <GypsieButton
-                          customButtonStyles={{
-                            position: "absolute",
-                            top: 0,
-                            right: 0,
-                            height: 24,
-                            width: 24,
-                            backgroundColor: PALETTE.LIGHTERGREY,
-                            zIndex: 1,
-                          }}
-                          customIconStyles={{
-                            fontSize: 24,
-                            color: PALETTE.RED,
-                          }}
-                          Icon={SquaredCrossIcon}
-                          onPress={() => onPressDeleteLinkedFeed(index)}
-                        />
-                      </View>
-                    );
-                  }
-                })}
+                {storyData.map((el, index) => (
+                  <NewStoryItem
+                    key={el.id}
+                    item={el}
+                    onStoryItemTextChange={onStoryItemTextChange}
+                    onPressDeleteLinkedFeed={() =>
+                      onPressDeleteLinkedFeed(index)
+                    }
+                  />
+                ))}
               </View>
             </View>
           </KeyboardAwareScrollView>
@@ -287,37 +217,43 @@ const NewItineraryPostScreen = ({
               backdropComponent={renderBackdrop}
               index={-1}
               snapPoints={snapPoints}>
-              <BottomSheetScrollView
-                style={{
-                  padding: 8,
-                }}>
-                {userLinkedFeedList.map(el => (
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      // width: "100%",
-                      marginVertical: 16,
-                      borderWidth: 1,
-                      borderColor: PALETTE.LIGHTERGREY,
-                    }}>
-                    <LinkedFeedsList data={el} />
-                    <GypsieButton
-                      customButtonStyles={{
-                        marginHorizontal: 8,
-                        height: 48,
-                        width: 48,
-                        borderRadius: 24,
-                        backgroundColor: "orange",
-                      }}
-                      customIconStyles={{ fontSize: 24 }}
-                      Icon={AddIcon}
-                      onPress={onPressAddLinkedFeed}
-                    />
-                  </View>
-                ))}
-              </BottomSheetScrollView>
+              {linkedFeedsList.status === "succeeded" ? (
+                <BottomSheetScrollView
+                  style={{
+                    padding: 8,
+                  }}
+                  showsVerticalScrollIndicator={false}>
+                  {linkedFeedsList.data.map(el => (
+                    <View style={styles.linkedFeedsListRow}>
+                      <LinkedFeedsList data={el} />
+                      <GypsieButton
+                        customButtonStyles={styles.addLinkedFeedButton}
+                        customIconStyles={{ fontSize: 32 }}
+                        Icon={AddIcon}
+                        onPress={onPressAddLinkedFeed}
+                      />
+                    </View>
+                  ))}
+                </BottomSheetScrollView>
+              ) : linkedFeedsList.status === "failed" ? (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}>
+                  <Text>Failed to load your feeds... Try again...</Text>
+                </View>
+              ) : (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}>
+                  <ActivityIndicator size={60} color={PALETTE.ORANGE} />
+                </View>
+              )}
             </BottomSheet>
           </Portal>
           <PortalHost name="NewItineraryPost_ShowLinkedFeedsList-host" />
@@ -359,7 +295,6 @@ const NewItineraryPostScreen = ({
                 borderRadius: 6,
               },
             ]}
-            // customIconStyles={{ fontSize: 24 }}
             customTextStyles={{
               fontSize: 16,
               fontWeight: "bold",
@@ -420,15 +355,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: PALETTE.LIGHTERGREY,
   },
-  storySectionInput: {
-    height: "100%",
-    width: "100%",
-    marginBottom: 8,
-    borderBottomWidth: 1,
-    borderColor: PALETTE.LIGHTERGREY,
-    // borderWidth: 2,
-    // borderColor: PALETTE.GREEN,
-  },
+
   bottomControls: {
     flexDirection: "row",
     justifyContent: "space-evenly",
@@ -455,6 +382,21 @@ const styles = StyleSheet.create({
     // borderColor: "red",
     paddingVertical: 4,
     paddingHorizontal: 8,
+  },
+  addLinkedFeedButton: {
+    marginHorizontal: 8,
+    height: 40,
+    width: 40,
+    borderRadius: 24,
+    backgroundColor: PALETTE.ORANGE,
+  },
+  linkedFeedsListRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 16,
+    // borderWidth: 1,
+    // borderColor: PALETTE.LIGHTERGREY,
   },
 });
 
