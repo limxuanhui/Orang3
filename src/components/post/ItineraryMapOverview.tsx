@@ -27,35 +27,19 @@ const ItineraryMapOverview = ({
       ]}
       onPress={onPressOverview}>
       <Image
-        style={{
-          width: "100%",
-          height: "100%",
-          borderRadius: 8,
-        }}
+        style={styles.mapOverviewBackground}
         source={{
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/mapoverview.jpeg",
         }}
         resizeMode="cover"
       />
-      <View
-        style={{
-          position: "absolute",
-          flexDirection: "row",
-          bottom: 0,
-          justifyContent: "space-evenly",
-          alignItems: "center",
-          height: 40,
-          width: "100%",
-          backgroundColor: "#00000088",
-          borderBottomLeftRadius: 8,
-          borderBottomRightRadius: 8,
-        }}>
+      <View style={styles.footer}>
         <Text style={{ fontWeight: "bold", color: "white" }}>
-          {data.length > 0
-            ? `No. of Places: ${data.length}`
+          {data.routes.length > 0
+            ? `No. of Places: ${data.routes.length}`
             : "Start adding plans"}
         </Text>
-        {data.length > 0 && onPressClearPlan ? (
+        {data.routes.length > 0 && onPressClearPlan ? (
           <GypsieButton
             customButtonStyles={[styles.footerButton]}
             customIconStyles={[
@@ -84,10 +68,27 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
   },
+  mapOverviewBackground: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 8,
+  },
   footerText: {
     textAlign: "center",
     color: PALETTE.WHITE,
     fontWeight: "800",
+  },
+  footer: {
+    position: "absolute",
+    flexDirection: "row",
+    bottom: 0,
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    height: 40,
+    width: "100%",
+    backgroundColor: "#00000088",
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
   },
   footerButton: { width: "auto", borderWidth: 0, borderColor: "red" },
   footerButtonText: { fontSize: 12, color: PALETTE.OFFWHITE },

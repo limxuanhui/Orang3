@@ -239,10 +239,40 @@ const NewItineraryPostScreen = ({
                 <View
                   style={{
                     flex: 1,
+                    // flexDirection: 'row',
+                    borderWidth: 1,
+                    borderColor: "red",
                     justifyContent: "center",
                     alignItems: "center",
                   }}>
-                  <Text>Failed to load your feeds... Try again...</Text>
+                  <Text
+                    style={{
+                      fontFamily: "Futura",
+                      fontSize: 24,
+                      color: PALETTE.GREY,
+                    }}>
+                    Unable to load your feeds...
+                  </Text>
+                  <GypsieButton
+                    customButtonStyles={{
+                      margin: 16,
+                      borderWidth: 1,
+                      borderColor: PALETTE.LIGHTERGREY,
+                      width: "auto",
+                      paddingVertical: 8,
+                      paddingHorizontal: 16,
+                    }}
+                    customTextStyles={{
+                      fontFamily: "Futura",
+                      fontSize: 16,
+                      fontWeight: "bold",
+                      color: PALETTE.GREYISHBLUE,
+                    }}
+                    customIconStyles={{ fontSize: 16, color: PALETTE.ORANGE }}
+                    Icon={ChangeSwapIcon}
+                    text="Try again"
+                    onPress={() => {}}
+                  />
                 </View>
               ) : (
                 <View

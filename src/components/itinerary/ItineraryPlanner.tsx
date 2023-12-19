@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 import MapView, { Polyline, PROVIDER_GOOGLE, Region } from "react-native-maps";
+import { v4 as uuidv4 } from "uuid";
 import useMapHandlers from "../../utils/hooks/useMapHandlers";
 import BottomSheet from "../common/BottomSheet";
 import MapPin from "./MapPin";
@@ -16,6 +17,11 @@ import {
   MAP_SCREEN_BOTTOM_SHEET_CONSTANTS,
 } from "../../utils/constants/constants";
 import { PALETTE } from "../../utils/constants/palette";
+import { useAppDispatch, useAppSelector } from "../../utils/redux/hooks";
+import {
+  createItineraryData,
+  setItineraryData,
+} from "../../utils/redux/reducers/newItineraryPostSlice";
 
 const ItineraryPlanner = () => {
   const mapRef = useRef<MapView | null>(null);
@@ -40,6 +46,8 @@ const ItineraryPlanner = () => {
     onStartRouting,
     onCloseModal,
   } = useMapHandlers();
+  const dispatch = useAppDispatch();
+  const { itineraryData } = useAppSelector(state => state.newItineraryPost);
 
   useEffect(() => {
     // Add animation to a certain location without places added
@@ -68,6 +76,20 @@ const ItineraryPlanner = () => {
     }
   }, [mapRef, selectedRoute]);
 
+  useEffect(() => {
+    console.log("itineraryplanner mounted");
+    return () => {
+      console.log("ItineraryViewScreen - ItineraryPlanner dismounted");
+      console.log("Dismounted: ", routes);
+      // Dispatch an action to update itinerary in NewItineraryPost.
+      // Should we actually be creating a new uuid everytime we dispatch => everytime we edit/or just dismounts ItineraryPlanner? Might need optimisation here.
+      if (!itineraryData.id) {
+        dispatch(createItineraryData({}));
+      } else {
+        dispatch(setItineraryData({ routes }));
+      }
+    };
+  }, [routes, createItineraryData, setItineraryData, dispatch]);
   return (
     <View style={styles.container}>
       <Modal

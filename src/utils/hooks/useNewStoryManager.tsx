@@ -4,12 +4,13 @@ import { Asset, ImageLibraryOptions } from "react-native-image-picker";
 import newItineraryPostSlice, {
   setCoverMedia,
   setTitle,
-  setItineraryData,
+  createItineraryData,
   addStoryItem,
   deleteStoryItem,
   setStoryItemText,
   setPosting,
   fetchUserLinkedFeedsList,
+  setItineraryData,
 } from "../../utils/redux/reducers/newItineraryPostSlice";
 import useMediaPicker from "./useMediaPicker";
 import {
@@ -60,8 +61,8 @@ const useNewStoryManager = () => {
   }, [setCoverMedia, dispatch]);
 
   const onPressClearPlan = useCallback(() => {
-    dispatch(setItineraryData([]));
-  }, [setItineraryData]);
+    dispatch(setItineraryData({ routes: [] }));
+  }, [dispatch, setItineraryData]);
 
   const onTitleChange = useCallback(
     (text: string) => {
@@ -189,13 +190,17 @@ const useNewStoryManager = () => {
   }, [coverMedia, title, storyData, posting]);
 
   useEffect(() => {
-    // Fetch current user's linked feeds list    
+    // Fetch current user's linked feeds list
     console.log("status: ", linkedFeedsList.status);
     if (linkedFeedsList.status === "idle") {
-      console.log("in useEffect for loading linked feeds list")
+      console.log("in useEffect for loading linked feeds list");
       dispatch(fetchUserLinkedFeedsList("random user id "));
     }
   }, [linkedFeedsList, fetchUserLinkedFeedsList, dispatch]);
+
+  useEffect(() => {
+    console.log("ItineraryData @@@@@@@@@@@@@@@@", JSON.stringify(itineraryData))
+  }, [itineraryData])
 
   return {
     bottomSheetRef,

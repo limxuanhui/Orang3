@@ -31,9 +31,9 @@ export type RouteInfo = {
 export type RouteNodeCoord = LatLng;
 
 export type Itinerary = {
-  id: number;
-  routes: RouteNodeInfo[];
-  linkedFeeds: LinkedFeedsListItem[];
+  id: string;
+  routes: RouteInfo[];
+  // linkedFeeds: LinkedFeedsListItem[];
 };
 
 export type ItineraryFeedThumbnailInfo = {

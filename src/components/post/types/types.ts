@@ -1,6 +1,6 @@
 import type { StyleProp, TextStyle } from "react-native";
 import type { FeedItem } from "../../feed/types/types";
-import type { LinkedFeedsListItem } from "../../itinerary/types/types";
+import type { Itinerary, LinkedFeedsListItem, RouteInfo } from "../../itinerary/types/types";
 
 // Feed
 export type NewFeedPostSideControlsProps = {
@@ -15,18 +15,18 @@ export type NewFeedPostCarouselProps = {
 };
 
 // Itinerary
-export type ItineraryRow = {
-  title: string;
-  places: string[];
-};
+// export type Itinerary = {
+//   id: string;
+//   routes: RouteInfo[];
+// };
 
 export type ItineraryTableProps = {
-  data: ItineraryRow[];
+  data: Itinerary;
   clearDataHandler?: () => void;
 };
 
 export type ItineraryMapOverviewProps = {
-  data: ItineraryRow[];
+  data: Itinerary;
   onPressClearPlan?: () => void;
 };
 

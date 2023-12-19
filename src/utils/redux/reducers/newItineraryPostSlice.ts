@@ -1,19 +1,18 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { Asset } from "react-native-image-picker";
-import axios, { AxiosError } from "axios";
-import {
-  StoryItemType,
-  type ItineraryRow,
-  type Story,
-  StoryText,
-} from "../../../components/post/types/types";
-import type { LinkedFeedsListItem } from "../../../components/itinerary/types/types";
+import { v4 as uuidv4 } from "uuid";
+import type { Story } from "../../../components/post/types/types";
+import type {
+  Itinerary,
+  LinkedFeedsListItem,
+  RouteInfo,
+} from "../../../components/itinerary/types/types";
 import { linkedFeedsList } from "../../../data/linkedFeedsList";
 
 export type NewItineraryPostState = Readonly<{
   coverMedia: Asset | null;
   title: string;
-  itineraryData: ItineraryRow[];
+  itineraryData: Itinerary;
   storyData: Story;
   posting: boolean;
   saving: boolean;
@@ -28,7 +27,7 @@ export type NewItineraryPostState = Readonly<{
 const initialState: NewItineraryPostState = {
   coverMedia: null,
   title: "",
-  itineraryData: [],
+  itineraryData: { id: "", routes: [] },
   storyData: [],
   posting: false,
   saving: false,
@@ -78,7 +77,12 @@ const newItineraryPostSlice = createSlice({
     setTitle: (state, action) => {
       state.title = action.payload;
     },
-    setItineraryData: (state, action) => {},
+    createItineraryData: (state, _) => {
+      state.itineraryData = { id: uuidv4(), routes: [] }
+    },
+    setItineraryData: (state, action) => {
+      state.itineraryData.routes = action.payload.routes;
+    },
     addStoryItem: (state, action) => {
       state.storyData.push(action.payload.newStoryItem);
     },
@@ -112,6 +116,7 @@ const newItineraryPostSlice = createSlice({
     },
   },
   extraReducers: builder => {
+    // fetchUserLinkedFeedsList
     builder
       .addCase(fetchUserLinkedFeedsList.pending, (state, action) => {
         state.linkedFeedsList.status = "pending";
@@ -130,6 +135,7 @@ const newItineraryPostSlice = createSlice({
 export const {
   setCoverMedia,
   setTitle,
+  createItineraryData,
   setItineraryData,
   addStoryItem,
   deleteStoryItem,

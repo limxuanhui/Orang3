@@ -41,44 +41,35 @@ import DeleteIcon from "../../common/icons/DeleteIcon";
 import ItineraryStory from "../../post/ItineraryStory";
 import ItineraryMapOverview from "../../post/ItineraryMapOverview";
 import { storyBodyStyle, storyTitleStyle } from "../../../utils/constants/text";
-
-const dummyItineraryData: ItineraryRow[] = [
-  { title: "day 1", places: ["Jewel", "Merlion city"] },
-  { title: "day 2", places: ["Gardens by the Bay", "Sentosa"] },
-  {
-    title: "day 3 is a bij",
-    places: [
-      "Gardens by the Bay",
-      "Sentosa",
-      "Changi city point",
-      "Coney Island",
-      "Singapore River",
-    ],
-  },
-];
+import { Itinerary } from "../../../utils/redux/reducers/newItineraryPostSlice";
 
 export const storyData: Story = [
   {
+    id: "1",
     type: StoryItemType.Text,
     text: "This is the craziest trip ever!",
     style: storyTitleStyle,
   },
   {
+    id: "2",
     type: StoryItemType.Text,
     text: "The weather here was amazing. Elit quis sit commodo officia nisi. Irure dolor ad aute amet excepteur elit sit.",
     style: storyBodyStyle,
   },
   {
+    id: "3",
     type: StoryItemType.Text,
     text: "The weather here was amazing. Elit quis sit commodo officia nisi. Irure dolor ad aute amet excepteur elit sit.",
     style: storyBodyStyle,
   },
   {
+    id: "4",
     type: StoryItemType.Text,
     text: "Day 2 - Jeju Hallabong Farm",
     style: storyTitleStyle,
   },
   {
+    id: "5",
     type: StoryItemType.Media,
     data: [
       {
@@ -100,21 +91,25 @@ export const storyData: Story = [
     ],
   },
   {
+    id: "6",
     type: StoryItemType.Text,
     text: "The weather here was amazing. Elit quis sit commodo officia nisi. Irure dolor ad aute amet excepteur elit sit.",
     style: storyBodyStyle,
   },
   {
+    id: "7",
     type: StoryItemType.Text,
     text: "Day 3 - Jeju Abalone stew",
     style: storyTitleStyle,
   },
   {
+    id: "8",
     type: StoryItemType.Text,
     text: "The weather here was amazing. Elit quis sit commodo officia nisi. Irure dolor ad aute amet excepteur elit sit.",
     style: storyBodyStyle,
   },
   {
+    id: "9",
     type: StoryItemType.Media,
     data: [
       {
@@ -146,7 +141,7 @@ const ItineraryPostViewScreen = ({
   const avatarUri =
     "/Users/limxuanhui/bluextech/gypsie/assets/avatars/yoona.jpeg";
   const name = "@Joseph";
-  const [itineraryData, setItineraryData] = useState<ItineraryRow[]>([]);
+  const [itineraryData, setItineraryData] = useState<Itinerary>({id: "", routes: []});
   const feedData = DUMMY_FEEDS.map(el => el.items);
 
   const onPressExpandBottomSheet = useCallback(() => {
