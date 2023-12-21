@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { Modal, StyleSheet, View } from "react-native";
 import MapView, { Polyline, PROVIDER_GOOGLE, Region } from "react-native-maps";
 import { v4 as uuidv4 } from "uuid";
@@ -22,6 +22,7 @@ import {
   createItineraryData,
   setItineraryData,
 } from "../../utils/redux/reducers/newItineraryPostSlice";
+import { AuthContext } from "../../utils/contexts/AuthContext";
 
 const ItineraryPlanner = () => {
   const mapRef = useRef<MapView | null>(null);
@@ -77,17 +78,17 @@ const ItineraryPlanner = () => {
   }, [mapRef, selectedRoute]);
 
   useEffect(() => {
-    console.log("itineraryplanner mounted");
+    console.log("ItineraryPlanner mounted");
+    // If itinerary id does not exist, create itinerary
+    if (!itineraryData.id) {
+      dispatch(createItineraryData({ creatorId: "" }));
+    }
+
     return () => {
-      console.log("ItineraryViewScreen - ItineraryPlanner dismounted");
-      console.log("Dismounted: ", routes);
+      console.log("ItineraryPlanner unmounted");
       // Dispatch an action to update itinerary in NewItineraryPost.
       // Should we actually be creating a new uuid everytime we dispatch => everytime we edit/or just dismounts ItineraryPlanner? Might need optimisation here.
-      if (!itineraryData.id) {
-        dispatch(createItineraryData({}));
-      } else {
-        dispatch(setItineraryData({ routes }));
-      }
+      dispatch(setItineraryData({ routes }));
     };
   }, [routes, createItineraryData, setItineraryData, dispatch]);
   return (

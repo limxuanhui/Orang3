@@ -1,11 +1,12 @@
 import { StyleProp, ViewStyle } from "react-native";
 import { GooglePlaceDetail } from "react-native-google-places-autocomplete";
 import { LatLng } from "react-native-maps";
+import { Media } from "../../feed/types/types";
 
 // Data types
-export type ItineraryFeedItem = {
-  name: string;
-};
+// export type ItineraryFeedItem = {
+//   name: string;
+// };
 
 export type LinkedFeedsListItem = {
   feedId: string;
@@ -32,26 +33,37 @@ export type RouteNodeCoord = LatLng;
 
 export type Itinerary = {
   id: string;
+  creatorId: string;
   routes: RouteInfo[];
-  // linkedFeeds: LinkedFeedsListItem[];
 };
+
+type ThumbnailMedia = {
+  id: string;
+  type: "image" | "video"
+}
 
 export type ItineraryFeedThumbnailInfo = {
   id: string;
-  imageUri: string;
-  caption: string;
+  creatorId: string;
+  coverMedia: Media;
+  title: string;
 };
 
 // Component properties
 export type ItineraryFeedProps = {
-  feed: ItineraryFeedItem[];
+  data: ItineraryFeedThumbnailInfo[];
+};
+
+export type ItineraryFeedThumbnailProps = {
+  index: number;
+  data: ItineraryFeedThumbnailInfo;
 };
 
 export type ItineraryFilterProps = {
   filter: string[];
 };
 
-export type LinkedFeedsListProps = {  
+export type LinkedFeedsListProps = {
   data: LinkedFeedsListItem[];
   style?: StyleProp<ViewStyle>;
 };

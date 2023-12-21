@@ -1,5 +1,5 @@
 import { Image, Text } from "react-native";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useContext, useMemo, useRef, useState } from "react";
 import {
   GestureResponderHandlers,
   NativeScrollEvent,
@@ -39,11 +39,13 @@ import useNewStoryManager from "../../../utils/hooks/useNewStoryManager";
 import { nanoid } from "@reduxjs/toolkit";
 import NewStoryItem from "../../post/NewStoryItem";
 import { ActivityIndicator } from "react-native-paper";
+import { AuthContext } from "../../../utils/contexts/AuthContext";
 
 const NewItineraryPostScreen = ({
   navigation,
 }: NewItineraryPostScreenProps) => {
   const insets = useSafeAreaInsets();
+  const userInfo = useContext(AuthContext);
 
   const {
     bottomSheetRef,
@@ -193,10 +195,7 @@ const NewItineraryPostScreen = ({
                 }}
                 scrollEnabled={false}
               />
-              <ItineraryMapOverview
-                data={itineraryData}
-                onPressClearPlan={onPressClearPlan}
-              />
+              <ItineraryMapOverview creatorId={userInfo.user?.id || ""} />
               <View style={{}}>
                 {storyData.map((el, index) => (
                   <NewStoryItem

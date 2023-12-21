@@ -8,6 +8,7 @@ import type {
   RouteInfo,
 } from "../../../components/itinerary/types/types";
 import { linkedFeedsList } from "../../../data/linkedFeedsList";
+import { BACKEND_BASE_URL } from "@env";
 
 export type NewItineraryPostState = Readonly<{
   coverMedia: Asset | null;
@@ -27,7 +28,19 @@ export type NewItineraryPostState = Readonly<{
 const initialState: NewItineraryPostState = {
   coverMedia: null,
   title: "",
-  itineraryData: { id: "", routes: [] },
+  itineraryData: {
+    id: "",
+    creatorId: "",
+    routes: [
+      {
+        id: "",
+        name: "Day 1",
+        routeNodes: [],
+        isRouted: false,
+        polyline: [],
+      },
+    ],
+  },
   storyData: [],
   posting: false,
   saving: false,
@@ -42,7 +55,7 @@ export const fetchUserLinkedFeedsList = createAsyncThunk(
   "newItineraryPost/fetchUserLinkedFeedsList",
   async (userId: string, thunkAPI) => {
     try {
-      // const url = "backend url to fetch linkedFeeds/userId";
+      const url = BACKEND_BASE_URL + "/userId";
       // const response = await axios.get(url);
       // console.log(JSON.stringify(response.data, null, 4));
       // return response.data;
@@ -77,8 +90,20 @@ const newItineraryPostSlice = createSlice({
     setTitle: (state, action) => {
       state.title = action.payload;
     },
-    createItineraryData: (state, _) => {
-      state.itineraryData = { id: uuidv4(), routes: [] }
+    createItineraryData: (state, action) => {
+      state.itineraryData = {
+        id: uuidv4(),
+        creatorId: action.payload.creatorId,
+        routes: [
+          {
+            id: uuidv4(),
+            name: "Day 1",
+            routeNodes: [],
+            isRouted: false,
+            polyline: [],
+          },
+        ],
+      };
     },
     setItineraryData: (state, action) => {
       state.itineraryData.routes = action.payload.routes;

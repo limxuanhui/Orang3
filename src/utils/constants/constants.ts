@@ -1,5 +1,6 @@
-import type { StackNavigationOptions } from "@react-navigation/stack";
 import { Dimensions } from "react-native";
+import type { StackNavigationOptions } from "@react-navigation/stack";
+import { GOOGLE_MAPS_API_KEY } from "@env";
 
 export const { height: DEVICE_HEIGHT, width: DEVICE_WIDTH } =
   Dimensions.get("window");
@@ -33,10 +34,10 @@ export const COLOR_PALETTE = {
   PRIMARY_PINK: "#f019ff",
 };
 
-export const API_KEY: string = "AIzaSyDLFxbxQyuOst6hzzaOKl8weOuQ5kKUZPY";
+// export const API_KEY: string = "AIzaSyDLFxbxQyuOst6hzzaOKl8weOuQ5kKUZPY";
 
 export const GOOGLE_PLACES_AUTOCOMPLETE_QUERY_OPTIONS = {
-  key: API_KEY,
+  key: GOOGLE_MAPS_API_KEY,
   language: "en",
 };
 

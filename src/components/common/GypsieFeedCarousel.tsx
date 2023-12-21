@@ -45,7 +45,8 @@ const GypsieFeedCarousel = ({
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={VIEWABILITY_CONFIG}
         pagingEnabled
-        keyExtractor={el => el.id?.toString()}
+        scrollEnabled={items.length > 1}
+        keyExtractor={el => el.id}
         renderItem={({ item, index }) => {
           if (item.media) {
             const media = item.media?.type.split("/");
@@ -80,7 +81,7 @@ const GypsieFeedCarousel = ({
           }
         }}
       />
-      {items.length > 0 ? (
+      {items.length > 1 ? (
         <PageIndicator index={currIndex + 1} maxIndex={items.length} />
       ) : null}
       {!!items[currIndex]?.caption ? (

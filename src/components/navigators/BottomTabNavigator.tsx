@@ -20,6 +20,8 @@ import {
 } from "../../utils/constants/constants";
 import { Text } from "react-native";
 import NewPostOptions from "../post/NewPostOptions";
+import BookOpenIcon from "../common/icons/BookOpenIcon";
+import BookIcon from "../common/icons/BookIcon";
 
 const BottomTab = createBottomTabNavigator<BottomTabNavigatorParamList>();
 
@@ -42,12 +44,25 @@ const BottomTabNavigator = () => {
               route.name === "ProfileStack" ||
               route.name === "ItineraryStack" ||
               route.name === "DriverStack"
-                ? PALETTE.OFFWHITE
-                : PALETTE.TRANSPARENT,
+                ? // ? PALETTE.OFFWHITE
+                  PALETTE.GREYISHBLUE
+                : // : route.name === "ItineraryStack"
+                  // ? PALETTE.GREYISHBLUE
+                  PALETTE.TRANSPARENT,
             position: "absolute",
             bottom: 0,
-            elevation: 0,
+
+            // Remove border top on both android & ios
             borderTopWidth: 0,
+            borderTopColor: "transparent",
+            elevation: 0,
+            // shadowColor: "#5bc4ff",
+            shadowOpacity: 0,
+            shadowOffset: {
+              height: 0,
+              width: 0,
+            },
+            shadowRadius: 0,
           },
           tabBarShowLabel: false,
         };
@@ -71,13 +86,17 @@ const BottomTabNavigator = () => {
         component={ItineraryStackNavigator}
         options={{
           tabBarShowLabel: false,
-          tabBarIcon: ({ focused }) => (
-            <FontAwesome
-              name="map"
-              size={24}
-              color={focused ? PALETTE.ORANGE : PALETTE.GREY}
-            />
-          ),
+          tabBarIcon: ({ focused }) => {
+            if (focused) {
+              return (
+                <BookOpenIcon
+                  style={{ fontSize: 24, color: PALETTE.ORANGE }}
+                />
+              );
+            } else {
+              return <BookIcon style={{ fontSize: 24, color: PALETTE.GREY }} />;
+            }
+          },
         }}
       />
       <BottomTab.Screen
@@ -87,12 +106,6 @@ const BottomTabNavigator = () => {
           tabBarShowLabel: false,
           tabBarButton: () => <NewPostOptions />,
         }}
-        // listeners={({ navigation }) => ({
-        //   tabPress: event => {
-        //     event.preventDefault();
-        //     navigation.navigate("Modal", { screen: "NewPostOptions" });
-        //   },
-        // })}
       />
       <BottomTab.Screen
         name="DriverStack"

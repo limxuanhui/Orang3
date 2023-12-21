@@ -241,7 +241,7 @@ const GooglePlacesInput = ({ onReceiveResults }: GooglePlacesInputProps) => {
   };
 
   const inputRef = useRef<GooglePlacesAutocompleteRef>(null);
-  
+
   const onPressSuggestion = useCallback(
     (data: GooglePlaceData, details: GooglePlaceDetail | null = null) => {
       // 'details' is provided when fetchDetails = true
@@ -255,16 +255,16 @@ const GooglePlacesInput = ({ onReceiveResults }: GooglePlacesInputProps) => {
 
   return (
     <GooglePlacesAutocomplete
-      styles={styles}
       ref={inputRef}
+      styles={styles}
       placeholder={GOOGLE_PLACES_AUTOCOMPLETE_PLACEHOLDER}
-      fetchDetails
-      onPress={onPressSuggestion}
       query={GOOGLE_PLACES_AUTOCOMPLETE_QUERY_OPTIONS}
       debounce={GOOGLE_PLACES_AUTOCOMPLETE_DEBOUNCE_RATE}
-      keepResultsAfterBlur
       GooglePlacesDetailsQuery={GOOGLE_PLACES_AUTOCOMPLETE_DETAILS_QUERY}
       textInputProps={GOOGLE_PLACES_AUTOCOMPLETE_TEXT_INPUT_PROPS}
+      fetchDetails
+      keepResultsAfterBlur
+      onPress={onPressSuggestion}
     />
   );
 };

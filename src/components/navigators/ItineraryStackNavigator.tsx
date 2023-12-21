@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "row",
   },
-  titleText: { color: "black", fontFamily: "Lilita One", fontSize: 24 },
+  titleText: { fontFamily: "Lilita One", fontSize: 24, color: PALETTE.BLACK },
 });
 
 export default ItineraryStackNavigator;

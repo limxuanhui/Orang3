@@ -8,6 +8,7 @@ import type {
   AvatarScreenParams,
   ProfileScreenParams,
 } from "../../screens/profile/types/types";
+import { ItineraryPostViewScreenParams } from "../../screens/post/types/types";
 
 // declare global {
 //   namespace ReactNavigation {
@@ -53,7 +54,7 @@ export type ModalNavigatorNavigationProp = StackNavigationProp<
 export type ModalNavigatorParamList = {
   NewFeedPost: undefined;
   NewItineraryPost: undefined;
-  ItineraryPostView: undefined;
+  ItineraryPostView: ItineraryPostViewScreenParams;
   Avatar: AvatarScreenParams;
   Feed: FeedScreenParams;
   ItineraryView: undefined;

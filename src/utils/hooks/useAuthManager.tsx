@@ -9,6 +9,7 @@ import axios from "axios";
 import jwtDecode from "jwt-decode";
 import type { GypsieUser } from "../../components/navigators/types/types";
 import { printPrettyJson } from "../helpers/functions";
+import { BACKEND_BASE_URL } from "@env";
 
 type GoogleIdToken = {
   iss: string;
@@ -32,7 +33,7 @@ const useAuthManager = () => {
   const [user, setUser] = useState<GypsieUser>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const url = "http://localhost:8080/auth/signin";
+  const url = BACKEND_BASE_URL + "/auth/signin";
 
   const storeUserIdToken = useCallback(
     async (idToken: string) => {

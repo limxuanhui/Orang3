@@ -8,17 +8,21 @@ import type {
   RouteNodeInfo,
 } from "../../components/itinerary/types/types";
 import useModalHandler from "./useModalHandler";
+import { useAppSelector } from "../redux/hooks";
+import { BACKEND_BASE_URL } from "@env";
 
 const useMapHandlers = () => {
-  const [routes, setRoutes] = useState<RouteInfo[]>([
-    {
-      id: "1", // to change to uuid
-      name: "Day 1",
-      routeNodes: [],
-      isRouted: false,
-      polyline: [],
-    },
-  ]);
+  const {itineraryData} = useAppSelector(state => state.newItineraryPost)
+  const [routes, setRoutes] = useState<RouteInfo[]>(itineraryData.routes);
+  // [
+  //   {
+  //     id: "1", // to change to uuid
+  //     name: "Day 1",
+  //     routeNodes: [],
+  //     isRouted: false,
+  //     polyline: [],
+  //   },
+  // ]
   const [selectedRouteId, setSelectedRouteId] = useState<string>(routes[0].id);
   const selectedRoute = routes.filter(
     (route: RouteInfo) => route.id === selectedRouteId,
@@ -180,7 +184,7 @@ const useMapHandlers = () => {
     // Backend receives distance matrix of the given coordinates and travel mode.
     // Determine order of travelling in backend.
     // Return ordered route nodes.
-    const url = "http://localhost:8080/directions";
+    const url = BACKEND_BASE_URL + "/directions";
 
     const data = selectedRoute.routeNodes.map(
       (routeNode: RouteNodeInfo) => routeNode.coord,

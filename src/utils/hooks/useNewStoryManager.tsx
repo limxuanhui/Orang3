@@ -12,7 +12,7 @@ import newItineraryPostSlice, {
   fetchUserLinkedFeedsList,
   setItineraryData,
 } from "../../utils/redux/reducers/newItineraryPostSlice";
-import useMediaPicker from "./useMediaPicker";
+import useMediaHandlers from "./useMediaHandlers";
 import {
   Story,
   StoryItem,
@@ -24,6 +24,7 @@ import useKeyboardManager from "./useKeyboardManager";
 import useBottomSheetHandler from "./useBottomSheetHandler";
 import { LinkedFeedsListItem } from "../../components/itinerary/types/types";
 import { nanoid } from "@reduxjs/toolkit";
+import { AWS_API_GATEWAY_S3_PRESIGNED_URL, BACKEND_BASE_URL } from "@env";
 
 const imageLibraryOptions: ImageLibraryOptions = {
   mediaType: "mixed",
@@ -32,7 +33,7 @@ const imageLibraryOptions: ImageLibraryOptions = {
 };
 
 const useNewStoryManager = () => {
-  const { openGallery } = useMediaPicker({ imageLibraryOptions });
+  const { openGallery } = useMediaHandlers(imageLibraryOptions);
   const { keyboardIsVisible, closeKeyboard } = useKeyboardManager();
   const { bottomSheetRef, snapPoints, renderBackdrop } = useBottomSheetHandler({
     snapPointsArr: [1, "50%"],
@@ -136,7 +137,7 @@ const useNewStoryManager = () => {
 
   const onSubmitPost = useCallback(async () => {
     setPosting(true);
-    // const url = "http://localhost:8080/itinerary/post";
+    const url = BACKEND_BASE_URL + "/itinerary/post";
     const data: {
       coverMedia: Asset | null;
       title: string;
@@ -148,11 +149,12 @@ const useNewStoryManager = () => {
     };
 
     // Get secure url from backend for uploading media to s3
-    const apiGatewayUrl =
-      "https://i0p8qk0h9a.execute-api.ap-southeast-1.amazonaws.com/default/getPresignedUrl";
-    const secureS3UrlResponse = await axios.get(apiGatewayUrl, {
-      headers: { mediaType: data.coverMedia?.type },
-    });
+    const secureS3UrlResponse = await axios.get(
+      AWS_API_GATEWAY_S3_PRESIGNED_URL,
+      {
+        headers: { mediaType: data.coverMedia?.type },
+      },
+    );
     console.log("TYPE: ", data.coverMedia?.type);
     const blobResponse = await fetch(
       data.coverMedia?.uri?.replace("file:///", "file:/") ||
@@ -199,8 +201,11 @@ const useNewStoryManager = () => {
   }, [linkedFeedsList, fetchUserLinkedFeedsList, dispatch]);
 
   useEffect(() => {
-    console.log("ItineraryData @@@@@@@@@@@@@@@@", JSON.stringify(itineraryData))
-  }, [itineraryData])
+    console.log(
+      "ItineraryData routes @@@@@@@@@@@@@@@@",
+      JSON.stringify(itineraryData),
+    );
+  }, [itineraryData]);
 
   return {
     bottomSheetRef,

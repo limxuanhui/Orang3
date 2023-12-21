@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import {
   KeyboardAvoidingView,
   Modal,
@@ -9,11 +9,10 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import useNewFeedHandler from "../../../utils/hooks/useNewFeedHandler";
-import FeedCarousel from "../../feed/FeedCarousel";
 import GypsieButton from "../../common/buttons/GypsieButton";
 import AuxiliaryControls from "../../common/AuxiliaryControls";
+import NewFeedPostCarousel from "../../post/NewFeedPostCarousel";
 import NewFeedPostSideControls from "../../post/NewFeedPostSideControls";
-import CameraIcon from "../../common/icons/CameraIcon";
 import CheckIcon from "../../common/icons/CheckIcon";
 import CloseIcon from "../../common/icons/CloseIcon";
 import {
@@ -22,14 +21,8 @@ import {
 } from "../../../utils/constants/constants";
 import { DIMENSION } from "../../../utils/constants/dimensions";
 import { PALETTE } from "../../../utils/constants/palette";
-import NewFeedPostCarousel from "../../post/NewFeedPostCarousel";
 import { useAppDispatch, useAppSelector } from "../../../utils/redux/hooks";
-import { useFocusEffect } from "@react-navigation/native";
-import {
-  NewFeedPostState,
-  reset,
-} from "../../../utils/redux/reducers/newFeedPostSlice";
-import { ActivityIndicator } from "react-native-paper";
+import { reset } from "../../../utils/redux/reducers/newFeedPostSlice";
 
 const NewFeedPostScreen = () => {
   const insets = useSafeAreaInsets();
@@ -47,9 +40,7 @@ const NewFeedPostScreen = () => {
     onPressPost,
     onSaveEditCaption,
   } = useNewFeedHandler();
-  const { saving } = useAppSelector(
-    state => state.newFeedPost,
-  );
+  const { saving } = useAppSelector(state => state.newFeedPost);
   const dispatch = useAppDispatch();
 
   useEffect(() => {

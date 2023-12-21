@@ -1,25 +1,23 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import Divider from "../../common/Divider";
 import ItineraryFeed from "../../itinerary/ItineraryFeed";
-import ItineraryFilter from "../../itinerary/ItineraryFilter";
-import type { ItineraryFeedItem } from "../../itinerary/types/types";
+import type { ItineraryFeedThumbnailInfo } from "../../itinerary/types/types";
 import {
   DEVICE_HEIGHT,
   DEVICE_WIDTH,
 } from "../../../utils/constants/constants";
-import { DUMMY_FILTERS } from "../../../data/filters";
+import { DUMMY_ITINERARY_FEED } from "../../../data/itinerary";
 import { PALETTE } from "../../../utils/constants/palette";
 
 const ItineraryFeedScreen = () => {
-  const [filter, setFilter] = useState<string[]>(DUMMY_FILTERS);
-  const [feed, setFeed] = useState<ItineraryFeedItem[]>([]);
+  const [feed, setFeed] =
+    useState<ItineraryFeedThumbnailInfo[]>(DUMMY_ITINERARY_FEED);
+
+  // Fetch itineraryfeed metadata from api/via createAsyncThunk/via RTK query
 
   return (
     <View style={styles.container}>
-      <ItineraryFilter filter={filter} />
-      <Divider thickness="thin" shade="light" />
-      <ItineraryFeed feed={feed} />
+      <ItineraryFeed data={feed} />
     </View>
   );
 };
@@ -29,6 +27,7 @@ const styles = StyleSheet.create({
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
     backgroundColor: PALETTE.OFFWHITE,
+    paddingBottom: 200,
   },
 });
 

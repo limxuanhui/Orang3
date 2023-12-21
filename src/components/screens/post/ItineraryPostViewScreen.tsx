@@ -1,13 +1,5 @@
-import { useCallback, useMemo, useRef, useState } from "react";
-import {
-  FlatList,
-  StyleProp,
-  StyleSheet,
-  Text,
-  TextInput,
-  TextStyle,
-  View,
-} from "react-native";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { PALETTE } from "../../../utils/constants/palette";
 import GypsieButton from "../../common/buttons/GypsieButton";
 import NewItineraryPostHandleBar from "../../post/NewItineraryPostHandleBar";
@@ -18,30 +10,25 @@ import BottomSheet, {
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import ItineraryTable from "../../post/ItineraryTable";
-import CloseIcon from "../../common/icons/CloseIcon";
 import ChevronsUpIcon from "../../common/icons/ChevronsUp";
-import GypsieFeedCarousel from "../../common/GypsieFeedCarousel";
 import { DUMMY_FEEDS } from "../../../data/feeds";
 import { DEVICE_HEIGHT } from "../../../utils/constants/constants";
 import { VIEWABILITY_CONFIG } from "../../../utils/constants/feed";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import FeedCarousel from "../../feed/FeedCarousel";
-import ItineraryPostBackdrop from "../../post/ItineraryPostBackdrop";
-import AddCircleIcon from "../../common/icons/AddCircleIcon";
 import CloneIcon from "../../common/icons/CloneIcon";
 import SearchIcon from "../../common/icons/SearchIcon";
-import {
-  type ItineraryRow,
-  type Story,
-  StoryItemType,
-} from "../../post/types/types";
-import type { ItineraryPostViewScreenProps } from "./types/types";
-import DeleteIcon from "../../common/icons/DeleteIcon";
-import ItineraryStory from "../../post/ItineraryStory";
+import { type Story, StoryItemType } from "../../post/types/types";
+import type {
+  ItineraryPostViewScreenProps,
+  ItineraryPostViewScreenRouteProp,
+} from "./types/types";
 import ItineraryMapOverview from "../../post/ItineraryMapOverview";
 import { storyBodyStyle, storyTitleStyle } from "../../../utils/constants/text";
-import { Itinerary } from "../../../utils/redux/reducers/newItineraryPostSlice";
+import { Itinerary } from "../../itinerary/types/types";
+import { useRoute } from "@react-navigation/native";
+import { FeedItem } from "../../feed/types/types";
+import { BACKEND_BASE_URL } from "@env";
 
 export const storyData: Story = [
   {
@@ -135,13 +122,18 @@ export const storyData: Story = [
 const ItineraryPostViewScreen = ({
   navigation,
 }: ItineraryPostViewScreenProps) => {
+  const { params } = useRoute<ItineraryPostViewScreenRouteProp>();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const insets = useSafeAreaInsets();
   const title = "12345678901234567890 - ItineraryPostViewScreen";
   const avatarUri =
     "/Users/limxuanhui/bluextech/gypsie/assets/avatars/yoona.jpeg";
   const name = "@Joseph";
-  const [itineraryData, setItineraryData] = useState<Itinerary>({id: "", routes: []});
+  const [itineraryData, setItineraryData] = useState<Itinerary>({
+    id: "",
+    creatorId: "",
+    routes: [],
+  });
   const feedData = DUMMY_FEEDS.map(el => el.items);
 
   const onPressExpandBottomSheet = useCallback(() => {
@@ -217,10 +209,25 @@ const ItineraryPostViewScreen = ({
     [insets, itineraryData],
   );
 
+  useEffect(() => {
+    // Fetch data with itinerary post id (params.id)
+    const url = BACKEND_BASE_URL + "/" + params.id;
+  }, [params]);
+
+  const coverMedia: FeedItem[] = [
+    {
+      id: "coverMediaId",
+      media: {
+        type: "video",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/videos/ace.mp4",
+      },
+    },
+  ];
+
   return (
     <View style={styles.container}>
       <FlatList
-        data={feedData}
+        data={[coverMedia, ...feedData]}
         renderItem={({ item, index }) => (
           <FeedCarousel
             handle={"@To be changed"}
@@ -256,16 +263,7 @@ const ItineraryPostViewScreen = ({
       >
         {/* To be changed (NewItineraryPostHandlerBar) */}
         <NewItineraryPostHandleBar avatarUri={avatarUri} name={name} />
-        {/* <BottomSheetScrollView> */}
-        {/* {itineraryData !== null ? (
-          <ItineraryTable
-            data={itineraryData}
-            // clearDataHandler={onPressClearPlan}
-          />
-        ) : null} */}
-        <ItineraryMapOverview data={itineraryData} />
-        {/* <ItineraryStory data={storyData} /> */}
-        {/* </BottomSheetScrollView> */}
+        <ItineraryMapOverview creatorId={itineraryData.creatorId} />
       </BottomSheet>
     </View>
   );
