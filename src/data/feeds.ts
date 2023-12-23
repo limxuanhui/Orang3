@@ -15,7 +15,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Gardens By The Bay - Labore quis qui labore labore labore consequat ullamco sint esse pariatur adipisicing minim ullamco ut.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20002",
@@ -25,7 +25,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Merlion - Proident proident sit cillum duis dolor tempor laborum culpa ad.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20003",
@@ -35,7 +35,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Char Kway Teow - Proident proident sit cillum duis dolor tempor laborum culpa ad.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20004",
@@ -45,7 +45,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Singapore River - Commodo duis ullamco nostrud veniam sit in voluptate dolore irure.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20005",
@@ -55,7 +55,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Singapore Chili Crab - Commodo duis ullamco nostrud veniam sit in voluptate dolore irure.",
-        mapLink: "",
+        taleId: "",
       },
     ],
     isLiked: false,
@@ -79,7 +79,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Sentosa - Dolor pariatur commodo proident voluptate pariatur dolore nostrud proident proident culpa in elit.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20007",
@@ -89,7 +89,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Universal Studios Singapore - Amet pariatur id voluptate sit id excepteur eiusmod consectetur.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20008",
@@ -99,7 +99,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "VivoCity - Amet pariatur id voluptate sit id excepteur eiusmod consectetur.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20009",
@@ -109,7 +109,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Lau Pa Sat - Amet pariatur id voluptate sit id excepteur eiusmod consectetur.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20010",
@@ -119,7 +119,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Satay at Lau Pa Sat - Amet pariatur id voluptate sit id excepteur eiusmod consectetur.",
-        mapLink: "",
+        taleId: "",
       },
     ],
     isLiked: false,
@@ -143,7 +143,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Changi Jewel - Consectetur non cupidatat ullamco cupidatat adipisicing velit commodo eu anim dolor eiusmod magna laborum laborum.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20012",
@@ -153,7 +153,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Song Fa Bak Kut Teh - Nisi incididunt tempor amet laborum Lorem tempor adipisicing ad.",
-        mapLink: "",
+        taleId: "",
       },
     ],
     isLiked: false,
@@ -176,7 +176,7 @@ export const DUMMY_FEEDS: Feed[] = [
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-101.jpeg",
         },
         caption: "Taipei 101 - Voluptate do mollit ex proident ullamco culpa.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20014",
@@ -186,7 +186,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Taiwan beach - Commodo amet velit ipsum magna mollit qui eiusmod eiusmod eiusmod ad ex dolore.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20015",
@@ -196,7 +196,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Jiufen Old Street - Qui culpa aute sint dolor aliquip id magna.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20016",
@@ -206,7 +206,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Hualien - Consectetur do qui cupidatat cillum reprehenderit cillum ad ipsum ex consequat consectetur deserunt.",
-        mapLink: "",
+        taleId: "",
       },
     ],
     isLiked: false,
@@ -230,7 +230,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Kyoto Shrine - Reprehenderit ex minim occaecat aute ex fugiat eiusmod et proident dolor consectetur qui aute sunt.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20018",
@@ -239,7 +239,7 @@ export const DUMMY_FEEDS: Feed[] = [
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-mtfuji.jpeg",
         },
         caption: "Mt Fuji - Fugiat proident deserunt deserunt enim.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20019",
@@ -249,7 +249,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Train Station - Reprehenderit dolor pariatur id ad adipisicing mollit cillum officia velit officia.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20020",
@@ -258,7 +258,7 @@ export const DUMMY_FEEDS: Feed[] = [
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-yokocho.jpeg",
         },
         caption: "Yokocho - Duis enim anim pariatur voluptate esse.",
-        mapLink: "",
+        taleId: "",
       },
     ],
     isLiked: false,
@@ -282,7 +282,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Dolor enim magna laboris labore incididunt aliquip ipsum proident anim. Sit incididunt consequat velit velit. Fugiat velit qui magna ullamco deserunt sint in consectetur irure. Occaecat id reprehenderit dolore sit esse qui sit in.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20022",
@@ -291,7 +291,7 @@ export const DUMMY_FEEDS: Feed[] = [
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample2.jpg",
         },
         caption: "Eu mollit occaecat proident pariatur.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20023",
@@ -300,7 +300,7 @@ export const DUMMY_FEEDS: Feed[] = [
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample3.jpg",
         },
         caption: "Ea dolor mollit dolor ad aliqua consectetur incididunt.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20024",
@@ -310,7 +310,7 @@ export const DUMMY_FEEDS: Feed[] = [
         },
         caption:
           "Incididunt ut duis excepteur quis occaecat proident deserunt amet et velit esse.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20025",
@@ -319,7 +319,7 @@ export const DUMMY_FEEDS: Feed[] = [
           uri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
         },
         caption: "Ex ea id laboris nostrud nostrud.",
-        mapLink: "",
+        taleId: "",
       },
       {
         id: "20026",
@@ -329,7 +329,7 @@ export const DUMMY_FEEDS: Feed[] = [
         // },
         caption:
           "Pariatur excepteur officia quis adipisicing non qui aute duis qui in fugiat.",
-        mapLink: "",
+        taleId: "",
       },
     ],
     isLiked: false,

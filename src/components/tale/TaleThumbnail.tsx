@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-// import Image from "react-native-scalable-image";
-import type { ItineraryFeedThumbnailProps } from "./types/types";
+import type { TaleThumbnailProps } from "../tale/types/types";
 import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
 import { DEVICE_WIDTH } from "../../utils/constants/constants";
 import { DIMENSION } from "../../utils/constants/dimensions";
@@ -10,14 +9,10 @@ import { PALETTE } from "../../utils/constants/palette";
 import Video from "react-native-video";
 import useMediaHandlers from "../../utils/hooks/useMediaHandlers";
 import GypsieAvatar from "../common/GypsieAvatar";
-import { ActivityIndicator } from "react-native-paper";
 
 const CARD_WIDTH = DEVICE_WIDTH / 2 - 8;
 
-const ItineraryFeedThumbnail = ({
-  index,
-  data,
-}: ItineraryFeedThumbnailProps) => {
+const TaleThumbnail = ({ index, data }: TaleThumbnailProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const [paused, setPaused] = useState<boolean>(true);
   const [mediaAspectRatio, setMediaAspectRatio] = useState<number>(0);
@@ -25,8 +20,8 @@ const ItineraryFeedThumbnail = ({
 
   const onPressFeed = useCallback(() => {
     navigation.push("Modal", {
-      screen: "ItineraryPostView",
-      params: { id: data.id, creatorId: data.creatorId },
+      screen: "TaleView",
+      params: { id: data.taleId, creatorId: data.creator.id },
     });
   }, [navigation]);
 
@@ -61,14 +56,14 @@ const ItineraryFeedThumbnail = ({
   );
 
   useEffect(() => {
-    if (data.coverMedia.type === "image") {
-      getImageAspectRatio(data.coverMedia.uri);
+    if (data.cover.type === "image") {
+      getImageAspectRatio(data.cover.uri);
     }
   }, [getImageAspectRatio]);
 
   // Temporarily set aspect ratio to 1 if media aspect ratio is still being calculated
   if (mediaAspectRatio === 0) {
-    setMediaAspectRatio(1);
+    setMediaAspectRatio(CARD_WIDTH / 200);
   }
 
   return (
@@ -80,20 +75,20 @@ const ItineraryFeedThumbnail = ({
       onTouchStart={() => setPaused(false)}
       onTouchEnd={() => setPaused(true)}
       onPress={onPressFeed}>
-      {data.coverMedia.type === "image" ? (
+      {data.cover.type === "image" ? (
         <Image
           style={[styles.feedCardMedia, { aspectRatio: mediaAspectRatio }]}
-          source={{ uri: data.coverMedia.uri }}
+          source={{ uri: data.cover.uri }}
           progressiveRenderingEnabled
-          resizeMode="cover"
+          resizeMode="contain"
           // defaultSource={{uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg"}}
         />
-      ) : data.coverMedia.type === "video" ? (
+      ) : data.cover.type === "video" ? (
         <Video
           style={[styles.feedCardMedia, { aspectRatio: mediaAspectRatio }]}
-          source={{ uri: data.coverMedia.uri }}
+          source={{ uri: data.cover.uri }}
           // posterResizeMode="contain"
-          resizeMode="cover"
+          resizeMode="contain"
           // onLoadStart={() => console.log("Video thumbnail is loading...")}
           onLoad={onVideoLoad}
           repeat
@@ -104,9 +99,7 @@ const ItineraryFeedThumbnail = ({
         <Text>Nothing to display...</Text>
       )}
       <View style={styles.feedCardFooter}>
-        <GypsieAvatar
-          uri={"/Users/limxuanhui/bluextech/gypsie/assets/avatars/yoona.jpeg"}
-        />
+        <GypsieAvatar uri={data.creator.avatar} />
         <Text
           style={styles.feedCardText}
           numberOfLines={3}
@@ -123,18 +116,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: CARD_WIDTH,
-    // padding: 4,
-    borderRadius: 8,
+    borderRadius: 12,
+    backgroundColor: PALETTE.OFFWHITE,
     shadowColor: PALETTE.BLACK,
-    shadowOpacity: 0.1,
-    shadowOffset: { height: 2, width: 2 },
+    shadowOpacity: 0.2,
+    shadowOffset: { height: 2, width: 0 },
     shadowRadius: 2,
     margin: 3,
   },
   feedCardMedia: {
     width: DIMENSION.HUNDRED_PERCENT,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
   },
   feedCardFooter: {
     flexDirection: "row",
@@ -143,8 +136,8 @@ const styles = StyleSheet.create({
     width: DIMENSION.HUNDRED_PERCENT,
     padding: 4,
     backgroundColor: PALETTE.OFFWHITE,
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
   },
   feedCardText: {
     flex: 1,
@@ -153,4 +146,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ItineraryFeedThumbnail;
+export default TaleThumbnail;

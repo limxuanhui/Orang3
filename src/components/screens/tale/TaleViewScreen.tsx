@@ -20,17 +20,19 @@ import CloneIcon from "../../common/icons/CloneIcon";
 import SearchIcon from "../../common/icons/SearchIcon";
 import { type Story, StoryItemType } from "../../post/types/types";
 import type {
-  ItineraryPostViewScreenProps,
-  ItineraryPostViewScreenRouteProp,
-} from "./types/types";
+  TaleViewScreenProps,
+  TaleViewScreenRouteProp,
+} from "../post/types/types";
 import ItineraryMapOverview from "../../post/ItineraryMapOverview";
 import { storyBodyStyle, storyTitleStyle } from "../../../utils/constants/text";
 import { Itinerary } from "../../itinerary/types/types";
 import { useRoute } from "@react-navigation/native";
 import { FeedItem } from "../../feed/types/types";
 import { BACKEND_BASE_URL } from "@env";
+import FeedItemThumbnailsCarousel from "../../tale/FeedItemThumbnailsCarousel";
+import { Tale } from "../../tale/types/types";
 
-export const storyData: Story = [
+export const story: Story = [
   {
     id: "1",
     type: StoryItemType.Text,
@@ -119,13 +121,11 @@ export const storyData: Story = [
   },
 ];
 
-const ItineraryPostViewScreen = ({
-  navigation,
-}: ItineraryPostViewScreenProps) => {
-  const { params } = useRoute<ItineraryPostViewScreenRouteProp>();
+const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
+  const { params } = useRoute<TaleViewScreenRouteProp>();  
   const bottomSheetRef = useRef<BottomSheet>(null);
   const insets = useSafeAreaInsets();
-  const title = "12345678901234567890 - ItineraryPostViewScreen";
+  const title = "12345678901234567890 - TaleViewScreen";
   const avatarUri =
     "/Users/limxuanhui/bluextech/gypsie/assets/avatars/yoona.jpeg";
   const name = "@Joseph";
@@ -135,6 +135,17 @@ const ItineraryPostViewScreen = ({
     routes: [],
   });
   const feedData = DUMMY_FEEDS.map(el => el.items);
+  const coverMedia: FeedItem[] = [
+    {
+      id: "coverMediaId",
+      media: {
+        type: "video",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/videos/ace.mp4",
+      },
+    },
+  ];
+
+  const [data, setData] = useState<Tale>();  
 
   const onPressExpandBottomSheet = useCallback(() => {
     bottomSheetRef.current?.snapToIndex(0);
@@ -183,46 +194,10 @@ const ItineraryPostViewScreen = ({
     ];
   }, [title]);
 
-  const renderFooter = useCallback(
-    (props: BottomSheetFooterProps) => (
-      <BottomSheetFooter {...props} bottomInset={insets.bottom}>
-        <View style={styles.footerContainer}>
-          <GypsieButton
-            customButtonStyles={styles.footerButton}
-            customIconStyles={styles.footerButtonIcon}
-            customTextStyles={styles.footerButtonText}
-            Icon={CloneIcon}
-            text="Clone plan"
-            onPress={() => {}}
-          />
-          <GypsieButton
-            customButtonStyles={styles.footerButton}
-            customIconStyles={styles.footerButtonIcon}
-            customTextStyles={styles.footerButtonText}
-            Icon={SearchIcon}
-            text="Find guide"
-            onPress={() => {}}
-          />
-        </View>
-      </BottomSheetFooter>
-    ),
-    [insets, itineraryData],
-  );
-
   useEffect(() => {
-    // Fetch data with itinerary post id (params.id)
+    // Fetch data with tale id (params.id)
     const url = BACKEND_BASE_URL + "/" + params.id;
   }, [params]);
-
-  const coverMedia: FeedItem[] = [
-    {
-      id: "coverMediaId",
-      media: {
-        type: "video",
-        uri: "/Users/limxuanhui/bluextech/gypsie/assets/videos/ace.mp4",
-      },
-    },
-  ];
 
   return (
     <View style={styles.container}>
@@ -263,7 +238,26 @@ const ItineraryPostViewScreen = ({
       >
         {/* To be changed (NewItineraryPostHandlerBar) */}
         <NewItineraryPostHandleBar avatarUri={avatarUri} name={name} />
-        <ItineraryMapOverview creatorId={itineraryData.creatorId} />
+        <BottomSheetScrollView
+          contentContainerStyle={{ paddingBottom: insets.bottom }}
+          showsVerticalScrollIndicator={false}>
+          <ItineraryMapOverview itineraryId={""} creatorId={params.creatorId} />
+          {story.map(el => {
+            if (el.type === StoryItemType.Text) {
+              return (
+                <View style={styles.storyItem} key={el.id}>
+                  <Text style={el.style}>{el.text}</Text>
+                </View>
+              );
+            } else if (el.type === StoryItemType.Media) {
+              return (
+                <View style={styles.storyItem} key={el.id}>
+                  <FeedItemThumbnailsCarousel data={el.data} />
+                </View>
+              );
+            } else return null;
+          })}
+        </BottomSheetScrollView>
       </BottomSheet>
     </View>
   );
@@ -328,6 +322,35 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: PALETTE.ORANGE,
   },
+  storyItem: {
+    marginVertical: 8,
+  },
 });
 
-export default ItineraryPostViewScreen;
+export default TaleViewScreen;
+
+// const renderFooter = useCallback(
+//   (props: BottomSheetFooterProps) => (
+//     <BottomSheetFooter {...props} bottomInset={insets.bottom}>
+//       <View style={styles.footerContainer}>
+//         <GypsieButton
+//           customButtonStyles={styles.footerButton}
+//           customIconStyles={styles.footerButtonIcon}
+//           customTextStyles={styles.footerButtonText}
+//           Icon={CloneIcon}
+//           text="Clone plan"
+//           onPress={() => {}}
+//         />
+//         <GypsieButton
+//           customButtonStyles={styles.footerButton}
+//           customIconStyles={styles.footerButtonIcon}
+//           customTextStyles={styles.footerButtonText}
+//           Icon={SearchIcon}
+//           text="Find guide"
+//           onPress={() => {}}
+//         />
+//       </View>
+//     </BottomSheetFooter>
+//   ),
+//   [insets, itineraryData],
+// );

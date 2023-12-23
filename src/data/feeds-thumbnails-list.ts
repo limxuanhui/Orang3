@@ -1,58 +1,58 @@
-import type { LinkedFeedsListItem } from "../components/itinerary/types/types";
+import type { FeedItemThumbnail } from "../components/tale/types/types";
 
-export const linkedFeedsList: LinkedFeedsListItem[][] = [
+export const DUMMY_FEEDS_ITEMS_THUMBNAILS: FeedItemThumbnail[][] = [
   [
     {
-      feedId: "Nulla labore labore fugiat officia.",
+      feedId: "feed-1",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-uss.jpg",
     },
     {
-      feedId: "Nulla labore labore fugiat officia.",
+      feedId: "feed-1",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
     },
     {
-      feedId: "Nulla labore labore fugiat officia.",
+      feedId: "feed-1",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-satay.jpeg",
     },
     {
-      feedId: "Nulla labore labore fugiat officia.",
+      feedId: "feed-1",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-beach.jpeg",
     },
   ],
   [
     {
-      feedId: "Nulla labore labore fugiat officia.",
+      feedId: "feed-2",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-beach.jpeg",
     },
     {
-      feedId: "Nulla labore labore fugiat officia.",
+      feedId: "feed-2",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
     },
     {
-      feedId: "Nulla labore labore fugiat officia.",
+      feedId: "feed-2",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-satay.jpeg",
     },
 
     {
-      feedId: "Nulla labore labore fugiat officia.",
+      feedId: "feed-2",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-uss.jpg",
     },
   ],
   [
     {
-      feedId: "Nulla labore labore fugiat officia.",
+      feedId: "feed-3",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-uss.jpg",
     },
     {
-      feedId: "Nulla labore labore fugiat officia.",
+      feedId: "feed-3",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
     },
     {
-      feedId: "Nulla labore labore fugiat officia.",
+      feedId: "feed-3",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-satay.jpeg",
     },
     {
-      feedId: "Nulla labore labore fugiat officia.",
+      feedId: "feed-3",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-beach.jpeg",
     },
   ],

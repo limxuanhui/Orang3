@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Keyboard } from "react-native";
 
-const useKeyboardManager = () => {
+const useKeyboardHandlers = () => {
   const [keyboardIsVisible, setKeyboardIsVisible] = useState<boolean>(false);
 
   const closeKeyboard = useCallback(() => {
@@ -32,4 +32,4 @@ const useKeyboardManager = () => {
   return { keyboardIsVisible, closeKeyboard };
 };
 
-export default useKeyboardManager;
+export default useKeyboardHandlers;

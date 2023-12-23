@@ -7,13 +7,13 @@ import type {
   RouteNodeCoord,
   RouteNodeInfo,
 } from "../../components/itinerary/types/types";
-import useModalHandler from "./useModalHandler";
+import useModalHandlers from "./useModalHandlers";
 import { useAppSelector } from "../redux/hooks";
 import { BACKEND_BASE_URL } from "@env";
 
 const useMapHandlers = () => {
-  const {itineraryData} = useAppSelector(state => state.newItineraryPost)
-  const [routes, setRoutes] = useState<RouteInfo[]>(itineraryData.routes);
+  const { itinerary } = useAppSelector(state => state.newTale);
+  const [routes, setRoutes] = useState<RouteInfo[]>(itinerary.routes);
   // [
   //   {
   //     id: "1", // to change to uuid
@@ -30,7 +30,7 @@ const useMapHandlers = () => {
   const [modalInitialValue, setModalInitialValue] = useState<string>(
     selectedRoute.name,
   );
-  const { modalIsOpen, closeModal, openModal } = useModalHandler();
+  const { modalIsOpen, closeModal, openModal } = useModalHandlers();
 
   const onAddRoute = useCallback(
     (name: string) => {

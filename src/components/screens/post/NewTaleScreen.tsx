@@ -1,5 +1,5 @@
 import { Image, Text } from "react-native";
-import { useCallback, useContext, useMemo, useRef, useState } from "react";
+import { useCallback, useContext, useRef, useState } from "react";
 import {
   GestureResponderHandlers,
   NativeScrollEvent,
@@ -11,6 +11,7 @@ import {
 import Video from "react-native-video";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { ActivityIndicator } from "react-native-paper";
 import { KeyboardAccessoryView } from "@flyerhq/react-native-keyboard-accessory-view";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Portal, PortalHost } from "@gorhom/portal";
@@ -18,7 +19,7 @@ import { Portal, PortalHost } from "@gorhom/portal";
 import AuxiliaryControls from "../../common/AuxiliaryControls";
 import GypsieButton from "../../common/buttons/GypsieButton";
 import ItineraryMapOverview from "../../post/ItineraryMapOverview";
-import LinkedFeedsList from "../../itinerary/LinkedFeedsList";
+import FeedItemThumbnailsCarousel from "../../tale/FeedItemThumbnailsCarousel";
 
 import AddIcon from "../../common/icons/AddIcon";
 import CameraOutlineIcon from "../../common/icons/CameraOutlineIcon";
@@ -27,23 +28,19 @@ import CheckIcon from "../../common/icons/CheckIcon";
 import DeleteOutlineIcon from "../../common/icons/DeleteOutlineIcon";
 import FolderImagesIcon from "../../common/icons/FolderImagesIcon";
 import ParagraphIcon from "../../common/icons/ParagraphIcon";
-import SquaredCrossIcon from "../../common/icons/SquaredCrossIcon";
 import TitleIcon from "../../common/icons/TitleIcon";
 
-import type { LinkedFeedsListItem } from "../../itinerary/types/types";
-import type { NewItineraryPostScreenProps } from "./types/types";
-import { StoryItemType } from "../../post/types/types";
-import { DEVICE_HEIGHT, FULL_SCREEN } from "../../../utils/constants/constants";
-import { PALETTE } from "../../../utils/constants/palette";
-import useNewStoryManager from "../../../utils/hooks/useNewStoryManager";
-import { nanoid } from "@reduxjs/toolkit";
+import useNewTaleManager from "../../../utils/hooks/useNewTaleManager";
+import type { NewTaleScreenProps } from "./types/types";
+
 import NewStoryItem from "../../post/NewStoryItem";
-import { ActivityIndicator } from "react-native-paper";
 import { AuthContext } from "../../../utils/contexts/AuthContext";
 
-const NewItineraryPostScreen = ({
-  navigation,
-}: NewItineraryPostScreenProps) => {
+import { DEVICE_HEIGHT, FULL_SCREEN } from "../../../utils/constants/constants";
+import { DIMENSION } from "../../../utils/constants/dimensions";
+import { PALETTE } from "../../../utils/constants/palette";
+
+const NewTaleScreen = ({ navigation }: NewTaleScreenProps) => {
   const insets = useSafeAreaInsets();
   const userInfo = useContext(AuthContext);
 
@@ -51,16 +48,16 @@ const NewItineraryPostScreen = ({
     bottomSheetRef,
     snapPoints,
     keyboardIsVisible,
-    coverMedia,
+    cover,
     title,
-    itineraryData,
-    storyData,
+    itinerary,
+    story,
     posting,
-    linkedFeedsList,
+    feedItemThumbnails,
     closeKeyboard,
     renderBackdrop,
-    onPressAddCoverMedia,
-    onPressClearCoverMedia,
+    onPressAddCover,
+    onPressClearCover,
     onPressClearPlan,
     onTitleChange,
     onStoryItemTextChange,
@@ -70,7 +67,7 @@ const NewItineraryPostScreen = ({
     onPressAddLinkedFeed,
     onPressDeleteLinkedFeed,
     onSubmitPost,
-  } = useNewStoryManager();
+  } = useNewTaleManager();
 
   const [currScrollPosition, setCurrScrollPosition] = useState<number>(0);
   const [prevHeight, setPrevHeight] = useState<number>(DEVICE_HEIGHT);
@@ -85,6 +82,7 @@ const NewItineraryPostScreen = ({
     [setCurrScrollPosition],
   );
 
+  // Scroll up or down depending on content size change
   const onContentSizeChange = useCallback(
     (w: number, h: number) => {
       console.log("W: ", w, " | h: ", h);
@@ -99,22 +97,6 @@ const NewItineraryPostScreen = ({
     },
     [scrollViewRef, currScrollPosition, prevHeight, setPrevHeight],
   );
-
-  // const [focusedText, setFocusedText] = useState<String>();
-  // const onBackspace = useCallback(
-  //   (e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
-  //     if (e.nativeEvent.key === "Backspace") {
-  //       console.log(
-  //         "backspaced: ",
-  //         // JSON.stringify(e., null, 4),
-  //       );
-
-  //       if (focusedText) {
-  //       }
-  //     }
-  //   },
-  //   [focusedText],
-  // );
 
   return (
     <KeyboardAccessoryView
@@ -133,21 +115,21 @@ const NewItineraryPostScreen = ({
             onScrollBeginDrag={onScroll}
             scrollEventThrottle={60}
             {...panHandlers}>
-            <View style={styles.coverMediaContainer}>
-              {coverMedia !== null ? (
+            <View style={styles.coverContainer}>
+              {cover !== null ? (
                 <>
-                  {coverMedia.type?.startsWith("video") ? (
+                  {cover.type?.startsWith("video") ? (
                     <Video
-                      style={styles.coverMedia}
-                      source={{ uri: coverMedia.uri }}
+                      style={styles.cover}
+                      source={{ uri: cover.uri }}
                       // controls
                       repeat
                       resizeMode="contain"
                     />
                   ) : (
                     <Image
-                      style={styles.coverMedia}
-                      source={{ uri: coverMedia.uri }}
+                      style={styles.cover}
+                      source={{ uri: cover.uri }}
                       resizeMode="cover"
                     />
                   )}
@@ -158,23 +140,23 @@ const NewItineraryPostScreen = ({
                     orientation="vertical"
                     position="bottom-right">
                     <GypsieButton
-                      customIconStyles={{ color: "white", fontSize: 24 }}
+                      customIconStyles={{ color: PALETTE.WHITE, fontSize: 24 }}
                       Icon={DeleteOutlineIcon}
-                      onPress={onPressClearCoverMedia}
+                      onPress={onPressClearCover}
                     />
                     <GypsieButton
-                      customIconStyles={{ color: "white", fontSize: 24 }}
+                      customIconStyles={{ color: PALETTE.WHITE, fontSize: 24 }}
                       Icon={ChangeSwapIcon}
-                      onPress={onPressAddCoverMedia}
+                      onPress={onPressAddCover}
                     />
                   </AuxiliaryControls>
                 </>
               ) : (
                 <GypsieButton
-                  customButtonStyles={styles.addCoverMediaButton}
+                  customButtonStyles={styles.addCoverButton}
                   customIconStyles={{ fontSize: 64, color: PALETTE.LIGHTGREY }}
                   Icon={CameraOutlineIcon}
-                  onPress={onPressAddCoverMedia}
+                  onPress={onPressAddCover}
                 />
               )}
             </View>
@@ -197,7 +179,7 @@ const NewItineraryPostScreen = ({
               />
               <ItineraryMapOverview creatorId={userInfo.user?.id || ""} />
               <View style={{}}>
-                {storyData.map((el, index) => (
+                {story.map((el, index) => (
                   <NewStoryItem
                     key={el.id}
                     item={el}
@@ -216,15 +198,15 @@ const NewItineraryPostScreen = ({
               backdropComponent={renderBackdrop}
               index={-1}
               snapPoints={snapPoints}>
-              {linkedFeedsList.status === "succeeded" ? (
+              {feedItemThumbnails.status === "succeeded" ? (
                 <BottomSheetScrollView
                   style={{
                     padding: 8,
                   }}
                   showsVerticalScrollIndicator={false}>
-                  {linkedFeedsList.data.map(el => (
-                    <View style={styles.linkedFeedsListRow}>
-                      <LinkedFeedsList data={el} />
+                  {feedItemThumbnails.data.map(el => (
+                    <View style={styles.feedItemThumbnailsList}>
+                      <FeedItemThumbnailsCarousel data={el} />
                       <GypsieButton
                         customButtonStyles={styles.addLinkedFeedButton}
                         customIconStyles={{ fontSize: 32 }}
@@ -234,7 +216,7 @@ const NewItineraryPostScreen = ({
                     </View>
                   ))}
                 </BottomSheetScrollView>
-              ) : linkedFeedsList.status === "failed" ? (
+              ) : feedItemThumbnails.status === "failed" ? (
                 <View
                   style={{
                     flex: 1,
@@ -285,7 +267,7 @@ const NewItineraryPostScreen = ({
               )}
             </BottomSheet>
           </Portal>
-          <PortalHost name="NewItineraryPost_ShowLinkedFeedsList-host" />
+          <PortalHost name="NewItineraryPost_ShowfeedItemThumbnails-host" />
         </View>
       )}>
       <View style={styles.bottomControls}>
@@ -346,23 +328,24 @@ const styles = StyleSheet.create({
   },
   container: {
     ...FULL_SCREEN,
-    // flex:1,
     backgroundColor: PALETTE.ORANGE,
   },
   scrollViewContainer: {
-    // flex: 1,
     backgroundColor: PALETTE.OFFWHITE,
   },
   scrollView: { flexGrow: 1 },
-  coverMediaContainer: {
+  coverContainer: {
     justifyContent: "center",
     alignItems: "center",
     height: 250,
-    width: "100%",
+    width: DIMENSION.HUNDRED_PERCENT,
     backgroundColor: PALETTE.GREYISHBLUE,
   },
-  coverMedia: { height: "100%", width: "100%" },
-  addCoverMediaButton: {
+  cover: {
+    height: DIMENSION.HUNDRED_PERCENT,
+    width: DIMENSION.HUNDRED_PERCENT,
+  },
+  addCoverButton: {
     position: "absolute",
     height: 80,
     width: 200,
@@ -373,23 +356,20 @@ const styles = StyleSheet.create({
   },
   blogContainer: {
     padding: 8,
-    // borderWidth: 5,
-    // borderColor: PALETTE.BLUE,
     backgroundColor: PALETTE.OFFWHITE,
   },
   titleInput: {
-    width: "100%",
+    width: DIMENSION.HUNDRED_PERCENT,
     fontFamily: "Futura",
     fontSize: 40,
     borderBottomWidth: 1,
     borderBottomColor: PALETTE.LIGHTERGREY,
   },
-
   bottomControls: {
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
-    width: "100%",
+    width: DIMENSION.HUNDRED_PERCENT,
     padding: 8,
     borderTopWidth: 1,
     borderColor: PALETTE.LIGHTERGREY,
@@ -401,14 +381,10 @@ const styles = StyleSheet.create({
     shadowColor: PALETTE.GREY,
     shadowOpacity: 0.2,
     shadowRadius: 2,
-    // borderWidth: 0,
-    // borderColor: "black",
   },
   bottomControl: {
     height: 32,
     width: 40,
-    // borderWidth: 0,
-    // borderColor: "red",
     paddingVertical: 4,
     paddingHorizontal: 8,
   },
@@ -419,14 +395,12 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     backgroundColor: PALETTE.ORANGE,
   },
-  linkedFeedsListRow: {
+  feedItemThumbnailsList: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     marginVertical: 16,
-    // borderWidth: 1,
-    // borderColor: PALETTE.LIGHTERGREY,
   },
 });
 
-export default NewItineraryPostScreen;
+export default NewTaleScreen;

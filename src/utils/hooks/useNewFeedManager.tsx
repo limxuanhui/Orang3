@@ -6,7 +6,7 @@ import {
   launchImageLibrary,
 } from "react-native-image-picker";
 import { FeedItem } from "../../components/feed/types/types";
-import useModalHandler from "./useModalHandler";
+import useModalHandlers from "./useModalHandlers";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import {
   addItems,
@@ -15,7 +15,7 @@ import {
   reset,
   setPosting,
   setSaving,
-} from "../redux/reducers/newFeedPostSlice";
+} from "../redux/reducers/newFeedSlice";
 import type { ModalNavigatorNavigationProp } from "../../components/navigators/types/types";
 
 const imageLibraryOptions: ImageLibraryOptions = {
@@ -24,8 +24,8 @@ const imageLibraryOptions: ImageLibraryOptions = {
   selectionLimit: 10,
 };
 
-const useNewFeedHandler = () => {
-  const { modalIsOpen, closeModal, openModal } = useModalHandler();
+const useNewFeedManager = () => {
+  const { modalIsOpen, closeModal, openModal } = useModalHandlers();
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const [captionWritten, setCaptionWritten] = useState<string>("");
   const {
@@ -33,7 +33,7 @@ const useNewFeedHandler = () => {
     selectedItemId: currIndex,
     posting,
     saving,
-  } = useAppSelector(state => state.newFeedPost);
+  } = useAppSelector(state => state.newFeed);
   const dispatch = useAppDispatch();
 
   const onChangeCaption = useCallback(
@@ -127,4 +127,4 @@ const useNewFeedHandler = () => {
   };
 };
 
-export default useNewFeedHandler;
+export default useNewFeedManager;

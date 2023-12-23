@@ -1,22 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { FeedItem } from "../../../components/feed/types/types";
 
-export type NewFeedPostState = Readonly<{
+export type NewFeedState = Readonly<{
   items: FeedItem[];
   posting: boolean;
   saving: boolean;
   selectedItemId: number;
 }>;
 
-const initialState: NewFeedPostState = {
+const initialState: NewFeedState = {
   items: [],
   posting: false,
   saving: false,
   selectedItemId: 0,
 };
 
-const newFeedPostSlice = createSlice({
-  name: "newFeedPost",
+const newFeedSlice = createSlice({
+  name: "newFeed",
   initialState,
   reducers: {
     addItems: (state, action) => {
@@ -68,5 +68,5 @@ export const {
   setPosting,
   setSaving,
   setSelectedItemId,
-} = newFeedPostSlice.actions;
-export default newFeedPostSlice.reducer;
+} = newFeedSlice.actions;
+export default newFeedSlice.reducer;

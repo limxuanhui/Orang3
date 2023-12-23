@@ -6,7 +6,6 @@ export const storyTitleStyle: StyleProp<TextStyle> = {
   fontSize: 24,
   fontWeight: "bold",
   color: PALETTE.GREYISHBLUE,
-  backgroundColor: PALETTE.OFFWHITE,
 };
 
 export const storyBodyStyle: StyleProp<TextStyle> = {

@@ -1,10 +1,11 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import GypsieButton from "../common/buttons/GypsieButton";
 import SquaredCrossIcon from "../common/icons/SquaredCrossIcon";
-import LinkedFeedsList from "../itinerary/LinkedFeedsList";
+import FeedItemThumbnailsCarousel from "../tale/FeedItemThumbnailsCarousel";
 import { type StoryItem, StoryItemType } from "./types/types";
 import { PALETTE } from "../../utils/constants/palette";
 import { useEffect } from "react";
+import { DIMENSION } from "../../utils/constants/dimensions";
 
 type NewStoryItemProps = {
   item: StoryItem;
@@ -47,7 +48,7 @@ const NewStoryItem = ({
   } else if (item.type === StoryItemType.Media) {
     return (
       <View style={styles.storyItemMedia} key={item.id}>
-        <LinkedFeedsList data={item.data} />
+        <FeedItemThumbnailsCarousel data={item.data} />
         <GypsieButton
           customButtonStyles={styles.deleteButton}
           customIconStyles={styles.deleteIcon}
@@ -64,8 +65,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   storyItemTextInput: {
-    height: "100%",
-    width: "100%",
+    height: DIMENSION.HUNDRED_PERCENT,
+    width: DIMENSION.HUNDRED_PERCENT,
     marginBottom: 8,
     borderBottomWidth: 1,
     borderColor: PALETTE.LIGHTERGREY,

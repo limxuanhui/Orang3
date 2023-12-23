@@ -1,15 +1,16 @@
 import { useCallback } from "react";
 import { FlatList, Image, Pressable, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import type { LinkedFeedsListProps } from "./types/types";
+import type { FeedItemThumbnailsCarouselProps } from "./types/types";
 import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
 
-const LinkedFeedsList = ({ data, style }: LinkedFeedsListProps) => {
+const FeedItemThumbnailsCarousel = ({
+  data,
+  style,
+}: FeedItemThumbnailsCarouselProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
-  // const insets = useSafeAreaInsets();
 
   const onPressLinkedPost = useCallback(
     (feedId: string) => {
@@ -28,10 +29,10 @@ const LinkedFeedsList = ({ data, style }: LinkedFeedsListProps) => {
           style={({ pressed }) => [
             styles.linkedFeed,
             {
-              marginLeft:
-                el.index === 0 ? 0 : 8,
+              marginLeft: el.index === 0 ? 0 : 8,
               transform: [{ scale: pressed ? 0.99 : 1 }],
             },
+            style,
           ]}
           onPress={() => onPressLinkedPost(el.item.feedId)}>
           <Image
@@ -59,7 +60,6 @@ const styles = StyleSheet.create({
   linkedFeed: {
     height: DIMENSION.HUNDRED_PERCENT,
     width: 100,
-    // marginHorizontal: 8,
     borderRadius: 8,
     backgroundColor: PALETTE.WHITE,
     shadowColor: PALETTE.BLACK,
@@ -70,4 +70,4 @@ const styles = StyleSheet.create({
   imageStyle: { height: DIMENSION.HUNDRED_PERCENT, borderRadius: 8 },
 });
 
-export default LinkedFeedsList;
+export default FeedItemThumbnailsCarousel;

@@ -13,7 +13,8 @@ const GypsieAvatar = ({ uri }: GypsieAvatarProps) => {
     <Image
       style={styles.avatar}
       source={{ uri }}
-      onLoad={x => console.log("GypsieAvatar Image loaded... ", x)}
+      // loadingIndicatorSource={{}}
+      // onLoad={x => console.log("GypsieAvatar Image loaded... ", x)}
       // defaultSource={{}}
     />
   );

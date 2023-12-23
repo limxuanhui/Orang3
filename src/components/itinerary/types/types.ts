@@ -4,13 +4,10 @@ import { LatLng } from "react-native-maps";
 import { Media } from "../../feed/types/types";
 
 // Data types
-// export type ItineraryFeedItem = {
-//   name: string;
-// };
-
-export type LinkedFeedsListItem = {
-  feedId: string;
-  uri: string;
+export type Itinerary = {
+  id: string;
+  creatorId: string;
+  routes: RouteInfo[];
 };
 
 export type RouteNodeInfo = {
@@ -31,43 +28,7 @@ export type RouteInfo = {
 
 export type RouteNodeCoord = LatLng;
 
-export type Itinerary = {
-  id: string;
-  creatorId: string;
-  routes: RouteInfo[];
-};
-
-type ThumbnailMedia = {
-  id: string;
-  type: "image" | "video"
-}
-
-export type ItineraryFeedThumbnailInfo = {
-  id: string;
-  creatorId: string;
-  coverMedia: Media;
-  title: string;
-};
-
 // Component properties
-export type ItineraryFeedProps = {
-  data: ItineraryFeedThumbnailInfo[];
-};
-
-export type ItineraryFeedThumbnailProps = {
-  index: number;
-  data: ItineraryFeedThumbnailInfo;
-};
-
-export type ItineraryFilterProps = {
-  filter: string[];
-};
-
-export type LinkedFeedsListProps = {
-  data: LinkedFeedsListItem[];
-  style?: StyleProp<ViewStyle>;
-};
-
 export type MapPinProps = {
   routeNode: RouteNodeInfo;
   onDeleteMarker: (placeId: string) => void;

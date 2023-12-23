@@ -1,11 +1,10 @@
-import { createStackNavigator } from "@react-navigation/stack";
-import ItineraryFeedScreen from "../screens/itinerary/ItineraryFeedScreen";
-import type { ItineraryStackNavigatorParamList } from "../screens/itinerary/types/types";
-import { PALETTE } from "../../utils/constants/palette";
 import { StyleSheet, Text, View } from "react-native";
-import { DEVICE_WIDTH } from "../../utils/constants/constants";
+import { createStackNavigator } from "@react-navigation/stack";
+import TalesOverviewScreen from "../screens/tale/TalesOverviewScreen";
+import type { TaleStackNavigatorParamList } from "../screens/tale/types/types";
+import { PALETTE } from "../../utils/constants/palette";
 
-const ItineraryStack = createStackNavigator<ItineraryStackNavigatorParamList>();
+const TaleStack = createStackNavigator<TaleStackNavigatorParamList>();
 
 const Title = () => {
   return (
@@ -24,16 +23,16 @@ const Title = () => {
   );
 };
 
-const ItineraryStackNavigator = () => {
+const TaleStackNavigator = () => {
   return (
-    <ItineraryStack.Navigator
-      initialRouteName="ItineraryFeed"
+    <TaleStack.Navigator
+      initialRouteName="TalesOverview"
       screenOptions={({ navigation, route }) => {
         return { headerShown: false };
       }}>
-      <ItineraryStack.Screen
-        name="ItineraryFeed"
-        component={ItineraryFeedScreen}
+      <TaleStack.Screen
+        name="TalesOverview"
+        component={TalesOverviewScreen}
         options={{
           headerShown: true,
           headerLeft: Title,
@@ -43,7 +42,7 @@ const ItineraryStackNavigator = () => {
           headerShadowVisible: false,
         }}
       />
-    </ItineraryStack.Navigator>
+    </TaleStack.Navigator>
   );
 };
 
@@ -51,7 +50,11 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "row",
   },
-  titleText: { fontFamily: "Lilita One", fontSize: 24, color: PALETTE.BLACK },
+  titleText: {
+    fontFamily: "Lilita One",
+    fontSize: 24,
+    color: PALETTE.GREYISHBLUE,
+  },
 });
 
-export default ItineraryStackNavigator;
+export default TaleStackNavigator;

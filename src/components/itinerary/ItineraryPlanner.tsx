@@ -19,9 +19,9 @@ import {
 import { PALETTE } from "../../utils/constants/palette";
 import { useAppDispatch, useAppSelector } from "../../utils/redux/hooks";
 import {
-  createItineraryData,
-  setItineraryData,
-} from "../../utils/redux/reducers/newItineraryPostSlice";
+  createItinerary,
+  setItinerary,
+} from "../../utils/redux/reducers/newTaleSlice";
 import { AuthContext } from "../../utils/contexts/AuthContext";
 
 const ItineraryPlanner = () => {
@@ -48,7 +48,7 @@ const ItineraryPlanner = () => {
     onCloseModal,
   } = useMapHandlers();
   const dispatch = useAppDispatch();
-  const { itineraryData } = useAppSelector(state => state.newItineraryPost);
+  const { itinerary } = useAppSelector(state => state.newTale);
 
   useEffect(() => {
     // Add animation to a certain location without places added
@@ -80,17 +80,18 @@ const ItineraryPlanner = () => {
   useEffect(() => {
     console.log("ItineraryPlanner mounted");
     // If itinerary id does not exist, create itinerary
-    if (!itineraryData.id) {
-      dispatch(createItineraryData({ creatorId: "" }));
+    if (!itinerary.id) {
+      // Use user id from global object as creatorId
+      dispatch(createItinerary({ creatorId: "" }));
     }
 
     return () => {
       console.log("ItineraryPlanner unmounted");
       // Dispatch an action to update itinerary in NewItineraryPost.
       // Should we actually be creating a new uuid everytime we dispatch => everytime we edit/or just dismounts ItineraryPlanner? Might need optimisation here.
-      dispatch(setItineraryData({ routes }));
+      dispatch(setItinerary({ routes }));
     };
-  }, [routes, createItineraryData, setItineraryData, dispatch]);
+  }, [routes, createItinerary, setItinerary, dispatch]);
   return (
     <View style={styles.container}>
       <Modal

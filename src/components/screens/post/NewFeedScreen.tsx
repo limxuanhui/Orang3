@@ -8,11 +8,11 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import useNewFeedHandler from "../../../utils/hooks/useNewFeedHandler";
+import useNewFeedManager from "../../../utils/hooks/useNewFeedManager";
 import GypsieButton from "../../common/buttons/GypsieButton";
 import AuxiliaryControls from "../../common/AuxiliaryControls";
-import NewFeedPostCarousel from "../../post/NewFeedPostCarousel";
-import NewFeedPostSideControls from "../../post/NewFeedPostSideControls";
+import NewFeedCarousel from "../../post/NewFeedCarousel";
+import NewFeedSideControls from "../../post/NewFeedSideControls";
 import CheckIcon from "../../common/icons/CheckIcon";
 import CloseIcon from "../../common/icons/CloseIcon";
 import {
@@ -22,12 +22,12 @@ import {
 import { DIMENSION } from "../../../utils/constants/dimensions";
 import { PALETTE } from "../../../utils/constants/palette";
 import { useAppDispatch, useAppSelector } from "../../../utils/redux/hooks";
-import { reset } from "../../../utils/redux/reducers/newFeedPostSlice";
+import { reset } from "../../../utils/redux/reducers/newFeedSlice";
 
-const NewFeedPostScreen = () => {
+const NewFeedScreen = () => {
   const insets = useSafeAreaInsets();
   // Use global object to get handle
-  const handle = "@Joseph";
+  // const handle = "@Joseph";
   const {
     captionWritten,
     modalIsOpen,
@@ -39,22 +39,22 @@ const NewFeedPostScreen = () => {
     onPressEdit,
     onPressPost,
     onSaveEditCaption,
-  } = useNewFeedHandler();
-  const { saving } = useAppSelector(state => state.newFeedPost);
+  } = useNewFeedManager();
+  const { saving } = useAppSelector(state => state.newFeed);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log("NewFeedPostScreen focused");
+    console.log("NewFeedScreen focused");
     return () => {
-      console.log("NewFeedPostScreen unfocused");
+      console.log("NewFeedScreen unfocused");
       dispatch(reset());
     };
   }, [reset, dispatch]);
 
   return (
     <View style={styles.container}>
-      <NewFeedPostCarousel />
-      <NewFeedPostSideControls
+      <NewFeedCarousel />
+      <NewFeedSideControls
         onPressAdd={onPressAdd}
         onPressDelete={onPressDelete}
         onPressEdit={onPressEdit}
@@ -151,4 +151,4 @@ const styles = StyleSheet.create({
   saveButton: { backgroundColor: PALETTE.ORANGE },
 });
 
-export default NewFeedPostScreen;
+export default NewFeedScreen;

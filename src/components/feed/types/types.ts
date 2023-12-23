@@ -16,18 +16,17 @@ export type Feed = BaseFeed & {
   shares: number;
 };
 
-export type MediaType = "image" | "video/mp4" | "video";
-export type Media = {
-  type: MediaType;
-  uri: string
-}
-
-
 export type FeedItem = {
   id: string;
-  media?: Media
+  media?: Media;
   caption?: string;
-  mapLink?: string;
+  taleId?: string;
+};
+
+export type MediaType = "image" | "video"| "video/mp4";
+export type Media = {
+  type: MediaType;
+  uri: string;
 };
 
 // Component properties

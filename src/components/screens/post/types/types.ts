@@ -2,33 +2,33 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { ModalNavigatorParamList } from "../../../navigators/types/types";
 import { RouteProp } from "@react-navigation/native";
 
-// --------------------------- ItineraryPostViewScreen ---------------------------
-export type ItineraryPostViewScreenNavigationProp = StackNavigationProp<
+// --------------------------- TaleViewScreen ---------------------------
+export type TaleViewScreenNavigationProp = StackNavigationProp<
   ModalNavigatorParamList,
-  "ItineraryPostView"
+  "TaleView"
 >;
 
-export type ItineraryPostViewScreenRouteProp = RouteProp<
+export type TaleViewScreenRouteProp = RouteProp<
   ModalNavigatorParamList,
-  "ItineraryPostView"
+  "TaleView"
 >;
 
-export type ItineraryPostViewScreenProps = {
-  navigation: ItineraryPostViewScreenNavigationProp;
-  route: ItineraryPostViewScreenRouteProp;
+export type TaleViewScreenProps = {
+  navigation: TaleViewScreenNavigationProp;
+  route: TaleViewScreenRouteProp;
 };
 
-export type ItineraryPostViewScreenParams = {
+export type TaleViewScreenParams = {
   id: string;
   creatorId: string;
 };
 
-// --------------------------- NewItineraryPostScreen ---------------------------
-export type NewItineraryPostScreenProps = {
-  navigation: NewItineraryPostNavigationProp;
+// --------------------------- NewTaleScreen ---------------------------
+export type NewTaleScreenProps = {
+  navigation: NewTaleNavigationProp;
 };
 
-export type NewItineraryPostNavigationProp = StackNavigationProp<
+export type NewTaleNavigationProp = StackNavigationProp<
   ModalNavigatorParamList,
-  "NewItineraryPost"
+  "NewTale"
 >;

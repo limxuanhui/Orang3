@@ -1,31 +1,21 @@
 import { useCallback, useContext, useState } from "react";
-import {
-  FlatList,
-  Modal,
-  RefreshControl,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import useFeedManager from "../../../utils/hooks/useFeedManager";
+import useDataManager from "../../../utils/hooks/useDataManager";
 import FeedDisplay from "../../feed/FeedDisplay";
 import { AuthContext } from "../../../utils/contexts/AuthContext";
 import type { HomeScreenProps } from "./types/types";
-import {
-  DEVICE_HEIGHT,
-  DEVICE_WIDTH,
-} from "../../../utils/constants/constants";
+import { DEVICE_HEIGHT } from "../../../utils/constants/constants";
 import { DUMMY_FEEDS } from "../../../data/feeds";
-import BottomSheet from "../../common/BottomSheet";
-import { VIEWABILITY_CONFIG } from "../../../utils/constants/feed";
 import { PALETTE } from "../../../utils/constants/palette";
+import { VIEWABILITY_CONFIG } from "../../../utils/constants/feed";
 
 const HomeScreen = ({ navigation }: HomeScreenProps) => {
   const { user } = useContext(AuthContext);
   const [homeScreenIsFocused, setHomeScreenIsFocused] = useState<boolean>(true);
   const [activePostIndex, setActivePostIndex] = useState<number>(0);
-  const { refreshing, refreshPostsHandler } = useFeedManager();
+  // Change to useDataManager
+  const { refreshing, refreshPostsHandler } = useDataManager("dev");
   const data = DUMMY_FEEDS;
 
   const onViewableItemsChanged = useCallback(

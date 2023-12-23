@@ -5,7 +5,7 @@ import AddMoreIcon from "../common/icons/AddMoreIcon";
 import DeleteOutlineIcon from "../common/icons/DeleteOutlineIcon";
 import EditIcon from "../common/icons/EditIcon";
 import GypsieButton from "../common/buttons/GypsieButton";
-import type { NewFeedPostSideControlsProps } from "./types/types";
+import type { NewFeedSideControlsProps } from "./types/types";
 import { PALETTE } from "../../utils/constants/palette";
 
 const NewFeedPostSideControls = ({
@@ -13,8 +13,8 @@ const NewFeedPostSideControls = ({
   onPressDelete,
   onPressEdit,
   onPressPost,
-}: NewFeedPostSideControlsProps) => {
-  const { items, posting } = useAppSelector(state => state.newFeedPost);
+}: NewFeedSideControlsProps) => {
+  const { items, posting } = useAppSelector(state => state.newFeed);
   const isValidPost = items.length > 0;
 
   return (

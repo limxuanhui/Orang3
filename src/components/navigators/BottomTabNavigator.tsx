@@ -1,24 +1,15 @@
 import { useCallback, useContext } from "react";
 import { Image, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import DriversOverviewScreen from "../screens/driver/DriversOverviewScreen";
 import HomeScreen from "../screens/feed/HomeScreen";
-import ItineraryStackNavigator from "./ItineraryStackNavigator";
+import TaleStackNavigator from "./TaleStackNavigator";
 import ProfileStackNavigator from "./ProfileStackNavigator";
 import type { BottomTabNavigatorParamList } from "./types/types";
 import { PALETTE } from "../../utils/constants/palette";
-import TestScreen from "../screens/TestScreen";
 import { AuthContext } from "../../utils/contexts/AuthContext";
-import BottomSheet from "../common/BottomSheet";
-import {
-  DEVICE_HEIGHT,
-  DEVICE_WIDTH,
-  MAX_TRANSLATE_Y,
-} from "../../utils/constants/constants";
-import { Text } from "react-native";
 import NewPostOptions from "../post/NewPostOptions";
 import BookOpenIcon from "../common/icons/BookOpenIcon";
 import BookIcon from "../common/icons/BookIcon";
@@ -42,7 +33,7 @@ const BottomTabNavigator = () => {
           tabBarStyle: {
             backgroundColor:
               route.name === "ProfileStack" ||
-              route.name === "ItineraryStack" ||
+              route.name === "TaleStack" ||
               route.name === "DriverStack"
                 ? // ? PALETTE.OFFWHITE
                   PALETTE.GREYISHBLUE
@@ -82,8 +73,8 @@ const BottomTabNavigator = () => {
         }}
       />
       <BottomTab.Screen
-        name="ItineraryStack"
-        component={ItineraryStackNavigator}
+        name="TaleStack"
+        component={TaleStackNavigator}
         options={{
           tabBarShowLabel: false,
           tabBarIcon: ({ focused }) => {

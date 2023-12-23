@@ -46,12 +46,12 @@ const NewPostOptions = () => {
 
   const onPressCreateFeed = useCallback(() => {
     bottomSheetRef?.current?.close();
-    navigation.navigate("Modal", { screen: "NewFeedPost" });
+    navigation.navigate("Modal", { screen: "NewFeed" });
   }, [bottomSheetRef, navigation]);
 
-  const onPressWriteMemory = useCallback(() => {
+  const onPressWriteTale = useCallback(() => {
     bottomSheetRef?.current?.close();
-    navigation.navigate("Modal", { screen: "NewItineraryPost" });
+    navigation.navigate("Modal", { screen: "NewTale" });
   }, [bottomSheetRef, navigation]);
 
   return (
@@ -92,8 +92,8 @@ const NewPostOptions = () => {
                   transform: [{ scale: pressed ? 0.99 : 1 }],
                 },
               ]}
-              onPress={onPressWriteMemory}>
-              <Text style={[styles.buttonText]}>Write memory</Text>
+              onPress={onPressWriteTale}>
+              <Text style={[styles.buttonText]}>Write tale...</Text>
             </Pressable>
           </BottomSheetView>
         </BottomSheet>

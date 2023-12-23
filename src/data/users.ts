@@ -1,55 +1,77 @@
-export const DUMMY_USERS = [
+import { GypsieUser } from "../components/navigators/types/types";
+
+export const DUMMY_USERS: GypsieUser[] = [
   {
-    id: 10001,
-    username: "jennie",
+    id: "user-1",
+    name: "jennie",
     handle: "@jennie",
     email: "jennie@test.com",
-    password: "jenniepassword",
+    picture: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
   },
   {
-    id: 10002,
-    username: "jisoo",
+    id: "user-2",
+    name: "jisoo",
     handle: "@jisoo",
     email: "jisoo@test.com",
-    password: "jisoopassword",
+    picture: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
   },
   {
-    id: 10003,
-    username: "lisa",
+    id: "user-3",
+    name: "lisa",
     handle: "@lisa",
     email: "lisa@test.com",
-    password: "lisapassword",
+    picture: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
   },
   {
-    id: 10004,
-    username: "rose",
+    id: "user-4",
+    name: "rose",
     handle: "@rose",
     email: "rose@test.com",
-    password: "rosepassword",
+    picture: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
   },
 ];
 
-export const DUMMY_AVATARS = [
-  {
-    id: 1,
-    userId: 10001,
-    uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg"
-  },
-  {
-    id: 2,
-    userId: 10002,
-    uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg"
-  },
-  {
-    id: 3,
-    userId: 10003,
-    uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg"
-  },
-  {
-    id: 4,
-    userId: 10004,
-    uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg"
-  },
-];
+// export const DUMMY_AVATARS = [
+//   {
+//     id: 1,
+//     userId: 10001,
+//     uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+//   },
+//   {
+//     id: 2,
+//     userId: 10002,
+//     uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+//   },
+//   {
+//     id: 3,
+//     userId: 10003,
+//     uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+//   },
+//   {
+//     id: 4,
+//     userId: 10004,
+//     uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+//   },
+// ];
 
-
+// export const AVATARS = [
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/iu.jpeg",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie2.png",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/kimjiwon.jpeg",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/nayeon.jpeg",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/yoona.jpeg",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/kimjiwon.jpeg",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/nayeon.jpeg",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/yoona.jpeg",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie2.png",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/kimjiwon.jpeg",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+//   "/Users/limxuanhui/bluextech/gypsie/assets/images/sample2.jpg",
+// ];

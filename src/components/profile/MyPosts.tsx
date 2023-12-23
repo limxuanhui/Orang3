@@ -5,14 +5,15 @@ import {
   useSafeAreaFrame,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import useFeedManager from "../../utils/hooks/useFeedManager";
+import useDataManager from "../../utils/hooks/useDataManager";
 import FeedThumbnail from "../feed/FeedThumbnail";
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
 import { DUMMY_FEEDS } from "../../data/feeds";
 import { PALETTE } from "../../utils/constants/palette";
 
 const MyPosts = () => {
-  const { refreshing, refreshPostsHandler } = useFeedManager();
+  // Change to useDataManager
+  const { refreshing, refreshPostsHandler } = useDataManager("dev");
   const data = DUMMY_FEEDS;
   const percentage = 0.62 * DEVICE_HEIGHT;
   const bh = useContext(BottomTabBarHeightContext) || 0;
@@ -29,8 +30,8 @@ const MyPosts = () => {
         renderItem={el => <FeedThumbnail feed={el.item} />}
         numColumns={3}
         showsVerticalScrollIndicator={false}
-        refreshing={refreshing}
-        onRefresh={refreshPostsHandler}
+        // refreshing={refreshing}
+        // onRefresh={refreshPostsHandler}
       />
     </View>
   );

@@ -13,7 +13,10 @@ const ItineraryMapOverview = ({ creatorId }: ItineraryMapOverviewProps) => {
   const userInfo = useContext(AuthContext);
 
   const onPressOverview = useCallback(() => {
-    navigation.push("Modal", { screen: "ItineraryView" });
+    navigation.push("Modal", {
+      screen: "ItineraryView",
+      // params: { id: "", creatorId: "" },
+    });
   }, [navigation]);
 
   const footerText = useMemo(() => {

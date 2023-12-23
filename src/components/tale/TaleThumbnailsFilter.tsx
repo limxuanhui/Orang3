@@ -1,10 +1,10 @@
 import { useCallback } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import type { ItineraryFilterProps } from "./types/types";
+import type { TaleThumbnailsFilterProps } from "./types/types";
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
 
-const ItineraryFilter = ({ filter }: ItineraryFilterProps) => {
+const TaleThumbnailsFilter = ({ filter }: TaleThumbnailsFilterProps) => {
   const onPressFilter = useCallback((item: string) => {
     console.warn(`${item} pressed`);
   }, []);
@@ -55,4 +55,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ItineraryFilter;
+export default TaleThumbnailsFilter;

@@ -1,18 +1,17 @@
 import { useCallback, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 import AvatarScreen from "../screens/profile/AvatarScreen";
 import FeedScreen from "../screens/feed/FeedScreen";
-import ItineraryViewScreen from "../screens/itinerary/ItineraryViewScreen";
-import PlaceSearchScreen from "../screens/itinerary/PlaceSearchScreen";
+import ItineraryViewScreen from "../screens/tale/ItineraryViewScreen";
+import PlaceSearchScreen from "../screens/tale/PlaceSearchScreen";
 import ProfileScreen from "../screens/profile/ProfileScreen";
-import type { ModalNavigatorParamList } from "./types/types";
+import TaleViewScreen from "../screens/tale/TaleViewScreen";
 import { PALETTE } from "../../utils/constants/palette";
-import NewFeedPostScreen from "../screens/post/NewFeedPostScreen";
-import NewItineraryPostScreen from "../screens/post/NewItineraryPostScreen";
+import NewFeedScreen from "../screens/post/NewFeedScreen";
+import NewTaleScreen from "../screens/post/NewTaleScreen";
 import OptionsIcon from "../common/icons/OptionsIcon";
 import GypsieButton from "../common/buttons/GypsieButton";
-import ItineraryPostViewScreen from "../screens/post/ItineraryPostViewScreen";
+import type { ModalNavigatorParamList } from "./types/types";
 
 const Modal = createStackNavigator<ModalNavigatorParamList>();
 
@@ -56,16 +55,16 @@ const ModalNavigator = () => {
         // animationEnabled: false,
       }}>
       <Modal.Screen
-        name="NewFeedPost"
-        component={NewFeedPostScreen}
+        name="NewFeed"
+        component={NewFeedScreen}
         options={{
           ...options,
           // headerTransparent: false,
         }}
       />
       <Modal.Screen
-        name="NewItineraryPost"
-        component={NewItineraryPostScreen}
+        name="NewTale"
+        component={NewTaleScreen}
         options={{
           ...options,
           // headerTransparent: false,
@@ -85,8 +84,8 @@ const ModalNavigator = () => {
         }}
       />
       <Modal.Screen
-        name="ItineraryPostView"
-        component={ItineraryPostViewScreen}
+        name="TaleView"
+        component={TaleViewScreen}
         options={{
           ...options,
           // headerTransparent: false,

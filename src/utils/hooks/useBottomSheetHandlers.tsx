@@ -3,13 +3,13 @@ import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import { SharedValue } from "react-native-reanimated";
 
-type useBottomSheetHandlerProps = {
+type useBottomSheetHandlersProps = {
   snapPointsArr: (string | number)[] | SharedValue<(string | number)[]>;
 };
 
-const useBottomSheetHandler = ({
+const useBottomSheetHandlers = ({
   snapPointsArr,
-}: useBottomSheetHandlerProps) => {
+}: useBottomSheetHandlersProps) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const renderBackdrop = useCallback(
@@ -28,4 +28,4 @@ const useBottomSheetHandler = ({
   return { bottomSheetRef, snapPoints, renderBackdrop };
 };
 
-export default useBottomSheetHandler;
+export default useBottomSheetHandlers;

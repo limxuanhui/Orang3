@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-const useModalHandler = () => {
+const useModalHandlers = () => {
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
   const closeModal = useCallback(() => {
@@ -14,4 +14,4 @@ const useModalHandler = () => {
   return { modalIsOpen, closeModal, openModal };
 };
 
-export default useModalHandler;
+export default useModalHandlers;

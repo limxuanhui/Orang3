@@ -3,8 +3,8 @@ import type { StackNavigationProp } from "@react-navigation/stack";
 import type { RouteNodeInfo } from "../../../itinerary/types/types";
 import type { ModalNavigatorParamList } from "../../../navigators/types/types";
 
-export type ItineraryStackNavigatorParamList = {
-  ItineraryFeed: undefined;
+export type TaleStackNavigatorParamList = {
+  TalesOverview: undefined;
   NewPostOptions: undefined;
 };
 
