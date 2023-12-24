@@ -89,38 +89,7 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
       gcTime: 1000 * 60 * 5,
     });
   }, [id, queryOptions]);
-  // const options = queryOptions({
-  //   queryKey:["tales", id],
-  //   queryFn,
-  //   networkMode: "online",
-  //   staleTime: 5000,
-  //   initialData: {
-  //     id: "",
-  //     creator: {
-  //       id: "",
-  //       handle: "",
-  //       avatar: "",
-  //     },
-  //     cover: null,
-  //     title: "",
-  //     itinerary: {
-  //       id: "",
-  //       creatorId: "",
-  //       routes: [
-  //         {
-  //           id: "",
-  //           name: "Day 1",
-  //           routeNodes: [],
-  //           isRouted: false,
-  //           polyline: [],
-  //         },
-  //       ],
-  //     },
-  //     story: [],
-  //   },
-  //   enabled: true,
-  //   gcTime: 1000 * 60 * 5,
-  // });
+
   const { data, isFetching, isLoading, isError } = useQuery(options);
 
   let renderedData: FeedItem[][] = feeds;
@@ -163,24 +132,27 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
         opacity={1}
         disappearsOnIndex={-1}
         appearsOnIndex={0}>
-        <View style={styles.headerTextBox}>
-          <Text style={styles.headerText}>{data?.title}</Text>
-        </View>
+        {data?.title && (
+          <View
+            style={[styles.headerTextBox, { backgroundColor: "#00000044" }]}>
+            <Text style={styles.headerText}>{data?.title}</Text>
+          </View>
+        )}
       </BottomSheetBackdrop>
     ),
     [data],
   );
   const snapPoints = useMemo(() => {
-    if (data) {
-      return [
-        Math.max(
-          (1 - 0.2) * DEVICE_HEIGHT -
-            (Math.floor(data.title.length / 17) + 1) * 40,
-          0.1 * DEVICE_HEIGHT,
-        ),
-        "100%",
-      ];
-    }
+    // if (data) {
+    //   return [
+    //     Math.max(
+    //       (1 - 0.2) * DEVICE_HEIGHT -
+    //         (Math.floor(data.title.length / 17) + 1) * 40,
+    //       0.1 * DEVICE_HEIGHT,
+    //     ),
+    //     "100%",
+    //   ];
+    // }
     return ["50%", "100%"];
   }, [data]);
   // ====================================================
@@ -277,10 +249,12 @@ const styles = StyleSheet.create({
   },
   headerTextBox: {
     position: "absolute",
-    top: 0.17 * DEVICE_HEIGHT,
-    minHeight: 100,
+    justifyContent: "center",
+    bottom: 0.5 * DEVICE_HEIGHT,
+    minHeight: 60,
     width: "100%",
     paddingHorizontal: 16,
+    // textAlignVertical: 'center',
     // borderWidth: 1,
     // borderColor: "yellow",
     // backgroundColor: 'rgba(0,0,0,1)',

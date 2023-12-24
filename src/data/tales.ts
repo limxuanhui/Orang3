@@ -16,7 +16,7 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
       type: "image/png",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie2.png",
     },
-    title: "(1) - Ea nisi sint pariatur eu laborum consequat sit.",
+    title: "Wanderlust Chronicles: Exploring Paradises",
   },
   {
     taleId: "tale-2",
@@ -31,7 +31,7 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/videos/ace.mp4",
     },
     title:
-      "(2) - Reprehenderit commodo cupidatat duis dolor sunt laborum consectetur enim tempor do.",
+      "Escaping to Tranquil Seascapes & Beyond",
   },
   {
     taleId: "tale-3",
@@ -45,7 +45,7 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
       type: "image/jpeg",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-jiufen.jpeg",
     },
-    title: "(3) - Fugiat sit qui dolore sunt consequat excepteur velit non.",
+    title: "Uncover Serene Havens & Cultural Marvels",
   },
   {
     taleId: "tale-4",
@@ -60,7 +60,7 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-gbtb.jpg",
     },
     title:
-      "(4) - Fugiat sit qui dolore sunt consequat excepteur velit non. Ad ut amet qui ipsum pariatur ad tempor est est laboris in fugiat irure. Amet nisi ut non nostrud et. Duis dolore magna qui Lorem officia culpa aliquip culpa voluptate et veniam duis veniam. Velit ipsum anim labore ipsum do id ullamco veniam reprehenderit magna non nostrud Lorem. Aliqua dolor non minim ea officia consectetur dolore sit. Nulla adipisicing reprehenderit aliqua aliquip enim.",
+      "Journey Through Timeless Landscapes",
   },
   {
     taleId: "tale-5",
@@ -75,7 +75,7 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-mtfuji.jpeg",
     },
     title:
-      "(5) - Minim amet et est ullamco enim aliquip magna amet pariatur tempor culpa Lorem in ex.",
+      "Discovering Hidden Gems & Natural Beauty",
   },
   {
     taleId: "tale-6",
@@ -90,7 +90,7 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
     },
     title:
-      "(6) - Ad adipisicing labore officia duis reprehenderit ea ex deserunt deserunt officia sit excepteur laborum pariatur. Dolor commodo commodo ex est cillum nostrud deserunt consectetur nisi est aute ad culpa reprehenderit. Veniam sint dolor consequat ad Lorem aliqua ullamco officia eiusmod. Exercitation ea cupidatat esse anim eu duis mollit tempor. Officia pariatur non dolor magna fugiat. Veniam sunt nulla dolor nulla laboris in.",
+      "Adventures in the Land of Enchantment",
   },
   {
     taleId: "tale-7",
@@ -105,7 +105,7 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-singaporeriver.jpg",
     },
     title:
-      "(7) - Dolore tempor laborum adipisicing enim tempor. Quis eu reprehenderit aute amet qui sunt sunt minim. Do excepteur ea anim qui qui incididunt ut occaecat voluptate. Consequat deserunt duis cillum pariatur nisi nostrud id. Do magna proident culpa commodo exercitation excepteur aliqua excepteur ut cillum labore excepteur. Id Lorem eu officia do amet.",
+      "Explore Ancient Ruins & Modern Wonders",
   },
 ];
 
@@ -122,7 +122,7 @@ export const DUMMY_TALES: Tale[] = [
       type: "image/png",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie2.png",
     },
-    title: "(1) - Ea nisi sint pariatur eu laborum consequat sit.",
+    title: "Wanderlust Chronicles: Exploring Paradises",
     itinerary: {
       id: "itinerary-1",
       creatorId: "user-1",
@@ -190,7 +190,7 @@ export const DUMMY_TALES: Tale[] = [
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/videos/ace.mp4",
     },
     title:
-      "(2) - Reprehenderit commodo cupidatat duis dolor sunt laborum consectetur enim tempor do.",
+      "Escaping to Tranquil Seascapes & Beyond",
     itinerary: {
       id: "itinerary-2",
       creatorId: "user-3",
@@ -257,7 +257,7 @@ export const DUMMY_TALES: Tale[] = [
       type: "image/jpeg",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-jiufen.jpeg",
     },
-    title: "(3) - Fugiat sit qui dolore sunt consequat excepteur velit non.",
+    title: "Uncover Serene Havens & Cultural Marvels",
     itinerary: {
       id: "itinerary-3",
       creatorId: "user-4",
@@ -303,7 +303,7 @@ export const DUMMY_TALES: Tale[] = [
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-gbtb.jpg",
     },
     title:
-      "(4) - Fugiat sit qui dolore sunt consequat excepteur velit non. Ad ut amet qui ipsum pariatur ad tempor est est laboris in fugiat irure. Amet nisi ut non nostrud et. Duis dolore magna qui Lorem officia culpa aliquip culpa voluptate et veniam duis veniam. Velit ipsum anim labore ipsum do id ullamco veniam reprehenderit magna non nostrud Lorem. Aliqua dolor non minim ea officia consectetur dolore sit. Nulla adipisicing reprehenderit aliqua aliquip enim.",
+      "Journey Through Timeless Landscapes",
     itinerary: {
       id: "itinerary-4",
       creatorId: "user-2",
@@ -349,7 +349,7 @@ export const DUMMY_TALES: Tale[] = [
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-mtfuji.jpeg",
     },
     title:
-      "(5) - Minim amet et est ullamco enim aliquip magna amet pariatur tempor culpa Lorem in ex.",
+      "Discovering Hidden Gems & Natural Beauty",
     itinerary: {
       id: "itinerary-5",
       creatorId: "user-1",
@@ -419,7 +419,7 @@ export const DUMMY_TALES: Tale[] = [
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
     },
     title:
-      "(6) - Ad adipisicing labore officia duis reprehenderit ea ex deserunt deserunt officia sit excepteur laborum pariatur. Dolor commodo commodo ex est cillum nostrud deserunt consectetur nisi est aute ad culpa reprehenderit. Veniam sint dolor consequat ad Lorem aliqua ullamco officia eiusmod. Exercitation ea cupidatat esse anim eu duis mollit tempor. Officia pariatur non dolor magna fugiat. Veniam sunt nulla dolor nulla laboris in.",
+      "Adventures in the Land of Enchantment",
     itinerary: {
       id: "itinerary-6",
       creatorId: "user-3",
@@ -465,7 +465,7 @@ export const DUMMY_TALES: Tale[] = [
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-singaporeriver.jpg",
     },
     title:
-      "(7) - Dolore tempor laborum adipisicing enim tempor. Quis eu reprehenderit aute amet qui sunt sunt minim. Do excepteur ea anim qui qui incididunt ut occaecat voluptate. Consequat deserunt duis cillum pariatur nisi nostrud id. Do magna proident culpa commodo exercitation excepteur aliqua excepteur ut cillum labore excepteur. Id Lorem eu officia do amet.",
+      "Explore Ancient Ruins & Modern Wonders",
     itinerary: {
       id: "itinerary-7",
       creatorId: "user-2",

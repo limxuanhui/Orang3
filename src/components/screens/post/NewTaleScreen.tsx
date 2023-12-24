@@ -171,6 +171,7 @@ const NewTaleScreen = ({ navigation }: NewTaleScreenProps) => {
                 multiline
                 placeholder="Write a title"
                 placeholderTextColor={PALETTE.LIGHTERGREY}
+                maxLength={100}
                 onChangeText={onTitleChange}
                 onBlur={() => {
                   console.warn("clicked out");
