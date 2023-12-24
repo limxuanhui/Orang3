@@ -106,7 +106,7 @@ const TalesOverviewScreen = () => {
     queryClient,
     fetchNextPage,
     refetch,
-  } = useInfiniteDataManager("dev", "tales-md");
+  } = useInfiniteDataManager("tales-md", "dev");
 
   console.log("===========================");
   console.log("isFetching: ", isFetching);

@@ -23,11 +23,19 @@ export type FeedItem = {
   taleId?: string;
 };
 
-export type MediaType = "image" | "video"| "video/mp4";
+export type MediaMimeType =
+  | "image/jpg"
+  | "image/jpeg"
+  | "image/png"
+  | "image/gif"
+  | "video/mp4";
+
 export type Media = {
-  type: MediaType;
+  id: string;
+  type: MediaMimeType;
   uri: string;
-};
+  // aspectRatio?: number;
+} | null;
 
 // Component properties
 export type FeedDisplayProps = {

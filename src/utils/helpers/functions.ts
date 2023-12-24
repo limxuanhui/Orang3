@@ -1,3 +1,3 @@
 export const printPrettyJson = (text: object) => {
-  console.log(JSON.stringify(text, null, 4));
+  console.info(JSON.stringify(text, null, 4));
 };

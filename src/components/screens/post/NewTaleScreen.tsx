@@ -122,7 +122,7 @@ const NewTaleScreen = ({ navigation }: NewTaleScreenProps) => {
                     <Video
                       style={styles.cover}
                       source={{ uri: cover.uri }}
-                      // controls
+                      controls
                       repeat
                       resizeMode="contain"
                     />

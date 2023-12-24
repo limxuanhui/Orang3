@@ -21,7 +21,7 @@ const TaleThumbnail = ({ index, data }: TaleThumbnailProps) => {
   const onPressFeed = useCallback(() => {
     navigation.push("Modal", {
       screen: "TaleView",
-      params: { id: data.taleId, creatorId: data.creator.id },
+      params: { id: data.taleId, creator: data.creator },
     });
   }, [navigation]);
 
@@ -56,10 +56,10 @@ const TaleThumbnail = ({ index, data }: TaleThumbnailProps) => {
   );
 
   useEffect(() => {
-    if (data.cover.type === "image") {
+    if (data.cover && data.cover.type.startsWith("image")) {
       getImageAspectRatio(data.cover.uri);
     }
-  }, [getImageAspectRatio]);
+  }, [data, getImageAspectRatio]);
 
   // Temporarily set aspect ratio to 1 if media aspect ratio is still being calculated
   if (mediaAspectRatio === 0) {
@@ -75,29 +75,30 @@ const TaleThumbnail = ({ index, data }: TaleThumbnailProps) => {
       onTouchStart={() => setPaused(false)}
       onTouchEnd={() => setPaused(true)}
       onPress={onPressFeed}>
-      {data.cover.type === "image" ? (
-        <Image
-          style={[styles.feedCardMedia, { aspectRatio: mediaAspectRatio }]}
-          source={{ uri: data.cover.uri }}
-          progressiveRenderingEnabled
-          resizeMode="contain"
-          // defaultSource={{uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg"}}
-        />
-      ) : data.cover.type === "video" ? (
-        <Video
-          style={[styles.feedCardMedia, { aspectRatio: mediaAspectRatio }]}
-          source={{ uri: data.cover.uri }}
-          // posterResizeMode="contain"
-          resizeMode="contain"
-          // onLoadStart={() => console.log("Video thumbnail is loading...")}
-          onLoad={onVideoLoad}
-          repeat
-          paused={paused}
-          volume={0}
-        />
-      ) : (
-        <Text>Nothing to display...</Text>
-      )}
+      {data.cover &&
+        (data.cover.type.startsWith("image") ? (
+          <Image
+            style={[styles.feedCardMedia, { aspectRatio: mediaAspectRatio }]}
+            source={{ uri: data.cover.uri }}
+            progressiveRenderingEnabled
+            resizeMode="contain"
+            // defaultSource={{uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg"}}
+          />
+        ) : data.cover.type.startsWith("video") ? (
+          <Video
+            style={[styles.feedCardMedia, { aspectRatio: mediaAspectRatio }]}
+            source={{ uri: data.cover.uri }}
+            // posterResizeMode="contain"
+            resizeMode="contain"
+            // onLoadStart={() => console.log("Video thumbnail is loading...")}
+            onLoad={onVideoLoad}
+            repeat
+            paused={paused}
+            volume={0}
+          />
+        ) : (
+          <Text>Nothing to display...</Text>
+        ))}
       <View style={styles.feedCardFooter}>
         <GypsieAvatar uri={data.creator.avatar} />
         <Text

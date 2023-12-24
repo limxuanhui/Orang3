@@ -8,10 +8,12 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
     taleId: "tale-1",
     creator: {
       id: "user-1",
+      handle: "@jennie",
       avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
     },
     cover: {
-      type: "image",
+      id: "tale-1-cover-1",
+      type: "image/png",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie2.png",
     },
     title: "(1) - Ea nisi sint pariatur eu laborum consequat sit.",
@@ -20,10 +22,12 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
     taleId: "tale-2",
     creator: {
       id: "user-3",
+      handle: "@lisa",
       avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
     },
     cover: {
-      type: "video",
+      id: "tale-2-cover",
+      type: "video/mp4",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/videos/ace.mp4",
     },
     title:
@@ -33,10 +37,12 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
     taleId: "tale-3",
     creator: {
       id: "user-4",
+      handle: "@rose",
       avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
     },
     cover: {
-      type: "image",
+      id: "tale-3-cover",
+      type: "image/jpeg",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-jiufen.jpeg",
     },
     title: "(3) - Fugiat sit qui dolore sunt consequat excepteur velit non.",
@@ -45,49 +51,57 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
     taleId: "tale-4",
     creator: {
       id: "user-2",
+      handle: "@jisoo",
       avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
     },
     cover: {
-      type: "image",
+      id: "tale-4-cover",
+      type: "image/jpg",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-gbtb.jpg",
     },
     title:
       "(4) - Fugiat sit qui dolore sunt consequat excepteur velit non. Ad ut amet qui ipsum pariatur ad tempor est est laboris in fugiat irure. Amet nisi ut non nostrud et. Duis dolore magna qui Lorem officia culpa aliquip culpa voluptate et veniam duis veniam. Velit ipsum anim labore ipsum do id ullamco veniam reprehenderit magna non nostrud Lorem. Aliqua dolor non minim ea officia consectetur dolore sit. Nulla adipisicing reprehenderit aliqua aliquip enim.",
   },
   {
-    taleId: "tale-thumbnail-5",
+    taleId: "tale-5",
     creator: {
       id: "user-1",
+      handle: "@jennie",
       avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
     },
     cover: {
-      type: "image",
+      id: "tale-5-cover",
+      type: "image/jpeg",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-mtfuji.jpeg",
     },
     title:
       "(5) - Minim amet et est ullamco enim aliquip magna amet pariatur tempor culpa Lorem in ex.",
   },
   {
-    taleId: "tale-thumbnail-6",
+    taleId: "tale-6",
     creator: {
       id: "user-3",
+      handle: "@lisa",
       avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
     },
     cover: {
-      type: "image",
+      id: "tale-6-cover",
+      type: "image/jpeg",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
     },
     title:
       "(6) - Ad adipisicing labore officia duis reprehenderit ea ex deserunt deserunt officia sit excepteur laborum pariatur. Dolor commodo commodo ex est cillum nostrud deserunt consectetur nisi est aute ad culpa reprehenderit. Veniam sint dolor consequat ad Lorem aliqua ullamco officia eiusmod. Exercitation ea cupidatat esse anim eu duis mollit tempor. Officia pariatur non dolor magna fugiat. Veniam sunt nulla dolor nulla laboris in.",
   },
   {
-    taleId: "tale-thumbnail-7",
+    taleId: "tale-7",
     creator: {
       id: "user-2",
+      handle: "@jisoo",
       avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
     },
     cover: {
-      type: "image",
+      id: "tale-7-cover",
+      type: "image/jpg",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-singaporeriver.jpg",
     },
     title:
@@ -100,10 +114,12 @@ export const DUMMY_TALES: Tale[] = [
     id: "tale-1",
     creator: {
       id: "user-1",
+      handle: "@jennie",
       avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
     },
     cover: {
-      type: "image",
+      id: "tale-1-cover-1",
+      type: "image/png",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie2.png",
     },
     title: "(1) - Ea nisi sint pariatur eu laborum consequat sit.",
@@ -165,10 +181,12 @@ export const DUMMY_TALES: Tale[] = [
     id: "tale-2",
     creator: {
       id: "user-3",
+      handle: "@lisa",
       avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
     },
     cover: {
-      type: "video",
+      id: "tale-2-cover",
+      type: "video/mp4",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/videos/ace.mp4",
     },
     title:
@@ -231,10 +249,12 @@ export const DUMMY_TALES: Tale[] = [
     id: "tale-3",
     creator: {
       id: "user-4",
+      handle: "@rose",
       avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
     },
     cover: {
-      type: "image",
+      id: "tale-3-cover",
+      type: "image/jpeg",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-jiufen.jpeg",
     },
     title: "(3) - Fugiat sit qui dolore sunt consequat excepteur velit non.",
@@ -274,10 +294,12 @@ export const DUMMY_TALES: Tale[] = [
     id: "tale-4",
     creator: {
       id: "user-2",
+      handle: "@jisoo",
       avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
     },
     cover: {
-      type: "image",
+      id: "tale-4-cover",
+      type: "image/jpg",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-gbtb.jpg",
     },
     title:
@@ -318,10 +340,12 @@ export const DUMMY_TALES: Tale[] = [
     id: "tale-5",
     creator: {
       id: "user-1",
+      handle: "@jennie",
       avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
     },
     cover: {
-      type: "image",
+      id: "tale-5-cover",
+      type: "image/jpeg",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-mtfuji.jpeg",
     },
     title:
@@ -386,10 +410,12 @@ export const DUMMY_TALES: Tale[] = [
     id: "tale-6",
     creator: {
       id: "user-3",
+      handle: "@lisa",
       avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
     },
     cover: {
-      type: "image",
+      id: "tale-6-cover",
+      type: "image/jpeg",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
     },
     title:
@@ -430,10 +456,12 @@ export const DUMMY_TALES: Tale[] = [
     id: "tale-7",
     creator: {
       id: "user-2",
+      handle: "@jisoo",
       avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
     },
     cover: {
-      type: "image",
+      id: "tale-7-cover",
+      type: "image/jpg",
       uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-singaporeriver.jpg",
     },
     title:

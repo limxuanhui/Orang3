@@ -1,6 +1,10 @@
 import { useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { Asset, ImageLibraryOptions } from "react-native-image-picker";
+import {
+  Asset,
+  ImageLibraryOptions,
+  ImagePickerResponse,
+} from "react-native-image-picker";
 import newItineraryPostSlice, {
   setCover,
   setTitle,
@@ -24,6 +28,7 @@ import useKeyboardHandlers from "./useKeyboardHandlers";
 import useBottomSheetHandlers from "./useBottomSheetHandlers";
 import { nanoid } from "@reduxjs/toolkit";
 import { AWS_API_GATEWAY_S3_PRESIGNED_URL, BACKEND_BASE_URL } from "@env";
+import { Media, MediaMimeType } from "../../components/feed/types/types";
 
 const imageLibraryOptions: ImageLibraryOptions = {
   mediaType: "mixed",
@@ -44,11 +49,18 @@ const useNewTaleManager = () => {
     useAppSelector(state => state.newTale);
 
   const onPressAddCover = useCallback(async () => {
-    const coverResponse = await openGallery();
-    let pickedCover;
+    const coverResponse: ImagePickerResponse = await openGallery();
+    let pickedAsset: Asset;
+
     if (coverResponse.assets && coverResponse.assets.length > 0) {
-      pickedCover = coverResponse.assets[0];
-      dispatch(setCover(pickedCover));
+      pickedAsset = coverResponse.assets[0];
+      console.log("PICKEDASSET: ", pickedAsset);
+      const cover: Media = {
+        id: nanoid(),
+        type: pickedAsset.type as MediaMimeType,
+        uri: pickedAsset.uri as string,
+      };
+      dispatch(setCover(cover));
     }
   }, [cover, dispatch, openGallery]);
 

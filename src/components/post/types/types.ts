@@ -9,7 +9,7 @@ export type NewFeedSideControlsProps = {
   onPressPost: () => void;
 };
 
-// Itinerary
+// Tale
 export type ItineraryMapOverviewProps = {
   creatorId: string;
   itineraryId?: string;

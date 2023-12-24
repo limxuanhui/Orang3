@@ -9,6 +9,11 @@ type NewTaleState = Readonly<NewTale>;
 
 const initialState: NewTaleState = {
   id: "",
+  creator: {
+    id: "",
+    handle: "",
+    avatar: "",
+  },
   cover: null,
   title: "",
   itinerary: {

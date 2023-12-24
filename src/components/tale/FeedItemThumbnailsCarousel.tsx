@@ -12,7 +12,7 @@ const FeedItemThumbnailsCarousel = ({
 }: FeedItemThumbnailsCarouselProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
 
-  const onPressLinkedPost = useCallback(
+  const onPressLinkedFeed = useCallback(
     (feedId: string) => {
       navigation.navigate("Modal", { screen: "Feed", params: { feedId } });
     },
@@ -34,7 +34,7 @@ const FeedItemThumbnailsCarousel = ({
             },
             style,
           ]}
-          onPress={() => onPressLinkedPost(el.item.feedId)}>
+          onPress={() => onPressLinkedFeed(el.item.feedId)}>
           <Image
             style={styles.imageStyle}
             source={{

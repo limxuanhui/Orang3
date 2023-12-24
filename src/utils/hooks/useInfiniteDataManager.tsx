@@ -20,7 +20,7 @@ type DataMode = "dev" | "test" | "prod";
  * @param dataKey
  * @returns
  */
-const useInfiniteDataManager = (dataMode: DataMode, dataKey: DataKey) => {
+const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
   const queryClient = useQueryClient();
   const queryFn = useCallback(
     async ({ queryKey, signal, meta }: QueryFunctionContext) => {
@@ -49,7 +49,7 @@ const useInfiniteDataManager = (dataMode: DataMode, dataKey: DataKey) => {
           console.info(`${dataMode} mode is not handled.`);
       }
     },
-    [BACKEND_BASE_URL],
+    [BACKEND_BASE_URL, DUMMY_DATABASE, setTimeout],
   );
 
   const options = useMemo(

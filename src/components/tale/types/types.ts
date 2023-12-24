@@ -2,17 +2,18 @@ import { StyleProp, ViewStyle } from "react-native";
 import type { Asset } from "react-native-image-picker";
 import type { Itinerary } from "../../itinerary/types/types";
 import type { Story } from "../../post/types/types";
-import { Media } from "../../feed/types/types";
+import type { Media } from "../../feed/types/types";
 
 export type Creator = {
   id: string;
+  handle: string;
   avatar: string;
 }
 
 export type Tale = {
   id: string;
   creator: Creator;
-  cover: Asset | null;
+  cover: Media;
   title: string;
   itinerary: Itinerary;
   story: Story;

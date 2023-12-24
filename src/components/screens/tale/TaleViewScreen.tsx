@@ -5,8 +5,6 @@ import GypsieButton from "../../common/buttons/GypsieButton";
 import NewItineraryPostHandleBar from "../../post/NewItineraryPostHandleBar";
 import BottomSheet, {
   BottomSheetBackdrop,
-  BottomSheetFooter,
-  BottomSheetFooterProps,
   BottomSheetScrollView,
 } from "@gorhom/bottom-sheet";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -16,8 +14,6 @@ import { DEVICE_HEIGHT } from "../../../utils/constants/constants";
 import { VIEWABILITY_CONFIG } from "../../../utils/constants/feed";
 import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
 import FeedCarousel from "../../feed/FeedCarousel";
-import CloneIcon from "../../common/icons/CloneIcon";
-import SearchIcon from "../../common/icons/SearchIcon";
 import { type Story, StoryItemType } from "../../post/types/types";
 import type {
   TaleViewScreenProps,
@@ -27,130 +23,119 @@ import ItineraryMapOverview from "../../post/ItineraryMapOverview";
 import { storyBodyStyle, storyTitleStyle } from "../../../utils/constants/text";
 import { Itinerary } from "../../itinerary/types/types";
 import { useRoute } from "@react-navigation/native";
-import { FeedItem } from "../../feed/types/types";
+import { FeedItem, Media } from "../../feed/types/types";
 import { BACKEND_BASE_URL } from "@env";
 import FeedItemThumbnailsCarousel from "../../tale/FeedItemThumbnailsCarousel";
 import { Tale } from "../../tale/types/types";
+import useDataManager from "../../../utils/hooks/useDataManager";
+import { QueryKey, queryOptions, useQuery } from "@tanstack/react-query";
+import { DUMMY_DATABASE } from "../../../data/database";
 
-export const story: Story = [
-  {
-    id: "1",
-    type: StoryItemType.Text,
-    text: "This is the craziest trip ever!",
-    style: storyTitleStyle,
-  },
-  {
-    id: "2",
-    type: StoryItemType.Text,
-    text: "The weather here was amazing. Elit quis sit commodo officia nisi. Irure dolor ad aute amet excepteur elit sit.",
-    style: storyBodyStyle,
-  },
-  {
-    id: "3",
-    type: StoryItemType.Text,
-    text: "The weather here was amazing. Elit quis sit commodo officia nisi. Irure dolor ad aute amet excepteur elit sit.",
-    style: storyBodyStyle,
-  },
-  {
-    id: "4",
-    type: StoryItemType.Text,
-    text: "Day 2 - Jeju Hallabong Farm",
-    style: storyTitleStyle,
-  },
-  {
-    id: "5",
-    type: StoryItemType.Media,
-    data: [
-      {
-        feedId: "Nulla labore labore fugiat officia.",
-        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
-      },
-      {
-        feedId: "Nulla labore labore fugiat officia.",
-        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-satay.jpeg",
-      },
-      {
-        feedId: "Nulla labore labore fugiat officia.",
-        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-beach.jpeg",
-      },
-      {
-        feedId: "Nulla labore labore fugiat officia.",
-        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-uss.jpg",
-      },
-    ],
-  },
-  {
-    id: "6",
-    type: StoryItemType.Text,
-    text: "The weather here was amazing. Elit quis sit commodo officia nisi. Irure dolor ad aute amet excepteur elit sit.",
-    style: storyBodyStyle,
-  },
-  {
-    id: "7",
-    type: StoryItemType.Text,
-    text: "Day 3 - Jeju Abalone stew",
-    style: storyTitleStyle,
-  },
-  {
-    id: "8",
-    type: StoryItemType.Text,
-    text: "The weather here was amazing. Elit quis sit commodo officia nisi. Irure dolor ad aute amet excepteur elit sit.",
-    style: storyBodyStyle,
-  },
-  {
-    id: "9",
-    type: StoryItemType.Media,
-    data: [
-      {
-        feedId: "Nulla labore labore fugiat officia.",
-        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
-      },
-      {
-        feedId: "Nulla labore labore fugiat officia.",
-        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-satay.jpeg",
-      },
-      {
-        feedId: "Nulla labore labore fugiat officia.",
-        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-beach.jpeg",
-      },
-      {
-        feedId: "Nulla labore labore fugiat officia.",
-        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-uss.jpg",
-      },
-    ],
-  },
-];
+type DataKey = "feeds" | "itineraries" | "tales" | "tales-md" | "users";
 
 const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
-  const { params } = useRoute<TaleViewScreenRouteProp>();  
-  const bottomSheetRef = useRef<BottomSheet>(null);
   const insets = useSafeAreaInsets();
-  const title = "12345678901234567890 - TaleViewScreen";
-  const avatarUri =
-    "/Users/limxuanhui/bluextech/gypsie/assets/avatars/yoona.jpeg";
-  const name = "@Joseph";
-  const [itineraryData, setItineraryData] = useState<Itinerary>({
-    id: "",
-    creatorId: "",
-    routes: [],
-  });
-  const feedData = DUMMY_FEEDS.map(el => el.items);
-  const coverMedia: FeedItem[] = [
-    {
-      id: "coverMediaId",
-      media: {
-        type: "video",
-        uri: "/Users/limxuanhui/bluextech/gypsie/assets/videos/ace.mp4",
-      },
+  const { params } = useRoute<TaleViewScreenRouteProp>();
+  const { id, creator } = params;
+
+  const feeds = DUMMY_FEEDS.map(el => el.items);
+
+  const queryFn = useCallback(
+    async ({ queryKey }: { queryKey: QueryKey }): Promise<Tale | undefined> => {
+      const [key, taleId] = queryKey;
+      console.log("QUERY FUNCTION CALLED");
+      return new Promise((resolve, reject) => {
+        const tales: Tale[] = DUMMY_DATABASE[key as DataKey] as Tale[];
+        setTimeout(() => {
+          resolve(tales.find((el: Tale) => el.id === taleId));
+        }, 2000);
+      });
     },
-  ];
+    [DUMMY_DATABASE],
+  );
 
-  const [data, setData] = useState<Tale>();  
+  const options = useMemo(() => {
+    const queryKey = ["tales", id];
+    return queryOptions({
+      queryKey,
+      queryFn,
+      networkMode: "online",
+      // staleTime: 1000,
+      initialData: {
+        id: "",
+        creator: {
+          id: "",
+          handle: "",
+          avatar: "",
+        },
+        cover: null,
+        title: "",
+        itinerary: {
+          id: "",
+          creatorId: "",
+          routes: [
+            {
+              id: "",
+              name: "Day 1",
+              routeNodes: [],
+              isRouted: false,
+              polyline: [],
+            },
+          ],
+        },
+        story: [],
+      },
+      enabled: true,
+      gcTime: 1000 * 60 * 5,
+    });
+  }, [id, queryOptions]);
+  // const options = queryOptions({
+  //   queryKey:["tales", id],
+  //   queryFn,
+  //   networkMode: "online",
+  //   staleTime: 5000,
+  //   initialData: {
+  //     id: "",
+  //     creator: {
+  //       id: "",
+  //       handle: "",
+  //       avatar: "",
+  //     },
+  //     cover: null,
+  //     title: "",
+  //     itinerary: {
+  //       id: "",
+  //       creatorId: "",
+  //       routes: [
+  //         {
+  //           id: "",
+  //           name: "Day 1",
+  //           routeNodes: [],
+  //           isRouted: false,
+  //           polyline: [],
+  //         },
+  //       ],
+  //     },
+  //     story: [],
+  //   },
+  //   enabled: true,
+  //   gcTime: 1000 * 60 * 5,
+  // });
+  const { data, isFetching, isLoading, isError } = useQuery(options);
 
-  const onPressExpandBottomSheet = useCallback(() => {
-    bottomSheetRef.current?.snapToIndex(0);
-  }, [bottomSheetRef]);
+  let renderedData: FeedItem[][] = feeds;
+  if (data && data.id) {
+    const cover: FeedItem = {
+      id: data.cover?.id as string,
+      media: data.cover as Media,
+      taleId: data.id as string,
+    };
+    renderedData = [[cover], ...feeds];
+    console.log("DATA: ", data);
+  }
 
+  // See if can move these to useBottomSheet hook
+  const bottomSheetRef = useRef<BottomSheet>(null);
   const [activePostIndex, setActivePostIndex] = useState<number>(0);
   const onViewableFeedChanged = useCallback(
     // Change type to more suitable one
@@ -162,7 +147,9 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
     },
     [setActivePostIndex],
   );
-
+  const onPressExpandBottomSheet = useCallback(() => {
+    bottomSheetRef.current?.snapToIndex(0);
+  }, [bottomSheetRef]);
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (
       <BottomSheetBackdrop
@@ -177,39 +164,46 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
         disappearsOnIndex={-1}
         appearsOnIndex={0}>
         <View style={styles.headerTextBox}>
-          <Text style={styles.headerText}>{title}</Text>
+          <Text style={styles.headerText}>{data?.title}</Text>
         </View>
       </BottomSheetBackdrop>
     ),
-    [],
+    [data],
   );
-
   const snapPoints = useMemo(() => {
-    return [
-      Math.max(
-        (1 - 0.2) * DEVICE_HEIGHT - (Math.floor(title.length / 17) + 1) * 40,
-        0.1 * DEVICE_HEIGHT,
-      ),
-      "100%",
-    ];
-  }, [title]);
+    if (data) {
+      return [
+        Math.max(
+          (1 - 0.2) * DEVICE_HEIGHT -
+            (Math.floor(data.title.length / 17) + 1) * 40,
+          0.1 * DEVICE_HEIGHT,
+        ),
+        "100%",
+      ];
+    }
+    return ["50%", "100%"];
+  }, [data]);
+  // ====================================================
 
   useEffect(() => {
-    // Fetch data with tale id (params.id)
-    const url = BACKEND_BASE_URL + "/" + params.id;
-  }, [params]);
+    console.log("Data when mounted: ", data);
+    return () => {
+      console.log("Data when dismounted: ", data);
+    };
+  }, [data]);
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={[coverMedia, ...feedData]}
+        data={renderedData}
         renderItem={({ item, index }) => (
           <FeedCarousel
-            handle={"@To be changed"}
+            handle={creator.handle}
             items={item}
             inView={index === activePostIndex}
           />
         )}
+        ListEmptyComponent={<Text>Loading tale data...</Text>}
         showsVerticalScrollIndicator={false}
         snapToInterval={DEVICE_HEIGHT}
         snapToAlignment="start"
@@ -237,12 +231,18 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
         // onChange={() => console.log("moving bottomsheet")}
       >
         {/* To be changed (NewItineraryPostHandlerBar) */}
-        <NewItineraryPostHandleBar avatarUri={avatarUri} name={name} />
+        <NewItineraryPostHandleBar
+          avatarUri={data?.creator.avatar || ""}
+          name={data?.creator.handle || ""}
+        />
         <BottomSheetScrollView
           contentContainerStyle={{ paddingBottom: insets.bottom }}
           showsVerticalScrollIndicator={false}>
-          <ItineraryMapOverview itineraryId={""} creatorId={params.creatorId} />
-          {story.map(el => {
+          <ItineraryMapOverview
+            itineraryId={""}
+            creatorId={params.creator.id}
+          />
+          {data?.story.map(el => {
             if (el.type === StoryItemType.Text) {
               return (
                 <View style={styles.storyItem} key={el.id}>

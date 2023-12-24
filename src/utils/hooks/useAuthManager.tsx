@@ -33,7 +33,7 @@ const useAuthManager = () => {
   const [user, setUser] = useState<GypsieUser>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const url = BACKEND_BASE_URL + "/auth/signin";
+  const url = BACKEND_BASE_URL + "/api/auth/signin";
 
   const storeUserIdToken = useCallback(
     async (idToken: string) => {
@@ -68,7 +68,7 @@ const useAuthManager = () => {
   );
 
   const retrieveUserIdToken = useCallback(async () => {
-    console.log("Retrieving user id token...");
+    console.info("Retrieving user id token...");
     try {
       const idToken = await EncryptedStorage.getItem("id_token");
       if (idToken !== null) {
@@ -83,7 +83,7 @@ const useAuthManager = () => {
   }, [EncryptedStorage]);
 
   const retrieveUserData = useCallback(async () => {
-    console.log("Retrieving user data...");
+    console.info("Retrieving user data...");
     try {
       const userData = await AsyncStorage.getItem("user_data");
       if (userData === null) {
@@ -97,7 +97,7 @@ const useAuthManager = () => {
   }, [AsyncStorage]);
 
   const removeUserIdToken = useCallback(async () => {
-    console.log("Removing user id token...");
+    console.info("Removing user id token...");
     try {
       const idToken = await retrieveUserIdToken();
       if (idToken === undefined) {
@@ -112,7 +112,7 @@ const useAuthManager = () => {
   }, [EncryptedStorage, retrieveUserIdToken]);
 
   const removeUserData = useCallback(async () => {
-    console.log("Removing user data...");
+    console.info("Removing user data...");
     try {
       const userData = await retrieveUserData();
       if (userData === undefined) {
@@ -127,7 +127,7 @@ const useAuthManager = () => {
   }, [AsyncStorage, retrieveUserData]);
 
   const clearStorage = useCallback(async () => {
-    console.log("Clearing storage...");
+    console.info("Clearing storage...");
     try {
       await EncryptedStorage.clear();
       await AsyncStorage.clear();
@@ -136,18 +136,17 @@ const useAuthManager = () => {
     }
   }, [EncryptedStorage, AsyncStorage]);
 
-  const loginHandler = useCallback(async () => {
-    console.warn("logging in");
-  }, []);
-
   const googleSigninHandler = useCallback(async () => {
     setLoading(true);
 
     try {
       await GoogleSignin.hasPlayServices();
-      console.log("Awaiting google signin");
+      console.info("Awaiting Google sign in...");
       const userInfo = await GoogleSignin.signIn();
-      console.log("Google signin complete: " + userInfo);
+      console.info(
+        "Google sign in complete!\nUser info:" +
+          JSON.stringify(userInfo, null, 4),
+      );
 
       if (userInfo.idToken) {
         const { sub, name, email, picture } = decodeIdToken(userInfo.idToken);
@@ -155,7 +154,7 @@ const useAuthManager = () => {
           user: { id: sub, name, handle: name, email, picture },
           id_token: userInfo.idToken,
         };
-        console.log(JSON.stringify(requestBody, null, 4));
+
         const response = await axios.post(url, requestBody, {});
 
         if (response.data) {
@@ -168,16 +167,16 @@ const useAuthManager = () => {
       }
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
+        // User cancelled the sign in flow
         console.log("Status Code: SIGN_IN_CANCELLED");
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation log in is in progress
+        // Sign in is in progress
         console.log("Status Code: IN_PROGRESS");
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available
+        // Play services not available
         console.log("Status Code: PLAY_SERVICES_NOT_AVAILABLE");
       } else {
-        // some other error happened
+        // Some other error happened
         console.error(
           "An unknown error occurred: Code:",
           error.code,
@@ -214,15 +213,15 @@ const useAuthManager = () => {
 
   const checkIfIdTokenIsValid = useCallback(
     async (idToken: string | undefined) => {
-      console.log("Checking if id token expired...");
-      console.log("idToken: ", idToken);
+      console.info("Checking if id token expired...");
+      console.info("idToken: ", idToken);
       if (idToken) {
         const decodedIdToken: GoogleIdToken = decodeIdToken(idToken);
         const currentTime = Math.floor(Date.now() / 1000);
-        console.log("Decoded jwt: ", JSON.stringify(decodedIdToken, null, 4));
-        console.log("Token expires at: ", decodedIdToken.exp);
-        console.log("Time now: ", currentTime);
-        console.log("Time left: ", decodedIdToken.exp - currentTime);
+        console.info("Decoded jwt: ", JSON.stringify(decodedIdToken, null, 4));
+        console.info("Token expires at: ", decodedIdToken.exp);
+        console.info("Time now: ", currentTime);
+        console.info("Time left: ", decodedIdToken.exp - currentTime);
         return currentTime < decodedIdToken.exp;
       }
       return false;
@@ -262,7 +261,6 @@ const useAuthManager = () => {
     user,
     isLoggedIn,
     loading,
-    loginHandler,
     googleSigninHandler,
     logoutHandler,
   };
