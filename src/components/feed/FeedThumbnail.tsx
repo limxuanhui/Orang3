@@ -3,7 +3,6 @@ import { Pressable, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { Image, Skeleton } from "@rneui/themed";
-import { createThumbnail } from "react-native-create-thumbnail";
 import type { FeedThumbnailProps } from "./types/types";
 import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
 import { DIMENSION } from "../../utils/constants/dimensions";
@@ -15,51 +14,7 @@ const FeedThumbnail = ({ feed }: FeedThumbnailProps) => {
     "/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png",
   );
 
-  const getThumbnail = useCallback(
-    async (
-      id: string = "0",
-      uri: string = "/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png",
-    ) => {
-      let thumbnailPath;
-      try {
-        thumbnailPath = await createThumbnail({
-          url: uri,
-          cacheName: id,
-          timeStamp: 0,
-        });
-      } catch (err) {
-        console.error(err);
-      }
-
-      return thumbnailPath?.path;
-    },
-    [createThumbnail],
-  );
-
-  // useEffect(() => {
-  //   const x = getThumbnail();
-  //   data.type === "image"
-  //     ? setUri(data.uri)
-  //     : setUri("");
-  // }, [data]);
-  // "/Users/limxuanhui/Library/Developer/CoreSimulator/Devices/830EEFA8-BEB1-4FEC-B81B-DA9837D41F82/data/Containers/Data/Application/5B2C0CF4-F5CC-4A5C-8E3B-59194B1C83F2/Library/Caches/thumbnails/thumb-5.jpeg"
-
-  //   : "/Users/limxuanhui/Library/Developer/CoreSimulator/Devices/830EEFA8-BEB1-4FEC-B81B-DA9837D41F82/data/Containers/Data/Application/5B2C0CF4-F5CC-4A5C-8E3B-59194B1C83F2/Library/Caches/thumbnails/thumb-5.jpeg";
-  //   : createThumbnail({
-  //       url: data.uri,
-  //       timeStamp: 10,
-  //       cacheName: data.id.toString(),
-  //     })
-  //       .then(response => {
-  //         return response.path;
-  //       })
-  //       .catch(error => {
-  //         console.error(error);
-  //         return "/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png";
-  //       });
-
   const onPressThumbnail = useCallback(() => {
-    // To open up post with navigation
     navigation.push("Modal", {
       screen: "Feed",
       params: {
@@ -82,12 +37,12 @@ const FeedThumbnail = ({ feed }: FeedThumbnailProps) => {
         containerStyle={styles.imageContainer}
         style={styles.image}
         source={{
-          uri:
-            feed.items[0].media?.type === "image"
-              ? feed.items[0].media.uri
-              : uri,
+          uri: feed.items[0].media?.type.startsWith("image")
+            ? feed.items[0].media.uri
+            : uri,
         }}
         PlaceholderContent={<Skeleton style={{ flex: 1 }} animation="pulse" />}
+        // resizeMode="contain"
       />
       {feed.items.length > 1 ? (
         <Ionicons

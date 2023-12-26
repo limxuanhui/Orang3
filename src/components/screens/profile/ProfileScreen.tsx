@@ -97,7 +97,7 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
             ),
           }}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="reactions"
           component={Reactions}
           options={{
@@ -110,7 +110,7 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
               />
             ),
           }}
-        />
+        /> */}
       </Tab.Navigator>
     </View>
   );

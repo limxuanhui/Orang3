@@ -13,7 +13,7 @@ import { PALETTE } from "../../utils/constants/palette";
 
 const MyPosts = () => {
   // Change to useDataManager
-  const { refreshing, refreshPostsHandler } = useDataManager("dev");
+  // const { refreshing, refreshPostsHandler } = useDataManager("dev");
   const data = DUMMY_FEEDS;
   const percentage = 0.62 * DEVICE_HEIGHT;
   const bh = useContext(BottomTabBarHeightContext) || 0;
