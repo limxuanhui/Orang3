@@ -57,7 +57,7 @@ const useAuthManager = () => {
       try {
         await AsyncStorage.setItem("user_data", JSON.stringify(userData));
         const newUserData = await retrieveUserData();
-        if (newUserData === undefined) {
+        if (!newUserData) {
           throw new Error("User data is not set properly");
         }
       } catch (error: any) {
@@ -71,10 +71,10 @@ const useAuthManager = () => {
     console.info("Retrieving user id token...");
     try {
       const idToken = await EncryptedStorage.getItem("id_token");
-      if (idToken !== null) {
-        return idToken;
+      if (!idToken) {
+        throw new Error("User id token is null");
       }
-      throw new Error("User id token is null");
+      return idToken;
     } catch (error: any) {
       console.error(
         "An error occurred while retrieving user id token: " + error,
@@ -86,7 +86,7 @@ const useAuthManager = () => {
     console.info("Retrieving user data...");
     try {
       const userData = await AsyncStorage.getItem("user_data");
-      if (userData === null) {
+      if (!userData) {
         console.error("User data is null");
         return;
       }
@@ -102,7 +102,7 @@ const useAuthManager = () => {
       const idToken = await retrieveUserIdToken();
       if (idToken === undefined) {
         // throw new Error("User id token is undefined");
-        console.error("User id token is undefined");
+        console.error("No user id token");
         return;
       }
       await EncryptedStorage.removeItem("id_token");
@@ -115,9 +115,9 @@ const useAuthManager = () => {
     console.info("Removing user data...");
     try {
       const userData = await retrieveUserData();
-      if (userData === undefined) {
+      if (!userData) {
         // throw new Error("User data is undefined");
-        console.error("User data is undefined");
+        console.error("No user data");
         return;
       }
       await AsyncStorage.removeItem("user_data");
@@ -244,8 +244,10 @@ const useAuthManager = () => {
       }
       const fetchedUser = await retrieveUserData();
       console.log("fetchedUser: ", fetchedUser);
-      setUser(fetchedUser);
-      setIsLoggedIn(true);
+      if (fetchedUser) {
+        setUser(fetchedUser);
+        setIsLoggedIn(true);
+      }
     };
 
     checkUserLoggedIn();

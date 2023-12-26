@@ -8,6 +8,8 @@ import AppStackNavigator from "./AppStackNavigator";
 import AuthStackNavigator from "./AuthStackNavigator";
 import type { RootStackNavigatorParamList } from "./types/types";
 import { SCREEN_OPTIONS } from "../../utils/constants/constants";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+// import BottomSheetModalProvider from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetModalProvider";
 
 const RootStack = createStackNavigator<RootStackNavigatorParamList>();
 
@@ -17,6 +19,7 @@ const RootStackNavigator = () => {
   return (
     <NavigationContainer>
       <PortalProvider>
+      {/* <BottomSheetModalProvider> */}
         <RootStack.Navigator screenOptions={SCREEN_OPTIONS}>
           {isLoggedIn ? (
             <RootStack.Screen name="App" component={AppStackNavigator} />
@@ -24,6 +27,7 @@ const RootStackNavigator = () => {
             <RootStack.Screen name="Auth" component={AuthStackNavigator} />
           )}
         </RootStack.Navigator>
+      {/* </BottomSheetModalProvider> */}
       </PortalProvider>
     </NavigationContainer>
   );

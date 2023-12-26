@@ -106,6 +106,8 @@ const TalesOverviewScreen = () => {
     queryClient,
     fetchNextPage,
     refetch,
+    onEndReached,
+    onRefresh,
   } = useInfiniteDataManager("tales-md", "dev");
 
   console.log("===========================");
@@ -115,26 +117,6 @@ const TalesOverviewScreen = () => {
   console.log("isError: ", isError);
   console.log("hasNextPage: ", hasNextPage);
   console.log("===========================\n");
-
-  /**
-   * onEndReached is called when end of list (determined by onEndReachedThreshold) is reached.
-   * This will fetch the next set of data and append to the end of the current set.
-   */
-  const onEndReached = useCallback(() => {
-    fetchNextPage();
-  }, [fetchNextPage]);
-
-  /**
-   * Refreshing posts will invalidate/reset cache and fetch new set of data.
-   * If the number of pages is > 2, reset cache.
-   */
-  const refreshPostsHandler = useCallback(() => {
-    if (data && data?.pageParams.length > 2) {
-      queryClient.resetQueries({ queryKey: ["tales-md"] });
-    } else {
-      queryClient.invalidateQueries({ queryKey: ["tales-md"] });
-    }
-  }, [data, queryClient]);
 
   useEffect(() => {
     console.log("TalesOverviewScreen Mounted");
@@ -152,7 +134,7 @@ const TalesOverviewScreen = () => {
         ]}>
         <MasonryList
           containerStyle={styles.masonryList}
-          data={data?.pages.flatMap(el => el) || ([] as TaleThumbnailInfo[])}
+          data={data?.pages.flat(1) || ([] as TaleThumbnailInfo[])}
           numColumns={2}
           renderItem={({ item, i }) => (
             <TaleThumbnail index={i} data={item as TaleThumbnailInfo} />
@@ -168,7 +150,7 @@ const TalesOverviewScreen = () => {
           showsVerticalScrollIndicator={false}
           onEndReached={onEndReached}
           onEndReachedThreshold={0.5}
-          onRefresh={refreshPostsHandler}
+          onRefresh={onRefresh}
           refreshing={isRefetching}
           refreshControlProps={{
             title: "Refreshing tales...",

@@ -11,16 +11,17 @@ import type { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/t
 import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
+import useBottomSheetHandlers from "../../utils/hooks/useBottomSheetHandlers";
 
 const NewPostOptions = () => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
-
-  // Creates a reference to the DOM element that we can interact with
-  const bottomSheetRef = useRef<BottomSheet>(null);
-
-  // Setting the points to which we want the bottom sheet to be set to
-  // Using '-30' here so that it is not seen when it is not presented
-  const snapPoints = useMemo(() => [1, "20%"], []);
+  const {
+    bottomSheetRef,
+    snapPoints,
+    closeBottomSheet,
+    openBottomSheet,
+    renderBackdrop,
+  } = useBottomSheetHandlers({ snapPointsArr: [1, "20%"] });
 
   // Callback function that gets called when the bottom sheet changes
   const handleSheetChanges = useCallback((index: number) => {
@@ -29,28 +30,16 @@ const NewPostOptions = () => {
 
   // Expands the bottom sheet when our button is pressed
   const onPressAddButton = useCallback(() => {
-    console.log("Expanding bottom sheet");
-    bottomSheetRef?.current?.expand();
+    openBottomSheet();
   }, [bottomSheetRef]);
 
-  const renderBackdrop = useCallback(
-    (props: BottomSheetDefaultBackdropProps) => (
-      <BottomSheetBackdrop
-        {...props}
-        disappearsOnIndex={0}
-        appearsOnIndex={1}
-      />
-    ),
-    [],
-  );
-
   const onPressCreateFeed = useCallback(() => {
-    bottomSheetRef?.current?.close();
+    closeBottomSheet();
     navigation.navigate("Modal", { screen: "NewFeed" });
   }, [bottomSheetRef, navigation]);
 
   const onPressWriteTale = useCallback(() => {
-    bottomSheetRef?.current?.close();
+    closeBottomSheet();
     navigation.navigate("Modal", { screen: "NewTale" });
   }, [bottomSheetRef, navigation]);
 
@@ -98,7 +87,7 @@ const NewPostOptions = () => {
           </BottomSheetView>
         </BottomSheet>
       </Portal>
-      <PortalHost name="NewPostOptions-host" />
+      {/* <PortalHost name="NewPostOptions-host" /> */}
     </View>
   );
 };

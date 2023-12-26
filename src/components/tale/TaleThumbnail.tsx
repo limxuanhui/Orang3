@@ -100,13 +100,15 @@ const TaleThumbnail = ({ index, data }: TaleThumbnailProps) => {
           <Text>Nothing to display...</Text>
         ))}
       <View style={styles.feedCardFooter}>
-        <GypsieAvatar uri={data.creator.avatar} />
-        <Text
-          style={styles.feedCardText}
-          numberOfLines={3}
-          ellipsizeMode="tail">
-          {data.title}
-        </Text>
+        <GypsieAvatar uri={data.creator.avatarUri} />
+        <View style={styles.feedCardTextWrapper}>
+          <Text
+            style={styles.feedCardText}
+            numberOfLines={3}
+            ellipsizeMode="tail">
+            {data.title}
+          </Text>
+        </View>
       </View>
     </Pressable>
   );
@@ -133,16 +135,17 @@ const styles = StyleSheet.create({
   feedCardFooter: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-start",
+    // alignItems: "flex-start",
     width: DIMENSION.HUNDRED_PERCENT,
     padding: 4,
     backgroundColor: PALETTE.OFFWHITE,
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
   },
+  feedCardTextWrapper: { flex: 1, justifyContent: "center" },
   feedCardText: {
-    flex: 1,
     fontFamily: "Futura",
+    fontSize: 14,
     color: PALETTE.GREYISHBLUE,
   },
 });

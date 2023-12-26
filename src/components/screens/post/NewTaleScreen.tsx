@@ -268,7 +268,7 @@ const NewTaleScreen = ({ navigation }: NewTaleScreenProps) => {
               )}
             </BottomSheet>
           </Portal>
-          <PortalHost name="NewItineraryPost_ShowfeedItemThumbnails-host" />
+          {/* <PortalHost name="NewTale_ShowFeedItemThumbnails-host" /> */}
         </View>
       )}>
       <View style={styles.bottomControls}>

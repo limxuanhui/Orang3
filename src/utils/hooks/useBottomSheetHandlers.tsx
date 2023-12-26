@@ -11,6 +11,7 @@ const useBottomSheetHandlers = ({
   snapPointsArr,
 }: useBottomSheetHandlersProps) => {
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const snapPoints = useMemo(() => snapPointsArr, [snapPointsArr]);
 
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (
@@ -23,9 +24,32 @@ const useBottomSheetHandlers = ({
     [],
   );
 
-  const snapPoints = useMemo(() => snapPointsArr, [snapPointsArr]);
+  const closeBottomSheet = useCallback(() => {
+    if (bottomSheetRef.current) {
+      bottomSheetRef.current.close();
+    }
+  }, [bottomSheetRef]);
 
-  return { bottomSheetRef, snapPoints, renderBackdrop };
+  const collapseBottomSheet = useCallback(() => {
+    if (bottomSheetRef.current) {
+      bottomSheetRef.current.collapse();
+    }
+  }, [bottomSheetRef]);
+
+  const openBottomSheet = useCallback(() => {
+    if (bottomSheetRef.current) {
+      bottomSheetRef.current.expand();
+    }
+  }, [bottomSheetRef]);
+
+  return {
+    bottomSheetRef,
+    snapPoints,
+    closeBottomSheet,
+    collapseBottomSheet,
+    openBottomSheet,
+    renderBackdrop,
+  };
 };
 
 export default useBottomSheetHandlers;

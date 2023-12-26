@@ -2,6 +2,7 @@ import { StoryItemType } from "../components/post/types/types";
 import type { NewTale, Tale } from "../components/tale/types/types";
 import type { TaleThumbnailInfo } from "../components/tale/types/types";
 import { storyBodyStyle, storyTitleStyle } from "../utils/constants/text";
+import { DUMMY_FEEDS } from "./feeds";
 
 export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
   {
@@ -9,103 +10,100 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
     creator: {
       id: "user-1",
       handle: "@jennie",
-      avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+      avatarUri:
+        "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
     },
     cover: {
       id: "tale-1-cover-1",
-      type: "image/png",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie2.png",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-1.jpeg",
     },
-    title: "Wanderlust Chronicles: Exploring Paradises",
+    title: "Taiwan Chronicles: Exploring Paradises",
   },
   {
     taleId: "tale-2",
     creator: {
       id: "user-3",
       handle: "@lisa",
-      avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
     },
     cover: {
       id: "tale-2-cover",
-      type: "video/mp4",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/videos/ace.mp4",
+      type: "image/jpg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-1.jpg",
     },
-    title:
-      "Escaping to Tranquil Seascapes & Beyond",
+    title: "Escaping to Tranquil Singapore & Beyond",
   },
   {
     taleId: "tale-3",
     creator: {
       id: "user-4",
       handle: "@rose",
-      avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
     },
     cover: {
       id: "tale-3-cover",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-jiufen.jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-1.jpeg",
     },
-    title: "Uncover Serene Havens & Cultural Marvels",
+    title: "Uncover Serene Havens & Cultural Marvels in Korea",
   },
   {
     taleId: "tale-4",
     creator: {
       id: "user-2",
       handle: "@jisoo",
-      avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
     },
     cover: {
       id: "tale-4-cover",
-      type: "image/jpg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-gbtb.jpg",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-1.jpeg",
     },
-    title:
-      "Journey Through Timeless Landscapes",
+    title: "Journey Through Timeless Landscapes of Thailand",
   },
   {
     taleId: "tale-5",
     creator: {
       id: "user-1",
       handle: "@jennie",
-      avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+      avatarUri:
+        "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
     },
     cover: {
       id: "tale-5-cover",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-mtfuji.jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-1.jpeg",
     },
-    title:
-      "Discovering Hidden Gems & Natural Beauty",
+    title: "Discovering Hidden Gems & Natural Beauty of Japan",
   },
   {
     taleId: "tale-6",
     creator: {
       id: "user-3",
       handle: "@lisa",
-      avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
     },
     cover: {
       id: "tale-6-cover",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-1.jpeg",
     },
-    title:
-      "Adventures in the Land of Enchantment",
+    title: "Adventures in the Land of Enchantment: Vietnam",
   },
   {
     taleId: "tale-7",
     creator: {
       id: "user-2",
       handle: "@jisoo",
-      avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
     },
     cover: {
       id: "tale-7-cover",
-      type: "image/jpg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-singaporeriver.jpg",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-1.jpeg",
     },
-    title:
-      "Explore Ancient Ruins & Modern Wonders",
+    title: "Explore Ancient Ruins & Modern Wonders of China",
   },
 ];
 
@@ -115,14 +113,16 @@ export const DUMMY_TALES: Tale[] = [
     creator: {
       id: "user-1",
       handle: "@jennie",
-      avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+      avatarUri:
+        "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
     },
     cover: {
       id: "tale-1-cover-1",
-      type: "image/png",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie2.png",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-1.jpeg",
     },
-    title: "Wanderlust Chronicles: Exploring Paradises",
+    title: "Taiwan Chronicles: Exploring Paradises",
+    feeds: [DUMMY_FEEDS[0], DUMMY_FEEDS[4]],
     itinerary: {
       id: "itinerary-1",
       creatorId: "user-1",
@@ -182,15 +182,15 @@ export const DUMMY_TALES: Tale[] = [
     creator: {
       id: "user-3",
       handle: "@lisa",
-      avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
     },
     cover: {
       id: "tale-2-cover",
-      type: "video/mp4",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/videos/ace.mp4",
+      type: "image/jpg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-1.jpg",
     },
-    title:
-      "Escaping to Tranquil Seascapes & Beyond",
+    title: "Escaping to Tranquil Singapore & Beyond",
+    feeds: [DUMMY_FEEDS[2], DUMMY_FEEDS[6]],
     itinerary: {
       id: "itinerary-2",
       creatorId: "user-3",
@@ -250,14 +250,15 @@ export const DUMMY_TALES: Tale[] = [
     creator: {
       id: "user-4",
       handle: "@rose",
-      avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
     },
     cover: {
       id: "tale-3-cover",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-jiufen.jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-1.jpeg",
     },
-    title: "Uncover Serene Havens & Cultural Marvels",
+    title: "Uncover Serene Havens & Cultural Marvels in Korea",
+    feeds: [DUMMY_FEEDS[3], DUMMY_FEEDS[7]],
     itinerary: {
       id: "itinerary-3",
       creatorId: "user-4",
@@ -295,15 +296,15 @@ export const DUMMY_TALES: Tale[] = [
     creator: {
       id: "user-2",
       handle: "@jisoo",
-      avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
     },
     cover: {
       id: "tale-4-cover",
-      type: "image/jpg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-gbtb.jpg",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-1.jpeg",
     },
-    title:
-      "Journey Through Timeless Landscapes",
+    title: "Journey Through Timeless Landscapes of Thailand",
+    feeds: [DUMMY_FEEDS[1], DUMMY_FEEDS[5]],
     itinerary: {
       id: "itinerary-4",
       creatorId: "user-2",
@@ -341,15 +342,16 @@ export const DUMMY_TALES: Tale[] = [
     creator: {
       id: "user-1",
       handle: "@jennie",
-      avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+      avatarUri:
+        "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
     },
     cover: {
       id: "tale-5-cover",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-mtfuji.jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-1.jpeg",
     },
-    title:
-      "Discovering Hidden Gems & Natural Beauty",
+    title: "Discovering Hidden Gems & Natural Beauty of Japan",
+    feeds: [DUMMY_FEEDS[8], DUMMY_FEEDS[11]],
     itinerary: {
       id: "itinerary-5",
       creatorId: "user-1",
@@ -411,15 +413,15 @@ export const DUMMY_TALES: Tale[] = [
     creator: {
       id: "user-3",
       handle: "@lisa",
-      avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
     },
     cover: {
       id: "tale-6-cover",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-1.jpeg",
     },
-    title:
-      "Adventures in the Land of Enchantment",
+    title: "Adventures in the Land of Enchantment: Vietnam",
+    feeds: [DUMMY_FEEDS[10], DUMMY_FEEDS[13]],
     itinerary: {
       id: "itinerary-6",
       creatorId: "user-3",
@@ -457,15 +459,15 @@ export const DUMMY_TALES: Tale[] = [
     creator: {
       id: "user-2",
       handle: "@jisoo",
-      avatar: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
     },
     cover: {
       id: "tale-7-cover",
-      type: "image/jpg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-singaporeriver.jpg",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-1.jpeg",
     },
-    title:
-      "Explore Ancient Ruins & Modern Wonders",
+    title: "Explore Ancient Ruins & Modern Wonders of China",
+    feeds: [DUMMY_FEEDS[9], DUMMY_FEEDS[12]],
     itinerary: {
       id: "itinerary-7",
       creatorId: "user-2",

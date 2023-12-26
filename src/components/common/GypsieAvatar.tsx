@@ -1,6 +1,8 @@
 import { Image, StyleSheet, View } from "react-native";
 import { PALETTE } from "../../utils/constants/palette";
 import { DEVICE_WIDTH } from "../../utils/constants/constants";
+import { PropsWithChildren, useState } from "react";
+import LinearGradient from "react-native-linear-gradient";
 
 // Create an avatar that shows GypsieSkeleton when loading image,
 // is pressable, scale on press and navigates to profile page
@@ -8,15 +10,57 @@ type GypsieAvatarProps = {
   uri: string;
 };
 
+// const Skeleton = createShimmerPlaceholder(LinearGradient);
+
+// type GSkeletonProps = {};
+
+// const GSkeleton = ({ children }: PropsWithChildren<GSkeletonProps>) => {
+//   return (
+//     <Skeleton
+//       ref={}
+//       style={}
+//       shimmerStyle={}
+//       shimmerColors={}
+//       contentStyle={}
+//       height={}
+//       width={}
+//       LinearGradient={}
+//       key={}
+//       containerProps={}
+//       shimmerContainerProps={}
+//       shimmerWidthPercent={}
+//       duration={1}
+//       location={}
+//       stopAutoRun={}
+//       visible={}
+//       delay={}
+//       isReversed={}
+//       isInteraction={}
+//       // children={}
+//       // childrenContainerProps={}
+//     >
+//       {children}
+//     </Skeleton>
+//   );
+// };
+
 const GypsieAvatar = ({ uri }: GypsieAvatarProps) => {
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
   return (
-    <Image
-      style={styles.avatar}
-      source={{ uri }}
-      // loadingIndicatorSource={{}}
-      // onLoad={x => console.log("GypsieAvatar Image loaded... ", x)}
-      // defaultSource={{}}
-    />
+    <View
+      style={{
+        // backgroundColor: "green",
+        justifyContent: "center",
+        alignItems: "center",
+      }}>
+      <Image
+        style={styles.avatar}
+        source={{ uri }}
+        // loadingIndicatorSource={{}}
+        // onLoad={x => console.log("GypsieAvatar Image loaded... ", x)}
+        // defaultSource={{}}
+      />
+    </View>
   );
 };
 

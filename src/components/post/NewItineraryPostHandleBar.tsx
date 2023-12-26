@@ -1,8 +1,11 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import AddCircleIcon from "../common/icons/AddCircleIcon";
 import GypsieButton from "../common/buttons/GypsieButton";
 import { PALETTE } from "../../utils/constants/palette";
+import LinearGradient from "react-native-linear-gradient";
+import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 
 type NewItineraryPostHandleBarProps = {
   avatarUri: string;
@@ -14,7 +17,13 @@ const NewItineraryPostHandleBar = ({
   name,
 }: NewItineraryPostHandleBarProps) => {
   const onPressFollow = useCallback(() => {}, []);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }, [isLoading]);
   return (
     <View style={styles.container}>
       <View style={styles.avatarBox}>

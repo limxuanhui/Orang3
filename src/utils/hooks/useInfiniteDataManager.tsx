@@ -138,6 +138,26 @@ const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
     refetch,
   } = useInfiniteQuery(options);
 
+  /**
+   * onEndReached is called when end of list (determined by onEndReachedThreshold prop in Flatlist or similar components) is reached.
+   * This will fetch the next set of data and append to the end of the current set.
+   */
+  const onEndReached = useCallback(() => {
+    fetchNextPage();
+  }, [fetchNextPage]);
+
+  /**
+   * Refreshing will invalidate/reset cache and fetch new set of data.
+   * If the number of pages is > 2, reset cache.
+   */
+  const onRefresh = useCallback(() => {
+    if (data && data?.pageParams.length > 2) {
+      queryClient.resetQueries({ queryKey: [dataKey] });
+    } else {
+      queryClient.invalidateQueries({ queryKey: [dataKey] });
+    }
+  }, [data, dataKey, queryClient]);
+
   return {
     data,
     error,
@@ -149,6 +169,8 @@ const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
     queryClient,
     fetchNextPage,
     refetch,
+    onEndReached,
+    onRefresh,
   };
 };
 

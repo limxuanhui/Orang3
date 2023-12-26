@@ -2,6 +2,7 @@ import type { Feed } from "../components/feed/types/types";
 import type { Itinerary } from "../components/itinerary/types/types";
 import type { GypsieUser } from "../components/navigators/types/types";
 import type { Tale, TaleThumbnailInfo } from "../components/tale/types/types";
+import { DUMMY_FEEDS } from "./feeds";
 import { DUMMY_TALES, DUMMY_TALE_THUMBNAILS } from "./tales";
 
 /**
@@ -18,7 +19,7 @@ type DummyDatabase = {
 
 export const DUMMY_DATABASE: DummyDatabase = {
   users: [],
-  feeds: [],
+  feeds: DUMMY_FEEDS,
   tales: DUMMY_TALES,
   itineraries: [],
   "tales-md": DUMMY_TALE_THUMBNAILS,

@@ -2,60 +2,62 @@ import { Feed } from "../components/feed/types/types";
 
 export const DUMMY_FEEDS: Feed[] = [
   {
-    id: "30001",
-    userId: "10001",
-    handle: "@Jennie",
-    avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+    id: "feed-1",
+    creator: {
+      id: "user-1",
+      handle: "@jennie",
+      avatarUri:
+        "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+    },
     items: [
       {
-        id: "20001",
+        id: "feed-1-item-1",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-gbtb.jpg",
+          id: "feed-1-item-1-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-2.jpeg",
         },
         caption:
-          "Gardens By The Bay - Labore quis qui labore labore labore consequat ullamco sint esse pariatur adipisicing minim ullamco ut.",
-        taleId: "",
+          "Beach - Labore quis qui labore labore labore consequat ullamco sint esse pariatur adipisicing minim ullamco ut.",
       },
       {
-        id: "20002",
+        id: "feed-1-item-2",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-merlion.jpg",
+          id: "feed-1-item-2-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-3.jpeg",
         },
         caption:
-          "Merlion - Proident proident sit cillum duis dolor tempor laborum culpa ad.",
-        taleId: "",
+          "Cliff - Proident proident sit cillum duis dolor tempor laborum culpa ad.",
       },
       {
-        id: "20003",
+        id: "feed-1-item-3",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-ckt.jpg",
+          id: "feed-1-item-3-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-4.jpeg",
         },
-        caption:
-          "Char Kway Teow - Proident proident sit cillum duis dolor tempor laborum culpa ad.",
-        taleId: "",
+        caption: "Jiufen old street - Qui amet commodo Lorem esse do.",
       },
       {
-        id: "20004",
+        id: "feed-1-item-4",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-singaporeriver.jpg",
+          id: "feed-1-item-4-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-5.jpeg",
         },
         caption:
-          "Singapore River - Commodo duis ullamco nostrud veniam sit in voluptate dolore irure.",
-        taleId: "",
+          "Smelly tofu - In dolor exercitation est adipisicing reprehenderit do occaecat amet eiusmod Lorem non velit sunt dolore.",
       },
       {
-        id: "20005",
+        id: "feed-1-item-5",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-chilicrab.jpeg",
+          id: "feed-1-item-5-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-6.jpeg",
         },
         caption:
-          "Singapore Chili Crab - Commodo duis ullamco nostrud veniam sit in voluptate dolore irure.",
-        taleId: "",
+          "Boba milk tea - Commodo duis ullamco nostrud veniam sit in voluptate dolore irure.",
       },
     ],
     isLiked: false,
@@ -64,62 +66,54 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
+    taleId: "tale-1"
   },
   {
-    id: "30002",
-    userId: "10001",
-    handle: "@Jennie",
-    avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+    id: "feed-2",
+    creator: {
+      id: "user-2",
+      handle: "@jisoo",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+    },
     items: [
       {
-        id: "20006",
+        id: "feed-2-item-1",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-sentosa.jpg",
+          id: "feed-2-item-1-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-2.jpeg",
         },
-        caption:
-          "Sentosa - Dolor pariatur commodo proident voluptate pariatur dolore nostrud proident proident culpa in elit.",
-        taleId: "",
+        caption: "Deserunt ex nisi est ad do Lorem aliqua irure anim.",
       },
       {
-        id: "20007",
+        id: "feed-2-item-2",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-uss.jpg",
+          id: "feed-2-item-2-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-3.jpeg",
         },
         caption:
-          "Universal Studios Singapore - Amet pariatur id voluptate sit id excepteur eiusmod consectetur.",
-        taleId: "",
+          "Lantern festival - Occaecat enim do minim est irure mollit exercitation labore elit laborum laborum duis labore.",
       },
       {
-        id: "20008",
+        id: "feed-2-item-3",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-vivo.jpeg",
+          id: "feed-2-item-3-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-4.jpeg",
         },
         caption:
-          "VivoCity - Amet pariatur id voluptate sit id excepteur eiusmod consectetur.",
-        taleId: "",
+          "Dragon temple - Occaecat enim do minim est irure mollit exercitation labore elit laborum laborum duis labore.",
       },
       {
-        id: "20009",
+        id: "feed-2-item-4",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-lps.jpeg",
+          id: "feed-2-item-4-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-5.jpeg",
         },
         caption:
-          "Lau Pa Sat - Amet pariatur id voluptate sit id excepteur eiusmod consectetur.",
-        taleId: "",
-      },
-      {
-        id: "20010",
-        media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-satay.jpeg",
-        },
-        caption:
-          "Satay at Lau Pa Sat - Amet pariatur id voluptate sit id excepteur eiusmod consectetur.",
-        taleId: "",
+          "Phuket - Consectetur commodo laboris amet reprehenderit non sit non do cillum qui ad.",
       },
     ],
     isLiked: false,
@@ -128,32 +122,64 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
+    taleId: "tale-4"
   },
   {
-    id: "30003",
-    userId: "10001",
-    handle: "@Jennie",
-    avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+    id: "feed-3",
+    creator: {
+      id: "user-3",
+      handle: "@lisa",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+    },
     items: [
       {
-        id: "20011",
+        id: "feed-3-item-1",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-jewel.jpg",
+          id: "feed-3-item-1-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-2.jpeg",
         },
         caption:
-          "Changi Jewel - Consectetur non cupidatat ullamco cupidatat adipisicing velit commodo eu anim dolor eiusmod magna laborum laborum.",
-        taleId: "",
+          "Chili crab - Labore quis qui labore labore labore consequat ullamco sint esse pariatur adipisicing minim ullamco ut.",
       },
       {
-        id: "20012",
+        id: "feed-3-item-2",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore-bkt.jpeg",
+          id: "feed-3-item-2-media",
+          type: "image/jpg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-3.jpg",
         },
         caption:
-          "Song Fa Bak Kut Teh - Nisi incididunt tempor amet laborum Lorem tempor adipisicing ad.",
-        taleId: "",
+          "Char kway teow - Proident proident sit cillum duis dolor tempor laborum culpa ad.",
+      },
+      {
+        id: "feed-3-item-3",
+        media: {
+          id: "feed-3-item-3-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-4.jpeg",
+        },
+        caption: "Bak kut teh - Qui amet commodo Lorem esse do.",
+      },
+      {
+        id: "feed-3-item-4",
+        media: {
+          id: "feed-3-item-4-media",
+          type: "image/jpg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-5.jpg",
+        },
+        caption:
+          "Changi Jewel - In dolor exercitation est adipisicing reprehenderit do occaecat amet eiusmod Lorem non velit sunt dolore.",
+      },
+      {
+        id: "feed-3-item-5",
+        media: {
+          id: "feed-3-item-5-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-6.jpeg",
+        },
+        caption:
+          "Lau pa sat - Commodo duis ullamco nostrud veniam sit in voluptate dolore irure.",
       },
     ],
     isLiked: false,
@@ -162,51 +188,55 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
+    taleId: "tale-2"
   },
   {
-    id: "30004",
-    userId: "10002",
-    handle: "@Jisoo",
-    avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+    id: "feed-4",
+    creator: {
+      id: "user-4",
+      handle: "@rose",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+    },
     items: [
       {
-        id: "20013",
+        id: "feed-4-item-1",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-101.jpeg",
-        },
-        caption: "Taipei 101 - Voluptate do mollit ex proident ullamco culpa.",
-        taleId: "",
-      },
-      {
-        id: "20014",
-        media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-beach.jpeg",
+          id: "feed-4-item-1-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-2.jpeg",
         },
         caption:
-          "Taiwan beach - Commodo amet velit ipsum magna mollit qui eiusmod eiusmod eiusmod ad ex dolore.",
-        taleId: "",
+          "Bukchon hanok village - Irure quis commodo duis incididunt ipsum eu aute esse.",
       },
       {
-        id: "20015",
+        id: "feed-4-item-2",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-jiufen.jpeg",
+          id: "feed-4-item-2-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-3.jpeg",
         },
         caption:
-          "Jiufen Old Street - Qui culpa aute sint dolor aliquip id magna.",
-        taleId: "",
+          "Traditional hanbok - Consequat magna culpa reprehenderit deserunt labore deserunt cillum.",
       },
       {
-        id: "20016",
+        id: "feed-4-item-3",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan-hualien.jpeg",
+          id: "feed-4-item-3-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-4.jpeg",
         },
         caption:
-          "Hualien - Consectetur do qui cupidatat cillum reprehenderit cillum ad ipsum ex consequat consectetur deserunt.",
-        taleId: "",
+          "Seoul - Consectetur qui commodo et consectetur duis aliqua deserunt in eiusmod.",
+      },
+      {
+        id: "feed-4-item-4",
+        media: {
+          id: "feed-4-item-4-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-5.jpeg",
+        },
+        caption:
+          "Namsan tower - Voluptate nisi amet veniam officia excepteur labore consequat voluptate amet dolore deserunt dolore.",
       },
     ],
     isLiked: false,
@@ -215,50 +245,123 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
+    taleId: "tale-3"
+  },
+
+  {
+    id: "feed-5",
+    creator: {
+      id: "user-1",
+      handle: "@jennie",
+      avatarUri:
+        "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+    },
+    items: [
+      {
+        id: "feed-5-item-1",
+        media: {
+          id: "feed-5-item-1-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-7.jpeg",
+        },
+        caption:
+          "Large chicken cutlet - Voluptate Lorem tempor aute irure occaecat laboris anim.",
+      },
+      {
+        id: "feed-5-item-2",
+        media: {
+          id: "feed-5-item-2-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-8.jpeg",
+        },
+        caption:
+          "Shilin night market - Aute pariatur anim excepteur ea anim minim dolor sit.",
+      },
+      {
+        id: "feed-5-item-3",
+        media: {
+          id: "feed-5-item-3-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-9.jpeg",
+        },
+        caption:
+          "Raohe night market - Proident ad magna fugiat ullamco ex pariatur.",
+      },
+      {
+        id: "feed-5-item-4",
+        media: {
+          id: "feed-5-item-4-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-10.jpeg",
+        },
+        caption: "Rainbow road - Proident ad magna fugiat ullamco ex pariatur.",
+      },
+    ],
+    isLiked: false,
+    isBookmarked: true,
+    likes: Math.floor(Math.random() * 10000000 + 1),
+    comments: Math.floor(Math.random() * 10000000 + 1),
+    bookmarks: Math.floor(Math.random() * 1000000 + 1),
+    shares: Math.floor(Math.random() * 10000000 + 1),
+    taleId: "tale-1"
   },
   {
-    id: "30005",
-    userId: "10003",
-    handle: "@Lisa",
-    avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+    id: "feed-6",
+    creator: {
+      id: "user-2",
+      handle: "@jisoo",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+    },
     items: [
       {
-        id: "20017",
+        id: "feed-6-item-1",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
+          id: "feed-6-item-1-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-6.jpeg",
         },
         caption:
-          "Kyoto Shrine - Reprehenderit ex minim occaecat aute ex fugiat eiusmod et proident dolor consectetur qui aute sunt.",
-        taleId: "",
+          "Blue Pearl Buddha - Mollit dolore irure nulla do do nisi qui.",
       },
       {
-        id: "20018",
+        id: "feed-6-item-2",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-mtfuji.jpeg",
-        },
-        caption: "Mt Fuji - Fugiat proident deserunt deserunt enim.",
-        taleId: "",
-      },
-      {
-        id: "20019",
-        media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-trainstation.jpeg",
+          id: "feed-6-item-2-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-7.jpeg",
         },
         caption:
-          "Train Station - Reprehenderit dolor pariatur id ad adipisicing mollit cillum officia velit officia.",
-        taleId: "",
+          "Tom yum soup - Mollit ea quis culpa excepteur et Lorem id id fugiat in in dolor incididunt.",
       },
       {
-        id: "20020",
+        id: "feed-6-item-3",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-yokocho.jpeg",
+          id: "feed-6-item-3-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-8.jpeg",
         },
-        caption: "Yokocho - Duis enim anim pariatur voluptate esse.",
-        taleId: "",
+        caption:
+          "Coconut icecream - Ut duis labore sint dolore sit quis nulla mollit.",
+      },
+      {
+        id: "feed-6-item-4",
+        media: {
+          id: "feed-6-item-4-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-9.jpeg",
+        },
+        caption:
+          "Boat river market - Esse minim sit eiusmod ullamco voluptate amet.",
+      },
+      {
+        id: "feed-6-item-5",
+        media: {
+          id: "feed-6-item-5-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-10.jpeg",
+        },
+        caption:
+          "Clear sea - Quis laborum qui amet non anim excepteur sit proident incididunt minim esse.",
       },
     ],
     isLiked: false,
@@ -267,69 +370,83 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
+    taleId: "tale-4"
   },
   {
-    id: "30006",
-    userId: "10004",
-    handle: "@rosé",
-    avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+    id: "feed-7",
+    creator: {
+      id: "user-3",
+      handle: "@lisa",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+    },
     items: [
       {
-        id: "20021",
+        id: "feed-7-item-1",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/samplephoto1.jpg",
+          id: "feed-7-item-1-media",
+          type: "image/jpg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-7.jpg",
         },
         caption:
-          "Dolor enim magna laboris labore incididunt aliquip ipsum proident anim. Sit incididunt consequat velit velit. Fugiat velit qui magna ullamco deserunt sint in consectetur irure. Occaecat id reprehenderit dolore sit esse qui sit in.",
-        taleId: "",
+          "Marina bay sands - Laborum do sit proident ad nulla cillum tempor ad ut commodo ullamco sit.",
       },
       {
-        id: "20022",
+        id: "feed-7-item-2",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample2.jpg",
+          id: "feed-7-item-2-media",
+          type: "image/jpg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-8.jpg",
         },
-        caption: "Eu mollit occaecat proident pariatur.",
-        taleId: "",
+        caption: "Merlion - Id aliqua cillum tempor quis fugiat consequat.",
       },
       {
-        id: "20023",
+        id: "feed-7-item-3",
         media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample3.jpg",
-        },
-        caption: "Ea dolor mollit dolor ad aliqua consectetur incididunt.",
-        taleId: "",
-      },
-      {
-        id: "20024",
-        media: {
-          type: "image",
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sample1.jpg",
+          id: "feed-7-item-3-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-9.jpeg",
         },
         caption:
-          "Incididunt ut duis excepteur quis occaecat proident deserunt amet et velit esse.",
-        taleId: "",
+          "Satay - Ut nisi cupidatat officia aute aute pariatur mollit incididunt ea eu.",
       },
       {
-        id: "20025",
+        id: "feed-7-item-4",
         media: {
-          type: "video",
-          uri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
+          id: "feed-7-item-4-media",
+          type: "image/jpg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-10.jpg",
         },
-        caption: "Ex ea id laboris nostrud nostrud.",
-        taleId: "",
+        caption: "Sentosa - Do sunt eu et dolor cupidatat dolor enim.",
       },
       {
-        id: "20026",
-        // media: {
-        //   type: "video",
-        //   uri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
-        // },
+        id: "feed-7-item-5",
+        media: {
+          id: "feed-7-item-5-media",
+          type: "image/jpg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-11.jpg",
+        },
         caption:
-          "Pariatur excepteur officia quis adipisicing non qui aute duis qui in fugiat.",
-        taleId: "",
+          "Singapore river - Reprehenderit quis anim sit consequat dolore aute elit velit.",
+      },
+      {
+        id: "feed-7-item-6",
+        media: {
+          id: "feed-7-item-6-media",
+          type: "image/jpg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-12.jpg",
+        },
+        caption:
+          "USS - Reprehenderit laborum sit magna ut cupidatat officia ipsum sint magna cillum consectetur minim.",
+      },
+      {
+        id: "feed-7-item-7",
+        media: {
+          id: "feed-7-item-7-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-13.jpeg",
+        },
+        caption:
+          "Vivocity - Ut consequat cillum amet ut Lorem laboris exercitation magna esse fugiat.",
       },
     ],
     isLiked: false,
@@ -338,5 +455,442 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
+    taleId: "tale-2"
+  },
+  {
+    id: "feed-8",
+    creator: {
+      id: "user-4",
+      handle: "@rose",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+    },
+    items: [
+      {
+        id: "feed-8-item-1",
+        media: {
+          id: "feed-8-item-1-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-6.jpeg",
+        },
+        caption:
+          "Nami island - Labore pariatur cillum cillum non commodo culpa ea.",
+      },
+      {
+        id: "feed-8-item-2",
+        media: {
+          id: "feed-8-item-2-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-7.jpeg",
+        },
+        caption:
+          "Myeongdong street food - Do sit qui quis qui laborum aute incididunt eu ut sit.",
+      },
+      {
+        id: "feed-8-item-3",
+        media: {
+          id: "feed-8-item-3-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-8.jpeg",
+        },
+        caption:
+          "Myeongdong shops - Adipisicing ut ipsum consectetur qui aliquip consequat ea officia ipsum irure deserunt aute est.",
+      },
+      {
+        id: "feed-8-item-4",
+        media: {
+          id: "feed-8-item-4-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-9.jpeg",
+        },
+        caption:
+          "Busan rainbow houses - Eu aliquip tempor voluptate anim esse mollit deserunt irure.",
+      },
+      {
+        id: "feed-8-item-5",
+        media: {
+          id: "feed-8-item-5-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-10.jpeg",
+        },
+        caption: "Budae jjigae - Aliquip amet excepteur cupidatat id.",
+      },
+    ],
+    isLiked: false,
+    isBookmarked: true,
+    likes: Math.floor(Math.random() * 10000000 + 1),
+    comments: Math.floor(Math.random() * 10000000 + 1),
+    bookmarks: Math.floor(Math.random() * 1000000 + 1),
+    shares: Math.floor(Math.random() * 10000000 + 1),
+    taleId: "tale-3"
+  },
+
+  {
+    id: "feed-9",
+    creator: {
+      id: "user-1",
+      handle: "@jennie",
+      avatarUri:
+        "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+    },
+    items: [
+      {
+        id: "feed-9-item-1",
+        media: {
+          id: "feed-9-item-1-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-2.jpeg",
+        },
+        caption:
+          "Mt Fuji - Est reprehenderit ut laboris mollit aliqua fugiat proident nostrud consectetur amet.",
+      },
+      {
+        id: "feed-9-item-2",
+        media: {
+          id: "feed-9-item-2-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-3.jpeg",
+        },
+        caption: "Train station - Dolor non eiusmod ea aute.",
+      },
+      {
+        id: "feed-9-item-3",
+        media: {
+          id: "feed-9-item-3-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-4.jpeg",
+        },
+        caption:
+          "Alley with ramen shops - In esse nostrud irure reprehenderit id deserunt ex laborum.",
+      },
+      {
+        id: "feed-9-item-4",
+        media: {
+          id: "feed-9-item-4-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-5.jpeg",
+        },
+        caption:
+          "Shrine entrance - Sit qui nisi irure tempor aliqua velit eu dolore nulla dolore minim ea aliquip fugiat.",
+      },
+      {
+        id: "feed-9-item-5",
+        media: {
+          id: "feed-9-item-4-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-6.jpeg",
+        },
+        caption:
+          "Ramen - Magna ullamco nostrud proident ea ex cillum ullamco proident sint est sint.",
+      },
+    ],
+    isLiked: false,
+    isBookmarked: true,
+    likes: Math.floor(Math.random() * 10000000 + 1),
+    comments: Math.floor(Math.random() * 10000000 + 1),
+    bookmarks: Math.floor(Math.random() * 1000000 + 1),
+    shares: Math.floor(Math.random() * 10000000 + 1),
+    taleId: "tale-5"
+  },
+  {
+    id: "feed-10",
+    creator: {
+      id: "user-2",
+      handle: "@jisoo",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+    },
+    items: [
+      {
+        id: "feed-10-item-1",
+        media: {
+          id: "feed-10-item-1-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-2.jpeg",
+        },
+        caption: "Great Wall of China - Nostrud sint cupidatat et duis.",
+      },
+      {
+        id: "feed-10-item-2",
+        media: {
+          id: "feed-10-item-2-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-3.jpeg",
+        },
+        caption:
+          "Shanghai Oriental Pearl Tower - Dolor veniam adipisicing ut culpa ex sit adipisicing amet fugiat.",
+      },
+      {
+        id: "feed-10-item-3",
+        media: {
+          id: "feed-10-item-3-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-4.jpeg",
+        },
+        caption:
+          "View of Shanghai Financial Centre - Commodo elit id adipisicing enim id anim voluptate adipisicing nulla fugiat commodo aliquip pariatur quis.",
+      },
+      {
+        id: "feed-10-item-4",
+        media: {
+          id: "feed-10-item-4-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-5.jpeg",
+        },
+        caption:
+          "Boutique shops - Dolore ipsum quis qui esse occaecat velit anim est dolore occaecat ex officia.",
+      },
+      {
+        id: "feed-10-item-5",
+        media: {
+          id: "feed-10-item-5-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-6.jpeg",
+        },
+        caption:
+          "Candied fruit sticks - Ea in veniam non laboris esse ea duis adipisicing.",
+      },
+      {
+        id: "feed-10-item-6",
+        media: {
+          id: "feed-10-item-6-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-7.jpeg",
+        },
+        caption:
+          "Tea leaves farm - Tempor cupidatat aliquip Lorem culpa aute proident esse non duis voluptate laboris officia sunt excepteur.",
+      },
+    ],
+    isLiked: false,
+    isBookmarked: true,
+    likes: Math.floor(Math.random() * 10000000 + 1),
+    comments: Math.floor(Math.random() * 10000000 + 1),
+    bookmarks: Math.floor(Math.random() * 1000000 + 1),
+    shares: Math.floor(Math.random() * 10000000 + 1),
+    taleId: "tale-6"
+  },
+  {
+    id: "feed-11",
+    creator: {
+      id: "user-3",
+      handle: "@lisa",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+    },
+    items: [
+      {
+        id: "feed-11-item-1",
+        media: {
+          id: "feed-11-item-1-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-2.jpeg",
+        },
+        caption:
+          "Bridge with giant hands - Sunt velit cillum irure magna laboris.",
+      },
+      {
+        id: "feed-11-item-2",
+        media: {
+          id: "feed-11-item-2-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-3.jpeg",
+        },
+        caption: "View of Giant Buddha - Nisi sint ipsum culpa in sint.",
+      },
+      {
+        id: "feed-11-item-3",
+        media: {
+          id: "feed-11-item-3-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-4.jpeg",
+        },
+        caption: "Tea leaves farmland - Elit do aliqua et tempor officia.",
+      },
+      {
+        id: "feed-11-item-4",
+        media: {
+          id: "feed-11-item-4-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-5.jpeg",
+        },
+        caption:
+          "Boat trip - Officia cupidatat magna duis nulla elit sint dolore.",
+      },
+    ],
+    isLiked: false,
+    isBookmarked: true,
+    likes: Math.floor(Math.random() * 10000000 + 1),
+    comments: Math.floor(Math.random() * 10000000 + 1),
+    bookmarks: Math.floor(Math.random() * 1000000 + 1),
+    shares: Math.floor(Math.random() * 10000000 + 1),
+    taleId: "tale-6"
+  },
+
+  {
+    id: "feed-12",
+    creator: {
+      id: "user-1",
+      handle: "@jennie",
+      avatarUri:
+        "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+    },
+    items: [
+      {
+        id: "feed-12-item-1",
+        media: {
+          id: "feed-12-item-1-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-7.jpeg",
+        },
+        caption:
+          "Traditional palace - Voluptate ad reprehenderit ex et enim commodo.",
+      },
+      {
+        id: "feed-12-item-2",
+        media: {
+          id: "feed-12-item-2-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-8.jpeg",
+        },
+        caption: "Seafood market - In non aliquip sunt laboris est nisi minim.",
+      },
+      {
+        id: "feed-12-item-3",
+        media: {
+          id: "feed-12-item-3-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-9.jpeg",
+        },
+        caption: "Shopping district - Laborum ea ut ad consequat.",
+      },
+      {
+        id: "feed-12-item-4",
+        media: {
+          id: "feed-12-item-4-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-10.jpeg",
+        },
+        caption:
+          "Shopping district in the day - Cillum occaecat laboris dolor aliquip quis esse pariatur.",
+      },
+    ],
+    isLiked: false,
+    isBookmarked: true,
+    likes: Math.floor(Math.random() * 10000000 + 1),
+    comments: Math.floor(Math.random() * 10000000 + 1),
+    bookmarks: Math.floor(Math.random() * 1000000 + 1),
+    shares: Math.floor(Math.random() * 10000000 + 1),
+    taleId: "tale-5"
+  },
+  {
+    id: "feed-13",
+    creator: {
+      id: "user-2",
+      handle: "@jisoo",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+    },
+    items: [
+      {
+        id: "feed-13-item-1",
+        media: {
+          id: "feed-13-item-1-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-8.jpeg",
+        },
+        caption:
+          "Terracotta warriors - Eu Lorem sit occaecat id do ex incididunt qui officia sunt.",
+      },
+      {
+        id: "feed-13-item-2",
+        media: {
+          id: "feed-13-item-2-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-9.jpeg",
+        },
+        caption:
+          "Zhangjiajie Avatar mountain - Esse laborum consectetur tempor nulla ullamco non.",
+      },
+      {
+        id: "feed-13-item-3",
+        media: {
+          id: "feed-13-item-3-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-10.jpeg",
+        },
+        caption:
+          "Cable car ride at Avatar mountain - Velit irure labore laborum ut sint sunt.",
+      },
+    ],
+    isLiked: false,
+    isBookmarked: true,
+    likes: Math.floor(Math.random() * 10000000 + 1),
+    comments: Math.floor(Math.random() * 10000000 + 1),
+    bookmarks: Math.floor(Math.random() * 1000000 + 1),
+    shares: Math.floor(Math.random() * 10000000 + 1),
+    taleId: "tale-6"
+  },
+  {
+    id: "feed-14",
+    creator: {
+      id: "user-3",
+      handle: "@lisa",
+      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+    },
+    items: [
+      {
+        id: "feed-14-item-1",
+        media: {
+          id: "feed-14-item-1-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-6.jpeg",
+        },
+        caption:
+          "Beef pho - Proident laboris elit duis amet nulla amet quis elit.",
+      },
+      {
+        id: "feed-14-item-2",
+        media: {
+          id: "feed-14-item-2-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-7.jpeg",
+        },
+        caption:
+          "Spring rolls - Reprehenderit nostrud cillum do ipsum excepteur.",
+      },
+      {
+        id: "feed-14-item-3",
+        media: {
+          id: "feed-14-item-3-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-8.jpeg",
+        },
+        caption:
+          "Street food noodles - Incididunt fugiat consectetur eu exercitation qui cupidatat nulla fugiat laboris adipisicing duis do.",
+      },
+      {
+        id: "feed-14-item-4",
+        media: {
+          id: "feed-14-item-4-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-9.jpeg",
+        },
+        caption:
+          "Boutique hotel - Veniam duis excepteur voluptate labore eu duis consequat minim.",
+      },
+      {
+        id: "feed-14-item-5",
+        media: {
+          id: "feed-14-item-5-media",
+          type: "image/jpeg",
+          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-10.jpeg",
+        },
+        caption:
+          "Train tracks - Tempor ea qui esse incididunt aliquip ad Lorem ad qui occaecat exercitation sunt do occaecat.",
+      },
+    ],
+    isLiked: false,
+    isBookmarked: true,
+    likes: Math.floor(Math.random() * 10000000 + 1),
+    comments: Math.floor(Math.random() * 10000000 + 1),
+    bookmarks: Math.floor(Math.random() * 1000000 + 1),
+    shares: Math.floor(Math.random() * 10000000 + 1),
+    taleId: "tale-6"
   },
 ];

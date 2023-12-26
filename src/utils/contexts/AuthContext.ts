@@ -5,7 +5,6 @@ type Auth = {
   user: GypsieUser;
   isLoggedIn: boolean;
   loading: boolean;
-  loginHandler: () => void;
   googleSigninHandler: () => void;
   logoutHandler: () => void;
 };
@@ -13,8 +12,7 @@ type Auth = {
 export const AuthContext = createContext<Auth>({
   user: null,
   isLoggedIn: false,
-  loading: false,
-  loginHandler: () => {},
+  loading: false,  
   googleSigninHandler: () => {},
   logoutHandler: () => {},
 });

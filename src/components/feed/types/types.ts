@@ -1,26 +1,27 @@
+import type { Creator } from "../../tale/types/types";
+
 // Data types
 export type BaseFeed = {
   id: string;
-  userId: string;
+  creator: Creator;
   items: FeedItem[];
 };
 
 export type Feed = BaseFeed & {
-  avatarUri: string;
-  handle: string;
-  isLiked: boolean;
-  isBookmarked: boolean;
-  likes: number;
-  comments: number;
-  bookmarks: number;
-  shares: number;
+  isLiked?: boolean;
+  isBookmarked?: boolean;
+  likes?: number;
+  comments?: number;
+  bookmarks?: number;
+  shares?: number;
+  taleId?: string;
 };
 
 export type FeedItem = {
   id: string;
-  media?: Media;
+  media: Media;
   caption?: string;
-  taleId?: string;
+  taleId?: string; // Might be able to remove this property
 };
 
 export type MediaMimeType =
@@ -53,14 +54,15 @@ export type FeedDescriptionProps = {
 };
 
 export type FeedReactionControlsProps = {
-  userId: string;
-  avatarUri: string;
-  isLiked: boolean;
-  isBookmarked: boolean;
-  likes: number;
-  comments: number;
-  bookmarks: number;
-  shares: number;
+  creator: Creator;
+  isLiked?: boolean;
+  isBookmarked?: boolean;
+  likes?: number;
+  comments?: number;
+  bookmarks?: number;
+  shares?: number;
+  taleId?: string;
+  onPressComments?: () => void;
 };
 
 export type FeedCarouselProps = {
