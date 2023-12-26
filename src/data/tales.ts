@@ -150,30 +150,24 @@ export const DUMMY_TALES: Tale[] = [
       {
         id: "tale-1-storymedia-1",
         type: StoryItemType.Media,
-        data: [
-          {
-            feedId: "tale-1-storymedia-1-feed-1",
-            uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
-          },
-          {
-            feedId: "tale-1-storymedia-1-feed-1",
-            uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-mtfuji.jpeg",
-          },
-          {
-            feedId: "tale-1-storymedia-1-feed-1",
-            uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-trainstation.jpeg",
-          },
-          {
-            feedId: "tale-1-storymedia-1-feed-1",
-            uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-yokocho.jpeg",
-          },
-        ],
+        data: DUMMY_FEEDS[0].items.map((el, i) => ({
+          feedId: `tale-1-storymedia-1-feed-${i + 1}`,
+          uri: el.media?.uri as string,
+        })),
       },
       {
         id: "tale-1-storytext-4",
         type: StoryItemType.Text,
         text: "Consequat consectetur enim et esse veniam occaecat culpa commodo nostrud.",
         style: storyBodyStyle,
+      },
+      {
+        id: "tale-1-storymedia-2",
+        type: StoryItemType.Media,
+        data: DUMMY_FEEDS[4].items.map((el, i) => ({
+          feedId: `tale-1-storymedia-1-feed-${i + 1}`,
+          uri: el.media?.uri as string,
+        })),
       },
     ],
   },
@@ -218,30 +212,24 @@ export const DUMMY_TALES: Tale[] = [
       {
         id: "tale-2-storymedia-1",
         type: StoryItemType.Media,
-        data: [
-          {
-            feedId: "tale-2-storymedia-1-feed-1",
-            uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg",
-          },
-          {
-            feedId: "tale-2-storymedia-1-feed-1",
-            uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-mtfuji.jpeg",
-          },
-          {
-            feedId: "tale-2-storymedia-1-feed-1",
-            uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-trainstation.jpeg",
-          },
-          {
-            feedId: "tale-2-storymedia-1-feed-1",
-            uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-yokocho.jpeg",
-          },
-        ],
+        data: DUMMY_FEEDS[2].items.map((el, i) => ({
+          feedId: `tale-2-storymedia-1-feed-${i + 1}`,
+          uri: el.media?.uri as string,
+        })),
       },
       {
         id: "tale-2-storytext-4",
         type: StoryItemType.Text,
         text: "Consectetur adipisicing sint esse in ullamco nostrud fugiat cupidatat voluptate eiusmod laboris.",
         style: storyBodyStyle,
+      },
+      {
+        id: "tale-2-storymedia-2",
+        type: StoryItemType.Media,
+        data: DUMMY_FEEDS[6].items.map((el, i) => ({
+          feedId: `tale-2-storymedia-2-feed-${i + 1}`,
+          uri: el.media?.uri as string,
+        })),
       },
     ],
   },
@@ -270,6 +258,22 @@ export const DUMMY_TALES: Tale[] = [
         type: StoryItemType.Text,
         text: "Labore amet laboris laborum minim consectetur incididunt.",
         style: storyTitleStyle,
+      },
+      {
+        id: "tale-3-storymedia-1",
+        type: StoryItemType.Media,
+        data: DUMMY_FEEDS[3].items.map((el, i) => ({
+          feedId: `tale-3-storymedia-1-feed-${i + 1}`,
+          uri: el.media?.uri as string,
+        })),
+      },
+      {
+        id: "tale-3-storymedia-2",
+        type: StoryItemType.Media,
+        data: DUMMY_FEEDS[7].items.map((el, i) => ({
+          feedId: `tale-3-storymedia-2-feed-${i + 1}`,
+          uri: el.media?.uri as string,
+        })),
       },
       {
         id: "tale-3-storytext-2",
@@ -322,6 +326,22 @@ export const DUMMY_TALES: Tale[] = [
         type: StoryItemType.Text,
         text: "Excepteur tempor amet incididunt esse duis exercitation.",
         style: storyBodyStyle,
+      },
+      {
+        id: "tale-4-storymedia-1",
+        type: StoryItemType.Media,
+        data: DUMMY_FEEDS[1].items.map((el, i) => ({
+          feedId: `tale-4-storymedia-1-feed-${i + 1}`,
+          uri: el.media?.uri as string,
+        })),
+      },
+      {
+        id: "tale-4-storymedia-2",
+        type: StoryItemType.Media,
+        data: DUMMY_FEEDS[5].items.map((el, i) => ({
+          feedId: `tale-4-storymedia-2-feed-${i + 1}`,
+          uri: el.media?.uri as string,
+        })),
       },
       {
         id: "tale-4-storytext-3",
@@ -401,10 +421,26 @@ export const DUMMY_TALES: Tale[] = [
         style: storyBodyStyle,
       },
       {
+        id: "tale-5-storymedia-1",
+        type: StoryItemType.Media,
+        data: DUMMY_FEEDS[8].items.map((el, i) => ({
+          feedId: `tale-5-storymedia-1-feed-${i + 1}`,
+          uri: el.media?.uri as string,
+        })),
+      },
+      {
         id: "tale-5-storytext-8",
         type: StoryItemType.Text,
         text: "Excepteur reprehenderit exercitation officia velit proident velit dolor quis labore fugiat.",
         style: storyBodyStyle,
+      },
+      {
+        id: "tale-5-storymedia-2",
+        type: StoryItemType.Media,
+        data: DUMMY_FEEDS[11].items.map((el, i) => ({
+          feedId: `tale-5-storymedia-2-feed-${i + 1}`,
+          uri: el.media?.uri as string,
+        })),
       },
     ],
   },
@@ -428,6 +464,22 @@ export const DUMMY_TALES: Tale[] = [
       routes: [],
     },
     story: [
+      {
+        id: "tale-6-storymedia-1",
+        type: StoryItemType.Media,
+        data: DUMMY_FEEDS[10].items.map((el, i) => ({
+          feedId: `tale-6-storymedia-1-feed-${i + 1}`,
+          uri: el.media?.uri as string,
+        })),
+      },
+      {
+        id: "tale-6-storymedia-2",
+        type: StoryItemType.Media,
+        data: DUMMY_FEEDS[13].items.map((el, i) => ({
+          feedId: `tale-6-storymedia-2-feed-${i + 1}`,
+          uri: el.media?.uri as string,
+        })),
+      },
       {
         id: "tale-6-storytext-1",
         type: StoryItemType.Text,
@@ -481,6 +533,14 @@ export const DUMMY_TALES: Tale[] = [
         style: storyTitleStyle,
       },
       {
+        id: "tale-7-storymedia-1",
+        type: StoryItemType.Media,
+        data: DUMMY_FEEDS[9].items.map((el, i) => ({
+          feedId: `tale-7-storymedia-1-feed-${i + 1}`,
+          uri: el.media?.uri as string,
+        })),
+      },
+      {
         id: "tale-7-storytext-2",
         type: StoryItemType.Text,
         text: "Esse deserunt voluptate deserunt fugiat.",
@@ -497,6 +557,14 @@ export const DUMMY_TALES: Tale[] = [
         type: StoryItemType.Text,
         text: "Labore aliquip cillum est dolore proident exercitation culpa ut non velit.",
         style: storyBodyStyle,
+      },
+      {
+        id: "tale-7-storymedia-2",
+        type: StoryItemType.Media,
+        data: DUMMY_FEEDS[12].items.map((el, i) => ({
+          feedId: `tale-7-storymedia-2-feed-${i + 1}`,
+          uri: el.media?.uri as string,
+        })),
       },
     ],
   },
