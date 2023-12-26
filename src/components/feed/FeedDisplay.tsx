@@ -1,7 +1,6 @@
 import { StyleSheet, View } from "react-native";
 import FeedCarousel from "./FeedCarousel";
 import FeedReactionControls from "./FeedReactionControls";
-import useBottomSheetHandlers from "../../utils/hooks/useBottomSheetHandlers";
 import type { FeedDisplayProps } from "./types/types";
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
 import { PALETTE } from "../../utils/constants/palette";
@@ -41,6 +40,7 @@ const styles = StyleSheet.create({
   container: {
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
+    backgroundColor: PALETTE.GREYISHBLUE,
   },
   contentContainer: { paddingBottom: 100 },
   image: {

@@ -150,8 +150,8 @@ export const DUMMY_TALES: Tale[] = [
       {
         id: "tale-1-storymedia-1",
         type: StoryItemType.Media,
-        data: DUMMY_FEEDS[0].items.map((el, i) => ({
-          feedId: `tale-1-storymedia-1-feed-${i + 1}`,
+        data: DUMMY_FEEDS[0].items.map((el) => ({
+          feedId: "feed-1",
           uri: el.media?.uri as string,
         })),
       },
@@ -165,7 +165,7 @@ export const DUMMY_TALES: Tale[] = [
         id: "tale-1-storymedia-2",
         type: StoryItemType.Media,
         data: DUMMY_FEEDS[4].items.map((el, i) => ({
-          feedId: `tale-1-storymedia-1-feed-${i + 1}`,
+          feedId: "feed-5",
           uri: el.media?.uri as string,
         })),
       },
@@ -213,7 +213,7 @@ export const DUMMY_TALES: Tale[] = [
         id: "tale-2-storymedia-1",
         type: StoryItemType.Media,
         data: DUMMY_FEEDS[2].items.map((el, i) => ({
-          feedId: `tale-2-storymedia-1-feed-${i + 1}`,
+          feedId: "feed-3",
           uri: el.media?.uri as string,
         })),
       },
@@ -227,7 +227,7 @@ export const DUMMY_TALES: Tale[] = [
         id: "tale-2-storymedia-2",
         type: StoryItemType.Media,
         data: DUMMY_FEEDS[6].items.map((el, i) => ({
-          feedId: `tale-2-storymedia-2-feed-${i + 1}`,
+          feedId: "feed-7",
           uri: el.media?.uri as string,
         })),
       },
@@ -263,7 +263,7 @@ export const DUMMY_TALES: Tale[] = [
         id: "tale-3-storymedia-1",
         type: StoryItemType.Media,
         data: DUMMY_FEEDS[3].items.map((el, i) => ({
-          feedId: `tale-3-storymedia-1-feed-${i + 1}`,
+          feedId: "feed-4",
           uri: el.media?.uri as string,
         })),
       },
@@ -271,7 +271,7 @@ export const DUMMY_TALES: Tale[] = [
         id: "tale-3-storymedia-2",
         type: StoryItemType.Media,
         data: DUMMY_FEEDS[7].items.map((el, i) => ({
-          feedId: `tale-3-storymedia-2-feed-${i + 1}`,
+          feedId: "feed-8",
           uri: el.media?.uri as string,
         })),
       },
@@ -331,7 +331,7 @@ export const DUMMY_TALES: Tale[] = [
         id: "tale-4-storymedia-1",
         type: StoryItemType.Media,
         data: DUMMY_FEEDS[1].items.map((el, i) => ({
-          feedId: `tale-4-storymedia-1-feed-${i + 1}`,
+          feedId: "feed-2",
           uri: el.media?.uri as string,
         })),
       },
@@ -339,7 +339,7 @@ export const DUMMY_TALES: Tale[] = [
         id: "tale-4-storymedia-2",
         type: StoryItemType.Media,
         data: DUMMY_FEEDS[5].items.map((el, i) => ({
-          feedId: `tale-4-storymedia-2-feed-${i + 1}`,
+          feedId: "feed-6",
           uri: el.media?.uri as string,
         })),
       },
@@ -424,7 +424,7 @@ export const DUMMY_TALES: Tale[] = [
         id: "tale-5-storymedia-1",
         type: StoryItemType.Media,
         data: DUMMY_FEEDS[8].items.map((el, i) => ({
-          feedId: `tale-5-storymedia-1-feed-${i + 1}`,
+          feedId: "feed-9",
           uri: el.media?.uri as string,
         })),
       },
@@ -438,7 +438,7 @@ export const DUMMY_TALES: Tale[] = [
         id: "tale-5-storymedia-2",
         type: StoryItemType.Media,
         data: DUMMY_FEEDS[11].items.map((el, i) => ({
-          feedId: `tale-5-storymedia-2-feed-${i + 1}`,
+          feedId: "feed-12",
           uri: el.media?.uri as string,
         })),
       },
@@ -468,7 +468,7 @@ export const DUMMY_TALES: Tale[] = [
         id: "tale-6-storymedia-1",
         type: StoryItemType.Media,
         data: DUMMY_FEEDS[10].items.map((el, i) => ({
-          feedId: `tale-6-storymedia-1-feed-${i + 1}`,
+          feedId: "feed-11",
           uri: el.media?.uri as string,
         })),
       },
@@ -476,7 +476,7 @@ export const DUMMY_TALES: Tale[] = [
         id: "tale-6-storymedia-2",
         type: StoryItemType.Media,
         data: DUMMY_FEEDS[13].items.map((el, i) => ({
-          feedId: `tale-6-storymedia-2-feed-${i + 1}`,
+          feedId: "feed-14",
           uri: el.media?.uri as string,
         })),
       },
@@ -536,7 +536,7 @@ export const DUMMY_TALES: Tale[] = [
         id: "tale-7-storymedia-1",
         type: StoryItemType.Media,
         data: DUMMY_FEEDS[9].items.map((el, i) => ({
-          feedId: `tale-7-storymedia-1-feed-${i + 1}`,
+          feedId: "feed-10",
           uri: el.media?.uri as string,
         })),
       },
@@ -562,7 +562,7 @@ export const DUMMY_TALES: Tale[] = [
         id: "tale-7-storymedia-2",
         type: StoryItemType.Media,
         data: DUMMY_FEEDS[12].items.map((el, i) => ({
-          feedId: `tale-7-storymedia-2-feed-${i + 1}`,
+          feedId: "feed-13",
           uri: el.media?.uri as string,
         })),
       },

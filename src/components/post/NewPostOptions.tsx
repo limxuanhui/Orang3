@@ -1,13 +1,9 @@
 import { useCallback, useMemo, useRef } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetView,
-} from "@gorhom/bottom-sheet";
-import { Portal, PortalHost } from "@gorhom/portal";
-import AddCircleIcon from "../common/icons/AddCircleIcon";
-import type { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
+import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import { Portal } from "@gorhom/portal";
+import SunnyIcon from "../common/icons/SunnyIcon";
 import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
@@ -46,7 +42,7 @@ const NewPostOptions = () => {
   return (
     <View style={styles.container}>
       <Pressable onPress={onPressAddButton}>
-        <AddCircleIcon style={{ fontSize: 40, color: PALETTE.ORANGE }} />
+        <SunnyIcon style={{ fontSize: 40, color: PALETTE.ORANGE }} />
       </Pressable>
       <Portal>
         <BottomSheet

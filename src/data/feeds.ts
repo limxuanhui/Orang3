@@ -665,7 +665,7 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
-    taleId: "tale-6"
+    taleId: "tale-7"
   },
   {
     id: "feed-11",
@@ -824,7 +824,7 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
-    taleId: "tale-6"
+    taleId: "tale-7"
   },
   {
     id: "feed-14",

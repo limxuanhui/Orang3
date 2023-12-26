@@ -45,8 +45,6 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
   const { params } = useRoute<TaleViewScreenRouteProp>();
   const { id, creator } = params;
 
-  // const feeds = DUMMY_FEEDS.map(el => el.items);
-
   const queryFn = useCallback(
     async ({ queryKey }: { queryKey: QueryKey }): Promise<Tale | undefined> => {
       const [key, taleId] = queryKey;
@@ -100,6 +98,7 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
   const { data, isFetching, isError, isLoading, isPending, isPlaceholderData } =
     useQuery(options);
 
+  // Should I create this in useState and useEffect on mount?
   let renderedData: Feed[] = data?.feeds || [];
   if (data && data.id && data.cover) {
     const cover: FeedItem = {
@@ -134,6 +133,7 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
     bottomSheetRef.current?.snapToIndex(0);
   }, [bottomSheetRef]);
 
+  // Can I generalise this to useBottomSheetHandlers?
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (
       <BottomSheetBackdrop
