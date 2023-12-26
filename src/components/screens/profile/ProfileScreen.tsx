@@ -11,14 +11,15 @@ import type { ProfileScreenProps } from "./types/types";
 import { GYPSIE_THEME, PALETTE } from "../../../utils/constants/palette";
 import { DIMENSION } from "../../../utils/constants/dimensions";
 import { Avatar, Image, Skeleton } from "@rneui/themed";
+import GypsieButton from "../../common/buttons/GypsieButton";
+import AddIcon from "../../common/icons/AddIcon";
+import BookOpenIcon from "../../common/icons/BookOpenIcon";
+import BookIcon from "../../common/icons/BookIcon";
 
 const Tab = createMaterialTopTabNavigator();
 
 const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
   // const { userId, avatarUri } = route.params;
-  console.log("--------");
-  console.log("--------");
-  console.log("--------" + "rendered ProfileScreen");
   let userId: string | undefined;
   let avatarUri: string | undefined;
   if (route.params) {
@@ -36,55 +37,124 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
     }
   }, [avatarUri, navigation]);
 
-  const onPressSettings = useCallback(() => {    
+  const onPressSettings = useCallback(() => {
     navigation.push("Settings");
   }, [navigation]);
 
   return (
     <View style={styles.container}>
-      <Pressable
-        style={({ pressed }) => [
-          styles.avatarContainer,
-          { transform: [{ scale: pressed ? 0.98 : 1 }] },
-        ]}
-        onPress={onPressAvatar}>
-        <Image
-          style={styles.avatar}
-          source={{
-            uri: avatarUri,
-          }}
-          PlaceholderContent={
-            <Skeleton style={{ flex: 1 }} animation="pulse" />
-          }
-        />
-      </Pressable>
-      <Pressable style={styles.banner}>
-        <Image
-          style={styles.bannerImage}
-          source={{ uri: userData.bannerUri }}
-          PlaceholderContent={
-            <Skeleton style={{ flex: 1 }} animation="pulse" />
-          }
-        />
-      </Pressable>
+      <View style={styles.banner}>
+        <Pressable
+          style={({ pressed }) => [
+            styles.avatarContainer,
+            { transform: [{ scale: pressed ? 0.98 : 1 }] },
+          ]}
+          onPress={onPressAvatar}>
+          <Image
+            style={styles.avatar}
+            source={{
+              uri: avatarUri,
+            }}
+            PlaceholderContent={
+              <Skeleton style={{ flex: 1 }} animation="pulse" />
+            }
+          />
+          <GypsieButton
+            customButtonStyles={{
+              position: "absolute",
+              bottom: 8,
+              right: 8,
+              justifyContent: "center",
+              alignItems: "center",
+              // zIndex: 1,
+              height: 24,
+              width: 24,
+              borderRadius: 10,
+              shadowColor: "black",
+              shadowOpacity: 0.1,
+              shadowRadius: 0.4,
+              shadowOffset: { height: 2, width: 0 },
+              // borderWidth: 2,
+              // borderColor: "black",
+              backgroundColor: PALETTE.ORANGE,
+            }}
+            customIconStyles={{ fontSize: 20 }}
+            Icon={AddIcon}
+            onPress={() => {}}
+          />
+        </Pressable>
+
+        <View
+          style={{
+            backgroundColor: PALETTE.OFFWHITE,
+            justifyContent: "center",
+            height: "100%",
+            width: "50%",
+            borderWidth: 1,
+            borderColor: "red",
+          }}>
+          <Text
+            style={{
+              color: "black",
+              fontSize: 20,
+              fontWeight: "bold",
+              fontFamily: "Futura",
+              marginBottom: 8,
+            }}>
+            @Joseph
+          </Text>
+          <Text
+            style={{
+              color: "black",
+              fontSize: 16,
+              fontFamily: "Futura",
+              marginBottom: 8,
+            }}>
+            Love travelling
+          </Text>
+          <GypsieButton
+            customButtonStyles={{
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              width: 100,
+              padding: 4,
+              backgroundColor: PALETTE.ORANGE,
+            }}
+            customTextStyles={{
+              color: PALETTE.GREYISHBLUE,
+              fontFamily: 'Futura',
+              fontSize: 14,
+              fontWeight: "bold",
+            }}
+            customIconStyles={{ fontSize: 14 }}
+            Icon={AddIcon}
+            text="Follow"
+            onPress={() => {}}
+          />
+        </View>
+      </View>
+
       {/* Check if profile is current user's. If not, hide settings button. */}
       <Pressable style={styles.settingsButton} onPress={onPressSettings}>
-        <Ionicons name="settings" size={24} color={PALETTE.OFFWHITE} />
+        <Ionicons name="settings" size={24} color={PALETTE.BLACK} />
       </Pressable>
-      <View style={styles.userDetails}>
-        {/* <Text style={styles.userDetail}>{userData.handle || "Name"}</Text>
-        <Text style={styles.userDetail}>{userData.email || "Email"}</Text> */}
-      </View>
+
       <Tab.Navigator
         sceneContainerStyle={styles.sceneContainer}
-        initialRouteName="myposts"
+        // style={{flex:1}}
+        initialRouteName="myfeeds"
         screenOptions={{
-          tabBarStyle: { backgroundColor: PALETTE.WHITE, height: "8%" },
+          tabBarStyle: {
+            // backgroundColor: PALETTE.GREYISHBLUE,
+            backgroundColor: PALETTE.OFFWHITE,
+            height: "7%",
+            // padding: 8,
+          },
           tabBarShowLabel: false,
           tabBarIndicatorStyle: { backgroundColor: PALETTE.ORANGE },
         }}>
         <Tab.Screen
-          name="myposts"
+          name="myfeeds"
           component={MyPosts}
           options={{
             tabBarLabel: "Posts",
@@ -92,11 +162,29 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
               <Ionicons
                 name={focused ? "grid" : "grid-outline"}
                 size={20}
-                color={focused ? PALETTE.ORANGE : PALETTE.BLACK}
+                color={focused ? PALETTE.GREYISHBLUE : PALETTE.GREYISHBLUE}
               />
             ),
           }}
         />
+        <Tab.Screen
+          name="mytales"
+          component={MyPosts}
+          options={{
+            tabBarLabel: "Posts",
+            tabBarIcon: ({ focused }) =>
+              focused ? (
+                <BookOpenIcon
+                  style={{ fontSize: 20, color: PALETTE.GREYISHBLUE }}
+                />
+              ) : (
+                <BookIcon
+                  style={{ fontSize: 20, color: PALETTE.GREYISHBLUE }}
+                />
+              ),
+          }}
+        />
+
         {/* <Tab.Screen
           name="reactions"
           component={Reactions}
@@ -120,29 +208,37 @@ const styles = StyleSheet.create({
   container: {
     width: DIMENSION.HUNDRED_PERCENT,
     height: DIMENSION.HUNDRED_PERCENT,
-    backgroundColor: PALETTE.BLUE,
+    // backgroundColor: PALETTE.GREYISHBLUE,
+    backgroundColor: PALETTE.OFFWHITE,
   },
   sceneContainer: {
+    // flex:1,
     backgroundColor: PALETTE.OFFWHITE,
+    // backgroundColor: PALETTE.GREYISHBLUE,
   },
   settingsButton: { position: "absolute", top: 50, right: 20, zIndex: 3 },
   banner: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
     height: DIMENSION.TWENTYFIVE_PERCENT,
     width: DIMENSION.HUNDRED_PERCENT,
-    borderBottomWidth: 1,
-    borderBottomColor: PALETTE.LIGHTGREY,
+    // backgroundColor: "skyblue",
+    // borderBottomWidth: 1,
+    // borderBottomColor: PALETTE.LIGHTGREY,
   },
   bannerImage: {
     height: DIMENSION.HUNDRED_PERCENT,
     width: DIMENSION.HUNDRED_PERCENT,
   },
   avatarContainer: {
-    position: "absolute",
-    top: DIMENSION.FIFTEEN_PERCENT,
-    alignSelf: "center",
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    // position: "absolute",
+    // top: DIMENSION.FORTY_PERCENT,
+    // left: '5%',
+    // alignSelf: "center",
+    width: 120,
+    height: 120,
+    borderRadius: 60,
     backgroundColor: PALETTE.WHITE,
     shadowOffset: { width: 0, height: 10 },
     shadowColor: PALETTE.GREY,
@@ -150,11 +246,12 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 20,
     zIndex: 1,
-    overflow: "hidden",
+    // overflow: "hidden",
   },
   avatar: {
     height: DIMENSION.HUNDRED_PERCENT,
     width: DIMENSION.HUNDRED_PERCENT,
+    borderRadius: 60,
   },
   userDetails: {
     flexDirection: "row",
