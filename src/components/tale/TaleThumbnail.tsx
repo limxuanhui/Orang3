@@ -12,7 +12,7 @@ import GypsieAvatar from "../common/GypsieAvatar";
 
 const CARD_WIDTH = DEVICE_WIDTH / 2 - 8;
 
-const TaleThumbnail = ({ index, data }: TaleThumbnailProps) => {
+const TaleThumbnail = ({ data }: TaleThumbnailProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const [paused, setPaused] = useState<boolean>(true);
   const [mediaAspectRatio, setMediaAspectRatio] = useState<number>(0);

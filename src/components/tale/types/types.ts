@@ -38,8 +38,7 @@ export type TaleThumbnailInfo = {
   title: string;
 };
 
-export type TaleThumbnailProps = {
-  index: number;
+export type TaleThumbnailProps = {  
   data: TaleThumbnailInfo;
 };
 

@@ -13,7 +13,7 @@ import { DUMMY_FEEDS } from "../../data/feeds";
 import { PALETTE } from "../../utils/constants/palette";
 import { Feed } from "../feed/types/types";
 
-const MyPosts = () => {
+const MyFeeds = () => {
   // Change to useDataManager
   // const { refreshing, refreshPostsHandler } = useDataManager("dev");
   const data: Feed[] = DUMMY_FEEDS;
@@ -30,22 +30,13 @@ const MyPosts = () => {
   return (
     // <View style={[styles.container, { height: percentage - insets.bottom }]}>
     <View style={[styles.container, { height: height }]}>
-      <MasonryList
-        // containerStyle={{borderWidth:4,borderColor:'black'}}
+      <MasonryList        
         contentContainerStyle={{ borderWidth: 0, borderColor: "red",paddingHorizontal:2 }}
         data={data}
         renderItem={el => <FeedThumbnail feed={el.item as Feed} />}
         numColumns={3}
         showsVerticalScrollIndicator={false}
       />
-      {/* <FlatList
-        data={data}
-        renderItem={el => <FeedThumbnail feed={el.item} />}
-        numColumns={3}
-        showsVerticalScrollIndicator={false}
-        // refreshing={refreshing}
-        // onRefresh={refreshPostsHandler}
-      /> */}
     </View>
   );
 };
@@ -58,4 +49,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyPosts;
+export default MyFeeds;

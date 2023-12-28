@@ -44,23 +44,6 @@ const FeedReactionControls = ({
   const [liked, setLiked] = useState<boolean>(isLiked || false);
   const [bookmarked, setBookmarked] = useState<boolean>(isBookmarked || false);
 
-  const onPressAvatar = useCallback(() => {
-    navigation.push("Modal", {
-      screen: "Profile",
-      params: { userId: creator.id, avatarUri: creator.avatarUri },
-    });
-  }, [navigation]);
-
-  const parseCount = useCallback((count: number): string => {
-    const parsedCount =
-      count > 1000000
-        ? Math.floor(count / 1000000) + "M"
-        : count > 1000
-        ? Math.floor(count / 1000) + "K"
-        : count + "";
-    return parsedCount;
-  }, []);
-
   const onPressReactionControlStyle = useCallback(
     ({ pressed }: PressableStateCallbackType) => {
       return [
@@ -74,32 +57,49 @@ const FeedReactionControls = ({
     [],
   );
 
-  const onPressLike = useCallback(() => {
-    const likesChange = liked ? -1 : 1;
-    setReactionCounts(prevReactionCounts => ({
-      ...prevReactionCounts,
-      likes: reactionCounts.likes + likesChange,
-    }));
-    setLiked(prevLikedState => !prevLikedState);
-  }, [liked, reactionCounts, setLiked, setReactionCounts]);
-
-  const onPressComment = useCallback(() => {
-    // navigation.getParent()?.navigate("comments", {
-    //   count: parseCount(reactionCounts.comments),
-    // });
-    if (onPressComments) {
-      onPressComments();
-    }
+  const onPressAvatar = useCallback(() => {
+    navigation.push("Modal", {
+      screen: "Profile",
+      params: { userId: creator.id, avatarUri: creator.avatarUri },
+    });
   }, [navigation]);
 
-  const onPressBookmark = useCallback(() => {
-    const bookmarksChange = bookmarked ? -1 : 1;
-    setReactionCounts(prevReactionCounts => ({
-      ...prevReactionCounts,
-      bookmarks: reactionCounts.bookmarks + bookmarksChange,
-    }));
-    setBookmarked(prevLikedState => !prevLikedState);
-  }, [bookmarked, reactionCounts, setBookmarked]);
+  // const parseCount = useCallback((count: number): string => {
+  //   const parsedCount =
+  //     count > 1000000
+  //       ? Math.floor(count / 1000000) + "M"
+  //       : count > 1000
+  //       ? Math.floor(count / 1000) + "K"
+  //       : count + "";
+  //   return parsedCount;
+  // }, []);
+
+  // const onPressLike = useCallback(() => {
+  //   const likesChange = liked ? -1 : 1;
+  //   setReactionCounts(prevReactionCounts => ({
+  //     ...prevReactionCounts,
+  //     likes: reactionCounts.likes + likesChange,
+  //   }));
+  //   setLiked(prevLikedState => !prevLikedState);
+  // }, [liked, reactionCounts, setLiked, setReactionCounts]);
+
+  // const onPressComment = useCallback(() => {
+  //   // navigation.getParent()?.navigate("comments", {
+  //   //   count: parseCount(reactionCounts.comments),
+  //   // });
+  //   if (onPressComments) {
+  //     onPressComments();
+  //   }
+  // }, [navigation]);
+
+  // const onPressBookmark = useCallback(() => {
+  //   const bookmarksChange = bookmarked ? -1 : 1;
+  //   setReactionCounts(prevReactionCounts => ({
+  //     ...prevReactionCounts,
+  //     bookmarks: reactionCounts.bookmarks + bookmarksChange,
+  //   }));
+  //   setBookmarked(prevLikedState => !prevLikedState);
+  // }, [bookmarked, reactionCounts, setBookmarked]);
 
   const onPressLink = useCallback(() => {
     if (taleId) {
@@ -127,7 +127,23 @@ const FeedReactionControls = ({
           }}
         />
       </Pressable>
-      <GypsieButton
+      {taleId ? (
+        <GypsieButton
+          customButtonStyles={onPressReactionControlStyle}
+          customIconStyles={[
+            styles.reactionIcon,
+            {
+              color: PALETTE.OFFWHITE,
+            },
+          ]}
+          customTextStyles={styles.reactionCount}
+          Icon={LinkIcon}
+          // text={"Tale"}
+          onPress={onPressLink}
+        />
+      ) : null}
+
+      {/* <GypsieButton
         customButtonStyles={onPressReactionControlStyle}
         customIconStyles={[
           styles.reactionIcon,
@@ -152,22 +168,8 @@ const FeedReactionControls = ({
         Icon={BookmarkIcon}
         text={parseCount(reactionCounts.bookmarks)}
         onPress={onPressBookmark}
-      />
-      {taleId ? (
-        <GypsieButton
-          customButtonStyles={onPressReactionControlStyle}
-          customIconStyles={[
-            styles.reactionIcon,
-            {
-              color: PALETTE.OFFWHITE,
-            },
-          ]}
-          customTextStyles={styles.reactionCount}
-          Icon={LinkIcon}
-          // text={"Tale"}
-          onPress={onPressLink}
-        />
-      ) : null}
+      /> */}
+
       {/* <GypsieButton
         customButtonStyles={onPressReactionControlStyle}
         customIconStyles={[
