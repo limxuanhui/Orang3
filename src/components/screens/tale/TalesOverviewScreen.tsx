@@ -132,32 +132,38 @@ const TalesOverviewScreen = () => {
           styles.masonryListContainer,
           { height, paddingTop: 8, paddingBottom: insets.bottom + 8 },
         ]}>
-        <MasonryList
-          containerStyle={styles.masonryList}
-          data={data?.pages.flat(1) || ([] as TaleThumbnailInfo[])}
-          numColumns={2}
-          renderItem={({ item, i }) => (
-            <TaleThumbnail index={i} data={item as TaleThumbnailInfo} />
-          )}
-          ListEmptyComponent={<SkeletonThumbnailList />}
-          ListFooterComponent={
-            <ActivityIndicator
-              style={{ marginVertical: 8 }}
-              size={24}
-              color={PALETTE.ORANGE}
-            />
-          }
-          showsVerticalScrollIndicator={false}
-          onEndReached={onEndReached}
-          onEndReachedThreshold={0.5}
-          onRefresh={onRefresh}
-          refreshing={isRefetching}
-          refreshControlProps={{
-            title: "Refreshing tales...",
-            titleColor: PALETTE.GREYISHBLUE,
-            tintColor: PALETTE.ORANGE,
-          }}
-        />
+        {data && data.pages[0].length === 0 ? (
+          <View style={styles.flexCenter}>
+            <Text style={styles.description}>No tales at the moment...</Text>
+          </View>
+        ) : (
+          <MasonryList
+            containerStyle={styles.masonryList}
+            data={data?.pages.flat(1) || ([] as TaleThumbnailInfo[])}
+            numColumns={2}
+            renderItem={({ item, i }) => (
+              <TaleThumbnail data={item as TaleThumbnailInfo} />
+            )}
+            ListEmptyComponent={<SkeletonThumbnailList />}
+            ListFooterComponent={
+              <ActivityIndicator
+                style={{ marginVertical: 8 }}
+                size={24}
+                color={PALETTE.ORANGE}
+              />
+            }
+            showsVerticalScrollIndicator={false}
+            onEndReached={onEndReached}
+            onEndReachedThreshold={0.5}
+            onRefresh={onRefresh}
+            refreshing={isRefetching}
+            refreshControlProps={{
+              title: "Refreshing tales...",
+              titleColor: PALETTE.GREYISHBLUE,
+              tintColor: PALETTE.ORANGE,
+            }}
+          />
+        )}
       </View>
     </View>
   );
@@ -168,6 +174,12 @@ const styles = StyleSheet.create({
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
     backgroundColor: PALETTE.OFFWHITE,
+  },
+  flexCenter: { flex: 1, justifyContent: "center", alignItems: "center" },
+  description: {
+    fontFamily: "Futura",
+    fontSize: 24,
+    color: PALETTE.ORANGE,
   },
   masonryListContainer: {
     width: DIMENSION.HUNDRED_PERCENT,
