@@ -1,12 +1,15 @@
 import { useCallback, useContext, useRef, useState } from "react";
-import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
+import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { ActivityIndicator } from "react-native-paper";
 import { AuthContext } from "../../../utils/contexts/AuthContext";
 import useInfiniteDataManager from "../../../utils/hooks/useInfiniteDataManager";
 import FeedDisplay from "../../feed/FeedDisplay";
 import type { HomeScreenProps } from "./types/types";
-import { DEVICE_HEIGHT } from "../../../utils/constants/constants";
+import {
+  DEVICE_HEIGHT,
+  DEVICE_WIDTH,
+} from "../../../utils/constants/constants";
 import { PALETTE } from "../../../utils/constants/palette";
 import { VIEWABILITY_CONFIG } from "../../../utils/constants/feed";
 
@@ -38,9 +41,12 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
   return (
     <View style={styles.container}>
       {!data && isLoading ? (
-        <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View style={styles.flexCenter}>
           <ActivityIndicator size={48} color={PALETTE.ORANGE} />
+        </View>
+      ) : data && data.pages[0].length === 0 ? (
+        <View style={styles.flexCenter}>
+          <Text style={styles.description}>No feeds at the moment...</Text>
         </View>
       ) : (
         <FlatList
@@ -83,6 +89,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: PALETTE.BLACK,
+  },
+  flexCenter: { flex: 1, justifyContent: "center", alignItems: "center" },
+  description: {
+    fontFamily: "Futura",
+    fontSize: 24,
+    color: PALETTE.ORANGE,
   },
   refreshControl: { backgroundColor: PALETTE.BLACK },
 });

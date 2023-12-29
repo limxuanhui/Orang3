@@ -10,11 +10,11 @@ import { DUMMY_TALES, DUMMY_TALE_THUMBNAILS } from "./tales";
  * based on object key.
  */
 type DummyDatabase = {
-  users?: GypsieUser[];
-  feeds?: Feed[];
-  tales?: Tale[];
-  itineraries?: Itinerary[];
-  "tales-md"?: TaleThumbnailInfo[];
+  users: GypsieUser[];
+  feeds: Feed[];
+  tales: Tale[];
+  itineraries: Itinerary[];
+  "tales-md": TaleThumbnailInfo[];
 };
 
 export const DUMMY_DATABASE: DummyDatabase = {

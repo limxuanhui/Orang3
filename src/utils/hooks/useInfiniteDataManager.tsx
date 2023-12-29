@@ -40,8 +40,12 @@ const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
 
         case "dev":
           return new Promise((resolve, reject) => {
+            const data =
+              DUMMY_DATABASE[key as DataKey].length > 0
+                ? DUMMY_DATABASE[key as DataKey]
+                : [];
             setTimeout(() => {
-              resolve(DUMMY_DATABASE[key as DataKey]);
+              resolve(data);
             }, 2000);
           });
         default:
