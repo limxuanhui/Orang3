@@ -184,7 +184,7 @@ const useMapHandlers = () => {
     // Backend receives distance matrix of the given coordinates and travel mode.
     // Determine order of travelling in backend.
     // Return ordered route nodes.
-    const url = BACKEND_BASE_URL + "/directions";
+    const url = BACKEND_BASE_URL + "/api/directions";
 
     const data = selectedRoute.routeNodes.map(
       (routeNode: RouteNodeInfo) => routeNode.coord,

@@ -18,7 +18,7 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
   const onPressAccount = useCallback(() => {
     navigation.push("Account");
   }, []);
-  
+
   const onPressPrivacy = useCallback(() => {
     navigation.push("Privacy");
   }, []);
@@ -30,9 +30,9 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Settings and privacy</Text>
+      <Text style={styles.title}>Account settings</Text>
       <ScrollView>
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.subtitle}>Account</Text>
           <View style={styles.sectionItems}>
             <Pressable
@@ -70,9 +70,9 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
               />
             </Pressable>
           </View>
-        </View>
+        </View> */}
         <View style={styles.section}>
-          <Text style={styles.subtitle}>Login</Text>
+          <Text style={styles.subtitle}>Account</Text>
           <View style={styles.sectionItems}>
             <Pressable
               style={({ pressed }) => [
@@ -117,9 +117,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: DEVICE_WIDTH - 16,
     backgroundColor: PALETTE.WHITE,
-    // shadowColor: PALETTE.DARKGREY,
-    // shadowOpacity: 0.1,
-    // shadowOffset: { height: 0, width: 0 },
   },
   sectionItem: {
     flexDirection: "row",

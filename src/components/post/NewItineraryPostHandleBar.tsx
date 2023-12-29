@@ -3,9 +3,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import AddCircleIcon from "../common/icons/AddCircleIcon";
 import GypsieButton from "../common/buttons/GypsieButton";
 import { PALETTE } from "../../utils/constants/palette";
-import LinearGradient from "react-native-linear-gradient";
-import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import { DIMENSION } from "../../utils/constants/dimensions";
 
 type NewItineraryPostHandleBarProps = {
   avatarUri: string;
@@ -16,7 +14,7 @@ const NewItineraryPostHandleBar = ({
   avatarUri,
   name,
 }: NewItineraryPostHandleBarProps) => {
-  const onPressFollow = useCallback(() => {}, []);
+  // const onPressFollow = useCallback(() => {}, []);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -34,31 +32,31 @@ const NewItineraryPostHandleBar = ({
         />
       </View>
       <Text style={styles.description}>{name}</Text>
-      <GypsieButton
+      {/* <GypsieButton
         customButtonStyles={styles.followButton}
         customIconStyles={styles.followButtonIcon}
         customTextStyles={styles.followButtonText}
         Icon={AddCircleIcon}
         text="Follow"
         onPress={onPressFollow}
-      />
+      /> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
+    flexDirection: "row",    
+    justifyContent: "center",
+    width: DIMENSION.HUNDRED_PERCENT,
     height: 90,
     borderRadius: 16,
     backgroundColor: PALETTE.LIGHTERGREY,
-    // justifyContent: "center",
     alignItems: "center",
     padding: 16,
   },
   avatarBox: {
+    marginRight: 16,
     shadowColor: "black",
     shadowOpacity: 0.8,
     shadowRadius: 2,

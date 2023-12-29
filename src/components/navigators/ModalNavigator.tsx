@@ -68,19 +68,19 @@ const ModalNavigator = () => {
         options={{
           ...options,
           // headerTransparent: false,
-          headerTintColor: PALETTE.GREY,
-          headerRight: () => (
-            <GypsieButton
-              customButtonStyles={{
-                backgroundColor: "transparent",
-                width: "auto",
-                right: 16,
-              }}
-              customIconStyles={{ fontSize: 24, color: PALETTE.GREY }}
-              Icon={OptionsIcon}
-              onPress={onPressOptions}
-            />
-          ),
+          // headerTintColor: PALETTE.GREY,
+          // headerRight: () => (
+          //   <GypsieButton
+          //     customButtonStyles={{
+          //       backgroundColor: "transparent",
+          //       width: "auto",
+          //       right: 16,
+          //     }}
+          //     customIconStyles={{ fontSize: 24, color: PALETTE.GREY }}
+          //     Icon={OptionsIcon}
+          //     onPress={onPressOptions}
+          //   />
+          // ),
         }}
       />
       <Modal.Screen
@@ -89,19 +89,19 @@ const ModalNavigator = () => {
         options={{
           ...options,
           // headerTransparent: false,
-          headerTintColor: PALETTE.GREY,
-          headerRight: () => (
-            <GypsieButton
-              customButtonStyles={{
-                backgroundColor: "transparent",
-                width: "auto",
-                right: 16,
-              }}
-              customIconStyles={{ fontSize: 24, color: PALETTE.GREY }}
-              Icon={OptionsIcon}
-              onPress={onPressOptions}
-            />
-          ),
+          // headerTintColor: PALETTE.GREY,
+          // headerRight: () => (
+          //   <GypsieButton
+          //     customButtonStyles={{
+          //       backgroundColor: "transparent",
+          //       width: "auto",
+          //       right: 16,
+          //     }}
+          //     customIconStyles={{ fontSize: 24, color: PALETTE.GREY }}
+          //     Icon={OptionsIcon}
+          //     onPress={onPressOptions}
+          //   />
+          // ),
         }}
       />
       <Modal.Screen

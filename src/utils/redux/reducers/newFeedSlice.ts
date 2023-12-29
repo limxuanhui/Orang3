@@ -45,7 +45,7 @@ const newFeedSlice = createSlice({
       return { ...state, items };
     },
     reset: () => {
-      console.log("Resetting...");
+      console.log("Reseting...");
       return initialState;
     },
     setPosting: (state, action) => {

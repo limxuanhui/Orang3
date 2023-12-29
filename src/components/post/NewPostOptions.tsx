@@ -29,12 +29,12 @@ const NewPostOptions = () => {
     openBottomSheet();
   }, [bottomSheetRef]);
 
-  const onPressCreateFeed = useCallback(() => {
+  const onPressNewFeed = useCallback(() => {
     closeBottomSheet();
     navigation.navigate("Modal", { screen: "NewFeed" });
   }, [bottomSheetRef, navigation]);
 
-  const onPressWriteTale = useCallback(() => {
+  const onPressNewTale = useCallback(() => {
     closeBottomSheet();
     navigation.navigate("Modal", { screen: "NewTale" });
   }, [bottomSheetRef, navigation]);
@@ -46,16 +46,12 @@ const NewPostOptions = () => {
       </Pressable>
       <Portal>
         <BottomSheet
-          // style={{backgroundColor: 'red'}}
           backgroundStyle={styles.bottomSheet}
-          // containerStyle={{backgroundColor: '#cccccc22'}}
           handleStyle={styles.bottomSheetHandle}
           handleIndicatorStyle={styles.bottomSheetHandleIndicator}
           ref={bottomSheetRef}
           index={-1} // Hide the bottom sheet when we first load our component
           snapPoints={snapPoints}
-          //   enableHandlePanningGesture
-          //   enablePanDownToClose
           backdropComponent={renderBackdrop}
           onChange={handleSheetChanges}>
           <BottomSheetView style={styles.bottomSheetContent}>
@@ -66,8 +62,8 @@ const NewPostOptions = () => {
                   transform: [{ scale: pressed ? 0.99 : 1 }],
                 },
               ]}
-              onPress={onPressCreateFeed}>
-              <Text style={styles.buttonText}>Create feed</Text>
+              onPress={onPressNewFeed}>
+              <Text style={styles.buttonText}>New feed</Text>
             </Pressable>
             <Pressable
               style={({ pressed }) => [
@@ -77,13 +73,12 @@ const NewPostOptions = () => {
                   transform: [{ scale: pressed ? 0.99 : 1 }],
                 },
               ]}
-              onPress={onPressWriteTale}>
-              <Text style={[styles.buttonText]}>Write tale...</Text>
+              onPress={onPressNewTale}>
+              <Text style={[styles.buttonText]}>New tale</Text>
             </Pressable>
           </BottomSheetView>
         </BottomSheet>
       </Portal>
-      {/* <PortalHost name="NewPostOptions-host" /> */}
     </View>
   );
 };
@@ -91,14 +86,14 @@ const NewPostOptions = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "transparent",
+    backgroundColor: PALETTE.TRANSPARENT,
     justifyContent: "center",
     alignItems: "center",
   },
   bottomSheet: {
-    backgroundColor: "#121212",
+    backgroundColor: PALETTE.GREYISHBLUE,
   },
-  bottomSheetHandle: { backgroundColor: "transparent" },
+  bottomSheetHandle: { backgroundColor: PALETTE.TRANSPARENT },
   bottomSheetHandleIndicator: {
     backgroundColor: PALETTE.DARKGREY,
   },
@@ -122,8 +117,8 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   buttonText: {
-    fontFamily: "Lilita One",
-    fontSize: 20,
+    fontFamily: "Futura",
+    fontSize: 16,
     fontWeight: "bold",
     color: PALETTE.GREYISHBLUE,
   },

@@ -1,13 +1,11 @@
 import { useCallback, useContext, useEffect } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import AddIcon from "../../common/icons/AddIcon";
-import BookOpenIcon from "../../common/icons/BookOpenIcon";
+import { ImageLibraryOptions } from "react-native-image-picker";
 import BookIcon from "../../common/icons/BookIcon";
+import BookOpenIcon from "../../common/icons/BookOpenIcon";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { AuthContext } from "../../../utils/contexts/AuthContext";
-import useUserProfileManager from "../../../utils/hooks/useUserProfileManager";
-import GypsieButton from "../../common/buttons/GypsieButton";
 import MyFeeds from "../../profile/MyFeeds";
 import MyTales from "../../profile/MyTales";
 import type { ProfileScreenProps } from "./types/types";
@@ -15,6 +13,11 @@ import { DIMENSION } from "../../../utils/constants/dimensions";
 import { PALETTE } from "../../../utils/constants/palette";
 
 const Tab = createMaterialTopTabNavigator();
+const imageLibraryOptions: ImageLibraryOptions = {
+  mediaType: "photo",
+  presentationStyle: "fullScreen",
+  selectionLimit: 1,
+};
 
 const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
   const userInfo = useContext(AuthContext);
@@ -24,8 +27,7 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
     userId = route.params.userId;
     avatarUri = route.params.avatarUri;
   }
-
-  const { isLoading, userData } = useUserProfileManager(10001);
+  // const { openGallery } = useMediaHandlers(imageLibraryOptions);
 
   const onPressAvatar = useCallback(() => {
     if (avatarUri) {
@@ -33,7 +35,16 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
     }
   }, [avatarUri, navigation]);
 
-  const onPressChangeAvatar = useCallback(() => {}, []);
+  // const onPressChangeAvatar = useCallback(async () => {
+  //   const response = await openGallery();
+  //   if (response.assets) {
+  //     const asset = response.assets[0];
+      
+  //     // > avatarUri = asset.uri
+  //     // > Send file to s3 storage and update metadata table for changing avatarUri
+  //   }
+  //   console.log("RESPONSE: " , response);
+  // }, [openGallery]);
 
   const onPressSettings = useCallback(() => {
     navigation.push("Settings");
@@ -54,12 +65,12 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
               uri: avatarUri,
             }}
           />
-          <GypsieButton
+          {/* <GypsieButton
             customButtonStyles={styles.changeAvatarButton}
             customIconStyles={{ fontSize: 20 }}
             Icon={AddIcon}
             onPress={onPressChangeAvatar}
-          />
+          /> */}
         </Pressable>
 
         <View style={styles.bannerInfoContainer}>

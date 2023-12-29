@@ -98,7 +98,7 @@ const BottomTabNavigator = () => {
           tabBarButton: () => <NewPostOptions />,
         }}
       />
-      <BottomTab.Screen
+      {/* <BottomTab.Screen
         name="DriverStack"
         component={DriversOverviewScreen}
         options={{
@@ -113,7 +113,7 @@ const BottomTabNavigator = () => {
             />
           ),
         }}
-      />
+      /> */}
       <BottomTab.Screen
         name="ProfileStack"
         component={ProfileStackNavigator}
