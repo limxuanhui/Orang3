@@ -49,7 +49,7 @@ const GypsieFeedCarousel = ({
         keyExtractor={el => el.id}
         renderItem={({ item, index }) => {
           if (item.media) {
-            const media = item.media?.type.split("/");
+            const media = item.media.type.split("/");
             const mediaType = media[0]; // video, image
             const mediaFormat = media[1]; // mp4, jpg
             if (mediaType === "video") {
@@ -61,11 +61,22 @@ const GypsieFeedCarousel = ({
               );
             } else if (mediaType === "image") {
               return (
-                <Image
-                  style={styles.image}
-                  source={{ uri: item.media.uri }}
-                  resizeMode="contain"
-                />
+                <View
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: DEVICE_HEIGHT,
+                    width: DEVICE_WIDTH,
+                  }}>
+                  <Image
+                    style={[
+                      styles.image,
+                      { aspectRatio: item.media.width / item.media.height },
+                    ]}
+                    source={{ uri: item.media.uri }}
+                    resizeMode="contain"
+                  />
+                </View>
               );
             } else {
               return (
@@ -101,7 +112,7 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   image: {
-    height: DEVICE_HEIGHT,
+    // height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
     backgroundColor: PALETTE.BLACK,
   },

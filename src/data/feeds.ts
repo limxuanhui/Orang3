@@ -1,21 +1,370 @@
-import { Feed } from "../components/feed/types/types";
+import { Feed, FeedThumbnailInfo } from "../components/feed/types/types";
+
+export const DUMMY_FEED_THUMBNAILS: FeedThumbnailInfo[] = [
+  {
+    feedId: "feed-1",
+    creator: {
+      id: "user-1",
+      name: "JennieKim",
+      handle: "@jennie",
+      email: "jennie@test.com",
+      avatar: {
+        id: "avatar-1",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+        height: 736,
+        width: 736,
+      },
+    },
+    cover: {
+      id: "feed-1-item-1-media",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-2.jpeg",
+      height: 1024,
+      width: 680,
+      // aspectRatio: 680 / 1024,
+    },
+  },
+  {
+    feedId: "feed-2",
+    creator: {
+      id: "user-2",
+      name: "KimJisoo",
+      handle: "@jisoo",
+      email: "jisoo@test.com",
+      avatar: {
+        id: "avatar-4",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+        height: 586,
+        width: 480,
+      },
+    },
+    cover: {
+      id: "feed-2-item-1-media",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-2.jpeg",
+      height: 911,
+      width: 735,
+      // aspectRatio: 735 / 911,
+    },
+  },
+  {
+    feedId: "feed-3",
+    creator: {
+      id: "user-3",
+      name: "LaLisa",
+      handle: "@lisa",
+      email: "lisa@test.com",
+      avatar: {
+        id: "avatar-2",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+        height: 1280,
+        width: 719,
+      },
+    },
+    cover: {
+      id: "feed-3-item-1-media",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-2.jpeg",
+      height: 2048,
+      width: 1365,
+      // aspectRatio: 1365 / 2048,
+    },
+  },
+  {
+    feedId: "feed-4",
+    creator: {
+      id: "user-4",
+      name: "Rosé",
+      handle: "@rose",
+      email: "rose@test.com",
+      avatar: {
+        id: "avatar-3",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+        height: 2026,
+        width: 1268,
+      },
+    },
+    cover: {
+      id: "feed-4-item-1-media",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-2.jpeg",
+      height: 1104,
+      width: 736,
+      // aspectRatio: 736 / 1104,
+    },
+  },
+  {
+    feedId: "feed-5",
+    creator: {
+      id: "user-1",
+      name: "JennieKim",
+      handle: "@jennie",
+      email: "jennie@test.com",
+      avatar: {
+        id: "avatar-1",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+        height: 736,
+        width: 736,
+      },
+    },
+    cover: {
+      id: "feed-5-item-1-media",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-7.jpeg",
+      height: 900,
+      width: 600,
+      // aspectRatio: 600 / 900,
+    },
+  },
+  {
+    feedId: "feed-6",
+    creator: {
+      id: "user-2",
+      name: "KimJisoo",
+      handle: "@jisoo",
+      email: "jisoo@test.com",
+      avatar: {
+        id: "avatar-4",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+        height: 586,
+        width: 480,
+      },
+    },
+    cover: {
+      id: "feed-6-item-1-media",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-6.jpeg",
+      height: 1104,
+      width: 736,
+      // aspectRatio: 736 / 1104,
+    },
+  },
+  {
+    feedId: "feed-7",
+    creator: {
+      id: "user-3",
+      name: "LaLisa",
+      handle: "@lisa",
+      email: "lisa@test.com",
+      avatar: {
+        id: "avatar-2",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+        height: 1280,
+        width: 719,
+      },
+    },
+    cover: {
+      id: "feed-7-item-1-media",
+      type: "image/jpg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-7.jpg",
+      height: 892,
+      width: 736,
+      // aspectRatio: 736 / 892,
+    },
+  },
+  {
+    feedId: "feed-8",
+    creator: {
+      id: "user-4",
+      name: "Rosé",
+      handle: "@rose",
+      email: "rose@test.com",
+      avatar: {
+        id: "avatar-3",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+        height: 2026,
+        width: 1268,
+      },
+    },
+    cover: {
+      id: "feed-8-item-1-media",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-6.jpeg",
+      height: 1104,
+      width: 736,
+      // aspectRatio: 736 / 1104,
+    },
+  },
+  {
+    feedId: "feed-9",
+    creator: {
+      id: "user-1",
+      name: "JennieKim",
+      handle: "@jennie",
+      email: "jennie@test.com",
+      avatar: {
+        id: "avatar-1",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+        height: 736,
+        width: 736,
+      },
+    },
+    cover: {
+      id: "feed-9-item-1-media",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-2.jpeg",
+      height: 960,
+      width: 626,
+      // aspectRatio: 626 / 960,
+    },
+  },
+  {
+    feedId: "feed-10",
+    creator: {
+      id: "user-2",
+      name: "KimJisoo",
+      handle: "@jisoo",
+      email: "jisoo@test.com",
+      avatar: {
+        id: "avatar-4",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+        height: 586,
+        width: 480,
+      },
+    },
+    cover: {
+      id: "feed-10-item-1-media",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-2.jpeg",
+      height: 1104,
+      width: 736,
+      // aspectRatio: 736 / 1104,
+    },
+  },
+  {
+    feedId: "feed-11",
+    creator: {
+      id: "user-3",
+      name: "LaLisa",
+      handle: "@lisa",
+      email: "lisa@test.com",
+      avatar: {
+        id: "avatar-2",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+        height: 1280,
+        width: 719,
+      },
+    },
+    cover: {
+      id: "feed-11-item-1-media",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-2.jpeg",
+      height: 1102,
+      width: 735,
+      // aspectRatio: 735 / 1102,
+    },
+  },
+  {
+    feedId: "feed-12",
+    creator: {
+      id: "user-1",
+      name: "JennieKim",
+      handle: "@jennie",
+      email: "jennie@test.com",
+      avatar: {
+        id: "avatar-1",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+        height: 736,
+        width: 736,
+      },
+    },
+    cover: {
+      id: "feed-12-item-1-media",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-7.jpeg",
+      height: 743,
+      width: 496,
+      // aspectRatio: 496 / 743,
+    },
+  },
+  {
+    feedId: "feed-13",
+    creator: {
+      id: "user-2",
+      name: "KimJisoo",
+      handle: "@jisoo",
+      email: "jisoo@test.com",
+      avatar: {
+        id: "avatar-4",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+        height: 586,
+        width: 480,
+      },
+    },
+    cover: {
+      id: "feed-13-item-1-media",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-8.jpeg",
+      height: 1108,
+      width: 736,
+      // aspectRatio: 736 / 1108,
+    },
+  },
+  {
+    feedId: "feed-14",
+    creator: {
+      id: "user-3",
+      name: "LaLisa",
+      handle: "@lisa",
+      email: "lisa@test.com",
+      avatar: {
+        id: "avatar-2",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+        height: 1280,
+        width: 719,
+      },
+    },
+    cover: {
+      id: "feed-14-item-1-media",
+      type: "image/jpeg",
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-6.jpeg",
+      height: 1104,
+      width: 736,
+      // aspectRatio: 736 / 1104,
+    },
+  },
+];
 
 export const DUMMY_FEEDS: Feed[] = [
   {
     id: "feed-1",
     creator: {
       id: "user-1",
+      name: "JennieKim",
       handle: "@jennie",
-      avatarUri:
-        "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+      email: "jennie@test.com",
+      avatar: {
+        id: "avatar-1",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+        height: 736,
+        width: 736,
+      },
     },
     items: [
       {
         id: "feed-1-item-1",
         media: {
           id: "feed-1-item-1-media",
-          type: "image/jpeg",
+          type: "image/gif",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-2.jpeg",
+          height: 1024,
+          width: 680,
+          // aspectRatio: 680 / 1024,
         },
         caption:
           "Beach - Labore quis qui labore labore labore consequat ullamco sint esse pariatur adipisicing minim ullamco ut.",
@@ -26,6 +375,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-1-item-2-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-3.jpeg",
+          height: 1024,
+          width: 697,
+          // aspectRatio: 697 / 1024,
         },
         caption:
           "Cliff - Proident proident sit cillum duis dolor tempor laborum culpa ad.",
@@ -36,6 +388,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-1-item-3-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-4.jpeg",
+          height: 4032,
+          width: 2268,
+          // aspectRatio: 2268 / 4032,
         },
         caption: "Jiufen old street - Qui amet commodo Lorem esse do.",
       },
@@ -45,6 +400,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-1-item-4-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-5.jpeg",
+          height: 1101,
+          width: 735,
+          // aspectRatio: 735 / 1101,
         },
         caption:
           "Smelly tofu - In dolor exercitation est adipisicing reprehenderit do occaecat amet eiusmod Lorem non velit sunt dolore.",
@@ -55,6 +413,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-1-item-5-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-6.jpeg",
+          height: 981,
+          width: 736,
+          // aspectRatio: 736 / 981,
         },
         caption:
           "Boba milk tea - Commodo duis ullamco nostrud veniam sit in voluptate dolore irure.",
@@ -66,14 +427,22 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
-    taleId: "tale-1"
+    taleId: "tale-1",
   },
   {
     id: "feed-2",
     creator: {
       id: "user-2",
+      name: "KimJisoo",
       handle: "@jisoo",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+      email: "jisoo@test.com",
+      avatar: {
+        id: "avatar-4",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+        height: 586,
+        width: 480,
+      },
     },
     items: [
       {
@@ -82,6 +451,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-2-item-1-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-2.jpeg",
+          height: 911,
+          width: 735,
+          // aspectRatio: 735 / 911,
         },
         caption: "Deserunt ex nisi est ad do Lorem aliqua irure anim.",
       },
@@ -91,6 +463,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-2-item-2-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-3.jpeg",
+          height: 892,
+          width: 564,
+          // aspectRatio: 564 / 892,
         },
         caption:
           "Lantern festival - Occaecat enim do minim est irure mollit exercitation labore elit laborum laborum duis labore.",
@@ -101,6 +476,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-2-item-3-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-4.jpeg",
+          height: 1104,
+          width: 736,
+          // aspectRatio: 736 / 1104,
         },
         caption:
           "Dragon temple - Occaecat enim do minim est irure mollit exercitation labore elit laborum laborum duis labore.",
@@ -111,6 +489,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-2-item-4-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-5.jpeg",
+          height: 1105,
+          width: 736,
+          // aspectRatio: 736 / 1105,
         },
         caption:
           "Phuket - Consectetur commodo laboris amet reprehenderit non sit non do cillum qui ad.",
@@ -122,14 +503,22 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
-    taleId: "tale-4"
+    taleId: "tale-4",
   },
   {
     id: "feed-3",
     creator: {
       id: "user-3",
+      name: "LaLisa",
       handle: "@lisa",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+      email: "lisa@test.com",
+      avatar: {
+        id: "avatar-2",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+        height: 1280,
+        width: 719,
+      },
     },
     items: [
       {
@@ -138,6 +527,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-3-item-1-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-2.jpeg",
+          height: 2048,
+          width: 1365,
+          // aspectRatio: 1365 / 2048,
         },
         caption:
           "Chili crab - Labore quis qui labore labore labore consequat ullamco sint esse pariatur adipisicing minim ullamco ut.",
@@ -148,6 +540,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-3-item-2-media",
           type: "image/jpg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-3.jpg",
+          height: 800,
+          width: 640,
+          // aspectRatio: 640 / 800,
         },
         caption:
           "Char kway teow - Proident proident sit cillum duis dolor tempor laborum culpa ad.",
@@ -158,6 +553,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-3-item-3-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-4.jpeg",
+          height: 1065,
+          width: 710,
+          // aspectRatio: 710 / 1065,
         },
         caption: "Bak kut teh - Qui amet commodo Lorem esse do.",
       },
@@ -167,6 +565,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-3-item-4-media",
           type: "image/jpg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-5.jpg",
+          height: 875,
+          width: 700,
+          // aspectRatio: 700 / 875,
         },
         caption:
           "Changi Jewel - In dolor exercitation est adipisicing reprehenderit do occaecat amet eiusmod Lorem non velit sunt dolore.",
@@ -177,6 +578,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-3-item-5-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-6.jpeg",
+          height: 550,
+          width: 930,
+          // aspectRatio: 930 / 550,
         },
         caption:
           "Lau pa sat - Commodo duis ullamco nostrud veniam sit in voluptate dolore irure.",
@@ -188,14 +592,22 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
-    taleId: "tale-2"
+    taleId: "tale-2",
   },
   {
     id: "feed-4",
     creator: {
       id: "user-4",
+      name: "Rosé",
       handle: "@rose",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+      email: "rose@test.com",
+      avatar: {
+        id: "avatar-3",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+        height: 2026,
+        width: 1268,
+      },
     },
     items: [
       {
@@ -204,6 +616,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-4-item-1-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-2.jpeg",
+          height: 1104,
+          width: 736,
+          // aspectRatio: 736 / 1104,
         },
         caption:
           "Bukchon hanok village - Irure quis commodo duis incididunt ipsum eu aute esse.",
@@ -214,6 +629,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-4-item-2-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-3.jpeg",
+          height: 1102,
+          width: 735,
+          // aspectRatio: 735 / 1102,
         },
         caption:
           "Traditional hanbok - Consequat magna culpa reprehenderit deserunt labore deserunt cillum.",
@@ -224,6 +642,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-4-item-3-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-4.jpeg",
+          height: 981,
+          width: 736,
+          // aspectRatio: 736 / 981,
         },
         caption:
           "Seoul - Consectetur qui commodo et consectetur duis aliqua deserunt in eiusmod.",
@@ -234,6 +655,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-4-item-4-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-5.jpeg",
+          height: 1104,
+          width: 736,
+          // aspectRatio: 736 / 1104,
         },
         caption:
           "Namsan tower - Voluptate nisi amet veniam officia excepteur labore consequat voluptate amet dolore deserunt dolore.",
@@ -245,16 +669,23 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
-    taleId: "tale-3"
+    taleId: "tale-3",
   },
 
   {
     id: "feed-5",
     creator: {
       id: "user-1",
+      name: "JennieKim",
       handle: "@jennie",
-      avatarUri:
-        "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+      email: "jennie@test.com",
+      avatar: {
+        id: "avatar-1",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+        height: 736,
+        width: 736,
+      },
     },
     items: [
       {
@@ -263,6 +694,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-5-item-1-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-7.jpeg",
+          height: 900,
+          width: 600,
+          // aspectRatio: 600 / 900,
         },
         caption:
           "Large chicken cutlet - Voluptate Lorem tempor aute irure occaecat laboris anim.",
@@ -273,6 +707,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-5-item-2-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-8.jpeg",
+          height: 1102,
+          width: 736,
+          // aspectRatio: 736 / 1102,
         },
         caption:
           "Shilin night market - Aute pariatur anim excepteur ea anim minim dolor sit.",
@@ -283,6 +720,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-5-item-3-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-9.jpeg",
+          height: 800,
+          width: 533,
+          // aspectRatio: 533 / 800,
         },
         caption:
           "Raohe night market - Proident ad magna fugiat ullamco ex pariatur.",
@@ -293,6 +733,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-5-item-4-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-10.jpeg",
+          height: 1103,
+          width: 736,
+          // aspectRatio: 736 / 1103,
         },
         caption: "Rainbow road - Proident ad magna fugiat ullamco ex pariatur.",
       },
@@ -303,14 +746,22 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
-    taleId: "tale-1"
+    taleId: "tale-1",
   },
   {
     id: "feed-6",
     creator: {
       id: "user-2",
+      name: "KimJisoo",
       handle: "@jisoo",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+      email: "jisoo@test.com",
+      avatar: {
+        id: "avatar-4",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+        height: 586,
+        width: 480,
+      },
     },
     items: [
       {
@@ -319,6 +770,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-6-item-1-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-6.jpeg",
+          height: 1104,
+          width: 736,
+          // aspectRatio: 736 / 1104,
         },
         caption:
           "Blue Pearl Buddha - Mollit dolore irure nulla do do nisi qui.",
@@ -329,6 +783,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-6-item-2-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-7.jpeg",
+          height: 1104,
+          width: 736,
+          // aspectRatio: 736 / 1104,
         },
         caption:
           "Tom yum soup - Mollit ea quis culpa excepteur et Lorem id id fugiat in in dolor incididunt.",
@@ -339,6 +796,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-6-item-3-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-8.jpeg",
+          height: 981,
+          width: 736,
+          // aspectRatio: 736 / 981,
         },
         caption:
           "Coconut icecream - Ut duis labore sint dolore sit quis nulla mollit.",
@@ -349,6 +809,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-6-item-4-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-9.jpeg",
+          height: 1107,
+          width: 736,
+          // aspectRatio: 736 / 1107,
         },
         caption:
           "Boat river market - Esse minim sit eiusmod ullamco voluptate amet.",
@@ -359,6 +822,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-6-item-5-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-10.jpeg",
+          height: 1138,
+          width: 640,
+          // aspectRatio: 640 / 1138,
         },
         caption:
           "Clear sea - Quis laborum qui amet non anim excepteur sit proident incididunt minim esse.",
@@ -370,14 +836,22 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
-    taleId: "tale-4"
+    taleId: "tale-4",
   },
   {
     id: "feed-7",
     creator: {
       id: "user-3",
+      name: "LaLisa",
       handle: "@lisa",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+      email: "lisa@test.com",
+      avatar: {
+        id: "avatar-2",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+        height: 1280,
+        width: 719,
+      },
     },
     items: [
       {
@@ -386,6 +860,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-7-item-1-media",
           type: "image/jpg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-7.jpg",
+          height: 892,
+          width: 736,
+          // aspectRatio: 736 / 892,
         },
         caption:
           "Marina bay sands - Laborum do sit proident ad nulla cillum tempor ad ut commodo ullamco sit.",
@@ -396,6 +873,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-7-item-2-media",
           type: "image/jpg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-8.jpg",
+          height: 800,
+          width: 800,
+          // aspectRatio: 800 / 800,
         },
         caption: "Merlion - Id aliqua cillum tempor quis fugiat consequat.",
       },
@@ -405,6 +885,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-7-item-3-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-9.jpeg",
+          height: 832,
+          width: 1200,
+          // aspectRatio: 1200 / 832,
         },
         caption:
           "Satay - Ut nisi cupidatat officia aute aute pariatur mollit incididunt ea eu.",
@@ -415,6 +898,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-7-item-4-media",
           type: "image/jpg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-10.jpg",
+          height: 425,
+          width: 319,
+          // aspectRatio: 319 / 425,
         },
         caption: "Sentosa - Do sunt eu et dolor cupidatat dolor enim.",
       },
@@ -424,6 +910,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-7-item-5-media",
           type: "image/jpg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-11.jpg",
+          height: 562,
+          width: 1000,
+          // aspectRatio: 1000 / 562,
         },
         caption:
           "Singapore river - Reprehenderit quis anim sit consequat dolore aute elit velit.",
@@ -434,6 +923,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-7-item-6-media",
           type: "image/jpg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-12.jpg",
+          height: 533,
+          width: 800,
+          // aspectRatio: 800 / 533,
         },
         caption:
           "USS - Reprehenderit laborum sit magna ut cupidatat officia ipsum sint magna cillum consectetur minim.",
@@ -444,6 +936,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-7-item-7-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-13.jpeg",
+          height: 1200,
+          width: 1600,
+          // aspectRatio: 1600 / 1200,
         },
         caption:
           "Vivocity - Ut consequat cillum amet ut Lorem laboris exercitation magna esse fugiat.",
@@ -455,14 +950,22 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
-    taleId: "tale-2"
+    taleId: "tale-2",
   },
   {
     id: "feed-8",
     creator: {
       id: "user-4",
+      name: "Rosé",
       handle: "@rose",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+      email: "rose@test.com",
+      avatar: {
+        id: "avatar-3",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+        height: 2026,
+        width: 1268,
+      },
     },
     items: [
       {
@@ -471,6 +974,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-8-item-1-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-6.jpeg",
+          height: 1104,
+          width: 736,
+          // aspectRatio: 736 / 1104,
         },
         caption:
           "Nami island - Labore pariatur cillum cillum non commodo culpa ea.",
@@ -481,6 +987,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-8-item-2-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-7.jpeg",
+          height: 1307,
+          width: 735,
+          // aspectRatio: 735 / 1307,
         },
         caption:
           "Myeongdong street food - Do sit qui quis qui laborum aute incididunt eu ut sit.",
@@ -491,6 +1000,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-8-item-3-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-8.jpeg",
+          height: 640,
+          width: 427,
+          // aspectRatio: 427 / 640,
         },
         caption:
           "Myeongdong shops - Adipisicing ut ipsum consectetur qui aliquip consequat ea officia ipsum irure deserunt aute est.",
@@ -501,6 +1013,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-8-item-4-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-9.jpeg",
+          height: 1104,
+          width: 736,
+          // aspectRatio: 736 / 1104,
         },
         caption:
           "Busan rainbow houses - Eu aliquip tempor voluptate anim esse mollit deserunt irure.",
@@ -511,6 +1026,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-8-item-5-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-10.jpeg",
+          height: 981,
+          width: 736,
+          // aspectRatio: 736 / 981,
         },
         caption: "Budae jjigae - Aliquip amet excepteur cupidatat id.",
       },
@@ -521,16 +1039,23 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
-    taleId: "tale-3"
+    taleId: "tale-3",
   },
 
   {
     id: "feed-9",
     creator: {
       id: "user-1",
+      name: "JennieKim",
       handle: "@jennie",
-      avatarUri:
-        "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+      email: "jennie@test.com",
+      avatar: {
+        id: "avatar-1",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+        height: 736,
+        width: 736,
+      },
     },
     items: [
       {
@@ -539,6 +1064,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-9-item-1-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-2.jpeg",
+          height: 960,
+          width: 626,
+          // aspectRatio: 626 / 960,
         },
         caption:
           "Mt Fuji - Est reprehenderit ut laboris mollit aliqua fugiat proident nostrud consectetur amet.",
@@ -549,6 +1077,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-9-item-2-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-3.jpeg",
+          height: 913,
+          width: 736,
+          // aspectRatio: 736 / 913,
         },
         caption: "Train station - Dolor non eiusmod ea aute.",
       },
@@ -558,6 +1089,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-9-item-3-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-4.jpeg",
+          height: 2048,
+          width: 1286,
+          // aspectRatio: 1286 / 2048,
         },
         caption:
           "Alley with ramen shops - In esse nostrud irure reprehenderit id deserunt ex laborum.",
@@ -568,6 +1102,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-9-item-4-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-5.jpeg",
+          height: 1061,
+          width: 736,
+          // aspectRatio: 736 / 1061,
         },
         caption:
           "Shrine entrance - Sit qui nisi irure tempor aliqua velit eu dolore nulla dolore minim ea aliquip fugiat.",
@@ -578,6 +1115,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-9-item-4-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-6.jpeg",
+          height: 1104,
+          width: 736,
+          // aspectRatio: 736 / 1104,
         },
         caption:
           "Ramen - Magna ullamco nostrud proident ea ex cillum ullamco proident sint est sint.",
@@ -589,14 +1129,22 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
-    taleId: "tale-5"
+    taleId: "tale-5",
   },
   {
     id: "feed-10",
     creator: {
       id: "user-2",
+      name: "KimJisoo",
       handle: "@jisoo",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+      email: "jisoo@test.com",
+      avatar: {
+        id: "avatar-4",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+        height: 586,
+        width: 480,
+      },
     },
     items: [
       {
@@ -605,6 +1153,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-10-item-1-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-2.jpeg",
+          height: 1104,
+          width: 736,
+          // aspectRatio: 736 / 1104,
         },
         caption: "Great Wall of China - Nostrud sint cupidatat et duis.",
       },
@@ -614,6 +1165,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-10-item-2-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-3.jpeg",
+          height: 1104,
+          width: 736,
+          // aspectRatio: 736 / 1104,
         },
         caption:
           "Shanghai Oriental Pearl Tower - Dolor veniam adipisicing ut culpa ex sit adipisicing amet fugiat.",
@@ -624,6 +1178,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-10-item-3-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-4.jpeg",
+          height: 1102,
+          width: 736,
+          // aspectRatio: 736 / 1102,
         },
         caption:
           "View of Shanghai Financial Centre - Commodo elit id adipisicing enim id anim voluptate adipisicing nulla fugiat commodo aliquip pariatur quis.",
@@ -634,6 +1191,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-10-item-4-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-5.jpeg",
+          height: 900,
+          width: 600,
+          // aspectRatio: 600 / 900,
         },
         caption:
           "Boutique shops - Dolore ipsum quis qui esse occaecat velit anim est dolore occaecat ex officia.",
@@ -644,6 +1204,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-10-item-5-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-6.jpeg",
+          height: 1104,
+          width: 736,
+          // aspectRatio: 736 / 1104,
         },
         caption:
           "Candied fruit sticks - Ea in veniam non laboris esse ea duis adipisicing.",
@@ -654,6 +1217,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-10-item-6-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-7.jpeg",
+          height: 1030,
+          width: 736,
+          // aspectRatio: 736 / 1030,
         },
         caption:
           "Tea leaves farm - Tempor cupidatat aliquip Lorem culpa aute proident esse non duis voluptate laboris officia sunt excepteur.",
@@ -665,14 +1231,22 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
-    taleId: "tale-7"
+    taleId: "tale-7",
   },
   {
     id: "feed-11",
     creator: {
       id: "user-3",
+      name: "LaLisa",
       handle: "@lisa",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+      email: "lisa@test.com",
+      avatar: {
+        id: "avatar-2",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+        height: 1280,
+        width: 719,
+      },
     },
     items: [
       {
@@ -681,6 +1255,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-11-item-1-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-2.jpeg",
+          height: 1102,
+          width: 735,
+          // aspectRatio: 735 / 1102,
         },
         caption:
           "Bridge with giant hands - Sunt velit cillum irure magna laboris.",
@@ -691,6 +1268,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-11-item-2-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-3.jpeg",
+          height: 920,
+          width: 736,
+          // aspectRatio: 736 / 920,
         },
         caption: "View of Giant Buddha - Nisi sint ipsum culpa in sint.",
       },
@@ -700,6 +1280,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-11-item-3-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-4.jpeg",
+          height: 900,
+          width: 538,
+          // aspectRatio: 538 / 900,
         },
         caption: "Tea leaves farmland - Elit do aliqua et tempor officia.",
       },
@@ -709,6 +1292,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-11-item-4-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-5.jpeg",
+          height: 960,
+          width: 640,
+          // aspectRatio: 640 / 960,
         },
         caption:
           "Boat trip - Officia cupidatat magna duis nulla elit sint dolore.",
@@ -720,16 +1306,23 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
-    taleId: "tale-6"
+    taleId: "tale-6",
   },
 
   {
     id: "feed-12",
     creator: {
       id: "user-1",
+      name: "JennieKim",
       handle: "@jennie",
-      avatarUri:
-        "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+      email: "jennie@test.com",
+      avatar: {
+        id: "avatar-1",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+        height: 736,
+        width: 736,
+      },
     },
     items: [
       {
@@ -738,6 +1331,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-12-item-1-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-7.jpeg",
+          height: 743,
+          width: 496,
+          // aspectRatio: 496 / 743,
         },
         caption:
           "Traditional palace - Voluptate ad reprehenderit ex et enim commodo.",
@@ -748,6 +1344,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-12-item-2-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-8.jpeg",
+          height: 768,
+          width: 509,
+          // aspectRatio: 509 / 768,
         },
         caption: "Seafood market - In non aliquip sunt laboris est nisi minim.",
       },
@@ -757,6 +1356,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-12-item-3-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-9.jpeg",
+          height: 1104,
+          width: 736,
+          // aspectRatio: 736 / 1104,
         },
         caption: "Shopping district - Laborum ea ut ad consequat.",
       },
@@ -766,6 +1368,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-12-item-4-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-10.jpeg",
+          height: 1102,
+          width: 736,
+          // aspectRatio: 736 / 1102,
         },
         caption:
           "Shopping district in the day - Cillum occaecat laboris dolor aliquip quis esse pariatur.",
@@ -777,14 +1382,22 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
-    taleId: "tale-5"
+    taleId: "tale-5",
   },
   {
     id: "feed-13",
     creator: {
       id: "user-2",
+      name: "KimJisoo",
       handle: "@jisoo",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+      email: "jisoo@test.com",
+      avatar: {
+        id: "avatar-4",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+        height: 586,
+        width: 480,
+      },
     },
     items: [
       {
@@ -793,6 +1406,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-13-item-1-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-8.jpeg",
+          height: 1108,
+          width: 736,
+          // aspectRatio: 736 / 1108,
         },
         caption:
           "Terracotta warriors - Eu Lorem sit occaecat id do ex incididunt qui officia sunt.",
@@ -803,6 +1419,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-13-item-2-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-9.jpeg",
+          height: 920,
+          width: 736,
+          // aspectRatio: 736 / 920,
         },
         caption:
           "Zhangjiajie Avatar mountain - Esse laborum consectetur tempor nulla ullamco non.",
@@ -813,6 +1432,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-13-item-3-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-10.jpeg",
+          height: 1002,
+          width: 564,
+          // aspectRatio: 564 / 1002,
         },
         caption:
           "Cable car ride at Avatar mountain - Velit irure labore laborum ut sint sunt.",
@@ -824,14 +1446,22 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
-    taleId: "tale-7"
+    taleId: "tale-7",
   },
   {
     id: "feed-14",
     creator: {
       id: "user-3",
+      name: "LaLisa",
       handle: "@lisa",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+      email: "lisa@test.com",
+      avatar: {
+        id: "avatar-2",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+        height: 1280,
+        width: 719,
+      },
     },
     items: [
       {
@@ -840,6 +1470,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-14-item-1-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-6.jpeg",
+          height: 1104,
+          width: 736,
+          // aspectRatio: 736 / 1104,
         },
         caption:
           "Beef pho - Proident laboris elit duis amet nulla amet quis elit.",
@@ -850,6 +1483,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-14-item-2-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-7.jpeg",
+          height: 1103,
+          width: 736,
+          // aspectRatio: 736 / 1103,
         },
         caption:
           "Spring rolls - Reprehenderit nostrud cillum do ipsum excepteur.",
@@ -860,6 +1496,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-14-item-3-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-8.jpeg",
+          height: 1104,
+          width: 736,
+          // aspectRatio: 736 / 1104,
         },
         caption:
           "Street food noodles - Incididunt fugiat consectetur eu exercitation qui cupidatat nulla fugiat laboris adipisicing duis do.",
@@ -870,6 +1509,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-14-item-4-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-9.jpeg",
+          height: 1136,
+          width: 736,
+          // aspectRatio: 736 / 1136,
         },
         caption:
           "Boutique hotel - Veniam duis excepteur voluptate labore eu duis consequat minim.",
@@ -880,6 +1522,9 @@ export const DUMMY_FEEDS: Feed[] = [
           id: "feed-14-item-5-media",
           type: "image/jpeg",
           uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-10.jpeg",
+          height: 1104,
+          width: 736,
+          // aspectRatio: 736 / 1104,
         },
         caption:
           "Train tracks - Tempor ea qui esse incididunt aliquip ad Lorem ad qui occaecat exercitation sunt do occaecat.",
@@ -891,6 +1536,6 @@ export const DUMMY_FEEDS: Feed[] = [
     comments: Math.floor(Math.random() * 10000000 + 1),
     bookmarks: Math.floor(Math.random() * 1000000 + 1),
     shares: Math.floor(Math.random() * 10000000 + 1),
-    taleId: "tale-6"
+    taleId: "tale-6",
   },
 ];

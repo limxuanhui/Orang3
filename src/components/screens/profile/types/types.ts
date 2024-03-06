@@ -3,7 +3,10 @@ import type {
   RouteProp,
 } from "@react-navigation/native";
 import type { StackNavigationProp } from "@react-navigation/stack";
-import type { AppStackNavigatorParamList, ModalNavigatorParamList } from "../../../navigators/types/types";
+import type {
+  AppStackNavigatorParamList,
+  ModalNavigatorParamList,
+} from "../../../navigators/types/types";
 
 export type ProfileScreenParams = {
   userId?: string;
@@ -23,12 +26,12 @@ export type ProfileScreenProps = {
   route: ProfileScreenRouteProp;
 };
 
-type ProfileScreenNavigationProp = CompositeNavigationProp<
+export type ProfileScreenNavigationProp = CompositeNavigationProp<
   StackNavigationProp<ProfileStackNavigatorParamList, "Profile">,
   StackNavigationProp<AppStackNavigatorParamList, "Modal">
 >;
 
-type ProfileScreenRouteProp = RouteProp<
+export type ProfileScreenRouteProp = RouteProp<
   ProfileStackNavigatorParamList,
   "Profile"
 >;

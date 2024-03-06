@@ -3,23 +3,30 @@ import { Pressable, StyleSheet, Text } from "react-native";
 import type { RouteButtonProps } from "./types/types";
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
+import { useAppDispatch, useAppSelector } from "../../utils/redux/hooks";
+import {
+  holdRoute,
+  openModal,
+  selectRoute,
+} from "../../utils/redux/reducers/itineraryPlannerSlice";
 
-const RouteButton = ({
-  route,
-  selected,
-  onHoldRoute,
-  onSelectRoute,
-}: RouteButtonProps) => {
+const RouteButton = ({ route, selected }: RouteButtonProps) => {
+  const dispatch = useAppDispatch();
+  const { mode } = useAppSelector(state => state.itineraryPlanner);
+
   const onPress = useCallback(() => {
     if (!selected) {
-      onSelectRoute(route.id);
+      dispatch(selectRoute({ selectedRouteId: route.id }));
     }
-  }, [route, selected, onSelectRoute]);
+  }, [route, selected, selectRoute]);
 
   const onLongPress = useCallback(() => {
-    onPress();
-    onHoldRoute(route.name);
-  }, [route, onHoldRoute, onPress]);
+    if (mode === "edit") {
+      onPress();
+      dispatch(openModal());
+      dispatch(holdRoute({ modalInitialValue: route.name }));
+    }
+  }, [route, mode, holdRoute, openModal, onPress, dispatch]);
 
   return (
     <Pressable

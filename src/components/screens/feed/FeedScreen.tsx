@@ -13,8 +13,7 @@ import {
   DEVICE_HEIGHT,
   DEVICE_WIDTH,
 } from "../../../utils/constants/constants";
-
-type DataKey = "feeds" | "itineraries" | "tales" | "tales-md" | "users";
+import type { DataKey } from "../../../data/types/types";
 
 const FeedScreen = ({ navigation, route }: FeedScreenProps) => {
   const { feedId } = route.params;

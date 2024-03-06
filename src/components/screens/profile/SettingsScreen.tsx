@@ -17,11 +17,11 @@ const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
 
   const onPressAccount = useCallback(() => {
     navigation.push("Account");
-  }, []);
+  }, [navigation]);
 
   const onPressPrivacy = useCallback(() => {
     navigation.push("Privacy");
-  }, []);
+  }, [navigation]);
 
   const onPressLogout = useCallback(() => {
     console.warn("Log out pressed!");

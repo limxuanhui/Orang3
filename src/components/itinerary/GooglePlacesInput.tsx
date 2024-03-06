@@ -245,8 +245,8 @@ const GooglePlacesInput = ({ onReceiveResults }: GooglePlacesInputProps) => {
   const onPressSuggestion = useCallback(
     (data: GooglePlaceData, details: GooglePlaceDetail | null = null) => {
       // 'details' is provided when fetchDetails = true
-      console.log("Data:", JSON.stringify(data, null, 4));
-      console.log("Details", JSON.stringify(details, null, 4));
+      // console.log("Data:", JSON.stringify(data, null, 4));
+      // console.log("Details", JSON.stringify(details, null, 4));
       inputRef.current?.setAddressText("");
       onReceiveResults(details);
     },

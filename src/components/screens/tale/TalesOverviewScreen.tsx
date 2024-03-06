@@ -76,7 +76,7 @@ const SkeletonThumbnail = memo(() => {
   );
 });
 
-const SkeletonThumbnailList = () => {
+const SkeletonThumbnailList = memo(() => {
   return (
     <FlatList
       // style={{flex:1,height:DEVICE_HEIGHT}}
@@ -88,7 +88,7 @@ const SkeletonThumbnailList = () => {
       showsVerticalScrollIndicator={false}
     />
   );
-};
+});
 
 const TalesOverviewScreen = () => {
   const insets = useSafeAreaInsets();
@@ -109,6 +109,10 @@ const TalesOverviewScreen = () => {
     onEndReached,
     onRefresh,
   } = useInfiniteDataManager("tales-md", "dev");
+
+  const dataFetched = data && data.pages && data.pages[0];
+  const dataFetchedIsEmpty = dataFetched && data.pages[0].length === 0;
+  const dataFetchedIsNotEmpty = dataFetched && data.pages[0].length > 0;
 
   console.log("===========================");
   console.log("isFetching: ", isFetching);
@@ -132,14 +136,16 @@ const TalesOverviewScreen = () => {
           styles.masonryListContainer,
           { height, paddingTop: 8, paddingBottom: insets.bottom + 8 },
         ]}>
-        {data && data.pages[0].length === 0 ? (
+        {dataFetchedIsEmpty ? (
           <View style={styles.flexCenter}>
             <Text style={styles.description}>No tales at the moment...</Text>
           </View>
         ) : (
           <MasonryList
             containerStyle={styles.masonryList}
-            data={data?.pages.flat(1) || ([] as TaleThumbnailInfo[])}
+            data={
+              dataFetched ? data.pages.flat(1) : ([] as TaleThumbnailInfo[])
+            }
             numColumns={2}
             renderItem={({ item, i }) => (
               <TaleThumbnail data={item as TaleThumbnailInfo} />

@@ -4,15 +4,27 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import type { RouteBottomControlsProps } from "./types/types";
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
+import { useAppDispatch, useAppSelector } from "../../utils/redux/hooks";
+import {
+  itineraryPlanner_clearRoute,
+  itineraryPlanner_deleteRoute,
+  itineraryPlanner_setRoute,
+  itineraryPlanner_startRouting,
+} from "../../utils/redux/reducers/itineraryPlannerSlice";
+import { useCallback } from "react";
 
 const RouteBottomControls = ({
   isRouted,
   oneRouteLeft,
   routeLength,
-  onClearRoute,
-  onDeleteRoute,
-  onStartRouting,
 }: RouteBottomControlsProps) => {
+  const dispatch = useAppDispatch();
+  const selectedRoute = useAppSelector(state =>
+    state.itineraryPlanner.itinerary.routes.find(
+      route => route.id === state.itineraryPlanner.selectedRouteId,
+    ),
+  );
+  console.log("SELECTEDROUTE IN bottomcontrols: ", selectedRoute);
   const clearButtonIsDisabled = oneRouteLeft && routeLength === 0;
   const routeButtonIsDisabled = routeLength <= 1 || isRouted;
   const clearButtonColor = clearButtonIsDisabled
@@ -21,6 +33,35 @@ const RouteBottomControls = ({
   const routeButtonColor = routeButtonIsDisabled
     ? PALETTE.LIGHTGREY
     : PALETTE.BLACK;
+
+  const onDeleteRoute = useCallback(() => {
+    dispatch(itineraryPlanner_deleteRoute());
+  }, [itineraryPlanner_deleteRoute, dispatch]);
+  const onClearRoute = useCallback(() => {
+    dispatch(itineraryPlanner_clearRoute());
+  }, [itineraryPlanner_clearRoute, dispatch]);
+
+  const onStartRouting = useCallback(async () => {
+    if (selectedRoute) {
+      console.log("Starting to route...");
+      try {
+        const routedRoute = await dispatch(
+          itineraryPlanner_startRouting(selectedRoute),
+        ).unwrap();
+
+        if (routedRoute) {
+          dispatch(itineraryPlanner_setRoute({ route: routedRoute }));
+        }
+      } catch (err) {
+        console.error("An error occured while routing: ", err);
+      }
+    }
+  }, [
+    selectedRoute,
+    itineraryPlanner_startRouting,
+    itineraryPlanner_setRoute,
+    dispatch,
+  ]);
 
   return (
     <View style={styles.bottomControls}>

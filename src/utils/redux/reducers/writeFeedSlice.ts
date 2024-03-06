@@ -1,37 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { FeedItem } from "../../../components/feed/types/types";
 
-export type NewFeedState = Readonly<{
+export type WriteFeedState = Readonly<{
   items: FeedItem[];
   posting: boolean;
-  saving: boolean;
   selectedItemId: number;
 }>;
 
-const initialState: NewFeedState = {
+const initialState: WriteFeedState = {
   items: [],
   posting: false,
-  saving: false,
   selectedItemId: 0,
 };
 
-const newFeedSlice = createSlice({
-  name: "newFeed",
+const writeFeedSlice = createSlice({
+  name: "writeFeed",
   initialState,
   reducers: {
-    addItems: (state, action) => {
+    writeFeed_addItems: (state, action) => {
       console.log("Before: ", state.items);
       state.items.splice(action.payload.id, 0, ...action.payload.items);
       console.log("After: ", state.items);
     },
-    deleteItemById: (state, action) => {
+    writeFeed_deleteItemById: (state, action) => {
       if (action.payload === state.items.length - 1) {
         state.selectedItemId = action.payload - 1;
       }
       state.items.splice(action.payload, 1);
       console.log("DeleteItemById ended: ", state);
     },
-    editCaption: (state, action) => {
+    writeFeed_editCaption: (state, action) => {
       console.log(action.payload);
       const items = state.items.map((item, index) => {
         if (index === action.payload.id) {
@@ -44,29 +42,22 @@ const newFeedSlice = createSlice({
       console.log(JSON.stringify(items, null, 4));
       return { ...state, items };
     },
-    reset: () => {
-      console.log("Reseting...");
-      return initialState;
-    },
-    setPosting: (state, action) => {
+    writeFeed_setPosting: (state, action) => {
       state.posting = action.payload;
     },
-    setSaving: (state, action) => {
-      state.saving = action.payload;
-    },
-    setSelectedItemId: (state, action) => {
+    writeFeed_setSelectedItemId: (state, action) => {
       state.selectedItemId = action.payload;
     },
+    writeFeed_resetWriteFeedSlice: () => initialState,
   },
 });
 
 export const {
-  addItems,
-  deleteItemById,
-  editCaption,
-  reset,
-  setPosting,
-  setSaving,
-  setSelectedItemId,
-} = newFeedSlice.actions;
-export default newFeedSlice.reducer;
+  writeFeed_addItems,
+  writeFeed_deleteItemById,
+  writeFeed_editCaption,
+  writeFeed_resetWriteFeedSlice,
+  writeFeed_setPosting,
+  writeFeed_setSelectedItemId,
+} = writeFeedSlice.actions;
+export default writeFeedSlice.reducer;

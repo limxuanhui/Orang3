@@ -1,23 +1,25 @@
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import { useAppDispatch, useAppSelector } from "../../utils/redux/hooks";
-import { setSelectedItemId } from "../../utils/redux/reducers/newFeedSlice";
+import { writeFeed_setSelectedItemId } from "../../utils/redux/reducers/writeFeedSlice";
 import GypsieFeedCarousel from "../common/GypsieFeedCarousel";
+import { AuthContext } from "../../utils/contexts/AuthContext";
 
-const NewFeedCarousel = () => {
-  // use global object to get handle
-  const handle = "@Joseph";
+const WriteFeedCarousel = () => {
+  const { user } = useContext(AuthContext);
+  const handle = user ? `@${user.handle}` : "";
+
   const { items, selectedItemId: currIndex } = useAppSelector(
-    state => state.newFeed,
+    state => state.writeFeed,
   );
   const dispatch = useAppDispatch();
 
   const onViewableItemsChanged = useCallback(
     ({ viewableItems, itemsChanged }: any) => {
       if (viewableItems && viewableItems.length > 0) {
-        dispatch(setSelectedItemId(viewableItems[0].index));
+        dispatch(writeFeed_setSelectedItemId(viewableItems[0].index));
       }
     },
-    [setSelectedItemId, dispatch],
+    [writeFeed_setSelectedItemId, dispatch],
   );
 
   return (
@@ -30,4 +32,4 @@ const NewFeedCarousel = () => {
   );
 };
 
-export default NewFeedCarousel;
+export default WriteFeedCarousel;

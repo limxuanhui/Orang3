@@ -1,22 +1,34 @@
+import { nanoid } from "@reduxjs/toolkit";
 import { StoryItemType } from "../components/post/types/types";
-import type { NewTale, Tale } from "../components/tale/types/types";
+import type { Tale } from "../components/tale/types/types";
 import type { TaleThumbnailInfo } from "../components/tale/types/types";
 import { storyBodyStyle, storyTitleStyle } from "../utils/constants/text";
 import { DUMMY_FEEDS } from "./feeds";
+import { DUMMY_ITINERARIES } from "./itinerary";
 
 export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
   {
     taleId: "tale-1",
     creator: {
       id: "user-1",
+      name: "JennieKim",
       handle: "@jennie",
-      avatarUri:
-        "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+      email: "jennie@test.com",
+      avatar: {
+        id: "avatar-1",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+        height: 736,
+        width: 736,
+      },
     },
     cover: {
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-1.jpeg",
       id: "tale-1-cover-1",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-1.jpeg",
+      height: 1024,
+      width: 681,
+      // aspectRatio: 681 / 1024,
     },
     title: "Taiwan Chronicles: Exploring Paradises",
   },
@@ -24,13 +36,24 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
     taleId: "tale-2",
     creator: {
       id: "user-3",
+      name: "LaLisa",
       handle: "@lisa",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+      email: "lisa@test.com",
+      avatar: {
+        id: "avatar-2",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+        height: 1280,
+        width: 719,
+      },
     },
     cover: {
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-1.jpg",
       id: "tale-2-cover",
       type: "image/jpg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-1.jpg",
+      height: 1349,
+      width: 1080,
+      // aspectRatio: 1080 / 1349,
     },
     title: "Escaping to Tranquil Singapore & Beyond",
   },
@@ -38,13 +61,24 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
     taleId: "tale-3",
     creator: {
       id: "user-4",
+      name: "Rosé",
       handle: "@rose",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+      email: "rose@test.com",
+      avatar: {
+        id: "avatar-3",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+        height: 2026,
+        width: 1268,
+      },
     },
     cover: {
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-1.jpeg",
       id: "tale-3-cover",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-1.jpeg",
+      height: 1104,
+      width: 736,
+      // aspectRatio: 736 / 1104,
     },
     title: "Uncover Serene Havens & Cultural Marvels in Korea",
   },
@@ -52,13 +86,24 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
     taleId: "tale-4",
     creator: {
       id: "user-2",
+      name: "KimJisoo",
       handle: "@jisoo",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+      email: "jisoo@test.com",
+      avatar: {
+        id: "avatar-4",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+        height: 586,
+        width: 480,
+      },
     },
     cover: {
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-1.jpeg",
       id: "tale-4-cover",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-1.jpeg",
+      height: 1080,
+      width: 720,
+      // aspectRatio: 720 / 1080,
     },
     title: "Journey Through Timeless Landscapes of Thailand",
   },
@@ -66,14 +111,24 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
     taleId: "tale-5",
     creator: {
       id: "user-1",
+      name: "JennieKim",
       handle: "@jennie",
-      avatarUri:
-        "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+      email: "jennie@test.com",
+      avatar: {
+        id: "avatar-1",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+        height: 736,
+        width: 736,
+      },
     },
     cover: {
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-1.jpeg",
       id: "tale-5-cover",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-1.jpeg",
+      height: 1000,
+      width: 750,
+      // aspectRatio: 750 / 1000,
     },
     title: "Discovering Hidden Gems & Natural Beauty of Japan",
   },
@@ -81,13 +136,24 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
     taleId: "tale-6",
     creator: {
       id: "user-3",
+      name: "LaLisa",
       handle: "@lisa",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+      email: "lisa@test.com",
+      avatar: {
+        id: "avatar-2",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+        height: 1280,
+        width: 719,
+      },
     },
     cover: {
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-1.jpeg",
       id: "tale-6-cover",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-1.jpeg",
+      height: 920,
+      width: 736,
+      // aspectRatio: 736 / 920,
     },
     title: "Adventures in the Land of Enchantment: Vietnam",
   },
@@ -95,13 +161,24 @@ export const DUMMY_TALE_THUMBNAILS: TaleThumbnailInfo[] = [
     taleId: "tale-7",
     creator: {
       id: "user-2",
+      name: "KimJisoo",
       handle: "@jisoo",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+      email: "jisoo@test.com",
+      avatar: {
+        id: "avatar-4",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+        height: 586,
+        width: 480,
+      },
     },
     cover: {
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-1.jpeg",
       id: "tale-7-cover",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-1.jpeg",
+      height: 931,
+      width: 736,
+      // aspectRatio: 736 / 931,
     },
     title: "Explore Ancient Ruins & Modern Wonders of China",
   },
@@ -112,22 +189,28 @@ export const DUMMY_TALES: Tale[] = [
     id: "tale-1",
     creator: {
       id: "user-1",
+      name: "JennieKim",
       handle: "@jennie",
-      avatarUri:
-        "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+      email: "jennie@test.com",
+      avatar: {
+        id: "avatar-1",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+        height: 736,
+        width: 736,
+      },
     },
     cover: {
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-1.jpeg",
       id: "tale-1-cover-1",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/taiwan/taiwan-1.jpeg",
+      height: 1024,
+      width: 681,
+      // aspectRatio: 681 / 1024,
     },
     title: "Taiwan Chronicles: Exploring Paradises",
     feeds: [DUMMY_FEEDS[0], DUMMY_FEEDS[4]],
-    itinerary: {
-      id: "itinerary-1",
-      creatorId: "user-1",
-      routes: [],
-    },
+    itinerary: DUMMY_ITINERARIES[0],
     story: [
       {
         id: "tale-1-storytext-1",
@@ -150,7 +233,7 @@ export const DUMMY_TALES: Tale[] = [
       {
         id: "tale-1-storymedia-1",
         type: StoryItemType.Media,
-        data: DUMMY_FEEDS[0].items.map((el) => ({
+        data: DUMMY_FEEDS[0].items.map(el => ({
           feedId: "feed-1",
           uri: el.media?.uri as string,
         })),
@@ -175,20 +258,39 @@ export const DUMMY_TALES: Tale[] = [
     id: "tale-2",
     creator: {
       id: "user-3",
+      name: "LaLisa",
       handle: "@lisa",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+      email: "lisa@test.com",
+      avatar: {
+        id: "avatar-2",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+        height: 1280,
+        width: 719,
+      },
     },
     cover: {
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-1.jpg",
       id: "tale-2-cover",
       type: "image/jpg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/singapore/singapore-1.jpg",
+      height: 1349,
+      width: 1080,
+      // aspectRatio: 1080 / 1349,
     },
     title: "Escaping to Tranquil Singapore & Beyond",
     feeds: [DUMMY_FEEDS[2], DUMMY_FEEDS[6]],
     itinerary: {
       id: "itinerary-2",
       creatorId: "user-3",
-      routes: [],
+      routes: [
+        {
+          id: nanoid(),
+          name: "Day 1",
+          routeNodes: [],
+          isRouted: false,
+          encodedPolyline: "",
+        },
+      ],
     },
     story: [
       {
@@ -237,20 +339,39 @@ export const DUMMY_TALES: Tale[] = [
     id: "tale-3",
     creator: {
       id: "user-4",
+      name: "Rosé",
       handle: "@rose",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+      email: "rose@test.com",
+      avatar: {
+        id: "avatar-3",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/rose.jpeg",
+        height: 2026,
+        width: 1268,
+      },
     },
     cover: {
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-1.jpeg",
       id: "tale-3-cover",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/korea/korea-1.jpeg",
+      height: 1104,
+      width: 736,
+      // aspectRatio: 736 / 1104,
     },
     title: "Uncover Serene Havens & Cultural Marvels in Korea",
     feeds: [DUMMY_FEEDS[3], DUMMY_FEEDS[7]],
     itinerary: {
       id: "itinerary-3",
       creatorId: "user-4",
-      routes: [],
+      routes: [
+        {
+          id: nanoid(),
+          name: "Day 1",
+          routeNodes: [],
+          isRouted: false,
+          encodedPolyline: "",
+        },
+      ],
     },
     story: [
       {
@@ -299,20 +420,39 @@ export const DUMMY_TALES: Tale[] = [
     id: "tale-4",
     creator: {
       id: "user-2",
+      name: "KimJisoo",
       handle: "@jisoo",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+      email: "jisoo@test.com",
+      avatar: {
+        id: "avatar-4",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+        height: 586,
+        width: 480,
+      },
     },
     cover: {
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-1.jpeg",
       id: "tale-4-cover",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/thailand/thailand-1.jpeg",
+      height: 1080,
+      width: 720,
+      // aspectRatio: 720 / 1080,
     },
     title: "Journey Through Timeless Landscapes of Thailand",
     feeds: [DUMMY_FEEDS[1], DUMMY_FEEDS[5]],
     itinerary: {
       id: "itinerary-4",
       creatorId: "user-2",
-      routes: [],
+      routes: [
+        {
+          id: nanoid(),
+          name: "Day 1",
+          routeNodes: [],
+          isRouted: false,
+          encodedPolyline: "",
+        },
+      ],
     },
     story: [
       {
@@ -361,21 +501,39 @@ export const DUMMY_TALES: Tale[] = [
     id: "tale-5",
     creator: {
       id: "user-1",
+      name: "JennieKim",
       handle: "@jennie",
-      avatarUri:
-        "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+      email: "jennie@test.com",
+      avatar: {
+        id: "avatar-1",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie.jpeg",
+        height: 736,
+        width: 736,
+      },
     },
     cover: {
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-1.jpeg",
       id: "tale-5-cover",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan/japan-1.jpeg",
+      height: 1000,
+      width: 750,
+      // aspectRatio: 750 / 1000,
     },
     title: "Discovering Hidden Gems & Natural Beauty of Japan",
     feeds: [DUMMY_FEEDS[8], DUMMY_FEEDS[11]],
     itinerary: {
       id: "itinerary-5",
       creatorId: "user-1",
-      routes: [],
+      routes: [
+        {
+          id: nanoid(),
+          name: "Day 1",
+          routeNodes: [],
+          isRouted: false,
+          encodedPolyline: "",
+        },
+      ],
     },
     story: [
       {
@@ -448,20 +606,39 @@ export const DUMMY_TALES: Tale[] = [
     id: "tale-6",
     creator: {
       id: "user-3",
+      name: "LaLisa",
       handle: "@lisa",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+      email: "lisa@test.com",
+      avatar: {
+        id: "avatar-2",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/lisa.jpeg",
+        height: 1280,
+        width: 719,
+      },
     },
     cover: {
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-1.jpeg",
       id: "tale-6-cover",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/vietnam/vietnam-1.jpeg",
+      height: 920,
+      width: 736,
+      // aspectRatio: 736 / 920,
     },
     title: "Adventures in the Land of Enchantment: Vietnam",
     feeds: [DUMMY_FEEDS[10], DUMMY_FEEDS[13]],
     itinerary: {
       id: "itinerary-6",
       creatorId: "user-3",
-      routes: [],
+      routes: [
+        {
+          id: nanoid(),
+          name: "Day 1",
+          routeNodes: [],
+          isRouted: false,
+          encodedPolyline: "",
+        },
+      ],
     },
     story: [
       {
@@ -510,20 +687,39 @@ export const DUMMY_TALES: Tale[] = [
     id: "tale-7",
     creator: {
       id: "user-2",
+      name: "KimJisoo",
       handle: "@jisoo",
-      avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+      email: "jisoo@test.com",
+      avatar: {
+        id: "avatar-4",
+        type: "image/jpeg",
+        uri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jisoo.jpeg",
+        height: 586,
+        width: 480,
+      },
     },
     cover: {
+      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-1.jpeg",
       id: "tale-7-cover",
       type: "image/jpeg",
-      uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/china/china-1.jpeg",
+      height: 931,
+      width: 736,
+      // aspectRatio: 736 / 931,
     },
     title: "Explore Ancient Ruins & Modern Wonders of China",
     feeds: [DUMMY_FEEDS[9], DUMMY_FEEDS[12]],
     itinerary: {
       id: "itinerary-7",
       creatorId: "user-2",
-      routes: [],
+      routes: [
+        {
+          id: nanoid(),
+          name: "Day 1",
+          routeNodes: [],
+          isRouted: false,
+          encodedPolyline: "",
+        },
+      ],
     },
     story: [
       {

@@ -36,7 +36,7 @@ const NewPostOptions = () => {
 
   const onPressNewTale = useCallback(() => {
     closeBottomSheet();
-    navigation.navigate("Modal", { screen: "NewTale" });
+    navigation.navigate("Modal", { screen: "WriteTale", params: {} });
   }, [bottomSheetRef, navigation]);
 
   return (

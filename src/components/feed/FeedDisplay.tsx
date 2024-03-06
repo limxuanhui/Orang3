@@ -17,7 +17,7 @@ const FeedDisplay = ({ data, inView }: FeedDisplayProps) => {
     shares,
     taleId,
   } = data;
-
+  console.log("DATA: ", JSON.stringify(data, null,4));
   return (
     <View style={styles.container}>
       <FeedCarousel handle={creator.handle} items={items} inView={inView} />

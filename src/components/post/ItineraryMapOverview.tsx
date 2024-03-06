@@ -7,15 +7,15 @@ import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
 
-const ItineraryMapOverview = ({ creatorId }: ItineraryMapOverviewProps) => {
+const ItineraryMapOverview = ({itineraryId, creatorId }: ItineraryMapOverviewProps) => {
   // Pass itinerary data into navigation options parameters. If null/empty, then it is new plan
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const userInfo = useContext(AuthContext);
 
   const onPressOverview = useCallback(() => {
     navigation.push("Modal", {
-      screen: "ItineraryView",
-      // params: { id: "", creatorId: "" },
+      screen: "Itinerary",
+      params: { id: itineraryId, creatorId: "" },
     });
   }, [navigation]);
 

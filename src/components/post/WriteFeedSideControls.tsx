@@ -5,16 +5,16 @@ import AddMoreIcon from "../common/icons/AddMoreIcon";
 import DeleteOutlineIcon from "../common/icons/DeleteOutlineIcon";
 import EditIcon from "../common/icons/EditIcon";
 import GypsieButton from "../common/buttons/GypsieButton";
-import type { NewFeedSideControlsProps } from "./types/types";
+import type { WriteFeedSideControlsProps } from "./types/types";
 import { PALETTE } from "../../utils/constants/palette";
 
-const NewFeedPostSideControls = ({
+const WriteFeedSideControls = ({
   onPressAdd,
   onPressDelete,
   onPressEdit,
   onPressPost,
-}: NewFeedSideControlsProps) => {
-  const { items, posting } = useAppSelector(state => state.newFeed);
+}: WriteFeedSideControlsProps) => {
+  const { items, posting } = useAppSelector(state => state.writeFeed);
   const isValidPost = items.length > 0;
 
   return (
@@ -23,6 +23,7 @@ const NewFeedPostSideControls = ({
         customButtonStyles={styles.button}
         customIconStyles={styles.icon}
         Icon={AddMoreIcon}
+        disabled={posting}
         onPress={onPressAdd}
       />
       <GypsieButton
@@ -32,7 +33,7 @@ const NewFeedPostSideControls = ({
           { color: isValidPost ? PALETTE.WHITE : PALETTE.GREY },
         ]}
         Icon={EditIcon}
-        disabled={!isValidPost}
+        disabled={!isValidPost || posting}
         onPress={onPressEdit}
       />
       <GypsieButton
@@ -42,7 +43,7 @@ const NewFeedPostSideControls = ({
           { color: isValidPost ? PALETTE.WHITE : PALETTE.GREY },
         ]}
         Icon={DeleteOutlineIcon}
-        disabled={!isValidPost}
+        disabled={!isValidPost || posting}
         onPress={onPressDelete}
       />
       <GypsieButton
@@ -53,7 +54,7 @@ const NewFeedPostSideControls = ({
         customTextStyles={styles.postButtonText}
         text="Post"
         loading={posting}
-        disabled={!isValidPost}
+        disabled={!isValidPost || posting}
         onPress={onPressPost}
       />
     </AuxiliaryControls>
@@ -78,4 +79,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewFeedPostSideControls;
+export default WriteFeedSideControls;

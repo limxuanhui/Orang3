@@ -1,35 +1,57 @@
+import { memo, useContext, useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs";
+import { ActivityIndicator } from "react-native-paper";
 import MasonryList from "@react-native-seoul/masonry-list";
 import TaleThumbnail from "../tale/TaleThumbnail";
-import { TaleThumbnailInfo } from "../tale/types/types";
-import { DUMMY_TALE_THUMBNAILS } from "../../data/tales";
-import { useContext } from "react";
-import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs";
+import type { TaleThumbnailInfo } from "../tale/types/types";
+import type { MyTalesProps } from "./types/types";
 import { DEVICE_HEIGHT } from "../../utils/constants/constants";
+import { PALETTE } from "../../utils/constants/palette";
 
-const MyTales = () => {
-  // Fetch data that belong to user
-  const data: TaleThumbnailInfo[] = DUMMY_TALE_THUMBNAILS;
-
-  const bh = useContext(BottomTabBarHeightContext) || 0;
-  const height = (1 - 0.25 - 0.05) * DEVICE_HEIGHT - bh;
+const MyTales = memo(({ data }: MyTalesProps) => {
+  const insets = useSafeAreaInsets();
+  const bh = useContext(BottomTabBarHeightContext) || insets.bottom;
+  const height = useMemo(
+    () => (1 - 0.25 - 0.05) * DEVICE_HEIGHT - bh,
+    [DEVICE_HEIGHT, bh],
+  );
 
   return (
     <View style={[styles.container, { height: height }]}>
-      <MasonryList
-        contentContainerStyle={{
-          //   borderWidth: 0,
-          //   borderColor: "red",
-          paddingHorizontal: 2,
-        }}
-        data={data}
-        renderItem={el => <TaleThumbnail data={el.item as TaleThumbnailInfo} />}
-        numColumns={2}
-        showsVerticalScrollIndicator={false}
-      />
+      {!data ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <ActivityIndicator size={48} color={PALETTE.ORANGE} />
+        </View>
+      ) : data.length === 0 ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <Text
+            style={{
+              color: PALETTE.GREY,
+              fontFamily: "Futura",
+              fontSize: 24,
+              fontWeight: "bold",
+            }}>
+            You have no tales...
+          </Text>
+        </View>
+      ) : (
+        <MasonryList
+          contentContainerStyle={{ paddingHorizontal: 2 }}
+          data={data}
+          renderItem={el => (
+            <TaleThumbnail data={el.item as TaleThumbnailInfo} />
+          )}
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {},

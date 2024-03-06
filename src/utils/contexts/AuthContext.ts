@@ -2,7 +2,7 @@ import { createContext } from "react";
 import type { GypsieUser } from "../../components/navigators/types/types";
 
 type Auth = {
-  user: GypsieUser;
+  user: GypsieUser | null;
   isLoggedIn: boolean;
   loading: boolean;
   googleSigninHandler: () => void;
@@ -12,7 +12,7 @@ type Auth = {
 export const AuthContext = createContext<Auth>({
   user: null,
   isLoggedIn: false,
-  loading: false,  
+  loading: false,
   googleSigninHandler: () => {},
   logoutHandler: () => {},
 });

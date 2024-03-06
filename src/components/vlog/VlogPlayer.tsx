@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { StyleSheet,View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Video from "react-native-video";
 import VlogPlayerButton from "./VlogPlayerButton";
 import VlogPlayerSlider from "./VlogPlayerSlider";
@@ -10,7 +10,7 @@ import { PALETTE } from "../../utils/constants/palette";
 
 const VlogPlayer = ({ vlog, shouldPlay }: VlogPlayerProps) => {
   const { media } = vlog;
-  console.log("Vlog player: ", media )
+  console.log("Vlog player: ", media);
   const [status, setStatus] = useState<VlogPlayerStatus>(
     VlogPlayerStatus.PLAYING,
   );
@@ -28,8 +28,8 @@ const VlogPlayer = ({ vlog, shouldPlay }: VlogPlayerProps) => {
   return (
     <View style={styles.container}>
       <Video
-        style={styles.video}
-        source={{ uri: media?.uri }}
+        style={[styles.video, { aspectRatio: media.width / media.height }]}
+        source={{ uri: media.uri }}
         paused={!shouldPlay || status === VlogPlayerStatus.PAUSED}
         controls={false}
         repeat
@@ -52,11 +52,13 @@ const VlogPlayer = ({ vlog, shouldPlay }: VlogPlayerProps) => {
 
 const styles = StyleSheet.create({
   container: {
+    justifyContent: "center",
+    alignItems: "center",
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
   },
   video: {
-    height: DIMENSION.HUNDRED_PERCENT,
+    // height: DIMENSION.HUNDRED_PERCENT,
     width: DIMENSION.HUNDRED_PERCENT,
     backgroundColor: PALETTE.BLACK,
   },

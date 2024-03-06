@@ -3,12 +3,19 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { User } from "@react-native-google-signin/google-signin";
 import type { FeedScreenParams } from "../../screens/feed/types/types";
 import type { AuthStackNavigatorParamList } from "../../screens/auth/types/types";
-import type { PlaceSearchScreenParams } from "../../screens/tale/types/types";
+import type {
+  ItineraryScreenParams,
+  PlaceSearchScreenParams,
+} from "../../screens/tale/types/types";
 import type {
   AvatarScreenParams,
   ProfileScreenParams,
 } from "../../screens/profile/types/types";
-import { TaleViewScreenParams } from "../../screens/post/types/types";
+import {
+  TaleViewScreenParams,
+  WriteTaleScreenParams,
+} from "../../screens/post/types/types";
+import type { Media } from "../../feed/types/types";
 
 // declare global {
 //   namespace ReactNavigation {
@@ -16,15 +23,13 @@ import { TaleViewScreenParams } from "../../screens/post/types/types";
 //   }
 // }
 
-export type GypsieUser =
-  // | User
-  {
-    id: string;
-    name: string;
-    handle: string;
-    email: string;
-    picture?: string;
-  } | null;
+export type GypsieUser = {
+  id: string;
+  name: string;
+  handle: string;
+  email: string;
+  avatar?: Media;
+};
 
 export type RootStackNavigatorParamList = {
   Auth: AuthStackNavigatorParamList | undefined;
@@ -38,7 +43,6 @@ export type AppStackNavigatorParamList = {
 
 export type BottomTabNavigatorParamList = {
   Home: undefined;
-  // test: undefined;
   TaleStack: undefined;
   Post: undefined;
   DriverStack: undefined;
@@ -52,10 +56,10 @@ export type ModalNavigatorNavigationProp = StackNavigationProp<
 >;
 
 export type ModalNavigatorParamList = {
-  NewFeed: undefined;
-  NewTale: undefined;
+  WriteFeed: undefined;
+  WriteTale: WriteTaleScreenParams;
   TaleView: TaleViewScreenParams;
-  ItineraryView: undefined;
+  Itinerary: ItineraryScreenParams;
   Feed: FeedScreenParams;
   Avatar: AvatarScreenParams;
   PlaceSearch: PlaceSearchScreenParams;

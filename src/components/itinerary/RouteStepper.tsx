@@ -5,20 +5,21 @@ import type { RouteNodeInfo, RouteStepperProps } from "./types/types";
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
 
-const RouteStepper = ({ route, onDeletePlace }: RouteStepperProps) => {
+const RouteStepper = ({ route }: RouteStepperProps) => {
   return (
     <ScrollView
       style={styles.routeStepper}
       contentContainerStyle={styles.contentContainerStyle}
       showsVerticalScrollIndicator={false}>
-      {route?.routeNodes.map((routeNode: RouteNodeInfo) => (
+      {route?.routeNodes.map((routeNode: RouteNodeInfo, index: number) => (
         <>
           <RouteNode
             key={Math.random.toString()} // To change to uuid
             routeNode={routeNode}
-            onDeletePlace={onDeletePlace}
           />
-          {/* <RouteConnector horizontal={false} /> */}
+          {index !== route.routeNodes.length - 1 ? (
+            <RouteConnector horizontal={false} />
+          ) : null}
         </>
       ))}
     </ScrollView>

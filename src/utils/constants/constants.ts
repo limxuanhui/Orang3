@@ -34,8 +34,6 @@ export const COLOR_PALETTE = {
   PRIMARY_PINK: "#f019ff",
 };
 
-// export const API_KEY: string = "AIzaSyDLFxbxQyuOst6hzzaOKl8weOuQ5kKUZPY";
-
 export const GOOGLE_PLACES_AUTOCOMPLETE_QUERY_OPTIONS = {
   key: GOOGLE_MAPS_API_KEY,
   language: "en",
@@ -58,3 +56,6 @@ export const GOOGLE_PLACES_AUTOCOMPLETE_TEXT_INPUT_PROPS = {
 export const HEADER_SHOWN_FALSE = { headerShown: false };
 
 export const SCREEN_OPTIONS: StackNavigationOptions = { headerShown: false };
+
+export const PLACEHOLDER_IMAGE_URI: string =
+  "/Users/limxuanhui/bluextech/gypsie/assets/images/sun_design3.png";

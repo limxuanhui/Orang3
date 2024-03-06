@@ -1,26 +1,36 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { Pressable, ScrollView, StyleSheet, View } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import RouteButton from "./RouteButton";
 import type { RouteControlsProps, RouteInfo } from "./types/types";
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
+import { useAppDispatch, useAppSelector } from "../../utils/redux/hooks";
+import { holdRoute, openModal } from "../../utils/redux/reducers/itineraryPlannerSlice";
 
-const RouteControls = ({
-  routes,
-  selectedRouteId,
-  onHoldRoute,
-  onSelectRoute,
-}: RouteControlsProps) => {
+const RouteControls = ({ routes, selectedRouteId }: RouteControlsProps) => {
+  const dispatch = useAppDispatch();
+  const { mode } = useAppSelector(state => state.itineraryPlanner);
+
   const onPressAdd = useCallback(() => {
-    onHoldRoute("");
-  }, [onHoldRoute]);
+    dispatch(openModal());
+    dispatch(holdRoute({ modalInitialValue: "" }));
+  }, [holdRoute, openModal, dispatch]);
+
+  const sliderBorderRightStyle = useMemo(
+    () => ({
+      borderRightWidth: mode === "edit" ? 1 : 0,
+      borderRightColor:
+        mode === "edit" ? PALETTE.LIGHTERGREY : PALETTE.TRANSPARENT,
+    }),
+    [mode, PALETTE],
+  );
 
   return (
     <View style={styles.routeControls}>
       <View style={styles.routeSliderBox}>
         <ScrollView
-          style={styles.routeSlider}
+          style={[styles.routeSlider, sliderBorderRightStyle]}
           horizontal
           showsHorizontalScrollIndicator={false}>
           {routes.map((route: RouteInfo) => (
@@ -28,20 +38,20 @@ const RouteControls = ({
               key={Math.random().toString()} // change to uuid
               route={route}
               selected={route.id === selectedRouteId}
-              onHoldRoute={onHoldRoute}
-              onSelectRoute={onSelectRoute}
             />
           ))}
         </ScrollView>
       </View>
-      <Pressable
-        style={({ pressed }) => [
-          styles.addButton,
-          { opacity: pressed ? 0.7 : 1 },
-        ]}
-        onPress={onPressAdd}>
-        <Ionicons name="add-circle" size={24} color={PALETTE.ORANGE} />
-      </Pressable>
+      {mode === "edit" ? (
+        <Pressable
+          style={({ pressed }) => [
+            styles.addButton,
+            { opacity: pressed ? 0.7 : 1 },
+          ]}
+          onPress={onPressAdd}>
+          <Ionicons name="add-circle" size={24} color={PALETTE.ORANGE} />
+        </Pressable>
+      ) : null}
     </View>
   );
 };
@@ -67,8 +77,6 @@ const styles = StyleSheet.create({
   routeSlider: {
     flexDirection: "row",
     width: DIMENSION.HUNDRED_PERCENT,
-    borderRightWidth: 1,
-    borderRightColor: PALETTE.LIGHTERGREY,
     backgroundColor: PALETTE.OFFWHITE,
     shadowColor: PALETTE.BLACK,
     shadowOpacity: 1,

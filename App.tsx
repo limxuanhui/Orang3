@@ -18,7 +18,7 @@ const queryClient = new QueryClient();
 
 const App = (): JSX.Element => {
   const authInfo = useAuthManager();
-  const isDarkMode = useColorScheme() === "dark";
+  // const isDarkMode = useColorScheme() === "dark";
 
   return (
     <KeyboardProvider>
@@ -26,10 +26,10 @@ const App = (): JSX.Element => {
         <Provider store={store}>
           <AuthContext.Provider value={authInfo}>
             <GestureHandlerRootView style={{ flex: 1 }}>
-              <StatusBar
+              {/* <StatusBar
                 barStyle={isDarkMode ? "light-content" : "dark-content"}
                 hidden
-              />
+              /> */}
               <RootStackNavigator />
             </GestureHandlerRootView>
           </AuthContext.Provider>

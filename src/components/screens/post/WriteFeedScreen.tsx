@@ -8,11 +8,11 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import useNewFeedManager from "../../../utils/hooks/useNewFeedManager";
+import useWriteFeedManager from "../../../utils/hooks/useWriteFeedManager";
 import GypsieButton from "../../common/buttons/GypsieButton";
 import AuxiliaryControls from "../../common/AuxiliaryControls";
-import NewFeedCarousel from "../../post/NewFeedCarousel";
-import NewFeedSideControls from "../../post/NewFeedSideControls";
+import WriteFeedCarousel from "../../post/WriteFeedCarousel";
+import WriteFeedSideControls from "../../post/WriteFeedSideControls";
 import CheckIcon from "../../common/icons/CheckIcon";
 import CloseIcon from "../../common/icons/CloseIcon";
 import {
@@ -22,12 +22,10 @@ import {
 import { DIMENSION } from "../../../utils/constants/dimensions";
 import { PALETTE } from "../../../utils/constants/palette";
 import { useAppDispatch, useAppSelector } from "../../../utils/redux/hooks";
-import { reset } from "../../../utils/redux/reducers/newFeedSlice";
+import { writeFeed_resetWriteFeedSlice } from "../../../utils/redux/reducers/writeFeedSlice";
 
-const NewFeedScreen = () => {
-  const insets = useSafeAreaInsets();
-  // Use global object to get handle
-  // const handle = "@Joseph";
+const WriteFeedScreen = () => {
+  const insets = useSafeAreaInsets();  
   const {
     captionWritten,
     modalIsOpen,
@@ -39,22 +37,22 @@ const NewFeedScreen = () => {
     onPressEdit,
     onPressPost,
     onSaveEditCaption,
-  } = useNewFeedManager();
-  const { saving } = useAppSelector(state => state.newFeed);
+  } = useWriteFeedManager();
+  // const { saving } = useAppSelector(state => state.writeFeed);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log("NewFeedScreen focused");
+    console.log("WriteFeedScreen focused");
     return () => {
-      console.log("NewFeedScreen unfocused");
-      dispatch(reset());
+      console.log("WriteFeedScreen unfocused");
+      dispatch(writeFeed_resetWriteFeedSlice());
     };
-  }, [reset, dispatch]);
+  }, [writeFeed_resetWriteFeedSlice, dispatch]);
 
   return (
     <View style={styles.container}>
-      <NewFeedCarousel />
-      <NewFeedSideControls
+      <WriteFeedCarousel />
+      <WriteFeedSideControls
         onPressAdd={onPressAdd}
         onPressDelete={onPressDelete}
         onPressEdit={onPressEdit}
@@ -80,7 +78,7 @@ const NewFeedScreen = () => {
               customButtonStyles={[styles.auxControlButton, styles.saveButton]}
               customIconStyles={styles.auxControlIcon}
               Icon={CheckIcon}
-              loading={saving}
+              // loading={saving}
               onPress={onSaveEditCaption}
             />
           </AuxiliaryControls>
@@ -151,4 +149,4 @@ const styles = StyleSheet.create({
   saveButton: { backgroundColor: PALETTE.ORANGE },
 });
 
-export default NewFeedScreen;
+export default WriteFeedScreen;

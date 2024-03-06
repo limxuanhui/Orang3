@@ -4,21 +4,25 @@ import { StyleSheet } from "react-native";
 import { Marker } from "react-native-maps";
 import { MapPinProps } from "./types/types";
 
-const MapPin = ({ routeNode, onDeleteMarker }: MapPinProps) => {
-  const onPress = useCallback(
-    // (event: MapEvent) => {
-    (event: any) => {
-      event.stopPropagation();
-      onDeleteMarker(routeNode.placeId);
-    },
-    [routeNode, onDeleteMarker],
-  );
+const MapPin = ({ routeNode }: MapPinProps) => {
+  // const onPress = useCallback(
+  //   // (event: MapEvent) => {
+  //   (event: any) => {
+  //     event.stopPropagation();
+  //     if (onDeleteMarker) {
+  //       onDeleteMarker(routeNode.placeId);
+  //     }
+  //   },
+  //   [routeNode, onDeleteMarker],
+  // );
 
   return (
     <Marker
       key={Math.random()}
       coordinate={routeNode.coord}
-      onPress={onPress}
+      // style={{backgroundColor:'blue'}}
+      pinColor="plum"
+      // onPress={onPress}
       // tracksViewChanges={false}
     />
   );

@@ -35,11 +35,8 @@ const BottomTabNavigator = () => {
               route.name === "ProfileStack" ||
               route.name === "TaleStack" ||
               route.name === "DriverStack"
-                ? // ? PALETTE.OFFWHITE
-                  PALETTE.GREYISHBLUE
-                : // : route.name === "ItineraryStack"
-                  // ? PALETTE.GREYISHBLUE
-                  PALETTE.TRANSPARENT,
+                ? PALETTE.GREYISHBLUE
+                : PALETTE.TRANSPARENT,
             position: "absolute",
             bottom: 0,
 
@@ -47,7 +44,6 @@ const BottomTabNavigator = () => {
             borderTopWidth: 0,
             borderTopColor: "transparent",
             elevation: 0,
-            // shadowColor: "#5bc4ff",
             shadowOpacity: 0,
             shadowOffset: {
               height: 0,
@@ -80,9 +76,7 @@ const BottomTabNavigator = () => {
           tabBarIcon: ({ focused }) => {
             if (focused) {
               return (
-                <BookOpenIcon
-                  style={{ fontSize: 24, color: PALETTE.ORANGE }}
-                />
+                <BookOpenIcon style={{ fontSize: 24, color: PALETTE.ORANGE }} />
               );
             } else {
               return <BookIcon style={{ fontSize: 24, color: PALETTE.GREY }} />;
@@ -120,7 +114,7 @@ const BottomTabNavigator = () => {
         options={{
           tabBarShowLabel: false,
           tabBarIcon: ({ focused }) =>
-            user?.picture ? (
+            user?.avatar ? (
               <Image
                 style={[
                   styles.avatar,
@@ -131,7 +125,7 @@ const BottomTabNavigator = () => {
                   },
                 ]}
                 source={{
-                  uri: user.picture,
+                  uri: user.avatar?.uri,
                 }}
               />
             ) : (
@@ -142,7 +136,6 @@ const BottomTabNavigator = () => {
               />
             ),
         }}
-        
       />
     </BottomTab.Navigator>
   );

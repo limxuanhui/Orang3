@@ -1,45 +1,57 @@
-import { useContext } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { memo, useContext, useMemo } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs";
-import {
-  useSafeAreaFrame,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ActivityIndicator } from "react-native-paper";
 import MasonryList from "@react-native-seoul/masonry-list";
-import useDataManager from "../../utils/hooks/useDataManager";
 import FeedThumbnail from "../feed/FeedThumbnail";
+import type { FeedThumbnailInfo } from "../feed/types/types";
+import type { MyFeedsProps } from "./types/types";
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
-import { DUMMY_FEEDS } from "../../data/feeds";
 import { PALETTE } from "../../utils/constants/palette";
-import { Feed } from "../feed/types/types";
 
-const MyFeeds = () => {
-  // Change to useDataManager
-  // const { refreshing, refreshPostsHandler } = useDataManager("dev");
-  const data: Feed[] = DUMMY_FEEDS;
-  const percentage = 0. * DEVICE_HEIGHT;
-  const bh = useContext(BottomTabBarHeightContext) || 0;
-  const height = (1-0.25-0.05)*DEVICE_HEIGHT - bh;
-  // const percentage = 0.62 * DEVICE_HEIGHT;
-  // const bh = useContext(BottomTabBarHeightContext) || 0;
-  // const height = percentage - bh + 20;
-
-  const safeFrame = useSafeAreaFrame();
+const MyFeeds = memo(({ data }: MyFeedsProps) => {
   const insets = useSafeAreaInsets();
+  const bh = useContext(BottomTabBarHeightContext) || insets.bottom;
+  const height = useMemo(
+    () => (1 - 0.25 - 0.05) * DEVICE_HEIGHT - bh,
+    [DEVICE_HEIGHT, bh],
+  );
 
   return (
-    // <View style={[styles.container, { height: percentage - insets.bottom }]}>
-    <View style={[styles.container, { height: height }]}>
-      <MasonryList        
-        contentContainerStyle={{ borderWidth: 0, borderColor: "red",paddingHorizontal:2 }}
-        data={data}
-        renderItem={el => <FeedThumbnail feed={el.item as Feed} />}
-        numColumns={3}
-        showsVerticalScrollIndicator={false}
-      />
+    <View style={[styles.container, { height }]}>
+      {!data ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <ActivityIndicator size={48} color={PALETTE.ORANGE} />
+        </View>
+      ) : data.length === 0 ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <Text
+            style={{
+              color: PALETTE.GREY,
+              fontFamily: "Futura",
+              fontSize: 24,
+              fontWeight: "bold",
+            }}>
+            You have no feeds...
+          </Text>
+        </View>
+      ) : (
+        <MasonryList
+          contentContainerStyle={{ paddingHorizontal: 2 }}
+          data={data}
+          renderItem={el => (
+            <FeedThumbnail data={el.item as FeedThumbnailInfo} />
+          )}
+          numColumns={3}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

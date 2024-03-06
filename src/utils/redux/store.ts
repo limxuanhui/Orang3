@@ -1,10 +1,14 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import newFeedReducer from "./reducers/newFeedSlice";
-import newTaleReducer from "./reducers/newTaleSlice";
+import itineraryPlannerReducer from "./reducers/itineraryPlannerSlice";
+import writeFeedReducer from "./reducers/writeFeedSlice";
+import writeTaleReducer from "./reducers/writeTaleSlice";
+import userReducer from "./reducers/userSlice";
 
 const rootReducer = combineReducers({
-  newFeed: newFeedReducer,
-  newTale: newTaleReducer,
+  user: userReducer,
+  itineraryPlanner: itineraryPlannerReducer,
+  writeFeed: writeFeedReducer,
+  writeTale: writeTaleReducer,
 });
 
 const store = configureStore({

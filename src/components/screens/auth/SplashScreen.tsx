@@ -1,42 +1,24 @@
-import React, { useContext, useEffect, useState } from "react";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import { GYPSIE_THEME, PALETTE } from "../../../utils/constants/palette";
+import { useContext, useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import GypsieButton from "../../common/buttons/GypsieButton";
 import { AuthContext } from "../../../utils/contexts/AuthContext";
 import Sun from "../../common/splash/Sun";
+import GoogleIcon from "../../common/icons/GoogleIcon";
 import type { SplashScreenProps } from "./types/types";
 import {
   DEVICE_HEIGHT,
   DEVICE_WIDTH,
 } from "../../../utils/constants/constants";
-import GoogleIcon from "../../common/icons/GoogleIcon";
+import { GYPSIE_THEME, PALETTE } from "../../../utils/constants/palette";
 
 const SplashScreen = ({ navigation }: SplashScreenProps) => {
   const {
     user,
     isLoggedIn,
     loading,
-    loginHandler,
     googleSigninHandler,
     logoutHandler,
   } = useContext(AuthContext);
-  const [loadingProgress, setLoadingProgress] = useState(0);
-
-  useEffect(() => {
-    console.log("Progress: " + loadingProgress);
-  }, [loadingProgress]);
-
-  useEffect(() => {
-    // If logged in, transition to app
-    if (isLoggedIn) {
-      // navigation.replace("App");
-      // navigation.push("App")
-      // Send idToken (JWT) to backend for verification
-    }
-
-    // If not logged in, slide in authentication buttons
-  }, [isLoggedIn]);
 
   return (
     <View style={styles.container}>
@@ -51,10 +33,6 @@ const SplashScreen = ({ navigation }: SplashScreenProps) => {
         loading={loading}
       />
       <Sun />
-      {/* <Superman progress={loadingProgress} /> */}
-      {/* <Pressable style={{ borderWidth: 1, borderColor: "red" }} onPress={logoutHandler}>
-        <Text>Logout</Text>
-      </Pressable> */}
     </View>
   );
 };

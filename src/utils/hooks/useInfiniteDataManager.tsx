@@ -9,9 +9,7 @@ import axios from "axios";
 import { useCallback, useMemo } from "react";
 import { DUMMY_TALE_THUMBNAILS } from "../../data/tales";
 import { DUMMY_DATABASE } from "../../data/database";
-
-type DataKey = "feeds" | "itineraries" | "tales" | "tales-md" | "users";
-type DataMode = "dev" | "test" | "prod";
+import type { DataKey, DataMode } from "../../data/types/types";
 
 /**
  * useInfiniteDataManager manages the lifecycle of data (fetching, caching, invalidating)
@@ -31,12 +29,13 @@ const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
           try {
             const url = `${BACKEND_BASE_URL}/api/${key}`;
             const response = await axios.get(url);
+            console.log("Querying infinite data for: ", key);
+            console.log("REsponse!!!", JSON.stringify(response.data));
             return response.data;
           } catch (err) {
             console.error(err);
-            // Throw error?
-            // throw new Error(err);
           }
+          break;
 
         case "dev":
           return new Promise((resolve, reject) => {
@@ -48,6 +47,7 @@ const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
               resolve(data);
             }, 2000);
           });
+
         default:
           // Do I need to return a promise here?
           console.info(`${dataMode} mode is not handled.`);

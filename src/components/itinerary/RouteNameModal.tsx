@@ -4,22 +4,28 @@ import type { RouteNameModalProps } from "./types/types";
 import { DEVICE_HEIGHT } from "../../utils/constants/constants";
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
+import {
+  addRoute,
+  closeModal,
+  updateRouteName,
+} from "../../utils/redux/reducers/itineraryPlannerSlice";
+import { useAppDispatch } from "../../utils/redux/hooks";
 
-const RouteNameModal = ({
-  initialValue,
-  onCancel,
-  onAddRoute,
-  onUpdateRouteName,
-}: RouteNameModalProps) => {
+const RouteNameModal = ({ initialValue }: RouteNameModalProps) => {
   const [name, setName] = useState<string>(initialValue);
+  const dispatch = useAppDispatch();
 
   const onConfirm = useCallback(() => {
     if (initialValue === "") {
-      onAddRoute(name);
+      dispatch(addRoute({ name }));
     } else {
-      onUpdateRouteName(name);
+      dispatch(updateRouteName({ name }));
     }
-  }, [name, initialValue, onAddRoute, onUpdateRouteName]);
+  }, [initialValue, name, addRoute, updateRouteName, dispatch]);
+
+  const onCancel = useCallback(() => {
+    dispatch(closeModal());
+  }, [closeModal, dispatch]);
 
   const confirmButtonIsDisabled = name === "";
 

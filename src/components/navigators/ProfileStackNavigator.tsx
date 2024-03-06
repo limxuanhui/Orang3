@@ -12,10 +12,8 @@ const ProfileStack = createStackNavigator<ProfileStackNavigatorParamList>();
 
 const ProfileStackNavigator = () => {
   const { user } = useContext(AuthContext);
-  // Get from global user data
-  const avatarUri = user?.picture;
-  console.log("ProfileStackNavigator: ", JSON.stringify(user, null, 4));
-    // "/Users/limxuanhui/bluextech/gypsie/assets/avatars/jennie2.png";
+  const userId = user?.id;
+  const avatarUri = user?.avatar?.uri; 
 
   return (
     <ProfileStack.Navigator
@@ -25,7 +23,16 @@ const ProfileStackNavigator = () => {
         name="Profile"
         component={ProfileScreen}
         initialParams={{
+          userId,
           avatarUri,
+        }}
+        options={{
+          // headerShown: true,
+          headerBackTitleVisible: true,
+          headerTitle: "profile",
+          // headerStyle: { backgroundColor: PALETTE.BLACK },
+          headerTintColor: PALETTE.BLACK,
+          // headerShadowVisible: false,
         }}
       />
       <ProfileStack.Screen

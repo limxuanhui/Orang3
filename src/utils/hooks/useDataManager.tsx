@@ -8,13 +8,7 @@ import {
 } from "@tanstack/react-query";
 import { BACKEND_BASE_URL } from "@env";
 import { DUMMY_DATABASE } from "../../data/database";
-
-type DataOptions = {
-  dataKey: DataKey,
-  dataMode?: DataMode,  
-}
-type DataKey = "feeds" | "itineraries" | "tales" | "tales-md" | "users";
-type DataMode = "dev" | "test" | "prod";
+import type { DataKey, DataMode } from "../../data/types/types";
 
 /**
  * This hook manages all the data of the app components, except components with infinite scrolling.

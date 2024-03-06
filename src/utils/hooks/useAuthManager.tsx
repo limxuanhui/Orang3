@@ -7,6 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import EncryptedStorage from "react-native-encrypted-storage";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import { v4 as uuidv4 } from "uuid";
 import type { GypsieUser } from "../../components/navigators/types/types";
 import { printPrettyJson } from "../helpers/functions";
 import { BACKEND_BASE_URL } from "@env";
@@ -30,7 +31,7 @@ type GoogleIdToken = {
 };
 
 const useAuthManager = () => {
-  const [user, setUser] = useState<GypsieUser>(null);
+  const [user, setUser] = useState<GypsieUser>();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const url = BACKEND_BASE_URL + "/api/auth/signin";
@@ -136,6 +137,39 @@ const useAuthManager = () => {
     }
   }, [EncryptedStorage, AsyncStorage]);
 
+  const logoutHandler = useCallback(async () => {
+    // Remove token
+    await removeUserData();
+    await removeUserIdToken();
+    setUser(undefined);
+    setIsLoggedIn(false);
+  }, [removeUserIdToken, removeUserData, setIsLoggedIn, setUser]);
+
+  const decodeIdToken = useCallback(
+    (idToken: string): GoogleIdToken => {
+      return jwtDecode(idToken);
+    },
+    [jwtDecode],
+  );
+
+  const checkIfIdTokenIsValid = useCallback(
+    async (idToken: string | undefined) => {
+      console.info("Checking if id token expired...");
+      console.info("idToken: ", idToken);
+      if (idToken) {
+        const decodedIdToken: GoogleIdToken = decodeIdToken(idToken);
+        const currentTime = Math.floor(Date.now() / 1000);
+        console.info("Decoded jwt: ", JSON.stringify(decodedIdToken, null, 4));
+        console.info("Token expires at: ", decodedIdToken.exp);
+        console.info("Time now: ", currentTime);
+        console.info("Time left: ", decodedIdToken.exp - currentTime);
+        return currentTime < decodedIdToken.exp;
+      }
+      return false;
+    },
+    [decodeIdToken],
+  );
+
   const googleSigninHandler = useCallback(async () => {
     setLoading(true);
 
@@ -150,9 +184,15 @@ const useAuthManager = () => {
 
       if (userInfo.idToken) {
         const { sub, name, email, picture } = decodeIdToken(userInfo.idToken);
-        const requestBody = {
-          user: { id: sub, name, handle: name, email, picture },
-          id_token: userInfo.idToken,
+        const requestBody: { user: GypsieUser; idToken: string } = {
+          user: {
+            id: sub,
+            name,
+            handle: name.replace(" ", ""),
+            email,
+            avatar: { id: uuidv4(), type: "image/unknown", uri: picture, height: -1, width: -1 },
+          },
+          idToken: userInfo.idToken,
         };
 
         const response = await axios.post(url, requestBody, {});
@@ -189,45 +229,15 @@ const useAuthManager = () => {
     setLoading(false);
   }, [
     GoogleSignin,
+    uuidv4,
+    decodeIdToken,
     printPrettyJson,
+    setIsLoggedIn,
     setLoading,
     setUser,
     storeUserIdToken,
     storeUserData,
   ]);
-
-  const logoutHandler = useCallback(async () => {
-    // Remove token
-    await removeUserData();
-    await removeUserIdToken();
-    setUser(null);
-    setIsLoggedIn(false);
-  }, [removeUserIdToken, removeUserData, setIsLoggedIn, setUser]);
-
-  const decodeIdToken = useCallback(
-    (idToken: string): GoogleIdToken => {
-      return jwtDecode(idToken);
-    },
-    [jwtDecode],
-  );
-
-  const checkIfIdTokenIsValid = useCallback(
-    async (idToken: string | undefined) => {
-      console.info("Checking if id token expired...");
-      console.info("idToken: ", idToken);
-      if (idToken) {
-        const decodedIdToken: GoogleIdToken = decodeIdToken(idToken);
-        const currentTime = Math.floor(Date.now() / 1000);
-        console.info("Decoded jwt: ", JSON.stringify(decodedIdToken, null, 4));
-        console.info("Token expires at: ", decodedIdToken.exp);
-        console.info("Time now: ", currentTime);
-        console.info("Time left: ", decodedIdToken.exp - currentTime);
-        return currentTime < decodedIdToken.exp;
-      }
-      return false;
-    },
-    [decodeIdToken],
-  );
 
   useEffect(() => {
     console.log("useAuthManager useEffect called...");
@@ -236,7 +246,7 @@ const useAuthManager = () => {
       const idToken = await retrieveUserIdToken();
       const tokenIsValid = await checkIfIdTokenIsValid(idToken);
       if (!tokenIsValid) {
-        setUser(null);
+        setUser(undefined);
         setIsLoggedIn(false);
         await removeUserIdToken();
         await removeUserData();

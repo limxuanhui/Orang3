@@ -8,14 +8,24 @@ export type TaleStackNavigatorParamList = {
   NewPostOptions: undefined;
 };
 
-// --------------------------- ItineraryViewScreen ---------------------------
-export type ItineraryViewScreenProps = {
-  navigation: ItineraryViewNavigationProp;
+// --------------------------- ItineraryScreen ---------------------------
+export type ItineraryScreenParams = {
+  id?: string;
+  creatorId: string;
 };
 
-export type ItineraryViewNavigationProp = StackNavigationProp<
+export type ItineraryScreenProps = {
+  navigation: ItineraryNavigationProp;
+};
+
+export type ItineraryNavigationProp = StackNavigationProp<
   ModalNavigatorParamList,
-  "ItineraryView"
+  "Itinerary"
+>;
+
+export type ItineraryRouteProp = RouteProp<
+  ModalNavigatorParamList,
+  "Itinerary"
 >;
 
 // --------------------------- PlaceSearchScreen ---------------------------

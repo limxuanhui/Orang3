@@ -2,7 +2,7 @@ import type { StyleProp, TextStyle } from "react-native";
 import type { FeedItemThumbnail } from "../../tale/types/types";
 
 // Feed
-export type NewFeedSideControlsProps = {
+export type WriteFeedSideControlsProps = {
   onPressAdd: () => void;
   onPressDelete: () => void;
   onPressEdit: () => void;
@@ -24,7 +24,7 @@ export type StoryText = {
 
 export type StoryMedia = {
   id: string;
-  type: StoryItemType.Media;
+  type: StoryItemType.Media
   data: FeedItemThumbnail[];
 };
 

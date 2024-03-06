@@ -30,8 +30,8 @@ import FolderImagesIcon from "../../common/icons/FolderImagesIcon";
 import ParagraphIcon from "../../common/icons/ParagraphIcon";
 import TitleIcon from "../../common/icons/TitleIcon";
 
-import useNewTaleManager from "../../../utils/hooks/useNewTaleManager";
-import type { NewTaleScreenProps } from "./types/types";
+import useWriteTaleManager from "../../../utils/hooks/useWriteTaleManager";
+import type { WriteTaleScreenProps } from "./types/types";
 
 import NewStoryItem from "../../post/NewStoryItem";
 import { AuthContext } from "../../../utils/contexts/AuthContext";
@@ -39,10 +39,14 @@ import { AuthContext } from "../../../utils/contexts/AuthContext";
 import { DEVICE_HEIGHT, FULL_SCREEN } from "../../../utils/constants/constants";
 import { DIMENSION } from "../../../utils/constants/dimensions";
 import { PALETTE } from "../../../utils/constants/palette";
+import { nanoid } from "@reduxjs/toolkit";
+import { StoryItem } from "../../post/types/types";
 
-const NewTaleScreen = ({ navigation }: NewTaleScreenProps) => {
+const WriteTaleScreen = ({ navigation, route }: WriteTaleScreenProps) => {
   const insets = useSafeAreaInsets();
   const userInfo = useContext(AuthContext);
+  const { taleId } = route.params;
+  console.log("TALE ID:", taleId);
 
   const {
     bottomSheetRef,
@@ -54,20 +58,21 @@ const NewTaleScreen = ({ navigation }: NewTaleScreenProps) => {
     story,
     posting,
     feedItemThumbnails,
+    data,
+    isLoading,
     closeKeyboard,
     renderBackdrop,
     onPressAddCover,
     onPressClearCover,
-    onPressClearPlan,
     onTitleChange,
     onStoryItemTextChange,
     onPressAddTitle,
     onPressAddParagraph,
-    onPressAddLinkedFeeds,
+    onPressShowLinkedFeeds,
     onPressAddLinkedFeed,
     onPressDeleteLinkedFeed,
     onSubmitPost,
-  } = useNewTaleManager();
+  } = useWriteTaleManager(taleId);
 
   const [currScrollPosition, setCurrScrollPosition] = useState<number>(0);
   const [prevHeight, setPrevHeight] = useState<number>(DEVICE_HEIGHT);
@@ -96,9 +101,19 @@ const NewTaleScreen = ({ navigation }: NewTaleScreenProps) => {
       // setCurrScrollPosition(h);
     },
     [scrollViewRef, currScrollPosition, prevHeight, setPrevHeight],
-  );
+  );  
 
-  return (
+  return isLoading ? (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: PALETTE.GREYISHBLUE,
+      }}>
+      <ActivityIndicator size={48} color={PALETTE.ORANGE} />
+    </View>
+  ) : (
     <KeyboardAccessoryView
       style={styles.accessoryView}
       renderScrollable={(panHandlers: GestureResponderHandlers) => (
@@ -109,14 +124,12 @@ const NewTaleScreen = ({ navigation }: NewTaleScreenProps) => {
             contentContainerStyle={styles.scrollView}
             showsVerticalScrollIndicator={false}
             keyboardDismissMode="none"
-            // automaticallyAdjustKeyboardInsets
-            // decelerationRate={0}
             onContentSizeChange={onContentSizeChange}
             onScrollBeginDrag={onScroll}
             scrollEventThrottle={60}
             {...panHandlers}>
             <View style={styles.coverContainer}>
-              {cover !== null ? (
+              {cover !== undefined ? (
                 <>
                   {cover.type?.startsWith("video") ? (
                     <Video
@@ -178,9 +191,12 @@ const NewTaleScreen = ({ navigation }: NewTaleScreenProps) => {
                 }}
                 scrollEnabled={false}
               />
-              <ItineraryMapOverview creatorId={userInfo.user?.id || ""} />
+              <ItineraryMapOverview
+                itineraryId={itinerary.id}
+                creatorId={userInfo.user?.id || ""}
+              />
               <View style={{}}>
-                {story.map((el, index) => (
+                {story.map((el: StoryItem, index: number) => (
                   <NewStoryItem
                     key={el.id}
                     item={el}
@@ -206,7 +222,7 @@ const NewTaleScreen = ({ navigation }: NewTaleScreenProps) => {
                   }}
                   showsVerticalScrollIndicator={false}>
                   {feedItemThumbnails.data.map(el => (
-                    <View style={styles.feedItemThumbnailsList}>
+                    <View style={styles.feedItemThumbnailsList} key={nanoid()}>
                       <FeedItemThumbnailsCarousel data={el} />
                       <GypsieButton
                         customButtonStyles={styles.addLinkedFeedButton}
@@ -268,7 +284,6 @@ const NewTaleScreen = ({ navigation }: NewTaleScreenProps) => {
               )}
             </BottomSheet>
           </Portal>
-          {/* <PortalHost name="NewTale_ShowFeedItemThumbnails-host" /> */}
         </View>
       )}>
       <View style={styles.bottomControls}>
@@ -288,7 +303,7 @@ const NewTaleScreen = ({ navigation }: NewTaleScreenProps) => {
           customButtonStyles={styles.bottomControl}
           customIconStyles={{ fontSize: 24, color: PALETTE.GREYISHBLUE }}
           Icon={FolderImagesIcon}
-          onPress={onPressAddLinkedFeeds}
+          onPress={onPressShowLinkedFeeds}
         />
         {keyboardIsVisible ? (
           <GypsieButton
@@ -329,7 +344,7 @@ const styles = StyleSheet.create({
   },
   container: {
     ...FULL_SCREEN,
-    backgroundColor: PALETTE.ORANGE,
+    backgroundColor: PALETTE.OFFWHITE,
   },
   scrollViewContainer: {
     backgroundColor: PALETTE.OFFWHITE,
@@ -404,4 +419,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewTaleScreen;
+export default WriteTaleScreen;

@@ -68,3 +68,6 @@ assets/
 # Environment variables
 .env
 .env.*
+
+# Data
+*.sql

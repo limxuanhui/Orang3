@@ -1,35 +1,48 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 // import { LatLng, MapEvent, Region } from "react-native-maps";
 import axios from "axios";
 import Polyline from "@mapbox/polyline";
 import type {
+  ItineraryPlannerMode,
   RouteInfo,
   RouteNodeCoord,
   RouteNodeInfo,
 } from "../../components/itinerary/types/types";
 import useModalHandlers from "./useModalHandlers";
-import { useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { BACKEND_BASE_URL } from "@env";
+import MapView, { Region } from "react-native-maps";
+import { LATITUDE_DELTA, LONGITUDE_DELTA } from "../constants/constants";
+import { createItinerary, setItinerary } from "../redux/reducers/writeTaleSlice";
+import { useQuery } from "@tanstack/react-query";
 
-const useMapHandlers = () => {
+type useItineraryManagerProps = {
+  mode: ItineraryPlannerMode;
+  itineraryId?: string;
+};
+
+const useMapHandlers = ({ mode, itineraryId }: useItineraryManagerProps) => {
+  const mapRef = useRef<MapView | null>(null);
+  const dispatch = useAppDispatch();
+  // Itinerary is either new or fetched from api.
+  // Mode = 'new'
+
+  // Both edit and view modes query tale data from api, then this hook assigns itinerary from tale cache to itinerarySlice
+  // Mode = 'edit' => fetch tale from api, itinerary in tale gets assigned to itinerarySlice when ItineraryScreen is mounted, and reset when unmounted. Enables post button.
+  // Mode = 'view' => fetch tale from api, itinerary in tale gets assigned to itinerarySlice when ItineraryScreen is mounted, and reset when unmounted.
+
   const { itinerary } = useAppSelector(state => state.newTale);
+  // const {  } = useAppSelector(state => state.newTale);
   const [routes, setRoutes] = useState<RouteInfo[]>(itinerary.routes);
-  // [
-  //   {
-  //     id: "1", // to change to uuid
-  //     name: "Day 1",
-  //     routeNodes: [],
-  //     isRouted: false,
-  //     polyline: [],
-  //   },
-  // ]
   const [selectedRouteId, setSelectedRouteId] = useState<string>(routes[0].id);
   const selectedRoute = routes.filter(
     (route: RouteInfo) => route.id === selectedRouteId,
   )[0];
+
   const [modalInitialValue, setModalInitialValue] = useState<string>(
     selectedRoute.name,
   );
+
   const { modalIsOpen, closeModal, openModal } = useModalHandlers();
 
   const onAddRoute = useCallback(
@@ -166,6 +179,7 @@ const useMapHandlers = () => {
 
   const onUpdateRouteName = useCallback(
     (name: string) => {
+      // dispatch(updateRouteName({name}));
       setRoutes(prevRoutes =>
         prevRoutes.map(route => {
           if (route.id === selectedRouteId) {
@@ -257,7 +271,52 @@ const useMapHandlers = () => {
     closeModal();
   }, [closeModal]);
 
+  useEffect(() => {
+    // Add animation to a certain location without places added
+    console.log("Selected route: ", selectedRoute);
+
+    if (selectedRoute.routeNodes.length === 1) {
+      // Modify to use average of all routeNodes as region
+      const { latitude, longitude } = selectedRoute.routeNodes[0].coord;
+      const region: Region = {
+        latitude,
+        longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      };
+      mapRef.current?.animateToRegion(region, 200);
+    } else if (selectedRoute.routeNodes.length > 1) {
+      mapRef.current?.fitToCoordinates(
+        selectedRoute.routeNodes.map(
+          (routeNode: RouteNodeInfo) => routeNode.coord,
+        ),
+        {
+          edgePadding: { top: 80, right: 50, bottom: 200, left: 50 },
+          animated: false,
+        },
+      );
+    }
+  }, [mapRef, selectedRoute]);
+
+  useEffect(() => {
+    console.log("ItineraryPlanner mounted");
+    // If itinerary id does not exist, create itinerary
+    if (!itinerary.id) {
+      // Use user id from global object as creatorId
+      dispatch(createItinerary({ creatorId: "" }));
+    }
+
+    // Load routes from backend based on itineraryId and call setRoutes
+
+    return () => {
+      console.log("ItineraryPlanner unmounted");
+      // Dispatch an action to update itinerary in NewItineraryPost.
+      dispatch(setItinerary({ routes }));
+    };
+  }, [routes, createItinerary, setItinerary, dispatch]);
+
   return {
+    mapRef,
     routes,
     selectedRouteId,
     selectedRoute,

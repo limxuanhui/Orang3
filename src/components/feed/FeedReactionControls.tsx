@@ -17,6 +17,7 @@ import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
 import { DIMENSION } from "../../utils/constants/dimensions";
 import { PALETTE } from "../../utils/constants/palette";
 import LinkIcon from "../common/icons/LinkIcon";
+import { AWS_S3_MEDIA_URL } from "@env";
 
 const FeedReactionControls = ({
   creator,
@@ -60,7 +61,7 @@ const FeedReactionControls = ({
   const onPressAvatar = useCallback(() => {
     navigation.push("Modal", {
       screen: "Profile",
-      params: { userId: creator.id, avatarUri: creator.avatarUri },
+      params: { userId: creator.id, avatarUri: creator.avatar?.uri },
     });
   }, [navigation]);
 
@@ -113,17 +114,13 @@ const FeedReactionControls = ({
     }
   }, [navigation]);
 
-  // useEffect(() => {
-  //   // Send HTTP request to backend to update reactionCounts
-  // }, [reactionCounts])
-
   return (
     <AuxiliaryControls>
       <Pressable style={onPressReactionControlStyle} onPress={onPressAvatar}>
         <Image
           style={styles.avatar}
           source={{
-            uri: creator.avatarUri,
+            uri: `${AWS_S3_MEDIA_URL}/${creator.avatar?.uri}`,
           }}
         />
       </Pressable>
@@ -138,7 +135,6 @@ const FeedReactionControls = ({
           ]}
           customTextStyles={styles.reactionCount}
           Icon={LinkIcon}
-          // text={"Tale"}
           onPress={onPressLink}
         />
       ) : null}

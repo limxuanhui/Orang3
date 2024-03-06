@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { PALETTE } from "../../../utils/constants/palette";
 import GypsieButton from "../../common/buttons/GypsieButton";
@@ -37,15 +44,36 @@ import GypsieSkeleton from "../../common/GypsieSkeleton";
 import { ActivityIndicator } from "react-native-paper";
 import useBottomSheetHandlers from "../../../utils/hooks/useBottomSheetHandlers";
 import { DIMENSION } from "../../../utils/constants/dimensions";
-
-type DataKey = "feeds" | "itineraries" | "tales" | "tales-md" | "users";
+import { AuthContext } from "../../../utils/contexts/AuthContext";
+import AuxiliaryControls from "../../common/AuxiliaryControls";
+import { useAppDispatch, useAppSelector } from "../../../utils/redux/hooks";
+import {
+  itineraryPlanner_resetItineraryPlannerSlice,
+  itineraryPlanner_setItinerary,
+  itineraryPlanner_setMode,
+} from "../../../utils/redux/reducers/itineraryPlannerSlice";
+import EditIcon from "../../common/icons/EditIcon";
+import type { DataKey } from "../../../data/types/types";
 
 const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
   const insets = useSafeAreaInsets();
+  const userInfo = useContext(AuthContext);
   const { params } = useRoute<TaleViewScreenRouteProp>();
   const { id, creator } = params;
+  const dispatch = useAppDispatch();
+  const { mode } = useAppSelector(state => state.itineraryPlanner);
 
-  const queryFn = useCallback(
+  /**
+   * onPressChangeMode: allows user to change to edit mode to edit the tale if he/she is the creator.
+   */
+  const onPressChangeMode = useCallback(() => {
+    if (mode === "view") {
+      dispatch(itineraryPlanner_setMode({ mode: "edit" }));
+      navigation.navigate("WriteTale", { taleId: id });
+    }
+  }, [navigation, mode, itineraryPlanner_setMode, dispatch]);
+
+  const taleQueryFn = useCallback(
     async ({ queryKey }: { queryKey: QueryKey }): Promise<Tale | undefined> => {
       const [key, taleId] = queryKey;
       console.log("QUERY FUNCTION CALLED");
@@ -59,11 +87,11 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
     [DUMMY_DATABASE],
   );
 
-  const options = useMemo(() => {
+  const taleQueryOptions = useMemo(() => {
     const queryKey = ["tales", id];
     return queryOptions({
       queryKey,
-      queryFn,
+      queryFn: taleQueryFn,
       networkMode: "online",
       // initialData: {
       //   id: "",
@@ -93,10 +121,12 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
       gcTime: 1000 * 60 * 5,
       // staleTime: 1000,
     });
-  }, [id, queryOptions]);
+  }, [id, queryOptions, taleQueryFn]);
 
   const { data, isFetching, isError, isLoading, isPending, isPlaceholderData } =
-    useQuery(options);
+    useQuery(taleQueryOptions);
+
+  // use useQueries to fetch feeds with the array of feed id
 
   // Should I create this in useState and useEffect on mount?
   let renderedData: Feed[] = data?.feeds || [];
@@ -104,7 +134,7 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
     const cover: FeedItem = {
       id: data.cover.id,
       media: data.cover,
-      taleId: data.id,
+      caption: ""
     };
     const coverFeed: BaseFeed = {
       id: data.cover.id,
@@ -128,11 +158,9 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
   const { bottomSheetRef, snapPoints } = useBottomSheetHandlers({
     snapPointsArr: ["50%", "100%"],
   });
-
   const onPressExpandBottomSheet = useCallback(() => {
     bottomSheetRef.current?.snapToIndex(0);
   }, [bottomSheetRef]);
-
   // Can I generalise this to useBottomSheetHandlers?
   const renderBackdrop = useCallback(
     (props: BottomSheetDefaultBackdropProps) => (
@@ -156,6 +184,23 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
     ),
     [data],
   );
+
+  /**
+   * This useEffect is for pre-setting itineraryPlannerSlice data if tale data has been loaded, and resets the slice on unmount.
+   */
+  useEffect(() => {
+    if (data) {
+      dispatch(itineraryPlanner_setItinerary({ itinerary: data.itinerary }));
+    }
+    return () => {
+      dispatch(itineraryPlanner_resetItineraryPlannerSlice());
+    };
+  }, [
+    data,
+    itineraryPlanner_setItinerary,
+    itineraryPlanner_resetItineraryPlannerSlice,
+    dispatch,
+  ]);
 
   return (
     <View style={styles.container}>
@@ -189,6 +234,32 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
             Icon={ChevronsUpIcon}
             onPress={onPressExpandBottomSheet}
           />
+          {/* Render a button here for creator to change default mode to edit */}
+          {creator.id !== userInfo.user?.id ? (
+            <AuxiliaryControls
+              customStyle={{
+                top: insets.top,
+                justifyContent: "flex-start",
+                height: "auto",
+                // backgroundColor: "red",
+              }}
+              position="top-right">
+              <GypsieButton
+                customButtonStyles={{
+                  width: 40,
+                  height: 40,
+                  backgroundColor: "#00000044",
+                  borderRadius: 20,
+                }}
+                customIconStyles={{
+                  fontSize: 24,
+                  color: PALETTE.ORANGE,
+                }}
+                Icon={EditIcon}
+                onPress={onPressChangeMode}
+              />
+            </AuxiliaryControls>
+          ) : null}
           <BottomSheet
             ref={bottomSheetRef}
             style={styles.bottomSheet}
@@ -204,16 +275,18 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
           >
             {/* To be changed (NewItineraryPostHandlerBar) */}
             <NewItineraryPostHandleBar
-              avatarUri={data?.creator.avatarUri || ""}
+              avatarUri={data?.creator.avatar?.uri || ""}
               name={data?.creator.handle || ""}
             />
             <BottomSheetScrollView
               contentContainerStyle={{ paddingBottom: insets.bottom }}
               showsVerticalScrollIndicator={false}>
-              <ItineraryMapOverview
-                itineraryId={""}
-                creatorId={params.creator.id}
-              />
+              {data && data.itinerary.routes.length > 0 ? (
+                <ItineraryMapOverview
+                  itineraryId={""}
+                  creatorId={params.creator.id}
+                />
+              ) : null}
               {data?.story.map(el => {
                 if (el.type === StoryItemType.Text) {
                   return (

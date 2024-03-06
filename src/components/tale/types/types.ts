@@ -1,26 +1,26 @@
-import { StyleProp, ViewStyle } from "react-native";
-import type { Asset } from "react-native-image-picker";
+import type { StyleProp, ViewStyle } from "react-native";
 import type { Itinerary } from "../../itinerary/types/types";
 import type { Story } from "../../post/types/types";
 import type { Feed, Media } from "../../feed/types/types";
+import type { GypsieUser } from "../../navigators/types/types";
 
-export type Creator = {
-  id: string;
-  handle: string;
-  avatarUri: string;
-}
+// export type Creator = {
+//   id: string;
+//   handle: string;
+//   avatarUri: string;
+// }
 
 export type Tale = {
   id: string;
-  creator: Creator;
-  cover: Media;
+  creator: GypsieUser;
+  cover?: Media;
   title: string;
   feeds: Feed[];
   itinerary: Itinerary;
   story: Story;
 };
 
-export type NewTale = Tale & {
+export type WriteTale = Tale & {
   posting: boolean;
   saving: boolean;
   feedItemThumbnails: {
@@ -33,7 +33,7 @@ export type NewTale = Tale & {
 
 export type TaleThumbnailInfo = {
   taleId: string;
-  creator: Creator;
+  creator: GypsieUser;
   cover: Media;
   title: string;
 };

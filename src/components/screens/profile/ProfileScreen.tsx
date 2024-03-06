@@ -1,4 +1,11 @@
-import { useCallback, useContext, useEffect } from "react";
+import {
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { ImageLibraryOptions } from "react-native-image-picker";
@@ -8,38 +15,51 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { AuthContext } from "../../../utils/contexts/AuthContext";
 import MyFeeds from "../../profile/MyFeeds";
 import MyTales from "../../profile/MyTales";
-import type { ProfileScreenProps } from "./types/types";
+import type { ProfileScreenProps, ProfileScreenRouteProp } from "./types/types";
 import { DIMENSION } from "../../../utils/constants/dimensions";
 import { PALETTE } from "../../../utils/constants/palette";
+import { useRoute } from "@react-navigation/native";
+import { QueryKey, queryOptions, useQuery } from "@tanstack/react-query";
+import { DUMMY_DATABASE } from "../../../data/database";
+import type { DataKey } from "../../../data/types/types";
+import type { Feed, FeedThumbnailInfo } from "../../feed/types/types";
+import type { Tale, TaleThumbnailInfo } from "../../tale/types/types";
 
 const Tab = createMaterialTopTabNavigator();
-const imageLibraryOptions: ImageLibraryOptions = {
-  mediaType: "photo",
-  presentationStyle: "fullScreen",
-  selectionLimit: 1,
-};
+// const imageLibraryOptions: ImageLibraryOptions = {
+//   mediaType: "photo",
+//   presentationStyle: "fullScreen",
+//   selectionLimit: 1,
+// };
+
+// const { openGallery } = useMediaHandlers(imageLibraryOptions);
+
+// const onPressChangeAvatar = useCallback(async () => {
 
 const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
   const userInfo = useContext(AuthContext);
+  const { params } = useRoute<ProfileScreenRouteProp>();
+
   let userId: string | undefined;
   let avatarUri: string | undefined;
+  console.log("PARAMS: ", params);
   if (route.params) {
     userId = route.params.userId;
     avatarUri = route.params.avatarUri;
+  } else {
+    userId = userInfo.user?.id;
+    avatarUri = userInfo.user?.avatar?.uri;
   }
-  // const { openGallery } = useMediaHandlers(imageLibraryOptions);
 
   const onPressAvatar = useCallback(() => {
     if (avatarUri) {
       navigation.push("Modal", { screen: "Avatar", params: { avatarUri } });
     }
   }, [avatarUri, navigation]);
-
-  // const onPressChangeAvatar = useCallback(async () => {
   //   const response = await openGallery();
   //   if (response.assets) {
   //     const asset = response.assets[0];
-      
+
   //     // > avatarUri = asset.uri
   //     // > Send file to s3 storage and update metadata table for changing avatarUri
   //   }
@@ -50,40 +70,127 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
     navigation.push("Settings");
   }, [navigation]);
 
+  const feedsMetadataQueryFn = useCallback(
+    async ({
+      queryKey,
+    }: {
+      queryKey: QueryKey;
+    }): Promise<FeedThumbnailInfo[]> => {
+      const [key, userId] = queryKey;
+      console.log("QUERY FUNCTION CALLED");
+      return new Promise((resolve, reject) => {
+        const feedsThumbnails: FeedThumbnailInfo[] = DUMMY_DATABASE[
+          key as DataKey
+        ] as FeedThumbnailInfo[];
+        const userfeedsThumbnails: FeedThumbnailInfo[] = feedsThumbnails.filter(
+          (el: FeedThumbnailInfo) => el.creator.id === userId,
+        );
+        setTimeout(() => {
+          resolve(userfeedsThumbnails);
+        }, 2000);
+      });
+    },
+    [DUMMY_DATABASE],
+  );
+
+  const feedsMetadataOptions = useMemo(() => {
+    const queryKey = ["feeds-md", userId];
+    return queryOptions({
+      queryKey,
+      queryFn: feedsMetadataQueryFn,
+      networkMode: "online",
+      enabled: true,
+      gcTime: 1000 * 60 * 5,
+      staleTime: Infinity,
+    });
+  }, [userId, feedsMetadataQueryFn, queryOptions]);
+
+  const {
+    data: feedsMetadata,
+    isFetching,
+    isError,
+    isLoading,
+    isPending,
+    isPlaceholderData,
+  } = useQuery(feedsMetadataOptions);
+
+  const talesMetadataQueryFn = useCallback(
+    async ({
+      queryKey,
+    }: {
+      queryKey: QueryKey;
+    }): Promise<TaleThumbnailInfo[]> => {
+      const [key, userId] = queryKey;
+      console.log("QUERY FUNCTION CALLED");
+      return new Promise((resolve, reject) => {
+        const talesThumbnails: TaleThumbnailInfo[] = DUMMY_DATABASE[
+          key as DataKey
+        ] as TaleThumbnailInfo[];
+        const userTalesThumbnails: TaleThumbnailInfo[] = talesThumbnails.filter(
+          (el: TaleThumbnailInfo) => el.creator.id === userId,
+        );
+        setTimeout(() => {
+          resolve(userTalesThumbnails);
+        }, 2000);
+      });
+    },
+    [DUMMY_DATABASE],
+  );
+
+  const talesMetadataOptions = useMemo(() => {
+    const queryKey = ["tales-md", userId];
+    return queryOptions({
+      queryKey,
+      queryFn: talesMetadataQueryFn,
+      networkMode: "online",
+      enabled: true,
+      gcTime: 1000 * 60 * 5,
+      staleTime: Infinity,
+    });
+  }, [userId, talesMetadataQueryFn, queryOptions]);
+
+  const {
+    data: talesMetadata,
+    isFetching: isFetchingTalesData,
+    isError: isErrorTalesData,
+    isLoading: isLoadingTalesData,
+    isPending: isPendingTalesData,
+    isPlaceholderData: isPlaceholderDataTalesData,
+  } = useQuery(talesMetadataOptions);
+
   return (
     <View style={styles.container}>
       <View style={styles.banner}>
-        <Pressable
-          style={({ pressed }) => [
-            styles.avatarContainer,
-            { transform: [{ scale: pressed ? 0.98 : 1 }] },
-          ]}
-          onPress={onPressAvatar}>
-          <Image
-            style={styles.avatar}
-            source={{
-              uri: avatarUri,
-            }}
-          />
-          {/* <GypsieButton
-            customButtonStyles={styles.changeAvatarButton}
-            customIconStyles={{ fontSize: 20 }}
-            Icon={AddIcon}
-            onPress={onPressChangeAvatar}
-          /> */}
-        </Pressable>
-
+        <View style={styles.bannerImageContainer}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.avatarContainer,
+              { transform: [{ scale: pressed ? 0.98 : 1 }] },
+            ]}
+            onPress={onPressAvatar}>
+            <Image
+              style={styles.avatar}
+              source={{
+                uri: avatarUri,
+              }}
+              // loadingIndicatorSource={}
+              // resizeMode="cover"
+            />
+          </Pressable>
+        </View>
         <View style={styles.bannerInfoContainer}>
-          <Text style={styles.bannerInfoText}>
-            {"@" + userInfo.user?.handle}
+          <Text style={[styles.bannerInfoText, { color: PALETTE.ORANGE }]}>
+            @
           </Text>
+          <Text style={styles.bannerInfoText}>{userInfo.user?.handle}</Text>
         </View>
       </View>
 
-      {/* Check if profile is current user's. If not, hide settings button. */}
-      <Pressable style={styles.settingsButton} onPress={onPressSettings}>
-        <Ionicons name="settings" size={24} color={PALETTE.BLACK} />
-      </Pressable>
+      {userId === userInfo.user?.id ? (
+        <Pressable style={styles.settingsButton} onPress={onPressSettings}>
+          <Ionicons name="settings" size={24} color={PALETTE.BLACK} />
+        </Pressable>
+      ) : null}
 
       <Tab.Navigator
         sceneContainerStyle={styles.sceneContainer}
@@ -98,26 +205,28 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
         }}>
         <Tab.Screen
           name="myfeeds"
-          component={MyFeeds}
+          children={() => (
+            <MyFeeds data={feedsMetadata as FeedThumbnailInfo[]} />
+          )}
           options={{
             tabBarIcon: ({ focused }) => (
               <Ionicons
                 name={focused ? "grid" : "grid-outline"}
                 size={20}
-                color={focused ? PALETTE.GREYISHBLUE : PALETTE.GREYISHBLUE}
+                color={focused ? PALETTE.ORANGE : PALETTE.GREYISHBLUE}
               />
             ),
           }}
         />
         <Tab.Screen
           name="mytales"
-          component={MyTales}
+          children={() => (
+            <MyTales data={talesMetadata as TaleThumbnailInfo[]} />
+          )}
           options={{
             tabBarIcon: ({ focused }) =>
               focused ? (
-                <BookOpenIcon
-                  style={{ fontSize: 20, color: PALETTE.GREYISHBLUE }}
-                />
+                <BookOpenIcon style={{ fontSize: 20, color: PALETTE.ORANGE }} />
               ) : (
                 <BookIcon
                   style={{ fontSize: 20, color: PALETTE.GREYISHBLUE }}
@@ -134,41 +243,29 @@ const styles = StyleSheet.create({
   container: {
     width: DIMENSION.HUNDRED_PERCENT,
     height: DIMENSION.HUNDRED_PERCENT,
-    // backgroundColor: PALETTE.GREYISHBLUE,
     backgroundColor: PALETTE.OFFWHITE,
   },
   sceneContainer: {
-    backgroundColor: PALETTE.OFFWHITE,
+    // backgroundColor: PALETTE.GREYISHBLUE,
+    // height:'100%'
   },
   settingsButton: { position: "absolute", top: 50, right: 20, zIndex: 3 },
   banner: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "center",
     alignItems: "center",
     height: DIMENSION.TWENTYFIVE_PERCENT,
     width: DIMENSION.HUNDRED_PERCENT,
+    borderWidth: 0,
+    borderColor: "blue",
   },
-  bannerImage: {
-    height: DIMENSION.HUNDRED_PERCENT,
-    width: DIMENSION.HUNDRED_PERCENT,
-  },
-  bannerInfoContainer: {
-    backgroundColor: PALETTE.OFFWHITE,
+  bannerImageContainer: {
     justifyContent: "center",
-    alignItems: "center",
     height: DIMENSION.HUNDRED_PERCENT,
-    width: DIMENSION.FIFTY_PERCENT,
-  },
-  bannerInfoText: {
-    marginBottom: 8,
-    color: PALETTE.BLACK,
-    fontSize: 20,
-    fontFamily: "Futura",
-    fontWeight: "bold",
   },
   avatarContainer: {
-    width: 120,
     height: 120,
+    width: 120,
     borderRadius: 60,
     backgroundColor: PALETTE.WHITE,
     shadowOffset: { height: 2, width: 0 },
@@ -182,6 +279,21 @@ const styles = StyleSheet.create({
     height: DIMENSION.HUNDRED_PERCENT,
     width: DIMENSION.HUNDRED_PERCENT,
     borderRadius: 60,
+  },
+  bannerInfoContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    height: DIMENSION.HUNDRED_PERCENT,
+    width: DIMENSION.FIFTY_PERCENT,
+    backgroundColor: PALETTE.OFFWHITE,
+  },
+  bannerInfoText: {
+    marginBottom: 8,
+    color: PALETTE.BLACK,
+    fontSize: 24,
+    fontFamily: "Futura",
+    fontWeight: "bold",
   },
   changeAvatarButton: {
     position: "absolute",
@@ -198,4 +310,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default memo(ProfileScreen);

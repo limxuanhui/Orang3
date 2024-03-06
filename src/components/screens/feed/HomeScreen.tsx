@@ -12,13 +12,15 @@ import {
 } from "../../../utils/constants/constants";
 import { PALETTE } from "../../../utils/constants/palette";
 import { VIEWABILITY_CONFIG } from "../../../utils/constants/feed";
+import EmptyFeed from "../../feed/EmptyFeed";
 
 const HomeScreen = ({ navigation }: HomeScreenProps) => {
   const { user } = useContext(AuthContext);
   const [homeScreenIsFocused, setHomeScreenIsFocused] = useState<boolean>(true);
   const [activePostIndex, setActivePostIndex] = useState<number>(0);
   const { data, isLoading, isRefetching, onEndReached, onRefresh } =
-    useInfiniteDataManager("feeds", "dev");
+    // useInfiniteDataManager("feeds", "dev");
+    useInfiniteDataManager("feeds", "prod");
 
   const onViewableItemsChanged = useCallback(
     // Change type to more suitable one
@@ -38,19 +40,23 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     }, [setHomeScreenIsFocused]),
   );
 
+  const dataFetched = data && data.pages && data.pages[0];
+  const dataFetchedIsEmpty = dataFetched && data.pages[0].length === 0;
+  const dataFetchedIsNotEmpty = dataFetched && data.pages[0].length > 0;
+
   return (
     <View style={styles.container}>
       {!data && isLoading ? (
         <View style={styles.flexCenter}>
           <ActivityIndicator size={48} color={PALETTE.ORANGE} />
         </View>
-      ) : data && data.pages[0].length === 0 ? (
+      ) : dataFetchedIsEmpty ? (
         <View style={styles.flexCenter}>
           <Text style={styles.description}>No feeds at the moment...</Text>
         </View>
-      ) : (
+      ) : dataFetchedIsNotEmpty ? (
         <FlatList
-          data={data?.pages.flat(1)}
+          data={data.pages.flat(1)}
           // initialNumToRender={2}
           renderItem={({ item, index }) => (
             <FeedDisplay
@@ -78,6 +84,19 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
             />
           }
         />
+      ) : (
+        <EmptyFeed>
+          <Text
+            style={{
+              width: '70%',
+              fontFamily: "Futura",
+              fontSize: 24,
+              fontWeight: 'bold',
+              color: PALETTE.GREY,
+            }}>
+            Unable to get feeds for you at the moment...
+          </Text>
+        </EmptyFeed>
       )}
     </View>
   );

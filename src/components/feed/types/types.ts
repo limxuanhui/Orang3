@@ -1,9 +1,10 @@
-import type { Creator } from "../../tale/types/types";
+import { GypsieUser } from "../../navigators/types/types";
+// import type { Creator } from "../../tale/types/types";
 
 // Data types
 export type BaseFeed = {
   id: string;
-  creator: Creator;
+  creator: GypsieUser;
   items: FeedItem[];
 };
 
@@ -20,8 +21,13 @@ export type Feed = BaseFeed & {
 export type FeedItem = {
   id: string;
   media: Media;
-  caption?: string;
-  taleId?: string; // Might be able to remove this property
+  caption: string;
+};
+
+export type FeedThumbnailInfo = {
+  feedId: string;
+  creator: GypsieUser;
+  cover: Media;
 };
 
 export type MediaMimeType =
@@ -29,14 +35,17 @@ export type MediaMimeType =
   | "image/jpeg"
   | "image/png"
   | "image/gif"
-  | "video/mp4";
+  | "video/mp4"
+  | "image/unknown";
 
 export type Media = {
   id: string;
   type: MediaMimeType;
   uri: string;
-  // aspectRatio?: number;
-} | null;
+  height: number;
+  width: number;
+  // aspectRatio: number;
+};
 
 // Component properties
 export type FeedDisplayProps = {
@@ -45,7 +54,7 @@ export type FeedDisplayProps = {
 };
 
 export type FeedThumbnailProps = {
-  feed: Feed;
+  data: FeedThumbnailInfo;
 };
 
 export type FeedDescriptionProps = {
@@ -54,7 +63,7 @@ export type FeedDescriptionProps = {
 };
 
 export type FeedReactionControlsProps = {
-  creator: Creator;
+  creator: GypsieUser;
   isLiked?: boolean;
   isBookmarked?: boolean;
   likes?: number;
