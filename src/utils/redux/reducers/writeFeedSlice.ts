@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { FeedItem } from "../../../components/feed/types/types";
+import { createSlice } from '@reduxjs/toolkit';
+import type { FeedItem } from '@components/feed/types/types';
 
 export type WriteFeedState = Readonly<{
   items: FeedItem[];
@@ -14,27 +14,27 @@ const initialState: WriteFeedState = {
 };
 
 const writeFeedSlice = createSlice({
-  name: "writeFeed",
+  name: 'writeFeed',
   initialState,
   reducers: {
     writeFeed_addItems: (state, action) => {
-      console.log("Before: ", state.items);
+      console.log('Before: ', state.items);
       state.items.splice(action.payload.id, 0, ...action.payload.items);
-      console.log("After: ", state.items);
+      console.log('After: ', state.items);
     },
     writeFeed_deleteItemById: (state, action) => {
       if (action.payload === state.items.length - 1) {
         state.selectedItemId = action.payload - 1;
       }
       state.items.splice(action.payload, 1);
-      console.log("DeleteItemById ended: ", state);
+      console.log('DeleteItemById ended: ', state);
     },
     writeFeed_editCaption: (state, action) => {
       console.log(action.payload);
       const items = state.items.map((item, index) => {
         if (index === action.payload.id) {
           const newItem = { ...item, caption: action.payload.caption };
-          console.log("NewItem: ", JSON.stringify(newItem, null, 4));
+          console.log('NewItem: ', JSON.stringify(newItem, null, 4));
           return newItem;
         }
         return item;

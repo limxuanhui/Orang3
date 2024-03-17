@@ -1,10 +1,10 @@
-import { useCallback } from "react";
-import { Image } from "react-native";
+import { useCallback } from 'react';
+import { Image } from 'react-native';
 import {
   ImageLibraryOptions,
   ImagePickerResponse,
   launchImageLibrary,
-} from "react-native-image-picker";
+} from 'react-native-image-picker';
 
 // type useMediaHandlersProps = {
 //   imageLibraryOptions?: ImageLibraryOptions;
@@ -13,8 +13,8 @@ import {
 type ImageSize = { height: number; width: number };
 
 const defaultImageLibraryOptions: ImageLibraryOptions = {
-  mediaType: "mixed",
-  presentationStyle: "fullScreen",
+  mediaType: 'mixed',
+  presentationStyle: 'fullScreen',
   selectionLimit: 1,
 };
 
@@ -29,7 +29,7 @@ const useMediaHandlers = (
       },
     );
     return mediaPickerResponse;
-  }, [launchImageLibrary]);
+  }, [imageLibraryOptions]);
 
   const getImageSize = useCallback(
     async (imageUri: string): Promise<ImageSize> => {
@@ -45,7 +45,7 @@ const useMediaHandlers = (
         ),
       );
     },
-    [Image],
+    [],
   );
 
   const getMediaAspectRatio = useCallback((height: number, width: number) => {

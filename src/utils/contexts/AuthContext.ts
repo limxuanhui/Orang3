@@ -1,8 +1,8 @@
-import { createContext } from "react";
-import type { GypsieUser } from "../../components/navigators/types/types";
+import { createContext } from 'react';
+import type { GypsieUser } from '@navigators/types/types';
 
 type Auth = {
-  user: GypsieUser | null;
+  user: GypsieUser | undefined;
   isLoggedIn: boolean;
   loading: boolean;
   googleSigninHandler: () => void;
@@ -10,7 +10,7 @@ type Auth = {
 };
 
 export const AuthContext = createContext<Auth>({
-  user: null,
+  user: undefined,
   isLoggedIn: false,
   loading: false,
   googleSigninHandler: () => {},

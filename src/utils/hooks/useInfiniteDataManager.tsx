@@ -1,15 +1,13 @@
-import { BACKEND_BASE_URL } from "@env";
+import { useCallback, useMemo } from 'react';
 import {
-  QueryFunctionContext,
   infiniteQueryOptions,
   useInfiniteQuery,
   useQueryClient,
-} from "@tanstack/react-query";
-import axios from "axios";
-import { useCallback, useMemo } from "react";
-import { DUMMY_TALE_THUMBNAILS } from "../../data/tales";
-import { DUMMY_DATABASE } from "../../data/database";
-import type { DataKey, DataMode } from "../../data/types/types";
+} from '@tanstack/react-query';
+import axios from 'axios';
+import { BACKEND_BASE_URL } from '@env';
+import { DUMMY_DATABASE } from '@data/database';
+import type { DataKey, DataMode } from '@data/types/types';
 
 /**
  * useInfiniteDataManager manages the lifecycle of data (fetching, caching, invalidating)
@@ -21,24 +19,29 @@ import type { DataKey, DataMode } from "../../data/types/types";
 const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
   const queryClient = useQueryClient();
   const queryFn = useCallback(
-    async ({ queryKey, signal, meta }: QueryFunctionContext) => {
+    // @ts-ignore
+    async ({ queryKey, pageParam }) => {
+      console.log('Query function running...');
       const [key] = queryKey;
-
       switch (dataMode) {
-        case "prod":
+        case 'prod':
           try {
-            const url = `${BACKEND_BASE_URL}/api/${key}`;
+            let url = `${BACKEND_BASE_URL}/${key}`;
+            if (pageParam) {
+              url = `${url}?base64Key=${pageParam}`;
+            }
+            console.log('Querying infinite data for: ', key, ' @ ', url);
             const response = await axios.get(url);
-            console.log("Querying infinite data for: ", key);
-            console.log("REsponse!!!", JSON.stringify(response.data));
+            // printPrettyJson(response);
+
             return response.data;
           } catch (err) {
             console.error(err);
           }
           break;
 
-        case "dev":
-          return new Promise((resolve, reject) => {
+        case 'dev':
+          return new Promise((resolve, _reject) => {
             const data =
               DUMMY_DATABASE[key as DataKey].length > 0
                 ? DUMMY_DATABASE[key as DataKey]
@@ -53,7 +56,7 @@ const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
           console.info(`${dataMode} mode is not handled.`);
       }
     },
-    [BACKEND_BASE_URL, DUMMY_DATABASE, setTimeout],
+    [dataMode],
   );
 
   const options = useMemo(
@@ -63,20 +66,16 @@ const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
         queryFn,
         // gcTime,
         // enabled,
-        networkMode: dataMode === "prod" ? "online" : "always",
-        getNextPageParam: (
-          lastPage,
-          allPages,
-          lastPageParam,
-          allPageParams,
-        ) => {
+        networkMode: dataMode === 'prod' ? 'online' : 'always',
+        getNextPageParam: lastPage => {
+          console.log('in getNextPageParam: ', lastPage.lastEvaluatedKey);
           //   console.log("=======getNextPageParam=========");
           //   console.log("lastPage len: ", lastPage.length);
           //   console.log("allPages len: ", allPages.length);
           //   console.log("lastPageParam: ", lastPageParam);
           //   console.log("allPageParams: ", allPageParams);
           //   console.log("===========================\n");
-          return lastPageParam + 1;
+          return lastPage.lastEvaluatedKey || undefined;
         },
         // getPreviousPageParam: (
         //   firstPage,
@@ -86,7 +85,7 @@ const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
         // ) => {
         //   return firstPageParam;
         // },
-        initialPageParam: 1,
+        initialPageParam: null,
         // initialData,
         // initialDataUpdatedAt,
         // meta,
@@ -106,39 +105,18 @@ const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
         // structuralSharing,
         // throwOnError,
       }),
-    [infiniteQueryOptions],
+    [dataKey, dataMode, queryFn],
   );
 
   const {
     data,
-    dataUpdatedAt,
     error,
-    errorUpdatedAt,
-    errorUpdateCount,
-    failureCount,
-    failureReason,
-    fetchStatus,
     isError,
-    isFetched,
-    isFetchedAfterMount,
     isFetching,
-    isFetchingNextPage,
-    isFetchingPreviousPage,
-    isInitialLoading,
     isLoading,
-    isLoadingError,
-    isPaused,
-    isPending,
-    isPlaceholderData,
-    isRefetchError,
     isRefetching,
-    isStale,
-    isSuccess,
     hasNextPage,
-    hasPreviousPage,
-    status,
     fetchNextPage,
-    fetchPreviousPage,
     refetch,
   } = useInfiniteQuery(options);
 
@@ -147,6 +125,7 @@ const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
    * This will fetch the next set of data and append to the end of the current set.
    */
   const onEndReached = useCallback(() => {
+    console.log('End reached! fetching next page...');
     fetchNextPage();
   }, [fetchNextPage]);
 

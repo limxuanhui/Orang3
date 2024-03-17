@@ -1,7 +1,7 @@
-import { useCallback, useMemo, useRef } from "react";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
-import { SharedValue } from "react-native-reanimated";
+import { useCallback, useMemo, useRef } from 'react';
+import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import { SharedValue } from 'react-native-reanimated';
 
 type useBottomSheetHandlersProps = {
   snapPointsArr: (string | number)[] | SharedValue<(string | number)[]>;

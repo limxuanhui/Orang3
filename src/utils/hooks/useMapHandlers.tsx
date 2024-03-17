@@ -1,27 +1,28 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-// import { LatLng, MapEvent, Region } from "react-native-maps";
-import axios from "axios";
-import Polyline from "@mapbox/polyline";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import MapView, { Region } from 'react-native-maps';
+import Polyline from '@mapbox/polyline';
+import { ulid } from 'ulid';
 import type {
   ItineraryPlannerMode,
   RouteInfo,
   RouteNodeCoord,
   RouteNodeInfo,
-} from "../../components/itinerary/types/types";
-import useModalHandlers from "./useModalHandlers";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { BACKEND_BASE_URL } from "@env";
-import MapView, { Region } from "react-native-maps";
-import { LATITUDE_DELTA, LONGITUDE_DELTA } from "../constants/constants";
-import { createItinerary, setItinerary } from "../redux/reducers/writeTaleSlice";
-import { useQuery } from "@tanstack/react-query";
+} from '@components/itinerary/types/types';
+import useModalHandlers from '@hooks/useModalHandlers';
+import { useAppDispatch, useAppSelector } from '@redux/hooks';
+import {
+  writeTale_createTaleItinerary,
+  writeTale_setTaleItinerary,
+} from '@redux/reducers/writeTaleSlice';
+import { LATITUDE_DELTA, LONGITUDE_DELTA } from '@constants/constants';
+import { BACKEND_BASE_URL } from '@env';
 
 type useItineraryManagerProps = {
   mode: ItineraryPlannerMode;
   itineraryId?: string;
 };
 
-const useMapHandlers = ({ mode, itineraryId }: useItineraryManagerProps) => {
+const useMapHandlers = ({}: useItineraryManagerProps) => {
   const mapRef = useRef<MapView | null>(null);
   const dispatch = useAppDispatch();
   // Itinerary is either new or fetched from api.
@@ -31,8 +32,7 @@ const useMapHandlers = ({ mode, itineraryId }: useItineraryManagerProps) => {
   // Mode = 'edit' => fetch tale from api, itinerary in tale gets assigned to itinerarySlice when ItineraryScreen is mounted, and reset when unmounted. Enables post button.
   // Mode = 'view' => fetch tale from api, itinerary in tale gets assigned to itinerarySlice when ItineraryScreen is mounted, and reset when unmounted.
 
-  const { itinerary } = useAppSelector(state => state.newTale);
-  // const {  } = useAppSelector(state => state.newTale);
+  const { itinerary } = useAppSelector(state => state.writeTale);
   const [routes, setRoutes] = useState<RouteInfo[]>(itinerary.routes);
   const [selectedRouteId, setSelectedRouteId] = useState<string>(routes[0].id);
   const selectedRoute = routes.filter(
@@ -48,9 +48,9 @@ const useMapHandlers = ({ mode, itineraryId }: useItineraryManagerProps) => {
   const onAddRoute = useCallback(
     (name: string) => {
       // Change to uuid
-      const newId = Math.random().toString();
+      const newId = ulid();
       setRoutes(prevRoutes => [
-        { id: newId, name, routeNodes: [], isRouted: false, polyline: [] },
+        { id: newId, name, routeNodes: [], polyline: [], encodedPolyline: '' },
         ...prevRoutes,
       ]);
       closeModal();
@@ -60,7 +60,7 @@ const useMapHandlers = ({ mode, itineraryId }: useItineraryManagerProps) => {
   );
 
   const onClearRoute = useCallback(() => {
-    console.log("onClearRoute");
+    console.log('onClearRoute');
     setRoutes(prevRoutes =>
       prevRoutes.map(route => {
         if (route.id === selectedRouteId) {
@@ -101,21 +101,14 @@ const useMapHandlers = ({ mode, itineraryId }: useItineraryManagerProps) => {
 
   // Optimise ui performance since adding marker will have short delay before marker appears
   const onAddMarker = useCallback(
-    (
-      placeId: string,
-      name: string,
-      address: string = "nil",
-      coord: RouteNodeCoord,
-      openNow?: boolean,
-    ): void => {
-      const newRouteNode = { placeId, name, address, openNow, coord };
+    (newRouteNode: RouteNodeInfo): void => {
       setRoutes(prevRoutes =>
         prevRoutes.map(route => {
           if (route.id === selectedRouteId) {
             return {
               ...route,
               routeNodes: [...route.routeNodes, newRouteNode],
-              isRouted: false,
+              encodedPolyline: '',
             };
           }
           return route;
@@ -133,9 +126,9 @@ const useMapHandlers = ({ mode, itineraryId }: useItineraryManagerProps) => {
             return {
               ...route,
               routeNodes: route.routeNodes.filter(
-                (routeNode: RouteNodeInfo) => routeNode.placeId !== placeId, // Comparison
+                (routeNode: RouteNodeInfo) => routeNode.placeId !== placeId,
               ),
-              isRouted: false,
+              encodedPolyline: '',
             };
           }
           return route;
@@ -146,15 +139,7 @@ const useMapHandlers = ({ mode, itineraryId }: useItineraryManagerProps) => {
   );
 
   const onAddPlace = useCallback(
-    (routeNode: RouteNodeInfo) => {
-      onAddMarker(
-        routeNode.placeId,
-        routeNode.name,
-        routeNode.address,
-        routeNode.coord,
-        routeNode.openNow,
-      );
-    },
+    (routeNode: RouteNodeInfo) => onAddMarker(routeNode),
     [onAddMarker],
   );
 
@@ -172,7 +157,7 @@ const useMapHandlers = ({ mode, itineraryId }: useItineraryManagerProps) => {
 
       // Can make HTTP request to backend for fetching details based on coordinates pressed.
 
-      onAddMarker("", "", "", event.nativeEvent.coordinate, false); // Look into autogenerated placeId
+      onAddMarker('', '', '', event.nativeEvent.coordinate, false); // Look into autogenerated placeId
     },
     [onAddMarker],
   );
@@ -198,17 +183,17 @@ const useMapHandlers = ({ mode, itineraryId }: useItineraryManagerProps) => {
     // Backend receives distance matrix of the given coordinates and travel mode.
     // Determine order of travelling in backend.
     // Return ordered route nodes.
-    const url = BACKEND_BASE_URL + "/api/directions";
+    const url = BACKEND_BASE_URL + '/directions';
 
     const data = selectedRoute.routeNodes.map(
       (routeNode: RouteNodeInfo) => routeNode.coord,
     );
 
     const options = {
-      method: "POST",
+      method: 'POST',
       headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     };
@@ -252,11 +237,15 @@ const useMapHandlers = ({ mode, itineraryId }: useItineraryManagerProps) => {
               },
             );
 
+            const encodedPolyline = Polyline.encode(
+              polyline.map(coord => [coord.latitude, coord.longitude]),
+            );
+
             return {
               ...route,
               routeNodes: orderedRouteNodes,
-              isRouted: true,
               polyline,
+              encodedPolyline,
             };
           }
           return route;
@@ -273,7 +262,7 @@ const useMapHandlers = ({ mode, itineraryId }: useItineraryManagerProps) => {
 
   useEffect(() => {
     // Add animation to a certain location without places added
-    console.log("Selected route: ", selectedRoute);
+    console.log('Selected route: ', selectedRoute);
 
     if (selectedRoute.routeNodes.length === 1) {
       // Modify to use average of all routeNodes as region
@@ -299,21 +288,26 @@ const useMapHandlers = ({ mode, itineraryId }: useItineraryManagerProps) => {
   }, [mapRef, selectedRoute]);
 
   useEffect(() => {
-    console.log("ItineraryPlanner mounted");
+    console.log('ItineraryPlanner mounted');
     // If itinerary id does not exist, create itinerary
     if (!itinerary.id) {
       // Use user id from global object as creatorId
-      dispatch(createItinerary({ creatorId: "" }));
+      dispatch(writeTale_createTaleItinerary({ creatorId: '' }));
     }
 
     // Load routes from backend based on itineraryId and call setRoutes
 
     return () => {
-      console.log("ItineraryPlanner unmounted");
+      console.log('ItineraryPlanner unmounted');
       // Dispatch an action to update itinerary in NewItineraryPost.
-      dispatch(setItinerary({ routes }));
+      dispatch(writeTale_setTaleItinerary({ routes }));
     };
-  }, [routes, createItinerary, setItinerary, dispatch]);
+  }, [
+    routes,
+    writeTale_createTaleItinerary,
+    writeTale_setTaleItinerary,
+    dispatch,
+  ]);
 
   return {
     mapRef,
@@ -327,8 +321,8 @@ const useMapHandlers = ({ mode, itineraryId }: useItineraryManagerProps) => {
     onDeleteRoute,
     onHoldRoute,
     onSelectRoute,
-    onAddMarker,
-    onDeleteMarker,
+    // onAddMarker,
+    // onDeleteMarker,
     onAddPlace,
     onDeletePlace,
     onMapPress,

@@ -1,14 +1,9 @@
-import { useMemo } from "react";
-import axios from "axios";
-import {
-  QueryKey,
-  queryOptions,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query";
-import { BACKEND_BASE_URL } from "@env";
-import { DUMMY_DATABASE } from "../../data/database";
-import type { DataKey, DataMode } from "../../data/types/types";
+import { useCallback, useMemo } from 'react';
+import axios from 'axios';
+import { QueryKey, queryOptions, useQuery } from '@tanstack/react-query';
+import { BACKEND_BASE_URL } from '@env';
+import { DUMMY_DATABASE } from '@data/database';
+import type { DataKey, DataMode } from '@data/types/types';
 
 /**
  * This hook manages all the data of the app components, except components with infinite scrolling.
@@ -16,30 +11,34 @@ import type { DataKey, DataMode } from "../../data/types/types";
  * @param dataKey
  * @returns
  */
-const useDataManager = (dataKey: DataKey, dataMode: DataMode = "prod") => {
-  const queryFn = async ({ queryKey }: { queryKey: QueryKey }) => {
-    const [key] = queryKey;
+const useDataManager = (dataKey: DataKey, dataMode: DataMode = 'prod') => {
+  const queryFn = useCallback(
+    async ({ queryKey }: { queryKey: QueryKey }) => {
+      const [key] = queryKey;
 
-    switch (dataMode) {
-      case "prod":
-        try {
-          const response = await axios.get(`${BACKEND_BASE_URL}/api/${key}`);
-          return response.data;
-        } catch (err) {
-          console.error(err);
-        }
+      switch (dataMode) {
+        case 'prod':
+          try {
+            const response = await axios.get(`${BACKEND_BASE_URL}/api/${key}`);
+            return response.data;
+          } catch (err) {
+            console.error(err);
+          }
+          break;
 
-      case "dev":
-        return new Promise((resolve, reject) => {
-          setTimeout(() => {
-            resolve(DUMMY_DATABASE[key as DataKey]);
-          }, 2000);
-        });
-      default:
-        // Do I need to return a promise here?
-        console.info(`${dataMode} mode is not handled.`);
-    }
-  };
+        case 'dev':
+          return new Promise((resolve, _reject) => {
+            setTimeout(() => {
+              resolve(DUMMY_DATABASE[key as DataKey]);
+            }, 2000);
+          });
+        default:
+          // Do I need to return a promise here?
+          console.info(`${dataMode} mode is not handled.`);
+      }
+    },
+    [dataMode],
+  );
 
   const options = useMemo(() => {
     return queryOptions({
@@ -53,7 +52,7 @@ const useDataManager = (dataKey: DataKey, dataMode: DataMode = "prod") => {
       enabled: false,
       gcTime: 1000 * 60 * 5,
     });
-  }, [queryOptions]);
+  }, [dataKey, queryFn]);
 
   const {
     data,
@@ -81,7 +80,7 @@ const useDataManager = (dataKey: DataKey, dataMode: DataMode = "prod") => {
     refetch,
   } = useQuery(options);
 
-  const mutation = useMutation({});
+  // const mutation = useMutation({});
 
   return {
     data,

@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { GypsieUser } from "../../../components/navigators/types/types";
+import { createSlice } from '@reduxjs/toolkit';
+import { GypsieUser } from '@components/navigators/types/types';
 
 export type UserState = Readonly<{
   user: GypsieUser;
@@ -10,7 +10,7 @@ const initialState: UserState = {
 };
 
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
     resetUserSlice: () => initialState,

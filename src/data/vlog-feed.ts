@@ -1,14 +1,14 @@
 export const VLOG_FEED_DATA = [
   {
     id: 1,
-    videoUri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
+    videoUri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
     // videoUri:
     //   "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mov-file.mov",
     avatarUri:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-    handle: "@Joseph",
-    caption: "so i decided to annoy my dad today",
-    soundTrack: "@Edsheeran so good so good",
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+    handle: '@Joseph',
+    caption: 'so i decided to annoy my dad today',
+    soundTrack: '@Edsheeran so good so good',
     isLiked: false,
     isBookmarked: true,
     likes: 262,
@@ -18,12 +18,12 @@ export const VLOG_FEED_DATA = [
   },
   {
     id: 2,
-    videoUri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
+    videoUri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
     avatarUri:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-    handle: "@Jacob",
-    caption: "so i decided to annoy my dad today",
-    soundTrack: "@Edsheeran so good so good",
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+    handle: '@Jacob',
+    caption: 'so i decided to annoy my dad today',
+    soundTrack: '@Edsheeran so good so good',
     isLiked: true,
     isBookmarked: false,
     likes: 262,
@@ -33,12 +33,12 @@ export const VLOG_FEED_DATA = [
   },
   {
     id: 3,
-    videoUri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
+    videoUri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
     avatarUri:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-    handle: "@Jason",
-    caption: "so i decided to annoy my dad today",
-    soundTrack: "@Edsheeran so good so good",
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+    handle: '@Jason',
+    caption: 'so i decided to annoy my dad today',
+    soundTrack: '@Edsheeran so good so good',
     isLiked: true,
     isBookmarked: true,
     likes: 262,
@@ -48,14 +48,14 @@ export const VLOG_FEED_DATA = [
   },
   {
     id: 4,
-    videoUri: "https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
+    videoUri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
     // videoUri:
     //   "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mov-file.mov",
     avatarUri:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-    handle: "@Joseph",
-    caption: "so i decided to annoy my dad today",
-    soundTrack: "@Edsheeran so good so good",
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+    handle: '@Joseph',
+    caption: 'so i decided to annoy my dad today',
+    soundTrack: '@Edsheeran so good so good',
     isLiked: false,
     isBookmarked: true,
     likes: 262,
@@ -66,12 +66,12 @@ export const VLOG_FEED_DATA = [
   {
     id: 5,
     videoUri:
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
     avatarUri:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-    handle: "@Jacob",
-    caption: "so i decided to annoy my dad today",
-    soundTrack: "@Edsheeran so good so good",
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+    handle: '@Jacob',
+    caption: 'so i decided to annoy my dad today',
+    soundTrack: '@Edsheeran so good so good',
     isLiked: true,
     isBookmarked: false,
     likes: 262,
@@ -82,12 +82,12 @@ export const VLOG_FEED_DATA = [
   {
     id: 6,
     videoUri:
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
     avatarUri:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80",
-    handle: "@Jason",
-    caption: "so i decided to annoy my dad today",
-    soundTrack: "@Edsheeran so good so good",
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+    handle: '@Jason',
+    caption: 'so i decided to annoy my dad today',
+    soundTrack: '@Edsheeran so good so good',
     isLiked: true,
     isBookmarked: true,
     likes: 262,

@@ -1,16 +1,22 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 import {
   GoogleSignin,
   statusCodes,
-} from "@react-native-google-signin/google-signin";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import EncryptedStorage from "react-native-encrypted-storage";
-import axios from "axios";
-import jwtDecode from "jwt-decode";
-import { v4 as uuidv4 } from "uuid";
-import type { GypsieUser } from "../../components/navigators/types/types";
-import { printPrettyJson } from "../helpers/functions";
-import { BACKEND_BASE_URL } from "@env";
+} from '@react-native-google-signin/google-signin';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import EncryptedStorage from 'react-native-encrypted-storage';
+import { AuthorizeResult, authorize } from 'react-native-app-auth';
+import axios from 'axios';
+import jwtDecode from 'jwt-decode';
+import { v4 as uuidv4 } from 'uuid';
+import type { GypsieUser } from '@navigators/types/types';
+import { printPrettyJson } from '@helpers/functions';
+import {
+  BACKEND_BASE_URL,
+  GOOGLE_IOS_CLIENT_ID,
+  GOOGLE_ISSUER_URL,
+  REDIRECT_URL,
+} from '@env';
 
 type GoogleIdToken = {
   iss: string;
@@ -34,108 +40,108 @@ const useAuthManager = () => {
   const [user, setUser] = useState<GypsieUser>();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const url = BACKEND_BASE_URL + "/api/auth/signin";
+  const url = `${BACKEND_BASE_URL}/users/auth/signin`;
+
+  const retrieveUserIdToken = useCallback(async () => {
+    console.info('Retrieving user id token...');
+    try {
+      const idToken = await EncryptedStorage.getItem('id_token');
+      if (!idToken) {
+        throw new Error('User id token is null');
+      }
+      return idToken;
+    } catch (error: any) {
+      console.error(
+        'An error occurred while retrieving user id token: ' + error,
+      );
+    }
+  }, []);
+
+  const retrieveUserData = useCallback(async () => {
+    console.info('Retrieving user data...');
+    try {
+      const userData = await AsyncStorage.getItem('user_data');
+      if (!userData) {
+        console.error('User data is null');
+        return;
+      }
+      return JSON.parse(userData);
+    } catch (error: any) {
+      console.error('An error occurred while retrieving user data: ' + error);
+    }
+  }, []);
 
   const storeUserIdToken = useCallback(
     async (idToken: string) => {
       try {
-        await EncryptedStorage.setItem("id_token", idToken);
+        await EncryptedStorage.setItem('id_token', idToken);
         const newIdToken = await retrieveUserIdToken();
         if (newIdToken === undefined) {
-          throw new Error("User id token is not set properly");
+          throw new Error('User id token is not set properly');
         }
       } catch (error: any) {
         console.error(
-          "An error occurred while storing user id token: " + error,
+          'An error occurred while storing user id token: ' + error,
         );
       }
     },
-    [EncryptedStorage],
+    [retrieveUserIdToken],
   );
 
   const storeUserData = useCallback(
     async (userData: any) => {
       try {
-        await AsyncStorage.setItem("user_data", JSON.stringify(userData));
+        await AsyncStorage.setItem('user_data', JSON.stringify(userData));
         const newUserData = await retrieveUserData();
         if (!newUserData) {
-          throw new Error("User data is not set properly");
+          throw new Error('User data is not set properly');
         }
       } catch (error: any) {
-        console.error("An error occurred while setting user data: " + error);
+        console.error('An error occurred while setting user data: ' + error);
       }
     },
-    [AsyncStorage],
+    [retrieveUserData],
   );
 
-  const retrieveUserIdToken = useCallback(async () => {
-    console.info("Retrieving user id token...");
-    try {
-      const idToken = await EncryptedStorage.getItem("id_token");
-      if (!idToken) {
-        throw new Error("User id token is null");
-      }
-      return idToken;
-    } catch (error: any) {
-      console.error(
-        "An error occurred while retrieving user id token: " + error,
-      );
-    }
-  }, [EncryptedStorage]);
-
-  const retrieveUserData = useCallback(async () => {
-    console.info("Retrieving user data...");
-    try {
-      const userData = await AsyncStorage.getItem("user_data");
-      if (!userData) {
-        console.error("User data is null");
-        return;
-      }
-      return JSON.parse(userData);
-    } catch (error: any) {
-      console.error("An error occurred while retrieving user data: " + error);
-    }
-  }, [AsyncStorage]);
-
   const removeUserIdToken = useCallback(async () => {
-    console.info("Removing user id token...");
+    console.info('Removing user id token...');
     try {
       const idToken = await retrieveUserIdToken();
       if (idToken === undefined) {
         // throw new Error("User id token is undefined");
-        console.error("No user id token");
+        console.error('No user id token');
         return;
       }
-      await EncryptedStorage.removeItem("id_token");
+      await EncryptedStorage.removeItem('id_token');
     } catch (error: any) {
-      console.error("An error occurred while removing user id token: " + error);
+      console.error('An error occurred while removing user id token: ' + error);
     }
-  }, [EncryptedStorage, retrieveUserIdToken]);
+  }, [retrieveUserIdToken]);
 
   const removeUserData = useCallback(async () => {
-    console.info("Removing user data...");
+    console.info('Removing user data...');
     try {
       const userData = await retrieveUserData();
       if (!userData) {
         // throw new Error("User data is undefined");
-        console.error("No user data");
+        console.error('No user data');
         return;
       }
-      await AsyncStorage.removeItem("user_data");
+      await AsyncStorage.removeItem('user_data');
     } catch (error: any) {
-      console.error("An error occurred while removing user data: " + error);
+      console.error('An error occurred while removing user data: ' + error);
     }
-  }, [AsyncStorage, retrieveUserData]);
+  }, [retrieveUserData]);
 
-  const clearStorage = useCallback(async () => {
-    console.info("Clearing storage...");
-    try {
-      await EncryptedStorage.clear();
-      await AsyncStorage.clear();
-    } catch (error: any) {
-      console.error("An error occurred while clearing storage: " + error);
-    }
-  }, [EncryptedStorage, AsyncStorage]);
+  // const clearStorage = useCallback(async () => {
+  //   console.info('Clearing storage...');
+  //   try {
+  //     await EncryptedStorage.clear();
+  //     await AsyncStorage.clear();
+  //   } catch (error: any) {
+  //     console.error('An error occurred while clearing storage: ' + error);
+  //   }
+  // }, []);
 
   const logoutHandler = useCallback(async () => {
     // Remove token
@@ -145,24 +151,21 @@ const useAuthManager = () => {
     setIsLoggedIn(false);
   }, [removeUserIdToken, removeUserData, setIsLoggedIn, setUser]);
 
-  const decodeIdToken = useCallback(
-    (idToken: string): GoogleIdToken => {
-      return jwtDecode(idToken);
-    },
-    [jwtDecode],
-  );
+  const decodeIdToken = useCallback((idToken: string): GoogleIdToken => {
+    return jwtDecode(idToken);
+  }, []);
 
   const checkIfIdTokenIsValid = useCallback(
     async (idToken: string | undefined) => {
-      console.info("Checking if id token expired...");
-      console.info("idToken: ", idToken);
+      console.info('Checking if id token expired...');
+      console.info('idToken: ', idToken);
       if (idToken) {
         const decodedIdToken: GoogleIdToken = decodeIdToken(idToken);
         const currentTime = Math.floor(Date.now() / 1000);
-        console.info("Decoded jwt: ", JSON.stringify(decodedIdToken, null, 4));
-        console.info("Token expires at: ", decodedIdToken.exp);
-        console.info("Time now: ", currentTime);
-        console.info("Time left: ", decodedIdToken.exp - currentTime);
+        console.info('Decoded jwt: ', JSON.stringify(decodedIdToken, null, 4));
+        console.info('Token expires at: ', decodedIdToken.exp);
+        console.info('Time now: ', currentTime);
+        console.info('Time left: ', decodedIdToken.exp - currentTime);
         return currentTime < decodedIdToken.exp;
       }
       return false;
@@ -175,10 +178,10 @@ const useAuthManager = () => {
 
     try {
       await GoogleSignin.hasPlayServices();
-      console.info("Awaiting Google sign in...");
+      console.info('Awaiting Google sign in...');
       const userInfo = await GoogleSignin.signIn();
       console.info(
-        "Google sign in complete!\nUser info:" +
+        'Google sign in complete!\nUser info:' +
           JSON.stringify(userInfo, null, 4),
       );
 
@@ -188,15 +191,20 @@ const useAuthManager = () => {
           user: {
             id: sub,
             name,
-            handle: name.replace(" ", ""),
+            handle: name.replace(' ', ''),
             email,
-            avatar: { id: uuidv4(), type: "image/unknown", uri: picture, height: -1, width: -1 },
+            avatar: {
+              id: uuidv4(),
+              type: 'image/unknown',
+              uri: picture,
+              height: -1,
+              width: -1,
+            },
           },
           idToken: userInfo.idToken,
         };
 
         const response = await axios.post(url, requestBody, {});
-
         if (response.data) {
           await storeUserIdToken(userInfo.idToken);
           await storeUserData(response.data);
@@ -208,39 +216,67 @@ const useAuthManager = () => {
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // User cancelled the sign in flow
-        console.log("Status Code: SIGN_IN_CANCELLED");
+        console.log('Status Code: SIGN_IN_CANCELLED');
       } else if (error.code === statusCodes.IN_PROGRESS) {
         // Sign in is in progress
-        console.log("Status Code: IN_PROGRESS");
+        console.log('Status Code: IN_PROGRESS');
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         // Play services not available
-        console.log("Status Code: PLAY_SERVICES_NOT_AVAILABLE");
+        console.log('Status Code: PLAY_SERVICES_NOT_AVAILABLE');
       } else {
         // Some other error happened
         console.error(
-          "An unknown error occurred: Code:",
+          'An unknown error occurred: Code:',
           error.code,
-          "Error:",
+          'Error:',
           error,
         );
       }
       setLoading(false);
     }
     setLoading(false);
-  }, [
-    GoogleSignin,
-    uuidv4,
-    decodeIdToken,
-    printPrettyJson,
-    setIsLoggedIn,
-    setLoading,
-    setUser,
-    storeUserIdToken,
-    storeUserData,
-  ]);
+  }, [decodeIdToken, url, storeUserIdToken, storeUserData]);
+
+  const googleAuthHandler = async () => {
+    const config = {
+      issuer: GOOGLE_ISSUER_URL,
+      clientId: GOOGLE_IOS_CLIENT_ID, // configure to use android client id if platform is android
+      redirectUrl: REDIRECT_URL,
+      scopes: ['openid', 'profile', 'write'],
+    };
+
+    try {
+      const authRes: AuthorizeResult = await authorize(config);
+      console.log('====== Authorize Result ======');
+      console.log(JSON.stringify(authRes, null, 4));
+      console.log('==============================');
+
+      if (authRes.idToken) {
+        const decodedIdToken = decodeIdToken(authRes.idToken);
+        console.log('====== decodedIdToken ======');
+        console.log(decodedIdToken);
+      }
+      // await storeUserIdToken();
+      // await storeUserData(authUser);
+
+      // setUser(authUser);
+      // setIsLoggedIn(true);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const googleSignoutHandler = async () => {
+    try {
+      // await signOut({ global: true });
+      await logoutHandler();
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   useEffect(() => {
-    console.log("useAuthManager useEffect called...");
+    console.log('useAuthManager useEffect called...');
     const checkUserLoggedIn = async () => {
       // Check for existence of valid id token
       const idToken = await retrieveUserIdToken();
@@ -253,7 +289,7 @@ const useAuthManager = () => {
         return;
       }
       const fetchedUser = await retrieveUserData();
-      console.log("fetchedUser: ", fetchedUser);
+      console.log('fetchedUser: ', fetchedUser);
       if (fetchedUser) {
         setUser(fetchedUser);
         setIsLoggedIn(true);
@@ -267,6 +303,7 @@ const useAuthManager = () => {
     removeUserIdToken,
     removeUserData,
     setIsLoggedIn,
+    retrieveUserIdToken,
   ]);
 
   return {
@@ -275,6 +312,8 @@ const useAuthManager = () => {
     loading,
     googleSigninHandler,
     logoutHandler,
+    googleAuthHandler,
+    googleSignoutHandler,
   };
 };
 

@@ -1,32 +1,35 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { v4 as uuidv4 } from "uuid";
-import type { FeedItemThumbnail } from "../../../components/tale/types/types";
-import type { WriteTale } from "../../../components/tale/types/types";
-import { BACKEND_BASE_URL } from "@env";
-import { DUMMY_FEEDS_ITEMS_THUMBNAILS } from "../../../data/feeds-thumbnails-list";
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { v4 as uuidv4 } from 'uuid';
+import type { FeedItemThumbnail } from '@components/tale/types/types';
+import type { WriteTale } from '@components/tale/types/types';
+import { DUMMY_FEEDS_ITEMS_THUMBNAILS } from '@data/feeds-thumbnails-list';
+import { BACKEND_BASE_URL } from '@env';
 
 type WriteTaleState = Readonly<WriteTale>;
 
 const initialState: WriteTaleState = {
-  id: "",
-  creator: {
-    id: "",
-    handle: "",
-    avatarUri: "",
+  metadata: {
+    id: '',
+    creator: {
+      id: '',
+      name: '',
+      handle: '',
+      email: '',
+      avatar: undefined,
+    },
+    cover: undefined,
+    thumbnail: undefined,
+    title: '',
   },
-  cover: undefined,
-  title: "",
-  feeds: [],
   itinerary: {
-    id: "",
-    creatorId: "",
+    id: '',
+    creatorId: '',
     routes: [
       {
-        id: "",
-        name: "Day 1",
+        id: '',
+        name: '',
         routeNodes: [],
-        isRouted: false,
-        encodedPolyline: "",
+        encodedPolyline: '',
       },
     ],
   },
@@ -35,18 +38,17 @@ const initialState: WriteTaleState = {
   saving: false,
   feedItemThumbnails: {
     data: [],
-    status: "idle",
-    error: "",
+    status: 'idle',
+    error: '',
   },
-  // selectedItemId: 0,
 };
 
 // Replace with useQuery
 export const writeTale_fetchFeeds = createAsyncThunk(
-  "newTale/fetchFeeds",
+  'newTale/fetchFeeds',
   async (userId: string, thunkAPI) => {
     try {
-      const url = BACKEND_BASE_URL + "/api/userId";
+      const url = BACKEND_BASE_URL + '/api/userId';
       // const response = await axios.get(url);
       // console.log(JSON.stringify(response.data, null, 4));
       // return response.data;
@@ -72,22 +74,19 @@ export const writeTale_fetchFeeds = createAsyncThunk(
 );
 
 const writeTaleSlice = createSlice({
-  name: "writeTale",
+  name: 'writeTale',
   initialState,
   reducers: {
     writeTale_setFetchedTale: (state, action) => {
-      state.id = action.payload.tale.id;
-      state.cover = action.payload.tale.cover;
-      state.title = action.payload.tale.title;
-      state.feeds = action.payload.tale.feeds;
+      state.metadata = action.payload.tale.metadata;
       state.itinerary = action.payload.tale.itinerary;
       state.story = action.payload.tale.story;
     },
     writeTale_setCover: (state, action) => {
-      state.cover = action.payload;
+      state.metadata.cover = action.payload;
     },
     writeTale_setTitle: (state, action) => {
-      state.title = action.payload;
+      state.metadata.title = action.payload;
     },
     writeTale_createTaleItinerary: (state, action) => {
       state.itinerary = {
@@ -96,17 +95,18 @@ const writeTaleSlice = createSlice({
         routes: [
           {
             id: uuidv4(),
-            name: "Day 1",
+            name: 'Day 1',
             routeNodes: [],
-            isRouted: false,
-            encodedPolyline: "",
+            polyline: [],
+            encodedPolyline: '',
           },
         ],
       };
     },
     writeTale_setTaleItinerary: (state, action) => {
-      state.itinerary.routes = action.payload.routes;
+      state.itinerary = action.payload.itinerary;
     },
+
     writeTale_addStoryItem: (state, action) => {
       state.story.push(action.payload.newStoryItem);
     },
@@ -133,23 +133,23 @@ const writeTaleSlice = createSlice({
     writeTale_setPosting: (state, action) => {
       state.posting = action.payload;
     },
-    writeTale_setSaving: (state, action) => {
-      state.saving = action.payload;
-    },
+    // writeTale_setSaving: (state, action) => {
+    //   state.saving = action.payload;
+    // },
     writeTale_resetWriteTaleSlice: () => initialState,
   },
   extraReducers: builder => {
     // fetchFeeds
     builder
       .addCase(writeTale_fetchFeeds.pending, (state, action) => {
-        state.feedItemThumbnails.status = "pending";
+        state.feedItemThumbnails.status = 'pending';
       })
       .addCase(writeTale_fetchFeeds.fulfilled, (state, action) => {
-        state.feedItemThumbnails.status = "succeeded";
+        state.feedItemThumbnails.status = 'succeeded';
         state.feedItemThumbnails.data = action.payload as FeedItemThumbnail[][];
       })
       .addCase(writeTale_fetchFeeds.rejected, (state, action) => {
-        state.feedItemThumbnails.status = "failed";
+        state.feedItemThumbnails.status = 'failed';
         state.feedItemThumbnails.error = action.error.message;
       });
   },
@@ -165,7 +165,7 @@ export const {
   writeTale_deleteStoryItem,
   writeTale_setStoryItemText,
   writeTale_setPosting,
-  writeTale_setSaving,
+  // writeTale_setSaving,
   writeTale_resetWriteTaleSlice,
 } = writeTaleSlice.actions;
 export default writeTaleSlice.reducer;

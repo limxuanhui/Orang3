@@ -1,16 +1,16 @@
-import { StyleProp, TextStyle } from "react-native";
-import { PALETTE } from "./palette";
+import { StyleProp, TextStyle } from 'react-native';
+import { PALETTE } from './palette';
 
 export const storyTitleStyle: StyleProp<TextStyle> = {
-  fontFamily: "Futura",
+  fontFamily: 'Futura',
   fontSize: 24,
-  fontWeight: "bold",
+  fontWeight: 'bold',
   color: PALETTE.GREYISHBLUE,
 };
 
 export const storyBodyStyle: StyleProp<TextStyle> = {
-  fontFamily: "Futura",
+  fontFamily: 'Futura',
   fontSize: 16,
-  fontWeight: "normal",
+  fontWeight: 'normal',
   color: PALETTE.GREYISHBLUE,
 };
