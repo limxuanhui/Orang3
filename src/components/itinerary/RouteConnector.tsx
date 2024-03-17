@@ -1,8 +1,8 @@
-import { StyleSheet, View } from "react-native";
-import type { RouteConnectorProps } from "./types/types";
-import { PALETTE } from "../../utils/constants/palette";
+import { StyleSheet, View } from 'react-native';
+import type { RouteConnectorProps } from './types/types';
+import { PALETTE } from '@constants/palette';
 
-const RouteConnector = ({ horizontal, connectorText }: RouteConnectorProps) => {
+const RouteConnector = ({ horizontal }: RouteConnectorProps) => {
   return (
     <View
       style={
@@ -17,14 +17,14 @@ const RouteConnector = ({ horizontal, connectorText }: RouteConnectorProps) => {
 
 const styles = StyleSheet.create({
   connectorHorizontal: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   connectorVertical: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "baseline",
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'baseline',
     marginHorizontal: 30,
     marginVertical: 5,
   },

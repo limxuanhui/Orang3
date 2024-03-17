@@ -1,17 +1,17 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import type { RouteBottomControlsProps } from "./types/types";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
-import { useAppDispatch, useAppSelector } from "../../utils/redux/hooks";
+import { useCallback } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import type { RouteBottomControlsProps } from './types/types';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
+import { useAppDispatch, useAppSelector } from '@redux/hooks';
 import {
   itineraryPlanner_clearRoute,
   itineraryPlanner_deleteRoute,
   itineraryPlanner_setRoute,
   itineraryPlanner_startRouting,
-} from "../../utils/redux/reducers/itineraryPlannerSlice";
-import { useCallback } from "react";
+} from '@redux/reducers/itineraryPlannerSlice';
 
 const RouteBottomControls = ({
   isRouted,
@@ -24,7 +24,6 @@ const RouteBottomControls = ({
       route => route.id === state.itineraryPlanner.selectedRouteId,
     ),
   );
-  console.log("SELECTEDROUTE IN bottomcontrols: ", selectedRoute);
   const clearButtonIsDisabled = oneRouteLeft && routeLength === 0;
   const routeButtonIsDisabled = routeLength <= 1 || isRouted;
   const clearButtonColor = clearButtonIsDisabled
@@ -36,14 +35,14 @@ const RouteBottomControls = ({
 
   const onDeleteRoute = useCallback(() => {
     dispatch(itineraryPlanner_deleteRoute());
-  }, [itineraryPlanner_deleteRoute, dispatch]);
+  }, [dispatch]);
   const onClearRoute = useCallback(() => {
     dispatch(itineraryPlanner_clearRoute());
-  }, [itineraryPlanner_clearRoute, dispatch]);
+  }, [dispatch]);
 
   const onStartRouting = useCallback(async () => {
     if (selectedRoute) {
-      console.log("Starting to route...");
+      console.log('Starting to route...');
       try {
         const routedRoute = await dispatch(
           itineraryPlanner_startRouting(selectedRoute),
@@ -53,15 +52,10 @@ const RouteBottomControls = ({
           dispatch(itineraryPlanner_setRoute({ route: routedRoute }));
         }
       } catch (err) {
-        console.error("An error occured while routing: ", err);
+        console.error('An error occured while routing: ', err);
       }
     }
-  }, [
-    selectedRoute,
-    itineraryPlanner_startRouting,
-    itineraryPlanner_setRoute,
-    dispatch,
-  ]);
+  }, [selectedRoute, dispatch]);
 
   return (
     <View style={styles.bottomControls}>
@@ -105,9 +99,9 @@ const RouteBottomControls = ({
 
 const styles = StyleSheet.create({
   bottomControls: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     height: 36,
     width: DIMENSION.HUNDRED_PERCENT,
     backgroundColor: PALETTE.OFFWHITE,
@@ -115,9 +109,9 @@ const styles = StyleSheet.create({
   },
   bottomControl: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     height: DIMENSION.HUNDRED_PERCENT,
     borderWidth: 1,
     borderRadius: 4,

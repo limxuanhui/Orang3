@@ -1,14 +1,13 @@
-import { useCallback } from "react";
-import { Pressable, StyleSheet, Text } from "react-native";
-import type { RouteButtonProps } from "./types/types";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
-import { useAppDispatch, useAppSelector } from "../../utils/redux/hooks";
+import { useCallback } from 'react';
+import { Pressable, StyleSheet, Text } from 'react-native';
+import type { RouteButtonProps } from './types/types';
+import { DIMENSION } from '../../utils/constants/dimensions';
+import { PALETTE } from '../../utils/constants/palette';
+import { useAppDispatch, useAppSelector } from '../../utils/redux/hooks';
 import {
-  holdRoute,
-  openModal,
-  selectRoute,
-} from "../../utils/redux/reducers/itineraryPlannerSlice";
+  itineraryPlanner_openModal,
+  itineraryPlanner_selectRoute,
+} from '../../utils/redux/reducers/itineraryPlannerSlice';
 
 const RouteButton = ({ route, selected }: RouteButtonProps) => {
   const dispatch = useAppDispatch();
@@ -16,17 +15,21 @@ const RouteButton = ({ route, selected }: RouteButtonProps) => {
 
   const onPress = useCallback(() => {
     if (!selected) {
-      dispatch(selectRoute({ selectedRouteId: route.id }));
+      dispatch(itineraryPlanner_selectRoute({ selectedRouteId: route.id }));
     }
-  }, [route, selected, selectRoute]);
+  }, [selected, dispatch, route.id]);
 
   const onLongPress = useCallback(() => {
-    if (mode === "edit") {
+    if (mode === 'edit') {
       onPress();
-      dispatch(openModal());
-      dispatch(holdRoute({ modalInitialValue: route.name }));
+      dispatch(
+        itineraryPlanner_openModal({
+          modalType: 'ROUTE_NAME',
+          modalInitialValue: route.name,
+        }),
+      );
     }
-  }, [route, mode, holdRoute, openModal, onPress, dispatch]);
+  }, [route, mode, onPress, dispatch]);
 
   return (
     <Pressable
@@ -43,7 +46,7 @@ const RouteButton = ({ route, selected }: RouteButtonProps) => {
       <Text
         style={[
           styles.routeButtonText,
-          { fontWeight: selected ? "700" : "normal" },
+          { fontWeight: selected ? '700' : 'normal' },
         ]}>
         {route.name}
       </Text>
@@ -53,8 +56,8 @@ const RouteButton = ({ route, selected }: RouteButtonProps) => {
 
 const styles = StyleSheet.create({
   routeButton: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     height: DIMENSION.HUNDRED_PERCENT,
     minWidth: 80,
     marginRight: 4,
@@ -63,7 +66,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   routeButtonText: {
-    fontFamily: "Futura",
+    fontFamily: 'Futura',
   },
 });
 

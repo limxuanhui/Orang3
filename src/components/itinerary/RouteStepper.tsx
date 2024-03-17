@@ -1,9 +1,10 @@
-import { ScrollView, StyleSheet } from "react-native";
-import RouteConnector from "./RouteConnector";
-import RouteNode from "./RouteNode";
-import type { RouteNodeInfo, RouteStepperProps } from "./types/types";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
+import { ScrollView, StyleSheet } from 'react-native';
+import RouteConnector from './RouteConnector';
+import RouteNode from './RouteNode';
+import type { RouteNodeInfo, RouteStepperProps } from './types/types';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
+import { nanoid } from '@reduxjs/toolkit';
 
 const RouteStepper = ({ route }: RouteStepperProps) => {
   return (
@@ -13,10 +14,7 @@ const RouteStepper = ({ route }: RouteStepperProps) => {
       showsVerticalScrollIndicator={false}>
       {route?.routeNodes.map((routeNode: RouteNodeInfo, index: number) => (
         <>
-          <RouteNode
-            key={Math.random.toString()} // To change to uuid
-            routeNode={routeNode}
-          />
+          <RouteNode key={nanoid()} routeNode={routeNode} />
           {index !== route.routeNodes.length - 1 ? (
             <RouteConnector horizontal={false} />
           ) : null}
@@ -28,16 +26,16 @@ const RouteStepper = ({ route }: RouteStepperProps) => {
 
 const styles = StyleSheet.create({
   routeStepper: {
-    maxHeight: "100%",
-    width: "100%",
+    maxHeight: '100%',
+    width: '100%',
   },
   contentContainerStyle: {
     // flex: 1,
     // justifyContent: 'flex-end',
   },
   searchNavButton: {
-    justifyContent: "center",
-    alignItems: "flex-start",
+    justifyContent: 'center',
+    alignItems: 'flex-start',
     height: 40,
     width: DIMENSION.HUNDRED_PERCENT,
     padding: 8,

@@ -1,13 +1,13 @@
-import { useCallback } from "react";
-import { Pressable, StyleSheet, Text } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import Feather from "react-native-vector-icons/Feather";
-import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
-import type { RouteNodeInfo, SearchPlaceButtonProps } from "./types/types";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
-import { itineraryPlanner_addPlace } from "../../utils/redux/reducers/itineraryPlannerSlice";
-import { useAppDispatch } from "../../utils/redux/hooks";
+import { useCallback } from 'react';
+import { Pressable, StyleSheet, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Feather from 'react-native-vector-icons/Feather';
+import type { ModalNavigatorNavigationProp } from '../navigators/types/types';
+import type { RouteNodeInfo, SearchPlaceButtonProps } from './types/types';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
+import { itineraryPlanner_addPlace } from '@redux/reducers/itineraryPlannerSlice';
+import { useAppDispatch } from '@redux/hooks';
 
 const SearchPlaceButton = ({}: SearchPlaceButtonProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
@@ -17,12 +17,12 @@ const SearchPlaceButton = ({}: SearchPlaceButtonProps) => {
     (routeNode: RouteNodeInfo) => {
       dispatch(itineraryPlanner_addPlace({ routeNode }));
     },
-    [itineraryPlanner_addPlace, dispatch],
+    [dispatch],
   );
 
   const onPressSearchPlace = useCallback(() => {
-    navigation.navigate("Modal", {
-      screen: "PlaceSearch",
+    navigation.navigate('Modal', {
+      screen: 'PlaceSearch',
       params: { onAddPlace },
     });
   }, [navigation, onAddPlace]);
@@ -43,9 +43,9 @@ const SearchPlaceButton = ({}: SearchPlaceButtonProps) => {
 
 const styles = StyleSheet.create({
   searchNavButton: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     height: 40,
     width: DIMENSION.HUNDRED_PERCENT,
     padding: 8,

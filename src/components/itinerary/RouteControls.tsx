@@ -1,29 +1,34 @@
-import { useCallback, useMemo } from "react";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import RouteButton from "./RouteButton";
-import type { RouteControlsProps, RouteInfo } from "./types/types";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
-import { useAppDispatch, useAppSelector } from "../../utils/redux/hooks";
-import { holdRoute, openModal } from "../../utils/redux/reducers/itineraryPlannerSlice";
+import { useCallback, useMemo } from 'react';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { nanoid } from '@reduxjs/toolkit';
+import RouteButton from './RouteButton';
+import type { RouteControlsProps, RouteInfo } from './types/types';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
+import { useAppDispatch, useAppSelector } from '@redux/hooks';
+import { itineraryPlanner_openModal } from '@redux/reducers/itineraryPlannerSlice';
 
 const RouteControls = ({ routes, selectedRouteId }: RouteControlsProps) => {
   const dispatch = useAppDispatch();
   const { mode } = useAppSelector(state => state.itineraryPlanner);
 
   const onPressAdd = useCallback(() => {
-    dispatch(openModal());
-    dispatch(holdRoute({ modalInitialValue: "" }));
-  }, [holdRoute, openModal, dispatch]);
+    dispatch(
+      itineraryPlanner_openModal({
+        modalType: 'ROUTE_NAME',
+        modalInitialValue: '',
+      }),
+    );
+  }, [dispatch]);
 
   const sliderBorderRightStyle = useMemo(
     () => ({
-      borderRightWidth: mode === "edit" ? 1 : 0,
+      borderRightWidth: mode === 'edit' ? 1 : 0,
       borderRightColor:
-        mode === "edit" ? PALETTE.LIGHTERGREY : PALETTE.TRANSPARENT,
+        mode === 'edit' ? PALETTE.LIGHTERGREY : PALETTE.TRANSPARENT,
     }),
-    [mode, PALETTE],
+    [mode],
   );
 
   return (
@@ -35,14 +40,14 @@ const RouteControls = ({ routes, selectedRouteId }: RouteControlsProps) => {
           showsHorizontalScrollIndicator={false}>
           {routes.map((route: RouteInfo) => (
             <RouteButton
-              key={Math.random().toString()} // change to uuid
+              key={nanoid()}
               route={route}
               selected={route.id === selectedRouteId}
             />
           ))}
         </ScrollView>
       </View>
-      {mode === "edit" ? (
+      {mode === 'edit' ? (
         <Pressable
           style={({ pressed }) => [
             styles.addButton,
@@ -58,9 +63,9 @@ const RouteControls = ({ routes, selectedRouteId }: RouteControlsProps) => {
 
 const styles = StyleSheet.create({
   routeControls: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     height: 40,
     width: DIMENSION.HUNDRED_PERCENT,
     marginBottom: 8,
@@ -69,13 +74,13 @@ const styles = StyleSheet.create({
   },
   routeSliderBox: {
     flex: 6,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     height: DIMENSION.HUNDRED_PERCENT,
   },
   routeSlider: {
-    flexDirection: "row",
+    flexDirection: 'row',
     width: DIMENSION.HUNDRED_PERCENT,
     backgroundColor: PALETTE.OFFWHITE,
     shadowColor: PALETTE.BLACK,
@@ -84,9 +89,9 @@ const styles = StyleSheet.create({
   },
   addButton: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

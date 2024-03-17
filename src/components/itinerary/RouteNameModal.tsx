@@ -1,33 +1,33 @@
-import { useCallback, useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import type { RouteNameModalProps } from "./types/types";
-import { DEVICE_HEIGHT } from "../../utils/constants/constants";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
+import { useCallback, useState } from 'react';
+import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import type { RouteNameModalProps } from './types/types';
+import { DEVICE_HEIGHT } from '@constants/constants';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
 import {
-  addRoute,
-  closeModal,
-  updateRouteName,
-} from "../../utils/redux/reducers/itineraryPlannerSlice";
-import { useAppDispatch } from "../../utils/redux/hooks";
+  itineraryPlanner_addRoute,
+  itineraryPlanner_closeModal,
+  itineraryPlanner_updateRouteName,
+} from '@redux/reducers/itineraryPlannerSlice';
+import { useAppDispatch } from '@redux/hooks';
 
 const RouteNameModal = ({ initialValue }: RouteNameModalProps) => {
   const [name, setName] = useState<string>(initialValue);
   const dispatch = useAppDispatch();
 
   const onConfirm = useCallback(() => {
-    if (initialValue === "") {
-      dispatch(addRoute({ name }));
+    if (initialValue === '') {
+      dispatch(itineraryPlanner_addRoute({ name }));
     } else {
-      dispatch(updateRouteName({ name }));
+      dispatch(itineraryPlanner_updateRouteName({ name }));
     }
-  }, [initialValue, name, addRoute, updateRouteName, dispatch]);
+  }, [initialValue, name, dispatch]);
 
   const onCancel = useCallback(() => {
-    dispatch(closeModal());
-  }, [closeModal, dispatch]);
+    dispatch(itineraryPlanner_closeModal());
+  }, [dispatch]);
 
-  const confirmButtonIsDisabled = name === "";
+  const confirmButtonIsDisabled = name === '';
 
   return (
     <View style={styles.container}>
@@ -74,11 +74,11 @@ const RouteNameModal = ({ initialValue }: RouteNameModalProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000000aa",
+    backgroundColor: '#000000aa',
   },
   modalCard: {
-    alignSelf: "center",
-    justifyContent: "space-between",
+    alignSelf: 'center',
+    justifyContent: 'space-between',
     top: DEVICE_HEIGHT / 2 - 100,
     height: 180,
     width: 300,
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
   modalTitle: {
     margin: 16,
     fontSize: 20,
-    fontWeight: "bold",
-    fontFamily: "Futura",
+    fontWeight: 'bold',
+    fontFamily: 'Futura',
   },
   modalTextInput: {
     flex: 1,
@@ -101,14 +101,14 @@ const styles = StyleSheet.create({
     backgroundColor: PALETTE.OFFWHITE,
   },
   modalControls: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     width: DIMENSION.HUNDRED_PERCENT,
   },
   modalControl: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     height: 50,
     width: DIMENSION.FIFTY_PERCENT,
     padding: 6,
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   },
   cancelButtonText: {
     fontSize: 16,
-    fontFamily: "Futura",
+    fontFamily: 'Futura',
     color: PALETTE.RED,
   },
   confirmButton: {
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   confirmButtonText: {
     fontSize: 16,
-    fontFamily: "Futura",
+    fontFamily: 'Futura',
     color: PALETTE.WHITE,
   },
 });

@@ -1,7 +1,5 @@
-import { StyleProp, ViewStyle } from "react-native";
-import { GooglePlaceDetail } from "react-native-google-places-autocomplete";
-import { LatLng, MapPolyline } from "react-native-maps";
-import { Media } from "../../feed/types/types";
+import { GooglePlaceDetail } from 'react-native-google-places-autocomplete';
+import { LatLng } from 'react-native-maps';
 
 // Data types
 export type Itinerary = {
@@ -11,10 +9,13 @@ export type Itinerary = {
 };
 
 export type RouteNodeInfo = {
+  id: string;
   placeId: string;
   name: string;
   address: string;
   coord: RouteNodeCoord;
+  colour: string;
+  order?: number;
   openNow?: boolean;
 };
 
@@ -22,18 +23,18 @@ export type RouteInfo = {
   id: string;
   name: string;
   routeNodes: RouteNodeInfo[];
-  isRouted: boolean;
   encodedPolyline: string;
+  polyline?: RouteNodeCoord[];
 };
 
 export type RouteNodeCoord = LatLng;
 
 // Component properties
-export type ItineraryPlannerMode = "view" | "edit";
+export type ItineraryPlannerMode = 'view' | 'edit';
 
 export type MapPinProps = {
   routeNode: RouteNodeInfo;
-  // color: 
+  // color: string;
 };
 
 export type RouteBottomControlsProps = {
