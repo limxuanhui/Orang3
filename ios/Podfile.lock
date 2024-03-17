@@ -1,9 +1,9 @@
 PODS:
-  - AppAuth (1.6.2):
-    - AppAuth/Core (= 1.6.2)
-    - AppAuth/ExternalUserAgent (= 1.6.2)
-  - AppAuth/Core (1.6.2)
-  - AppAuth/ExternalUserAgent (1.6.2):
+  - AppAuth (1.7.1):
+    - AppAuth/Core (= 1.7.1)
+    - AppAuth/ExternalUserAgent (= 1.7.1)
+  - AppAuth/Core (1.7.1)
+  - AppAuth/ExternalUserAgent (1.7.1):
     - AppAuth/Core
   - boost (1.76.0)
   - BVLinearGradient (2.6.2):
@@ -119,9 +119,9 @@ PODS:
   - hermes-engine/Pre-built (0.71.1)
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.1100)
-  - PromisesObjC (2.3.1)
-  - PromisesSwift (2.3.1):
-    - PromisesObjC (= 2.3.1)
+  - PromisesObjC (2.4.0)
+  - PromisesSwift (2.4.0):
+    - PromisesObjC (= 2.4.0)
   - RCT-Folly (2021.07.22.00):
     - boost
     - DoubleConversion
@@ -346,7 +346,7 @@ PODS:
     - React-Core
   - react-native-encrypted-storage (4.0.3):
     - React-Core
-  - react-native-get-random-values (1.10.0):
+  - react-native-get-random-values (1.11.0):
     - React-Core
   - react-native-google-maps (1.7.1):
     - Google-Maps-iOS-Utils (= 4.1.0)
@@ -358,14 +358,12 @@ PODS:
     - React-Core
   - react-native-maps (1.7.1):
     - React-Core
+  - react-native-netinfo (11.3.1):
+    - React-Core
   - react-native-pager-view (6.2.0):
     - React-Core
-  - react-native-safe-area-context (4.5.0):
-    - RCT-Folly
-    - RCTRequired
-    - RCTTypeSafety
+  - react-native-safe-area-context (4.9.0):
     - React-Core
-    - ReactCommon/turbomodule/core
   - react-native-video (6.0.0-alpha.5):
     - React-Core
     - react-native-video/Video (= 6.0.0-alpha.5)
@@ -455,7 +453,9 @@ PODS:
     - React-jsi (= 0.71.1)
     - React-logger (= 0.71.1)
     - React-perflogger (= 0.71.1)
-  - RNCAsyncStorage (1.19.0):
+  - RNCAsyncStorage (1.22.3):
+    - React-Core
+  - RNCClipboard (1.13.2):
     - React-Core
   - RNCMaskedView (0.3.1):
     - React-Core
@@ -466,33 +466,10 @@ PODS:
   - RNGoogleSignin (9.0.2):
     - GoogleSignIn (~> 6.2)
     - React-Core
-  - RNReanimated (2.14.4):
-    - DoubleConversion
-    - FBLazyVector
-    - FBReactNativeSpec
-    - glog
-    - RCT-Folly
-    - RCTRequired
-    - RCTTypeSafety
-    - React-callinvoker
+  - RNReanimated (3.8.1):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
-    - React-Core/DevSupport
-    - React-Core/RCTWebSocket
-    - React-CoreModules
-    - React-cxxreact
-    - React-jsi
-    - React-jsiexecutor
-    - React-jsinspector
-    - React-RCTActionSheet
-    - React-RCTAnimation
-    - React-RCTBlob
-    - React-RCTImage
-    - React-RCTLinking
-    - React-RCTNetwork
-    - React-RCTSettings
-    - React-RCTText
     - ReactCommon/turbomodule/core
-    - Yoga
   - RNScreens (3.19.0):
     - React-Core
     - React-RCTImage
@@ -558,6 +535,7 @@ DEPENDENCIES:
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-keyboard-controller (from `../node_modules/react-native-keyboard-controller`)
   - react-native-maps (from `../node_modules/react-native-maps`)
+  - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-video (from `../node_modules/react-native-video`)
@@ -575,6 +553,7 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -670,6 +649,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-keyboard-controller"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
+  react-native-netinfo:
+    :path: "../node_modules/@react-native-community/netinfo"
   react-native-pager-view:
     :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
@@ -704,6 +685,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCClipboard:
+    :path: "../node_modules/@react-native-clipboard/clipboard"
   RNCMaskedView:
     :path: "../node_modules/@react-native-masked-view/masked-view"
   RNFlashList:
@@ -727,7 +710,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/Simon-TechForm/google-maps-ios-utils.git
 
 SPEC CHECKSUMS:
-  AppAuth: 3bb1d1cd9340bd09f5ed189fb00b1cc28e1e8570
+  AppAuth: e93b919be5dbcbba49555011ce94f7d716368574
   boost: 57d2868c099736d80fcd648bf211b4431e51a558
   BVLinearGradient: 34a999fda29036898a09c6a6b728b0b4189e1a44
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
@@ -754,8 +737,8 @@ SPEC CHECKSUMS:
   hermes-engine: 922ccd744f50d9bfde09e9677bf0f3b562ea5fb9
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
-  PromisesSwift: 28dca69a9c40779916ac2d6985a0192a5cb4a265
+  PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
+  PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: fd4d923b964658aa0c4091a32c8b2004c6d9e3a6
   RCTTypeSafety: c276d85975bde3d8448907235c70bf0da257adfd
@@ -772,13 +755,14 @@ SPEC CHECKSUMS:
   React-logger: 60a0b5f8bed667ecf9e24fecca1f30d125de6d75
   react-native-app-auth: aafaa6e2934ceeb72d1f5a42962937ffeed9566c
   react-native-encrypted-storage: db300a3f2f0aba1e818417c1c0a6be549038deb7
-  react-native-get-random-values: 384787fd76976f5aec9465aff6fa9e9129af1e74
+  react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
   react-native-google-maps: dd12cdd86b8e3fedbbb671676aedaa2f656e2ccd
   react-native-image-picker: db60857e03d63721f19b6f4027de20429ddd9cba
   react-native-keyboard-controller: 6c07a462c1b7020b48efd37f2ece16d52e66a03a
   react-native-maps: 667f9b975549c6fa9b1631bf859440f68ebd3b8f
+  react-native-netinfo: bdb108d340cdb41875c9ced535977cac6d2ff321
   react-native-pager-view: 0ccb8bf60e2ebd38b1f3669fa3650ecce81db2df
-  react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
+  react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
   react-native-video: a38e0a394fd8884fef4a48d866f1ed9a930f8385
   React-perflogger: ec8eef2a8f03ecfa6361c2c5fb9197ef4a29cc85
   React-RCTActionSheet: a0c023b86cf4c862fa9c4eb0f6f91fbe878fb2de
@@ -793,12 +777,13 @@ SPEC CHECKSUMS:
   React-RCTVibration: 49d531ec8498e0afa2c9b22c2205784372e3d4f3
   React-runtimeexecutor: 311feb67600774723fe10eb8801d3138cae9ad67
   ReactCommon: 03be76588338a27a88d103b35c3c44a3fd43d136
-  RNCAsyncStorage: 4b98ac3c64efa4e35c1197cb0c5ca5e9f5d4c666
+  RNCAsyncStorage: 10591b9e0a91eaffee14e69b3721009759235125
+  RNCClipboard: 60fed4b71560d7bfe40e9d35dea9762b024da86d
   RNCMaskedView: 090213d32d8b3bb83a4dcb7d12c18f0152591906
   RNFlashList: 4b4b6b093afc0df60ae08f9cbf6ccd4c836c667a
   RNGestureHandler: 071d7a9ad81e8b83fe7663b303d132406a7d8f39
   RNGoogleSignin: 22e468a9474dbcb8618d8847205ad4f0b2575d13
-  RNReanimated: cc5e3aa479cb9170bcccf8204291a6950a3be128
+  RNReanimated: 4943d1e286130877c0539f053c3f36a22d8c66f5
   RNScreens: ea4cd3a853063cda19a4e3c28d2e52180c80f4eb
   RNSharedElement: 504fa28a235b12505b6daedbb452a9ec96809bd0
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
