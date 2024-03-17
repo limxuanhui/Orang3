@@ -1,11 +1,10 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
-import GypsieButton from "../common/buttons/GypsieButton";
-import SquaredCrossIcon from "../common/icons/SquaredCrossIcon";
-import FeedItemThumbnailsCarousel from "../tale/FeedItemThumbnailsCarousel";
-import { type StoryItem, StoryItemType } from "./types/types";
-import { PALETTE } from "../../utils/constants/palette";
-import { useEffect } from "react";
-import { DIMENSION } from "../../utils/constants/dimensions";
+import { StyleSheet, TextInput, View } from 'react-native';
+import GypsieButton from '@components/common/buttons/GypsieButton';
+import SquaredCrossIcon from '@icons/SquaredCrossIcon';
+import FeedItemThumbnailsCarousel from '@components/tale/FeedItemThumbnailsCarousel';
+import { type StoryItem, StoryItemType } from './types/types';
+import { PALETTE } from '@constants/palette';
+import { DIMENSION } from '@constants/dimensions';
 
 type NewStoryItemProps = {
   item: StoryItem;
@@ -18,7 +17,7 @@ const NewStoryItem = ({
   onStoryItemTextChange,
   onPressDeleteLinkedFeed,
 }: NewStoryItemProps) => {
-  console.log("Investigate why is this component rendering 3 times");
+  console.log('Investigate why is this component rendering 3 times');
 
   if (item.type === StoryItemType.Text) {
     return (
@@ -62,7 +61,7 @@ const NewStoryItem = ({
 
 const styles = StyleSheet.create({
   storyItemText: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   storyItemTextInput: {
     height: DIMENSION.HUNDRED_PERCENT,
@@ -72,13 +71,13 @@ const styles = StyleSheet.create({
     borderColor: PALETTE.LIGHTERGREY,
   },
   storyItemMedia: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginVertical: 16,
   },
   deleteButton: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     right: 0,
     height: 24,

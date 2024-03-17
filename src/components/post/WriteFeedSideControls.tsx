@@ -1,12 +1,12 @@
-import { StyleSheet } from "react-native";
-import { useAppSelector } from "../../utils/redux/hooks";
-import AuxiliaryControls from "../common/AuxiliaryControls";
-import AddMoreIcon from "../common/icons/AddMoreIcon";
-import DeleteOutlineIcon from "../common/icons/DeleteOutlineIcon";
-import EditIcon from "../common/icons/EditIcon";
-import GypsieButton from "../common/buttons/GypsieButton";
-import type { WriteFeedSideControlsProps } from "./types/types";
-import { PALETTE } from "../../utils/constants/palette";
+import { StyleSheet } from 'react-native';
+import { useAppSelector } from '@redux/hooks';
+import AuxiliaryControls from '@components/common/AuxiliaryControls';
+import AddMoreIcon from '@components/common/icons/AddMoreIcon';
+import DeleteOutlineIcon from '@components/common/icons/DeleteOutlineIcon';
+import EditIcon from '@components/common/icons/EditIcon';
+import GypsieButton from '@components/common/buttons/GypsieButton';
+import type { WriteFeedSideControlsProps } from './types/types';
+import { PALETTE } from '@constants/palette';
 
 const WriteFeedSideControls = ({
   onPressAdd,
@@ -72,9 +72,9 @@ const styles = StyleSheet.create({
     zIndex: 101,
   },
   postButtonText: {
-    fontFamily: "Futura",
+    fontFamily: 'Futura',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: PALETTE.WHITE,
   },
 });

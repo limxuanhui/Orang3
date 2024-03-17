@@ -1,13 +1,13 @@
-import { useCallback, useMemo, useRef } from "react";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { Portal } from "@gorhom/portal";
-import SunnyIcon from "../common/icons/SunnyIcon";
-import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
-import useBottomSheetHandlers from "../../utils/hooks/useBottomSheetHandlers";
+import { useCallback } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import { Portal } from '@gorhom/portal';
+import SunnyIcon from '@icons/SunnyIcon';
+import type { ModalNavigatorNavigationProp } from '@navigators/types/types';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
+import useBottomSheetHandlers from '@hooks/useBottomSheetHandlers';
 
 const NewPostOptions = () => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
@@ -17,27 +17,27 @@ const NewPostOptions = () => {
     closeBottomSheet,
     openBottomSheet,
     renderBackdrop,
-  } = useBottomSheetHandlers({ snapPointsArr: [1, "20%"] });
+  } = useBottomSheetHandlers({ snapPointsArr: [1, '20%'] });
 
   // Callback function that gets called when the bottom sheet changes
   const handleSheetChanges = useCallback((index: number) => {
-    console.log("handleSheetChanges", index);
+    console.log('handleSheetChanges', index);
   }, []);
 
   // Expands the bottom sheet when our button is pressed
   const onPressAddButton = useCallback(() => {
     openBottomSheet();
-  }, [bottomSheetRef]);
+  }, [openBottomSheet]);
 
   const onPressNewFeed = useCallback(() => {
     closeBottomSheet();
-    navigation.navigate("Modal", { screen: "NewFeed" });
-  }, [bottomSheetRef, navigation]);
+    navigation.navigate('Modal', { screen: 'WriteFeed' });
+  }, [closeBottomSheet, navigation]);
 
   const onPressNewTale = useCallback(() => {
     closeBottomSheet();
-    navigation.navigate("Modal", { screen: "WriteTale", params: {} });
-  }, [bottomSheetRef, navigation]);
+    navigation.navigate('Modal', { screen: 'WriteTale', params: {} });
+  }, [closeBottomSheet, navigation]);
 
   return (
     <View style={styles.container}>
@@ -87,8 +87,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: PALETTE.TRANSPARENT,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   bottomSheet: {
     backgroundColor: PALETTE.GREYISHBLUE,
@@ -98,14 +98,14 @@ const styles = StyleSheet.create({
     backgroundColor: PALETTE.DARKGREY,
   },
   bottomSheetContent: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     height: DIMENSION.HUNDRED_PERCENT,
   },
   button: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     width: DIMENSION.FORTY_PERCENT,
     padding: 8,
     marginHorizontal: 8,
@@ -117,9 +117,9 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   buttonText: {
-    fontFamily: "Futura",
+    fontFamily: 'Futura',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: PALETTE.GREYISHBLUE,
   },
 });

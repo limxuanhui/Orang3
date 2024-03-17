@@ -1,28 +1,31 @@
-import { useCallback, useContext, useMemo } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { AuthContext } from "../../utils/contexts/AuthContext";
-import type { ItineraryMapOverviewProps } from "./types/types";
-import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
+import { useCallback, useContext, useMemo } from 'react';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from '@contexts/AuthContext';
+import type { ItineraryMapOverviewProps } from './types/types';
+import type { ModalNavigatorNavigationProp } from '@navigators/types/types';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
 
-const ItineraryMapOverview = ({itineraryId, creatorId }: ItineraryMapOverviewProps) => {
+const ItineraryMapOverview = ({
+  itineraryId,
+  creatorId,
+}: ItineraryMapOverviewProps) => {
   // Pass itinerary data into navigation options parameters. If null/empty, then it is new plan
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const userInfo = useContext(AuthContext);
 
   const onPressOverview = useCallback(() => {
-    navigation.push("Modal", {
-      screen: "Itinerary",
-      params: { id: itineraryId, creatorId: "" },
+    navigation.push('Modal', {
+      screen: 'Itinerary',
+      params: { id: itineraryId, creatorId: '' },
     });
-  }, [navigation]);
+  }, [itineraryId, navigation]);
 
   const footerText = useMemo(() => {
     return creatorId === userInfo.user?.id
-      ? "Start adding plans"
-      : "View plans";
+      ? 'Start adding plans'
+      : 'View plans';
   }, [creatorId, userInfo]);
 
   return (
@@ -35,7 +38,7 @@ const ItineraryMapOverview = ({itineraryId, creatorId }: ItineraryMapOverviewPro
       <Image
         style={styles.mapOverviewBackground}
         source={{
-          uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/mapoverview.jpeg",
+          uri: '/Users/limxuanhui/bluextech/gypsie/assets/images/mapoverview.jpeg',
         }}
         resizeMode="cover"
       />
@@ -63,18 +66,18 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   footerText: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: PALETTE.WHITE,
   },
   footer: {
-    position: "absolute",
-    flexDirection: "row",
+    position: 'absolute',
+    flexDirection: 'row',
     bottom: 0,
-    justifyContent: "space-evenly",
-    alignItems: "center",
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
     height: 40,
     width: DIMENSION.HUNDRED_PERCENT,
-    backgroundColor: "#00000088",
+    backgroundColor: '#00000088',
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
   },

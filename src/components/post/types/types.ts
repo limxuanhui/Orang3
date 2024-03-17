@@ -1,5 +1,5 @@
-import type { StyleProp, TextStyle } from "react-native";
-import type { FeedItemThumbnail } from "../../tale/types/types";
+import type { StyleProp, TextStyle } from 'react-native';
+import type { FeedItemThumbnail } from '@components/tale/types/types';
 
 // Feed
 export type WriteFeedSideControlsProps = {
@@ -24,13 +24,13 @@ export type StoryText = {
 
 export type StoryMedia = {
   id: string;
-  type: StoryItemType.Media
+  type: StoryItemType.Media;
   data: FeedItemThumbnail[];
 };
 
 export enum StoryItemType {
-  "Text",
-  "Media",
+  'Text',
+  'Media',
 }
 
 export type StoryItem = StoryText | StoryMedia;

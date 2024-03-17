@@ -1,9 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import AddCircleIcon from "../common/icons/AddCircleIcon";
-import GypsieButton from "../common/buttons/GypsieButton";
-import { PALETTE } from "../../utils/constants/palette";
-import { DIMENSION } from "../../utils/constants/dimensions";
+import { useEffect, useState } from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { PALETTE } from '@constants/palette';
+import { DIMENSION } from '@constants/dimensions';
 
 type NewItineraryPostHandleBarProps = {
   avatarUri: string;
@@ -46,18 +44,18 @@ const NewItineraryPostHandleBar = ({
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",    
-    justifyContent: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
     width: DIMENSION.HUNDRED_PERCENT,
     height: 90,
     borderRadius: 16,
     backgroundColor: PALETTE.LIGHTERGREY,
-    alignItems: "center",
+    alignItems: 'center',
     padding: 16,
   },
   avatarBox: {
     marginRight: 16,
-    shadowColor: "black",
+    shadowColor: 'black',
     shadowOpacity: 0.8,
     shadowRadius: 2,
     shadowOffset: { height: 2, width: 0 },
@@ -67,11 +65,11 @@ const styles = StyleSheet.create({
     width: 60,
     borderRadius: 30,
   },
-  description: { fontFamily: "Lilita One", fontSize: 20 },
+  description: { fontFamily: 'Lilita One', fontSize: 20 },
   followButton: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    width: "auto",
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    width: 'auto',
     // height: 30,
     padding: 8,
     borderRadius: 8,
@@ -79,11 +77,11 @@ const styles = StyleSheet.create({
   },
   followButtonIcon: {
     fontSize: 16,
-    color: "white",
+    color: 'white',
     marginRight: 8,
   },
   followButtonText: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 
