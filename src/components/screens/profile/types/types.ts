@@ -1,12 +1,12 @@
 import type {
   CompositeNavigationProp,
   RouteProp,
-} from "@react-navigation/native";
-import type { StackNavigationProp } from "@react-navigation/stack";
+} from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
 import type {
   AppStackNavigatorParamList,
   ModalNavigatorParamList,
-} from "../../../navigators/types/types";
+} from '@navigators/types/types';
 
 export type ProfileScreenParams = {
   userId?: string;
@@ -27,13 +27,13 @@ export type ProfileScreenProps = {
 };
 
 export type ProfileScreenNavigationProp = CompositeNavigationProp<
-  StackNavigationProp<ProfileStackNavigatorParamList, "Profile">,
-  StackNavigationProp<AppStackNavigatorParamList, "Modal">
+  StackNavigationProp<ProfileStackNavigatorParamList, 'Profile'>,
+  StackNavigationProp<AppStackNavigatorParamList, 'Modal'>
 >;
 
 export type ProfileScreenRouteProp = RouteProp<
   ProfileStackNavigatorParamList,
-  "Profile"
+  'Profile'
 >;
 
 // --------------------------- SettingsScreen ---------------------------
@@ -43,7 +43,7 @@ export type SettingsScreenProps = {
 
 type SettingsScreenNavigationProp = StackNavigationProp<
   ProfileStackNavigatorParamList,
-  "Settings"
+  'Settings'
 >;
 
 // --------------------------- AccountScreen ---------------------------
@@ -53,7 +53,7 @@ export type AccountScreenProps = {
 
 type AccountScreenNavigationProp = StackNavigationProp<
   ProfileStackNavigatorParamList,
-  "Account"
+  'Account'
 >;
 
 // --------------------------- PrivacyScreen ---------------------------
@@ -63,7 +63,7 @@ export type PrivacyScreenProps = {
 
 type PrivacyScreenNavigationProp = StackNavigationProp<
   ProfileStackNavigatorParamList,
-  "Privacy"
+  'Privacy'
 >;
 
 // --------------------------- AvatarScreen ---------------------------
@@ -74,10 +74,10 @@ export type AvatarScreenProps = {
 
 type AvatarScreenNavigationProp = StackNavigationProp<
   ModalNavigatorParamList,
-  "Avatar"
+  'Avatar'
 >;
 
-type AvatarScreenRouteProp = RouteProp<ModalNavigatorParamList, "Avatar">;
+type AvatarScreenRouteProp = RouteProp<ModalNavigatorParamList, 'Avatar'>;
 
 export type AvatarScreenParams = {
   avatarUri: string;

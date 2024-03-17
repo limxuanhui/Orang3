@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 import {
   KeyboardAvoidingView,
   Modal,
@@ -6,26 +6,23 @@ import {
   StyleSheet,
   TextInput,
   View,
-} from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import useWriteFeedManager from "../../../utils/hooks/useWriteFeedManager";
-import GypsieButton from "../../common/buttons/GypsieButton";
-import AuxiliaryControls from "../../common/AuxiliaryControls";
-import WriteFeedCarousel from "../../post/WriteFeedCarousel";
-import WriteFeedSideControls from "../../post/WriteFeedSideControls";
-import CheckIcon from "../../common/icons/CheckIcon";
-import CloseIcon from "../../common/icons/CloseIcon";
-import {
-  DEVICE_HEIGHT,
-  DEVICE_WIDTH,
-} from "../../../utils/constants/constants";
-import { DIMENSION } from "../../../utils/constants/dimensions";
-import { PALETTE } from "../../../utils/constants/palette";
-import { useAppDispatch, useAppSelector } from "../../../utils/redux/hooks";
-import { writeFeed_resetWriteFeedSlice } from "../../../utils/redux/reducers/writeFeedSlice";
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import useWriteFeedManager from '@hooks/useWriteFeedManager';
+import GypsieButton from '@components/common/buttons/GypsieButton';
+import AuxiliaryControls from '@components/common/AuxiliaryControls';
+import WriteFeedCarousel from '@components/post/WriteFeedCarousel';
+import WriteFeedSideControls from '@components/post/WriteFeedSideControls';
+import CheckIcon from '@icons/CheckIcon';
+import CloseIcon from '@icons/CloseIcon';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
+import { useAppDispatch } from '@redux/hooks';
+import { writeFeed_resetWriteFeedSlice } from '@redux/reducers/writeFeedSlice';
 
 const WriteFeedScreen = () => {
-  const insets = useSafeAreaInsets();  
+  const insets = useSafeAreaInsets();
   const {
     captionWritten,
     modalIsOpen,
@@ -42,12 +39,12 @@ const WriteFeedScreen = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log("WriteFeedScreen focused");
+    console.log('WriteFeedScreen focused');
     return () => {
-      console.log("WriteFeedScreen unfocused");
+      console.log('WriteFeedScreen unfocused');
       dispatch(writeFeed_resetWriteFeedSlice());
     };
-  }, [writeFeed_resetWriteFeedSlice, dispatch]);
+  }, [dispatch]);
 
   return (
     <View style={styles.container}>
@@ -66,7 +63,7 @@ const WriteFeedScreen = () => {
         animationType="slide">
         <KeyboardAvoidingView
           style={[styles.keyboardAvoidingView, { paddingTop: insets.top + 20 }]}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}>
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
           <AuxiliaryControls orientation="vertical" position="top-right">
             <GypsieButton
               customButtonStyles={[styles.auxControlButton]}
@@ -101,16 +98,16 @@ const styles = StyleSheet.create({
   container: {
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
-    alignItems: "center",
+    alignItems: 'center',
     backgroundColor: PALETTE.BLACK,
   },
   openGalleryButton: {
-    position: "absolute",
-    flexDirection: "row",
+    position: 'absolute',
+    flexDirection: 'row',
     top: DEVICE_HEIGHT / 3,
-    justifyContent: "center",
-    alignItems: "center",
-    width: "auto",
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 'auto',
     padding: 8,
     borderWidth: 1,
     borderColor: PALETTE.BLACK,
@@ -119,29 +116,29 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   openGalleryIcon: { marginRight: 8, fontSize: 18 },
-  openGalleryText: { alignSelf: "flex-end" },
+  openGalleryText: { alignSelf: 'flex-end' },
   buttonText: {
-    fontFamily: "Futura",
+    fontFamily: 'Futura',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   keyboardAvoidingView: {
     height: DIMENSION.HUNDRED_PERCENT,
     width: DIMENSION.HUNDRED_PERCENT,
-    backgroundColor: "#000000cc",
+    backgroundColor: '#000000cc',
   },
   textInput: {
     height: DIMENSION.HUNDRED_PERCENT,
     width: DIMENSION.NINETY_PERCENT,
     padding: 16,
     borderRadius: 4,
-    fontFamily: "Futura",
+    fontFamily: 'Futura',
     fontSize: 24,
     color: PALETTE.OFFWHITE,
   },
   auxControlButton: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     height: 40,
     width: 40,
   },

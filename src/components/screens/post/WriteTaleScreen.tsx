@@ -1,64 +1,61 @@
-import { Image, Text } from "react-native";
-import { useCallback, useContext, useRef, useState } from "react";
+import { Image, Text } from 'react-native';
+import { useContext, useRef } from 'react';
 import {
   GestureResponderHandlers,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
   StyleSheet,
   TextInput,
   View,
-} from "react-native";
-import Video from "react-native-video";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { ActivityIndicator } from "react-native-paper";
-import { KeyboardAccessoryView } from "@flyerhq/react-native-keyboard-accessory-view";
-import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { Portal, PortalHost } from "@gorhom/portal";
+} from 'react-native';
+import Video from 'react-native-video';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { ActivityIndicator } from 'react-native-paper';
+import { KeyboardAccessoryView } from '@flyerhq/react-native-keyboard-accessory-view';
+import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { Portal } from '@gorhom/portal';
 
-import AuxiliaryControls from "../../common/AuxiliaryControls";
-import GypsieButton from "../../common/buttons/GypsieButton";
-import ItineraryMapOverview from "../../post/ItineraryMapOverview";
-import FeedItemThumbnailsCarousel from "../../tale/FeedItemThumbnailsCarousel";
+import AuxiliaryControls from '@components/common/AuxiliaryControls';
+import GypsieButton from '@components/common/buttons/GypsieButton';
+import ItineraryMapOverview from '@components/post/ItineraryMapOverview';
+import FeedItemThumbnailsCarousel from '@components/tale/FeedItemThumbnailsCarousel';
 
-import AddIcon from "../../common/icons/AddIcon";
-import CameraOutlineIcon from "../../common/icons/CameraOutlineIcon";
-import ChangeSwapIcon from "../../common/icons/ChangeSwapIcon";
-import CheckIcon from "../../common/icons/CheckIcon";
-import DeleteOutlineIcon from "../../common/icons/DeleteOutlineIcon";
-import FolderImagesIcon from "../../common/icons/FolderImagesIcon";
-import ParagraphIcon from "../../common/icons/ParagraphIcon";
-import TitleIcon from "../../common/icons/TitleIcon";
+import AddIcon from '@icons/AddIcon';
+import CameraOutlineIcon from '@icons/CameraOutlineIcon';
+import ChangeSwapIcon from '@icons/ChangeSwapIcon';
+import CheckIcon from '@icons/CheckIcon';
+import DeleteOutlineIcon from '@icons/DeleteOutlineIcon';
+import FolderImagesIcon from '@icons/FolderImagesIcon';
+import ParagraphIcon from '@icons/ParagraphIcon';
+import TitleIcon from '@icons/TitleIcon';
 
-import useWriteTaleManager from "../../../utils/hooks/useWriteTaleManager";
-import type { WriteTaleScreenProps } from "./types/types";
+import useWriteTaleManager from '@components/../utils/hooks/useWriteTaleManager';
+import type { WriteTaleScreenProps } from './types/types';
 
-import NewStoryItem from "../../post/NewStoryItem";
-import { AuthContext } from "../../../utils/contexts/AuthContext";
+import NewStoryItem from '@components/post/NewStoryItem';
+import { AuthContext } from '@components/../utils/contexts/AuthContext';
 
-import { DEVICE_HEIGHT, FULL_SCREEN } from "../../../utils/constants/constants";
-import { DIMENSION } from "../../../utils/constants/dimensions";
-import { PALETTE } from "../../../utils/constants/palette";
-import { nanoid } from "@reduxjs/toolkit";
-import { StoryItem } from "../../post/types/types";
+import { FULL_SCREEN } from '@components/../utils/constants/constants';
+import { DIMENSION } from '@components/../utils/constants/dimensions';
+import { PALETTE } from '@components/../utils/constants/palette';
+import { nanoid } from '@reduxjs/toolkit';
+import { StoryItem } from '@components/post/types/types';
 
-const WriteTaleScreen = ({ navigation, route }: WriteTaleScreenProps) => {
+const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
   const insets = useSafeAreaInsets();
   const userInfo = useContext(AuthContext);
   const { taleId } = route.params;
-  console.log("TALE ID:", taleId);
+  console.log('TALE ID:', taleId);
 
   const {
     bottomSheetRef,
     snapPoints,
     keyboardIsVisible,
-    cover,
-    title,
+    metadata,
     itinerary,
     story,
     posting,
     feedItemThumbnails,
-    data,
+    // data,
     isLoading,
     closeKeyboard,
     renderBackdrop,
@@ -74,41 +71,38 @@ const WriteTaleScreen = ({ navigation, route }: WriteTaleScreenProps) => {
     onSubmitPost,
   } = useWriteTaleManager(taleId);
 
-  const [currScrollPosition, setCurrScrollPosition] = useState<number>(0);
-  const [prevHeight, setPrevHeight] = useState<number>(DEVICE_HEIGHT);
+  // const [currScrollPosition, setCurrScrollPosition] = useState<number>(0);
+  // const [prevHeight, setPrevHeight] = useState<number>(DEVICE_HEIGHT);
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
-  // Called every scrollEventThrottle ms (60 ms)
-  const onScroll = useCallback(
-    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-      console.log("Scrolling...");
-      setCurrScrollPosition(e.nativeEvent.contentOffset.y);
-    },
-    [setCurrScrollPosition],
-  );
+  // // Called every scrollEventThrottle ms (60 ms)
+  // const onScroll = useCallback(
+  //   (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+  //     console.log('Scrolling...');
+  //     setCurrScrollPosition(e.nativeEvent.contentOffset.y);
+  //   },
+  //   [setCurrScrollPosition],
+  // );
 
-  // Scroll up or down depending on content size change
-  const onContentSizeChange = useCallback(
-    (w: number, h: number) => {
-      console.log("W: ", w, " | h: ", h);
-      // if (scrollViewRef !== null)
-      //   scrollViewRef.current?.scrollToPosition(
-      //     0,
-      //     currScrollPosition + h - prevHeight + 10,
-      //     true,
-      //   );
-      // setPrevHeight(h);
-      // setCurrScrollPosition(h);
-    },
-    [scrollViewRef, currScrollPosition, prevHeight, setPrevHeight],
-  );  
+  // // Scroll up or down depending on content size change
+  // const onContentSizeChange = useCallback((w: number, h: number) => {
+  //   console.log('W: ', w, ' | h: ', h);
+  //   // if (scrollViewRef !== null)
+  //   //   scrollViewRef.current?.scrollToPosition(
+  //   //     0,
+  //   //     currScrollPosition + h - prevHeight + 10,
+  //   //     true,
+  //   //   );
+  //   // setPrevHeight(h);
+  //   // setCurrScrollPosition(h);
+  // }, []);
 
   return isLoading ? (
     <View
       style={{
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: PALETTE.GREYISHBLUE,
       }}>
       <ActivityIndicator size={48} color={PALETTE.ORANGE} />
@@ -124,17 +118,17 @@ const WriteTaleScreen = ({ navigation, route }: WriteTaleScreenProps) => {
             contentContainerStyle={styles.scrollView}
             showsVerticalScrollIndicator={false}
             keyboardDismissMode="none"
-            onContentSizeChange={onContentSizeChange}
-            onScrollBeginDrag={onScroll}
+            // onContentSizeChange={onContentSizeChange}
+            // onScrollBeginDrag={onScroll}
             scrollEventThrottle={60}
             {...panHandlers}>
             <View style={styles.coverContainer}>
-              {cover !== undefined ? (
+              {metadata.cover !== undefined ? (
                 <>
-                  {cover.type?.startsWith("video") ? (
+                  {metadata.cover.type?.startsWith('video') ? (
                     <Video
                       style={styles.cover}
-                      source={{ uri: cover.uri }}
+                      source={{ uri: metadata.cover.uri }}
                       controls
                       repeat
                       resizeMode="contain"
@@ -142,13 +136,13 @@ const WriteTaleScreen = ({ navigation, route }: WriteTaleScreenProps) => {
                   ) : (
                     <Image
                       style={styles.cover}
-                      source={{ uri: cover.uri }}
+                      source={{ uri: metadata.cover.uri }}
                       resizeMode="cover"
                     />
                   )}
                   <AuxiliaryControls
                     customStyle={{
-                      height: "50%",
+                      height: '50%',
                     }}
                     orientation="vertical"
                     position="bottom-right">
@@ -180,20 +174,20 @@ const WriteTaleScreen = ({ navigation, route }: WriteTaleScreenProps) => {
               ]}>
               <TextInput
                 style={styles.titleInput}
-                value={title}
+                value={metadata.title}
                 multiline
                 placeholder="Write a title"
                 placeholderTextColor={PALETTE.LIGHTERGREY}
                 maxLength={100}
                 onChangeText={onTitleChange}
                 onBlur={() => {
-                  console.warn("clicked out");
+                  console.warn('clicked out');
                 }}
                 scrollEnabled={false}
               />
               <ItineraryMapOverview
                 itineraryId={itinerary.id}
-                creatorId={userInfo.user?.id || ""}
+                creatorId={userInfo.user?.id || ''}
               />
               <View style={{}}>
                 {story.map((el: StoryItem, index: number) => (
@@ -215,7 +209,7 @@ const WriteTaleScreen = ({ navigation, route }: WriteTaleScreenProps) => {
               backdropComponent={renderBackdrop}
               index={-1}
               snapPoints={snapPoints}>
-              {feedItemThumbnails.status === "succeeded" ? (
+              {feedItemThumbnails.status === 'succeeded' ? (
                 <BottomSheetScrollView
                   style={{
                     padding: 8,
@@ -233,19 +227,19 @@ const WriteTaleScreen = ({ navigation, route }: WriteTaleScreenProps) => {
                     </View>
                   ))}
                 </BottomSheetScrollView>
-              ) : feedItemThumbnails.status === "failed" ? (
+              ) : feedItemThumbnails.status === 'failed' ? (
                 <View
                   style={{
                     flex: 1,
                     // flexDirection: 'row',
                     borderWidth: 1,
-                    borderColor: "red",
-                    justifyContent: "center",
-                    alignItems: "center",
+                    borderColor: 'red',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}>
                   <Text
                     style={{
-                      fontFamily: "Futura",
+                      fontFamily: 'Futura',
                       fontSize: 24,
                       color: PALETTE.GREY,
                     }}>
@@ -256,14 +250,14 @@ const WriteTaleScreen = ({ navigation, route }: WriteTaleScreenProps) => {
                       margin: 16,
                       borderWidth: 1,
                       borderColor: PALETTE.LIGHTERGREY,
-                      width: "auto",
+                      width: 'auto',
                       paddingVertical: 8,
                       paddingHorizontal: 16,
                     }}
                     customTextStyles={{
-                      fontFamily: "Futura",
+                      fontFamily: 'Futura',
                       fontSize: 16,
-                      fontWeight: "bold",
+                      fontWeight: 'bold',
                       color: PALETTE.GREYISHBLUE,
                     }}
                     customIconStyles={{ fontSize: 16, color: PALETTE.ORANGE }}
@@ -276,8 +270,8 @@ const WriteTaleScreen = ({ navigation, route }: WriteTaleScreenProps) => {
                 <View
                   style={{
                     flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}>
                   <ActivityIndicator size={60} color={PALETTE.ORANGE} />
                 </View>
@@ -317,20 +311,24 @@ const WriteTaleScreen = ({ navigation, route }: WriteTaleScreenProps) => {
             customButtonStyles={[
               styles.bottomControl,
               {
-                width: "auto",
-                backgroundColor: PALETTE.ORANGE,
+                width: 'auto',
+                backgroundColor:
+                  posting || metadata.title === ''
+                    ? PALETTE.GREY
+                    : PALETTE.ORANGE,
                 borderRadius: 6,
               },
             ]}
             customTextStyles={{
               fontSize: 16,
-              fontWeight: "bold",
+              fontWeight: 'bold',
               color: PALETTE.OFFWHITE,
             }}
-            text="Post"
+            // Icon={posting &&  ActivityIndicator}
+            text={posting ? 'Posting' : 'Post'}
             onPress={onSubmitPost}
             loading={posting}
-            disabled
+            disabled={posting || metadata.title === ''}
           />
         )}
       </View>
@@ -351,8 +349,8 @@ const styles = StyleSheet.create({
   },
   scrollView: { flexGrow: 1 },
   coverContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     height: 250,
     width: DIMENSION.HUNDRED_PERCENT,
     backgroundColor: PALETTE.GREYISHBLUE,
@@ -362,7 +360,7 @@ const styles = StyleSheet.create({
     width: DIMENSION.HUNDRED_PERCENT,
   },
   addCoverButton: {
-    position: "absolute",
+    position: 'absolute',
     height: 80,
     width: 200,
     shadowColor: PALETTE.WHITE,
@@ -376,15 +374,15 @@ const styles = StyleSheet.create({
   },
   titleInput: {
     width: DIMENSION.HUNDRED_PERCENT,
-    fontFamily: "Futura",
+    fontFamily: 'Futura',
     fontSize: 40,
     borderBottomWidth: 1,
     borderBottomColor: PALETTE.LIGHTERGREY,
   },
   bottomControls: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
     width: DIMENSION.HUNDRED_PERCENT,
     padding: 8,
     borderTopWidth: 1,
@@ -412,9 +410,9 @@ const styles = StyleSheet.create({
     backgroundColor: PALETTE.ORANGE,
   },
   feedItemThumbnailsList: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginVertical: 16,
   },
 });

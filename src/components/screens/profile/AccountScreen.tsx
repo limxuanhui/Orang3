@@ -1,9 +1,6 @@
-import { StyleSheet, Text, View } from "react-native";
-import {
-  DEVICE_HEIGHT,
-  DEVICE_WIDTH,
-} from "../../../utils/constants/constants";
-import { PALETTE } from "../../../utils/constants/palette";
+import { StyleSheet, Text, View } from 'react-native';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
+import { PALETTE } from '@constants/palette';
 
 const AccountScreen = () => {
   return (

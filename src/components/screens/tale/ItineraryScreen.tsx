@@ -1,21 +1,17 @@
-import { useContext } from "react";
-import { StyleSheet, View } from "react-native";
-import { useRoute } from "@react-navigation/native";
-import { getStatusBarHeight } from "react-native-status-bar-height";
-import ItineraryPlanner from "../../itinerary/ItineraryPlanner";
-import { ItineraryRouteProp, type ItineraryScreenProps } from "./types/types";
-import { AuthContext } from "../../../utils/contexts/AuthContext";
-import { useAppDispatch, useAppSelector } from "../../../utils/redux/hooks";
+import { StyleSheet, View } from 'react-native';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import ItineraryPlanner from '@components/itinerary/ItineraryPlanner';
+import { type ItineraryScreenProps } from './types/types';
 
-const ItineraryScreen = ({ navigation }: ItineraryScreenProps) => {
-  const { user } = useContext(AuthContext);
-  const { params } = useRoute<ItineraryRouteProp>();
-  const dispatch = useAppDispatch();
-  const { mode } = useAppSelector(state => state.itineraryPlanner);
+const ItineraryScreen = ({}: ItineraryScreenProps) => {
+  // const { user } = useContext(AuthContext);
+  // const { params } = useRoute<ItineraryRouteProp>();
+  // const dispatch = useAppDispatch();
+  // const { mode } = useAppSelector(state => state.itineraryPlanner);
 
   return (
     <View style={styles.container}>
-      <ItineraryPlanner mode={mode} itineraryId={params.id} />
+      <ItineraryPlanner />
     </View>
   );
 };
@@ -23,11 +19,11 @@ const ItineraryScreen = ({ navigation }: ItineraryScreenProps) => {
 const styles = StyleSheet.create({
   container: {},
   backButton: {
-    position: "absolute",
+    position: 'absolute',
     top: getStatusBarHeight(),
     left: 10,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     height: 32,
     width: 32,
     zIndex: 2,

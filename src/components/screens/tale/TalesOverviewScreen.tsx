@@ -1,27 +1,17 @@
-import { memo, useCallback, useEffect, useRef, useState } from "react";
-import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
-import type { TaleThumbnailInfo } from "../../tale/types/types";
-import MasonryList from "@react-native-seoul/masonry-list";
-import {
-  DEVICE_HEIGHT,
-  DEVICE_WIDTH,
-} from "../../../utils/constants/constants";
-import { DUMMY_TALE_THUMBNAILS } from "../../../data/tales";
-import { PALETTE } from "../../../utils/constants/palette";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import {
-  FlashList,
-  MasonryFlashList,
-  MasonryFlashListRef,
-} from "@shopify/flash-list";
-import { getStatusBarHeight } from "react-native-status-bar-height";
-import TaleThumbnail from "../../tale/TaleThumbnail";
-import { DIMENSION } from "../../../utils/constants/dimensions";
-import { ActivityIndicator } from "react-native-paper";
-import useInfiniteDataManager from "../../../utils/hooks/useInfiniteDataManager";
-import React from "react";
-import GypsieSkeleton from "../../common/GypsieSkeleton";
+import { memo, useEffect } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ActivityIndicator } from 'react-native-paper';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import MasonryList from '@react-native-seoul/masonry-list';
+import type { TaleThumbnailInfo } from '@components/tale/types/types';
+import TaleThumbnail from '@components/tale/TaleThumbnail';
+import GypsieSkeleton from '@components/common/GypsieSkeleton';
+import useInfiniteDataManager from '@hooks/useInfiniteDataManager';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
+import { PALETTE } from '@constants/palette';
+import { DIMENSION } from '@constants/dimensions';
 
 const SkeletonThumbnail = memo(() => {
   return (
@@ -35,20 +25,20 @@ const SkeletonThumbnail = memo(() => {
       <View
         style={{
           flex: 5,
-          width: "100%",
+          width: '100%',
           marginVertical: 4,
           borderRadius: 12,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}>
         <GypsieSkeleton />
       </View>
       <View
         style={{
           flex: 1,
-          flexDirection: "row",
-          justifyContent: "space-around",
-          alignItems: "center",
-          width: "100%",
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          width: '100%',
           // borderWidth: 1,
           // borderColor:'green'
         }}>
@@ -57,7 +47,7 @@ const SkeletonThumbnail = memo(() => {
             height: 40,
             width: 40,
             borderRadius: 20,
-            overflow: "hidden",
+            overflow: 'hidden',
           }}>
           <GypsieSkeleton />
         </View>
@@ -67,7 +57,7 @@ const SkeletonThumbnail = memo(() => {
             height: 40,
             marginLeft: 8,
             borderRadius: 12,
-            overflow: "hidden",
+            overflow: 'hidden',
           }}>
           <GypsieSkeleton />
         </View>
@@ -97,35 +87,31 @@ const TalesOverviewScreen = () => {
 
   const {
     data,
-    error,
     hasNextPage,
     isError,
     isFetching,
     isLoading,
     isRefetching,
-    queryClient,
-    fetchNextPage,
-    refetch,
     onEndReached,
     onRefresh,
-  } = useInfiniteDataManager("tales-md", "dev");
+  } = useInfiniteDataManager('tales-md', 'dev');
 
   const dataFetched = data && data.pages && data.pages[0];
   const dataFetchedIsEmpty = dataFetched && data.pages[0].length === 0;
-  const dataFetchedIsNotEmpty = dataFetched && data.pages[0].length > 0;
+  // const dataFetchedIsNotEmpty = dataFetched && data.pages[0].length > 0;
 
-  console.log("===========================");
-  console.log("isFetching: ", isFetching);
-  console.log("isRefetching: ", isRefetching);
-  console.log("isLoading: ", isLoading);
-  console.log("isError: ", isError);
-  console.log("hasNextPage: ", hasNextPage);
-  console.log("===========================\n");
+  console.log('===========================');
+  console.log('isFetching: ', isFetching);
+  console.log('isRefetching: ', isRefetching);
+  console.log('isLoading: ', isLoading);
+  console.log('isError: ', isError);
+  console.log('hasNextPage: ', hasNextPage);
+  console.log('===========================\n');
 
   useEffect(() => {
-    console.log("TalesOverviewScreen Mounted");
+    console.log('TalesOverviewScreen Mounted');
     return () => {
-      console.log("TalesOverviewScreen Unmounted");
+      console.log('TalesOverviewScreen Unmounted');
     };
   }, []);
 
@@ -147,7 +133,7 @@ const TalesOverviewScreen = () => {
               dataFetched ? data.pages.flat(1) : ([] as TaleThumbnailInfo[])
             }
             numColumns={2}
-            renderItem={({ item, i }) => (
+            renderItem={({ item }) => (
               <TaleThumbnail data={item as TaleThumbnailInfo} />
             )}
             ListEmptyComponent={<SkeletonThumbnailList />}
@@ -164,7 +150,7 @@ const TalesOverviewScreen = () => {
             onRefresh={onRefresh}
             refreshing={isRefetching}
             refreshControlProps={{
-              title: "Refreshing tales...",
+              title: 'Refreshing tales...',
               titleColor: PALETTE.GREYISHBLUE,
               tintColor: PALETTE.ORANGE,
             }}
@@ -181,9 +167,9 @@ const styles = StyleSheet.create({
     width: DEVICE_WIDTH,
     backgroundColor: PALETTE.OFFWHITE,
   },
-  flexCenter: { flex: 1, justifyContent: "center", alignItems: "center" },
+  flexCenter: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   description: {
-    fontFamily: "Futura",
+    fontFamily: 'Futura',
     fontSize: 24,
     color: PALETTE.ORANGE,
   },

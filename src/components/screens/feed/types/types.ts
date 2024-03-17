@@ -1,9 +1,6 @@
-import type {
-  CompositeNavigationProp,
-  RouteProp,
-} from "@react-navigation/native";
-import type { StackNavigationProp } from "@react-navigation/stack";
-import type { ModalNavigatorParamList } from "../../../navigators/types/types";
+import type { RouteProp } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
+import type { ModalNavigatorParamList } from '@navigators/types/types';
 
 export type HomeStackNavigatorParamList = {
   Home: undefined;
@@ -20,7 +17,7 @@ export type HomeScreenProps = {
 // >;
 export type HomeScreenNavigationProp = StackNavigationProp<
   HomeStackNavigatorParamList,
-  "Home"
+  'Home'
 >;
 
 // --------------------------- FeedScreen ---------------------------
@@ -35,7 +32,7 @@ export type FeedScreenProps = {
 
 export type FeedScreenNavigationProp = StackNavigationProp<
   ModalNavigatorParamList,
-  "Feed"
+  'Feed'
 >;
 
-export type FeedScreenRouteProp = RouteProp<ModalNavigatorParamList, "Feed">;
+export type FeedScreenRouteProp = RouteProp<ModalNavigatorParamList, 'Feed'>;

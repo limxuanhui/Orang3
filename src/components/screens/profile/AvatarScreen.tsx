@@ -1,13 +1,10 @@
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import {
-  DEVICE_HEIGHT,
-  DEVICE_WIDTH,
-} from "../../../utils/constants/constants";
-import { AvatarScreenProps } from "../../../utils/types/profile";
-import { PALETTE } from "../../../utils/constants/palette";
-import { DIMENSION } from "../../../utils/constants/dimensions";
+import { Image, StyleSheet, View } from 'react-native';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
+import { PALETTE } from '@constants/palette';
+import { DIMENSION } from '@constants/dimensions';
+import { AvatarScreenProps } from './types/types';
 
-const AvatarScreen = ({ navigation, route }: AvatarScreenProps) => {
+const AvatarScreen = ({ route }: AvatarScreenProps) => {
   return (
     <View style={styles.container}>
       <Image

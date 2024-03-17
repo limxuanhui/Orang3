@@ -1,30 +1,25 @@
-import { useCallback, useContext } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import { AuthContext } from "../../../utils/contexts/AuthContext";
-import type { SettingsScreenProps } from "./types/types";
-import {
-  DEVICE_HEIGHT,
-  DEVICE_WIDTH,
-} from "../../../utils/constants/constants";
-import { PALETTE } from "../../../utils/constants/palette";
+import { useCallback, useContext } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { AuthContext } from '@contexts/AuthContext';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
+import { PALETTE } from '@constants/palette';
+import type { SettingsScreenProps } from './types/types';
 
-const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
+const SettingsScreen = ({}: SettingsScreenProps) => {
   const { logoutHandler } = useContext(AuthContext);
 
-  const onPressAccount = useCallback(() => {
-    navigation.push("Account");
-  }, [navigation]);
+  // const onPressAccount = useCallback(() => {
+  //   navigation.push('Account');
+  // }, [navigation]);
 
-  const onPressPrivacy = useCallback(() => {
-    navigation.push("Privacy");
-  }, [navigation]);
+  // const onPressPrivacy = useCallback(() => {
+  //   navigation.push('Privacy');
+  // }, [navigation]);
 
   const onPressLogout = useCallback(() => {
-    console.warn("Log out pressed!");
+    console.warn('Log out pressed!');
     logoutHandler();
   }, [logoutHandler]);
 
@@ -100,31 +95,31 @@ const styles = StyleSheet.create({
   },
   title: {
     marginLeft: 16,
-    fontFamily: "Futura",
+    fontFamily: 'Futura',
     fontSize: 24,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: 0,
   },
   subtitle: {
     marginHorizontal: 16,
     marginVertical: 8,
     fontSize: 14,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: PALETTE.DARKGREY,
   },
   section: { marginVertical: 8 },
   sectionItems: {
-    alignSelf: "center",
+    alignSelf: 'center',
     width: DEVICE_WIDTH - 16,
     backgroundColor: PALETTE.WHITE,
   },
   sectionItem: {
-    flexDirection: "row",
+    flexDirection: 'row',
     padding: 8,
-    alignItems: "center",
+    alignItems: 'center',
   },
-  sectionItemTitle: { marginLeft: 8, fontWeight: "bold", fontSize: 16 },
-  rightChevron: { position: "absolute", right: 8 },
+  sectionItemTitle: { marginLeft: 8, fontWeight: 'bold', fontSize: 16 },
+  rightChevron: { position: 'absolute', right: 8 },
 });
 
 export default SettingsScreen;

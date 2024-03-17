@@ -1,6 +1,6 @@
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackNavigatorParamList } from "../../../navigators/types/types";
-import { StackNavigationProp } from "@react-navigation/stack";
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackNavigatorParamList } from '@navigators/types/types';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 export type AuthStackNavigatorParamList = {
   Login: undefined;
@@ -19,11 +19,11 @@ export type SplashScreenNavigationProp =
 // --------------------------- LoginScreen ---------------------------
 export type LoginScreenProps = NativeStackScreenProps<
   AuthStackNavigatorParamList,
-  "Login"
+  'Login'
 >;
 
 // --------------------------- SignupScreen ---------------------------
 export type SignupScreenProps = NativeStackScreenProps<
   AuthStackNavigatorParamList,
-  "Signup"
+  'Signup'
 >;

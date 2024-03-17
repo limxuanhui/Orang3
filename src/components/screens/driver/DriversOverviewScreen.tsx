@@ -1,9 +1,8 @@
-import { Pressable, SectionList, StyleSheet, Text, View } from "react-native";
-import DriverNamecard from "../../driver/DriverNamecard";
-import { launchImageLibrary } from "react-native-image-picker";
-import { Skeleton, SocialMediaType } from "@rneui/themed";
-import GypsieSkeleton from "../../common/GypsieSkeleton";
-import { Divider } from "react-native-paper";
+import { SectionList, StyleSheet, Text, View } from 'react-native';
+import { Divider } from 'react-native-paper';
+import { SocialMediaType } from '@rneui/themed';
+import DriverNamecard from '@components/driver/DriverNamecard';
+import GypsieSkeleton from '@components/common/GypsieSkeleton';
 
 type ContactInfo = {
   platform: SocialMediaType;
@@ -21,17 +20,17 @@ export type DriverNamecardInfo = {
 
 const DATA: DriverNamecardInfo[] = [
   {
-    title: "The Jeju Expert",
-    name: "Joseph Lim",
+    title: 'The Jeju Expert',
+    name: 'Joseph Lim',
     contacts: [
       {
-        platform: "whatsapp",
-        contact: "+6512345678",
-        name: "Joseph Lim",
+        platform: 'whatsapp',
+        contact: '+6512345678',
+        name: 'Joseph Lim',
       },
     ],
-    portfolio: ["@jason/memotrip", "@jennie/memotrip2"],
-    avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/joseph.jpg",
+    portfolio: ['@jason/memotrip', '@jennie/memotrip2'],
+    avatarUri: '/Users/limxuanhui/bluextech/gypsie/assets/avatars/joseph.jpg',
   },
 ];
 
@@ -44,13 +43,13 @@ const DriversOverviewScreen = () => {
         <DriverNamecard data={el} />
       ))}
       <View
-        style={{ width: 200, height: 300, borderWidth: 0, borderColor: "red" }}>
+        style={{ width: 200, height: 300, borderWidth: 0, borderColor: 'red' }}>
         <GypsieSkeleton />
       </View>
       <SectionList
         sections={[
-          { title: "a", data: [1, 2, 3] },
-          { title: "b", data: [4, 5, 6] },
+          { title: 'a', data: [1, 2, 3] },
+          { title: 'b', data: [4, 5, 6] },
         ]}
         renderItem={el => <Text>{el.item}</Text>}
         ItemSeparatorComponent={Divider}

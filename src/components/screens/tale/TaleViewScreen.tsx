@@ -1,98 +1,88 @@
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
-import { PALETTE } from "../../../utils/constants/palette";
-import GypsieButton from "../../common/buttons/GypsieButton";
-import NewItineraryPostHandleBar from "../../post/NewItineraryPostHandleBar";
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ActivityIndicator } from 'react-native-paper';
+import { useRoute } from '@react-navigation/native';
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetScrollView,
-} from "@gorhom/bottom-sheet";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import ChevronsUpIcon from "../../common/icons/ChevronsUp";
-import { DUMMY_FEEDS } from "../../../data/feeds";
-import {
-  DEVICE_HEIGHT,
-  DEVICE_WIDTH,
-} from "../../../utils/constants/constants";
-import { VIEWABILITY_CONFIG } from "../../../utils/constants/feed";
-import { BottomSheetDefaultBackdropProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types";
-import FeedCarousel from "../../feed/FeedCarousel";
-import { type Story, StoryItemType } from "../../post/types/types";
+} from '@gorhom/bottom-sheet';
+import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import { QueryKey, queryOptions, useQuery } from '@tanstack/react-query';
+
+import GypsieButton from '@components/common/buttons/GypsieButton';
+import NewItineraryPostHandleBar from '@components/post/NewItineraryPostHandleBar';
+import FeedCarousel from '@components/feed/FeedCarousel';
+import { type StoryItemType } from '@components/post/types/types';
+
 import type {
   TaleViewScreenProps,
   TaleViewScreenRouteProp,
-} from "../post/types/types";
-import ItineraryMapOverview from "../../post/ItineraryMapOverview";
-import { storyBodyStyle, storyTitleStyle } from "../../../utils/constants/text";
-import { Itinerary } from "../../itinerary/types/types";
-import { useRoute } from "@react-navigation/native";
-import { BaseFeed, Feed, FeedItem, Media } from "../../feed/types/types";
-import { BACKEND_BASE_URL } from "@env";
-import FeedItemThumbnailsCarousel from "../../tale/FeedItemThumbnailsCarousel";
-import { Tale } from "../../tale/types/types";
-import useDataManager from "../../../utils/hooks/useDataManager";
-import { QueryKey, queryOptions, useQuery } from "@tanstack/react-query";
-import { DUMMY_DATABASE } from "../../../data/database";
-import GypsieSkeleton from "../../common/GypsieSkeleton";
-import { ActivityIndicator } from "react-native-paper";
-import useBottomSheetHandlers from "../../../utils/hooks/useBottomSheetHandlers";
-import { DIMENSION } from "../../../utils/constants/dimensions";
-import { AuthContext } from "../../../utils/contexts/AuthContext";
-import AuxiliaryControls from "../../common/AuxiliaryControls";
-import { useAppDispatch, useAppSelector } from "../../../utils/redux/hooks";
+} from '../post/types/types';
+import ItineraryMapOverview from '@components/post/ItineraryMapOverview';
+
+import { BaseFeed, Feed, FeedItem } from '@components/feed/types/types';
+import FeedItemThumbnailsCarousel from '@components/tale/FeedItemThumbnailsCarousel';
+import AuxiliaryControls from '@components/common/AuxiliaryControls';
+import { Tale } from '@components/tale/types/types';
+
+import { PALETTE } from '@constants/palette';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
+import { VIEWABILITY_CONFIG } from '@constants/feed';
+import { DIMENSION } from '@constants/dimensions';
+
+import useBottomSheetHandlers from '@hooks/useBottomSheetHandlers';
+import { AuthContext } from '@contexts/AuthContext';
+import { useAppDispatch, useAppSelector } from '@redux/hooks';
 import {
   itineraryPlanner_resetItineraryPlannerSlice,
   itineraryPlanner_setItinerary,
   itineraryPlanner_setMode,
-} from "../../../utils/redux/reducers/itineraryPlannerSlice";
-import EditIcon from "../../common/icons/EditIcon";
-import type { DataKey } from "../../../data/types/types";
+} from '@redux/reducers/itineraryPlannerSlice';
+
+import ChevronsUpIcon from '@icons/ChevronsUp';
+import EditIcon from '@icons/EditIcon';
+import { DUMMY_DATABASE } from '@data/database';
+import type { DataKey } from '@data/types/types';
 
 const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
   const insets = useSafeAreaInsets();
   const userInfo = useContext(AuthContext);
-  const { params } = useRoute<TaleViewScreenRouteProp>();
-  const { id, creator } = params;
   const dispatch = useAppDispatch();
   const { mode } = useAppSelector(state => state.itineraryPlanner);
+  const { params } = useRoute<TaleViewScreenRouteProp>();
+  const { id, creator } = params;
 
   /**
    * onPressChangeMode: allows user to change to edit mode to edit the tale if he/she is the creator.
    */
   const onPressChangeMode = useCallback(() => {
-    if (mode === "view") {
-      dispatch(itineraryPlanner_setMode({ mode: "edit" }));
-      navigation.navigate("WriteTale", { taleId: id });
+    if (mode === 'view') {
+      dispatch(itineraryPlanner_setMode({ mode: 'edit' }));
+      navigation.navigate('WriteTale', { taleId: id });
     }
-  }, [navigation, mode, itineraryPlanner_setMode, dispatch]);
+  }, [mode, dispatch, navigation, id]);
 
   const taleQueryFn = useCallback(
     async ({ queryKey }: { queryKey: QueryKey }): Promise<Tale | undefined> => {
       const [key, taleId] = queryKey;
-      console.log("QUERY FUNCTION CALLED");
-      return new Promise((resolve, reject) => {
+      console.log('QUERY FUNCTION CALLED');
+      return new Promise((resolve, _reject) => {
         const tales: Tale[] = DUMMY_DATABASE[key as DataKey] as Tale[];
         setTimeout(() => {
-          resolve(tales.find((el: Tale) => el.id === taleId));
+          resolve(tales.find((el: Tale) => el.metadata.id === taleId));
         }, 2000);
       });
     },
-    [DUMMY_DATABASE],
+    [],
   );
 
   const taleQueryOptions = useMemo(() => {
-    const queryKey = ["tales", id];
+    const queryKey = ['tales', id];
     return queryOptions({
       queryKey,
       queryFn: taleQueryFn,
-      networkMode: "online",
+      networkMode: 'online',
       // initialData: {
       //   id: "",
       //   creator: {
@@ -121,10 +111,9 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
       gcTime: 1000 * 60 * 5,
       // staleTime: 1000,
     });
-  }, [id, queryOptions, taleQueryFn]);
+  }, [id, taleQueryFn]);
 
-  const { data, isFetching, isError, isLoading, isPending, isPlaceholderData } =
-    useQuery(taleQueryOptions);
+  const { data, isLoading } = useQuery(taleQueryOptions);
 
   // use useQueries to fetch feeds with the array of feed id
 
@@ -134,12 +123,14 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
     const cover: FeedItem = {
       id: data.cover.id,
       media: data.cover,
-      caption: ""
+      caption: '',
     };
     const coverFeed: BaseFeed = {
-      id: data.cover.id,
-      creator: data.creator,
-      items: [cover],
+      metadata: {
+        id: data.cover.id,
+        creator: data.creator,
+      },
+      feedItems: [cover],
     };
     renderedData = [coverFeed, ...data.feeds];
   }
@@ -147,8 +138,8 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
   const [activePostIndex, setActivePostIndex] = useState<number>(0);
   const onViewableFeedChanged = useCallback(
     // Change type to more suitable one
-    ({ viewableItems, changed }: any) => {
-      console.log("ViewableFeedChanged");
+    ({ viewableItems, _changed }: any) => {
+      console.log('ViewableFeedChanged');
       if (viewableItems && viewableItems?.length > 0) {
         setActivePostIndex(viewableItems[0].index);
       }
@@ -156,7 +147,7 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
     [setActivePostIndex],
   );
   const { bottomSheetRef, snapPoints } = useBottomSheetHandlers({
-    snapPointsArr: ["50%", "100%"],
+    snapPointsArr: ['50%', '100%'],
   });
   const onPressExpandBottomSheet = useCallback(() => {
     bottomSheetRef.current?.snapToIndex(0);
@@ -206,7 +197,7 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
     <View style={styles.container}>
       {!data && isLoading ? (
         <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <ActivityIndicator size={48} color={PALETTE.ORANGE} />
         </View>
       ) : (
@@ -216,7 +207,7 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
             renderItem={({ item, index }) => (
               <FeedCarousel
                 handle={creator.handle}
-                items={item.items}
+                items={item.feedItems}
                 inView={index === activePostIndex}
               />
             )}
@@ -224,13 +215,13 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
             showsVerticalScrollIndicator={false}
             snapToInterval={DEVICE_HEIGHT}
             snapToAlignment="start"
-            decelerationRate={"fast"}
+            decelerationRate={'fast'}
             viewabilityConfig={VIEWABILITY_CONFIG}
             onViewableItemsChanged={onViewableFeedChanged}
           />
           <GypsieButton
-            customButtonStyles={{ position: "absolute", bottom: insets.bottom }}
-            customIconStyles={{ color: "orange", fontSize: 40 }}
+            customButtonStyles={{ position: 'absolute', bottom: insets.bottom }}
+            customIconStyles={{ color: 'orange', fontSize: 40 }}
             Icon={ChevronsUpIcon}
             onPress={onPressExpandBottomSheet}
           />
@@ -239,8 +230,8 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
             <AuxiliaryControls
               customStyle={{
                 top: insets.top,
-                justifyContent: "flex-start",
-                height: "auto",
+                justifyContent: 'flex-start',
+                height: 'auto',
                 // backgroundColor: "red",
               }}
               position="top-right">
@@ -248,7 +239,7 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
                 customButtonStyles={{
                   width: 40,
                   height: 40,
-                  backgroundColor: "#00000044",
+                  backgroundColor: '#00000044',
                   borderRadius: 20,
                 }}
                 customIconStyles={{
@@ -275,15 +266,15 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
           >
             {/* To be changed (NewItineraryPostHandlerBar) */}
             <NewItineraryPostHandleBar
-              avatarUri={data?.creator.avatar?.uri || ""}
-              name={data?.creator.handle || ""}
+              avatarUri={data?.creator.avatar?.uri || ''}
+              name={data?.creator.handle || ''}
             />
             <BottomSheetScrollView
               contentContainerStyle={{ paddingBottom: insets.bottom }}
               showsVerticalScrollIndicator={false}>
               {data && data.itinerary.routes.length > 0 ? (
                 <ItineraryMapOverview
-                  itineraryId={""}
+                  itineraryId={''}
                   creatorId={params.creator.id}
                 />
               ) : null}
@@ -317,26 +308,26 @@ const styles = StyleSheet.create({
     backgroundColor: PALETTE.GREYISHBLUE,
   },
   bottomSheet: {
-    height: "auto",
+    height: 'auto',
     padding: 16,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     backgroundColor: PALETTE.OFFWHITE,
   },
   headerTextBox: {
-    position: "absolute",
-    justifyContent: "center",
+    position: 'absolute',
+    justifyContent: 'center',
     bottom: 0.5 * DEVICE_HEIGHT,
     minHeight: 60,
     width: DIMENSION.HUNDRED_PERCENT,
     paddingHorizontal: 16,
-    backgroundColor: "#00000044",
+    backgroundColor: '#00000044',
   },
   headerText: {
     color: PALETTE.WHITE,
     fontSize: 40,
     lineHeight: 40,
-    fontFamily: "Lilita One",
+    fontFamily: 'Lilita One',
   },
 
   storyItem: {

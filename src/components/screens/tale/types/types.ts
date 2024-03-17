@@ -1,7 +1,7 @@
-import type { RouteProp } from "@react-navigation/native";
-import type { StackNavigationProp } from "@react-navigation/stack";
-import type { RouteNodeInfo } from "../../../itinerary/types/types";
-import type { ModalNavigatorParamList } from "../../../navigators/types/types";
+import type { RouteProp } from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
+import type { RouteNodeInfo } from '@components/itinerary/types/types';
+import type { ModalNavigatorParamList } from '@navigators/types/types';
 
 export type TaleStackNavigatorParamList = {
   TalesOverview: undefined;
@@ -20,12 +20,12 @@ export type ItineraryScreenProps = {
 
 export type ItineraryNavigationProp = StackNavigationProp<
   ModalNavigatorParamList,
-  "Itinerary"
+  'Itinerary'
 >;
 
 export type ItineraryRouteProp = RouteProp<
   ModalNavigatorParamList,
-  "Itinerary"
+  'Itinerary'
 >;
 
 // --------------------------- PlaceSearchScreen ---------------------------
@@ -35,5 +35,5 @@ export type PlaceSearchScreenParams = {
 };
 
 export type PlaceSearchScreenProps = {
-  route: RouteProp<ModalNavigatorParamList, "PlaceSearch">;
+  route: RouteProp<ModalNavigatorParamList, 'PlaceSearch'>;
 };

@@ -1,30 +1,26 @@
-import { useCallback, useContext, useRef, useState } from "react";
-import { FlatList, RefreshControl, StyleSheet, Text, View } from "react-native";
-import { useFocusEffect } from "@react-navigation/native";
-import { ActivityIndicator } from "react-native-paper";
-import { AuthContext } from "../../../utils/contexts/AuthContext";
-import useInfiniteDataManager from "../../../utils/hooks/useInfiniteDataManager";
-import FeedDisplay from "../../feed/FeedDisplay";
-import type { HomeScreenProps } from "./types/types";
-import {
-  DEVICE_HEIGHT,
-  DEVICE_WIDTH,
-} from "../../../utils/constants/constants";
-import { PALETTE } from "../../../utils/constants/palette";
-import { VIEWABILITY_CONFIG } from "../../../utils/constants/feed";
-import EmptyFeed from "../../feed/EmptyFeed";
+import { useCallback, useState } from 'react';
+import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import { ActivityIndicator } from 'react-native-paper';
+import useInfiniteDataManager from '@hooks/useInfiniteDataManager';
+import FeedDisplay from '@components/feed/FeedDisplay';
+import EmptyFeed from '@components/feed/EmptyFeed';
+import type { HomeScreenProps } from './types/types';
+import { DEVICE_HEIGHT } from '@constants/constants';
+import { PALETTE } from '@constants/palette';
+import { VIEWABILITY_CONFIG } from '@constants/feed';
 
-const HomeScreen = ({ navigation }: HomeScreenProps) => {
-  const { user } = useContext(AuthContext);
+const HomeScreen = ({}: HomeScreenProps) => {
+  // const { user } = useContext(AuthContext);
   const [homeScreenIsFocused, setHomeScreenIsFocused] = useState<boolean>(true);
   const [activePostIndex, setActivePostIndex] = useState<number>(0);
   const { data, isLoading, isRefetching, onEndReached, onRefresh } =
     // useInfiniteDataManager("feeds", "dev");
-    useInfiniteDataManager("feeds", "prod");
-
+    useInfiniteDataManager('feeds', 'prod');
+  console.log('Data: ', data);
   const onViewableItemsChanged = useCallback(
     // Change type to more suitable one
-    ({ viewableItems, changed }: any) => {
+    ({ viewableItems, _changed }: any) => {
       if (viewableItems && viewableItems?.length > 0) {
         console.log(viewableItems[0]);
         setActivePostIndex(viewableItems[0].index);
@@ -40,10 +36,15 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
     }, [setHomeScreenIsFocused]),
   );
 
-  const dataFetched = data && data.pages && data.pages[0];
-  const dataFetchedIsEmpty = dataFetched && data.pages[0].length === 0;
-  const dataFetchedIsNotEmpty = dataFetched && data.pages[0].length > 0;
-
+  const dataIsFetched = data && !!data.pages;
+  const dataFetchedIsEmpty = dataIsFetched && data.pages.length === 0;
+  const dataFetchedIsNotEmpty = dataIsFetched && data.pages.length > 0;
+  // console.log("Data fetched: ",  dataIsFetched);
+  // console.log("Data fetched is empty: ",  dataFetchedIsEmpty);
+  // console.log("Data fetched is not empty: ",  dataFetchedIsNotEmpty);
+  // console.log("Data pages: ",  data?.pages);
+  console.log('Number of pages: ', data?.pages.length);
+  console.log(data?.pages.flat(1));
   return (
     <View style={styles.container}>
       {!data && isLoading ? (
@@ -56,7 +57,8 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
         </View>
       ) : dataFetchedIsNotEmpty ? (
         <FlatList
-          data={data.pages.flat(1)}
+          // data={data.pages.flat(1)}
+          data={data.pages.flatMap(el => el.items)}
           // initialNumToRender={2}
           renderItem={({ item, index }) => (
             <FeedDisplay
@@ -66,8 +68,8 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
           )}
           showsVerticalScrollIndicator={false}
           snapToInterval={DEVICE_HEIGHT}
-          snapToAlignment={"start"}
-          decelerationRate={"fast"}
+          snapToAlignment={'start'}
+          decelerationRate={'fast'}
           viewabilityConfig={VIEWABILITY_CONFIG}
           onViewableItemsChanged={onViewableItemsChanged}
           onEndReached={onEndReached}
@@ -89,7 +91,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
           <Text
             style={{
               width: '70%',
-              fontFamily: "Futura",
+              fontFamily: 'Futura',
               fontSize: 24,
               fontWeight: 'bold',
               color: PALETTE.GREY,
@@ -105,13 +107,13 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: PALETTE.BLACK,
   },
-  flexCenter: { flex: 1, justifyContent: "center", alignItems: "center" },
+  flexCenter: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   description: {
-    fontFamily: "Futura",
+    fontFamily: 'Futura',
     fontSize: 24,
     color: PALETTE.ORANGE,
   },

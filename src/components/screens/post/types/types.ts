@@ -1,16 +1,19 @@
-import { StackNavigationProp } from "@react-navigation/stack";
-import type { RouteProp } from "@react-navigation/native";
-import type { GypsieUser, ModalNavigatorParamList } from "../../../navigators/types/types";
+import { StackNavigationProp } from '@react-navigation/stack';
+import type { RouteProp } from '@react-navigation/native';
+import type {
+  GypsieUser,
+  ModalNavigatorParamList,
+} from '@navigators/types/types';
 
 // --------------------------- TaleViewScreen ---------------------------
 export type TaleViewScreenNavigationProp = StackNavigationProp<
   ModalNavigatorParamList,
-  "TaleView"
+  'TaleView'
 >;
 
 export type TaleViewScreenRouteProp = RouteProp<
   ModalNavigatorParamList,
-  "TaleView"
+  'TaleView'
 >;
 
 export type TaleViewScreenProps = {
@@ -27,11 +30,11 @@ export type TaleViewScreenParams = {
 
 export type WriteTaleScreenNavigationProp = StackNavigationProp<
   ModalNavigatorParamList,
-  "WriteTale"
+  'WriteTale'
 >;
 export type WriteTaleScreenRouteProp = RouteProp<
   ModalNavigatorParamList,
-  "WriteTale"
+  'WriteTale'
 >;
 
 export type WriteTaleScreenProps = {

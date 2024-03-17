@@ -1,29 +1,21 @@
-import {
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { ImageLibraryOptions } from "react-native-image-picker";
-import BookIcon from "../../common/icons/BookIcon";
-import BookOpenIcon from "../../common/icons/BookOpenIcon";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import { AuthContext } from "../../../utils/contexts/AuthContext";
-import MyFeeds from "../../profile/MyFeeds";
-import MyTales from "../../profile/MyTales";
-import type { ProfileScreenProps, ProfileScreenRouteProp } from "./types/types";
-import { DIMENSION } from "../../../utils/constants/dimensions";
-import { PALETTE } from "../../../utils/constants/palette";
-import { useRoute } from "@react-navigation/native";
-import { QueryKey, queryOptions, useQuery } from "@tanstack/react-query";
-import { DUMMY_DATABASE } from "../../../data/database";
-import type { DataKey } from "../../../data/types/types";
-import type { Feed, FeedThumbnailInfo } from "../../feed/types/types";
-import type { Tale, TaleThumbnailInfo } from "../../tale/types/types";
+import { memo, useCallback, useContext, useMemo } from 'react';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useRoute } from '@react-navigation/native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { QueryKey, queryOptions, useQuery } from '@tanstack/react-query';
+import BookIcon from '@icons/BookIcon';
+import BookOpenIcon from '@icons/BookOpenIcon';
+import { AuthContext } from '@contexts/AuthContext';
+import MyFeeds from '@components/profile/MyFeeds';
+import MyTales from '@components/profile/MyTales';
+import type { ProfileScreenProps, ProfileScreenRouteProp } from './types/types';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
+import { DUMMY_DATABASE } from '@data/database';
+import type { DataKey } from '@data/types/types';
+import type { FeedThumbnailInfo } from '@components/feed/types/types';
+import type { TaleThumbnailInfo } from '@components/tale/types/types';
 
 const Tab = createMaterialTopTabNavigator();
 // const imageLibraryOptions: ImageLibraryOptions = {
@@ -42,7 +34,7 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
 
   let userId: string | undefined;
   let avatarUri: string | undefined;
-  console.log("PARAMS: ", params);
+  console.log('PARAMS: ', params);
   if (route.params) {
     userId = route.params.userId;
     avatarUri = route.params.avatarUri;
@@ -53,7 +45,7 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
 
   const onPressAvatar = useCallback(() => {
     if (avatarUri) {
-      navigation.push("Modal", { screen: "Avatar", params: { avatarUri } });
+      navigation.push('Modal', { screen: 'Avatar', params: { avatarUri } });
     }
   }, [avatarUri, navigation]);
   //   const response = await openGallery();
@@ -67,7 +59,7 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
   // }, [openGallery]);
 
   const onPressSettings = useCallback(() => {
-    navigation.push("Settings");
+    navigation.push('Settings');
   }, [navigation]);
 
   const feedsMetadataQueryFn = useCallback(
@@ -77,8 +69,8 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
       queryKey: QueryKey;
     }): Promise<FeedThumbnailInfo[]> => {
       const [key, userId] = queryKey;
-      console.log("QUERY FUNCTION CALLED");
-      return new Promise((resolve, reject) => {
+      console.log('QUERY FUNCTION CALLED');
+      return new Promise((resolve, _reject) => {
         const feedsThumbnails: FeedThumbnailInfo[] = DUMMY_DATABASE[
           key as DataKey
         ] as FeedThumbnailInfo[];
@@ -90,29 +82,22 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
         }, 2000);
       });
     },
-    [DUMMY_DATABASE],
+    [],
   );
 
   const feedsMetadataOptions = useMemo(() => {
-    const queryKey = ["feeds-md", userId];
+    const queryKey = ['feeds-md', userId];
     return queryOptions({
       queryKey,
       queryFn: feedsMetadataQueryFn,
-      networkMode: "online",
+      networkMode: 'online',
       enabled: true,
       gcTime: 1000 * 60 * 5,
       staleTime: Infinity,
     });
-  }, [userId, feedsMetadataQueryFn, queryOptions]);
+  }, [userId, feedsMetadataQueryFn]);
 
-  const {
-    data: feedsMetadata,
-    isFetching,
-    isError,
-    isLoading,
-    isPending,
-    isPlaceholderData,
-  } = useQuery(feedsMetadataOptions);
+  const { data: feedsMetadata } = useQuery(feedsMetadataOptions);
 
   const talesMetadataQueryFn = useCallback(
     async ({
@@ -121,8 +106,8 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
       queryKey: QueryKey;
     }): Promise<TaleThumbnailInfo[]> => {
       const [key, userId] = queryKey;
-      console.log("QUERY FUNCTION CALLED");
-      return new Promise((resolve, reject) => {
+      console.log('QUERY FUNCTION CALLED');
+      return new Promise((resolve, _reject) => {
         const talesThumbnails: TaleThumbnailInfo[] = DUMMY_DATABASE[
           key as DataKey
         ] as TaleThumbnailInfo[];
@@ -134,29 +119,22 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
         }, 2000);
       });
     },
-    [DUMMY_DATABASE],
+    [],
   );
 
   const talesMetadataOptions = useMemo(() => {
-    const queryKey = ["tales-md", userId];
+    const queryKey = ['tales-md', userId];
     return queryOptions({
       queryKey,
       queryFn: talesMetadataQueryFn,
-      networkMode: "online",
+      networkMode: 'online',
       enabled: true,
       gcTime: 1000 * 60 * 5,
       staleTime: Infinity,
     });
-  }, [userId, talesMetadataQueryFn, queryOptions]);
+  }, [userId, talesMetadataQueryFn]);
 
-  const {
-    data: talesMetadata,
-    isFetching: isFetchingTalesData,
-    isError: isErrorTalesData,
-    isLoading: isLoadingTalesData,
-    isPending: isPendingTalesData,
-    isPlaceholderData: isPlaceholderDataTalesData,
-  } = useQuery(talesMetadataOptions);
+  const { data: talesMetadata } = useQuery(talesMetadataOptions);
 
   return (
     <View style={styles.container}>
@@ -198,7 +176,7 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
         screenOptions={{
           tabBarStyle: {
             backgroundColor: PALETTE.OFFWHITE,
-            height: "7%",
+            height: '7%',
           },
           tabBarShowLabel: false,
           tabBarIndicatorStyle: { backgroundColor: PALETTE.ORANGE },
@@ -211,7 +189,7 @@ const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
           options={{
             tabBarIcon: ({ focused }) => (
               <Ionicons
-                name={focused ? "grid" : "grid-outline"}
+                name={focused ? 'grid' : 'grid-outline'}
                 size={20}
                 color={focused ? PALETTE.ORANGE : PALETTE.GREYISHBLUE}
               />
@@ -249,18 +227,18 @@ const styles = StyleSheet.create({
     // backgroundColor: PALETTE.GREYISHBLUE,
     // height:'100%'
   },
-  settingsButton: { position: "absolute", top: 50, right: 20, zIndex: 3 },
+  settingsButton: { position: 'absolute', top: 50, right: 20, zIndex: 3 },
   banner: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     height: DIMENSION.TWENTYFIVE_PERCENT,
     width: DIMENSION.HUNDRED_PERCENT,
     borderWidth: 0,
-    borderColor: "blue",
+    borderColor: 'blue',
   },
   bannerImageContainer: {
-    justifyContent: "center",
+    justifyContent: 'center',
     height: DIMENSION.HUNDRED_PERCENT,
   },
   avatarContainer: {
@@ -281,9 +259,9 @@ const styles = StyleSheet.create({
     borderRadius: 60,
   },
   bannerInfoContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     height: DIMENSION.HUNDRED_PERCENT,
     width: DIMENSION.FIFTY_PERCENT,
     backgroundColor: PALETTE.OFFWHITE,
@@ -292,15 +270,15 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     color: PALETTE.BLACK,
     fontSize: 24,
-    fontFamily: "Futura",
-    fontWeight: "bold",
+    fontFamily: 'Futura',
+    fontWeight: 'bold',
   },
   changeAvatarButton: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 8,
     right: 8,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     height: 24,
     width: 24,
     borderRadius: 12,
