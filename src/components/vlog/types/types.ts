@@ -1,4 +1,4 @@
-import type { FeedItem } from "../../feed/types/types";
+import type { FeedItem } from '@components/feed/types/types';
 
 export type VlogPlayerProps = {
   vlog: FeedItem;

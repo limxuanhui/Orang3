@@ -1,16 +1,16 @@
-import { useCallback, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import Video from "react-native-video";
-import VlogPlayerButton from "./VlogPlayerButton";
-import VlogPlayerSlider from "./VlogPlayerSlider";
-import { type VlogPlayerProps, VlogPlayerStatus } from "./types/types";
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
+import { useCallback, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import Video from 'react-native-video';
+import VlogPlayerButton from '@components/vlog/VlogPlayerButton';
+import VlogPlayerSlider from '@components/vlog/VlogPlayerSlider';
+import { type VlogPlayerProps, VlogPlayerStatus } from './types/types';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
 
 const VlogPlayer = ({ vlog, shouldPlay }: VlogPlayerProps) => {
   const { media } = vlog;
-  console.log("Vlog player: ", media);
+  console.log('Vlog player: ', media);
   const [status, setStatus] = useState<VlogPlayerStatus>(
     VlogPlayerStatus.PLAYING,
   );
@@ -35,12 +35,15 @@ const VlogPlayer = ({ vlog, shouldPlay }: VlogPlayerProps) => {
         repeat
         // muted
         resizeMode="contain"
+        onLoadStart={() => console.warn('video is loading...')}
         onProgress={data => {
           setValue(data.currentTime);
           // find a better way to fix max duration
           setMaxValue(data.playableDuration);
         }}
-        // onBuffer={}
+        onBuffer={() => {
+          console.log('Buffering video...');
+        }}
         // onEnd
         // onError
       />
@@ -52,8 +55,8 @@ const VlogPlayer = ({ vlog, shouldPlay }: VlogPlayerProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
   },

@@ -1,10 +1,10 @@
-import { useCallback } from "react";
-import { FlatList, Image, Pressable, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import type { FeedItemThumbnailsCarouselProps } from "./types/types";
-import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
+import { useCallback } from 'react';
+import { FlatList, Image, Pressable, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { FeedItemThumbnailsCarouselProps } from './types/types';
+import type { ModalNavigatorNavigationProp } from '@components/navigators/types/types';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
 
 const FeedItemThumbnailsCarousel = ({
   data,
@@ -14,7 +14,7 @@ const FeedItemThumbnailsCarousel = ({
 
   const onPressLinkedFeed = useCallback(
     (feedId: string) => {
-      navigation.navigate("Modal", { screen: "Feed", params: { feedId } });
+      navigation.navigate('Modal', { screen: 'Feed', params: { feedId } });
     },
     [navigation],
   );
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   linkedFeedsContentContainer: {
-    alignSelf: "center",
+    alignSelf: 'center',
     height: 120,
   },
   linkedFeed: {

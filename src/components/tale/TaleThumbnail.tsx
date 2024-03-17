@@ -1,18 +1,14 @@
-import { memo, useCallback, useEffect, useState } from "react";
-import { Image, Pressable, StyleSheet, Text, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import type { TaleThumbnailProps } from "../tale/types/types";
-import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
-import {
-  DEVICE_WIDTH,
-  PLACEHOLDER_IMAGE_URI,
-} from "../../utils/constants/constants";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
-import Video from "react-native-video";
-import useMediaHandlers from "../../utils/hooks/useMediaHandlers";
-import GypsieAvatar from "../common/GypsieAvatar";
-import GypsieSkeleton from "../common/GypsieSkeleton";
+import { memo, useCallback, useState } from 'react';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import Video from 'react-native-video';
+import type { TaleThumbnailProps } from '@components/tale/types/types';
+import type { ModalNavigatorNavigationProp } from '@navigators/types/types';
+import { DEVICE_WIDTH, PLACEHOLDER_IMAGE_URI } from '@constants/constants';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
+import GypsieAvatar from '@components/common/GypsieAvatar';
+import GypsieSkeleton from '@components/common/GypsieSkeleton';
 
 const CARD_WIDTH = DEVICE_WIDTH / 2 - 8;
 
@@ -28,20 +24,20 @@ const SkeletonThumbnail = memo(() => {
       <View
         style={{
           flex: 5,
-          width: "100%",
+          width: '100%',
           marginVertical: 4,
           borderRadius: 12,
-          overflow: "hidden",
+          overflow: 'hidden',
         }}>
         <GypsieSkeleton />
       </View>
       <View
         style={{
           flex: 1,
-          flexDirection: "row",
-          justifyContent: "space-around",
-          alignItems: "center",
-          width: "100%",
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          width: '100%',
           // borderWidth: 1,
           // borderColor:'green'
         }}>
@@ -50,7 +46,7 @@ const SkeletonThumbnail = memo(() => {
             height: 40,
             width: 40,
             borderRadius: 20,
-            overflow: "hidden",
+            overflow: 'hidden',
           }}>
           <GypsieSkeleton />
         </View>
@@ -60,7 +56,7 @@ const SkeletonThumbnail = memo(() => {
             height: 40,
             marginLeft: 8,
             borderRadius: 12,
-            overflow: "hidden",
+            overflow: 'hidden',
           }}>
           <GypsieSkeleton />
         </View>
@@ -74,15 +70,15 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
   const [paused, setPaused] = useState<boolean>(true);
 
   const onPressFeed = useCallback(() => {
-    navigation.push("Modal", {
-      screen: "TaleView",
+    navigation.push('Modal', {
+      screen: 'TaleView',
       params: { id: data.taleId, creator: data.creator },
     });
   }, [navigation, data]);
 
   const onPauseToggle = useCallback(() => {
     setPaused(prev => !prev);
-  }, [setPaused])
+  }, [setPaused]);
 
   if (!data) {
     return <SkeletonThumbnail />;
@@ -101,7 +97,7 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
       onPress={onPressFeed}>
       {data &&
         data.cover &&
-        (data.cover.type.startsWith("image") ? (
+        (data.cover.type.startsWith('image') ? (
           <Image
             style={[
               styles.feedCardMedia,
@@ -112,7 +108,7 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
             resizeMode="contain"
             // defaultSource={{uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg"}}
           />
-        ) : data.cover.type.startsWith("video") ? (
+        ) : data.cover.type.startsWith('video') ? (
           <Video
             style={[
               styles.feedCardMedia,
@@ -121,14 +117,14 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
             source={{ uri: data.cover.uri }}
             // posterResizeMode="contain"
             resizeMode="contain"
-            // onLoadStart={() => console.log("Video thumbnail is loading...")}
+            // onLoadStart={() => console.log("Video thumbnail is loading@components.")}
             // onLoad={onVideoLoad}
             repeat
             paused={paused}
             volume={0}
           />
         ) : (
-          <Text>Nothing to display...</Text>
+          <Text>Nothing to display@components.</Text>
         ))}
       <View style={styles.feedCardFooter}>
         <GypsieAvatar uri={data.creator.avatar?.uri || PLACEHOLDER_IMAGE_URI} />
@@ -147,8 +143,8 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
 
 const styles = StyleSheet.create({
   feedCard: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     width: CARD_WIDTH,
     borderRadius: 12,
     backgroundColor: PALETTE.OFFWHITE,
@@ -164,8 +160,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 12,
   },
   feedCardFooter: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     // alignItems: "flex-start",
     width: DIMENSION.HUNDRED_PERCENT,
     padding: 4,
@@ -173,9 +169,9 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
   },
-  feedCardTextWrapper: { flex: 1, justifyContent: "center" },
+  feedCardTextWrapper: { flex: 1, justifyContent: 'center' },
   feedCardText: {
-    fontFamily: "Futura",
+    fontFamily: 'Futura',
     fontSize: 14,
     color: PALETTE.GREYISHBLUE,
   },

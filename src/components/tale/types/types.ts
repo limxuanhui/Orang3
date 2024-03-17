@@ -1,8 +1,8 @@
-import type { StyleProp, ViewStyle } from "react-native";
-import type { Itinerary } from "../../itinerary/types/types";
-import type { Story } from "../../post/types/types";
-import type { Feed, Media } from "../../feed/types/types";
-import type { GypsieUser } from "../../navigators/types/types";
+import type { StyleProp, ViewStyle } from 'react-native';
+import type { Itinerary } from '@components/itinerary/types/types';
+import type { Story } from '@components/post/types/types';
+import type { Media } from '@components/feed/types/types';
+import type { GypsieUser } from '@navigators/types/types';
 
 // export type Creator = {
 //   id: string;
@@ -11,11 +11,13 @@ import type { GypsieUser } from "../../navigators/types/types";
 // }
 
 export type Tale = {
-  id: string;
-  creator: GypsieUser;
-  cover?: Media;
-  title: string;
-  feeds: Feed[];
+  metadata: {
+    id: string;
+    creator: GypsieUser;
+    cover?: Media;
+    thumbnail?: Media;
+    title: string;
+  };
   itinerary: Itinerary;
   story: Story;
 };
@@ -25,10 +27,9 @@ export type WriteTale = Tale & {
   saving: boolean;
   feedItemThumbnails: {
     data: FeedItemThumbnail[][];
-    status: "idle" | "pending" | "succeeded" | "failed";
+    status: 'idle' | 'pending' | 'succeeded' | 'failed';
     error?: string;
   };
-  // selectedItemId: number;
 };
 
 export type TaleThumbnailInfo = {
@@ -38,7 +39,7 @@ export type TaleThumbnailInfo = {
   title: string;
 };
 
-export type TaleThumbnailProps = {  
+export type TaleThumbnailProps = {
   data: TaleThumbnailInfo;
 };
 

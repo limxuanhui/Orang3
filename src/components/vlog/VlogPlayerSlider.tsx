@@ -1,7 +1,6 @@
-import { StyleSheet, View } from "react-native";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { Slider } from "@miblanchard/react-native-slider";
-import type { VlogPlayerSliderProps } from "./types/types";
+import { StyleSheet, View } from 'react-native';
+import { Slider } from '@miblanchard/react-native-slider';
+import type { VlogPlayerSliderProps } from './types/types';
 
 const VlogPlayerSlider = ({ value, maxValue }: VlogPlayerSliderProps) => {
   // const BOTTOM_TAB_BAR_HEIGHT = useBottomTabBarHeight();
@@ -25,12 +24,12 @@ const VlogPlayerSlider = ({ value, maxValue }: VlogPlayerSliderProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    position: "absolute",
-    width: "100%",
+    position: 'absolute',
+    width: '100%',
     zIndex: 999999,
   },
   track: {
-    borderColor: "blue",
+    borderColor: 'blue',
   },
   thumb: {
     height: 15,

@@ -1,15 +1,9 @@
-import { useCallback } from "react";
-import {
-  ActivityIndicator,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
-import FontIcon from "react-native-vector-icons/FontAwesome5";
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
-import { VlogPlayerStatus } from "./types/types";
+import { useCallback } from 'react';
+import { ActivityIndicator, Pressable, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import FontIcon from 'react-native-vector-icons/FontAwesome5';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
+import { VlogPlayerStatus } from './types/types';
 
 type VlogPlayerButtonProps = {
   status: VlogPlayerStatus;
@@ -24,7 +18,7 @@ const VlogPlayerButton = ({ status, togglePlay }: VlogPlayerButtonProps) => {
       return <FontIcon name="pause" size={100} color="#ffffff" />;
     } else if (status === VlogPlayerStatus.PAUSED) {
       return <Icon name="play" size={30} color="#ffffff" />;
-    } else if (status === "Ended") {
+    } else if (status === 'Ended') {
       return <Icon name="replay" size={30} color="#ffffff" />;
     }
   }, []);
@@ -45,7 +39,7 @@ const VlogPlayerButton = ({ status, togglePlay }: VlogPlayerButtonProps) => {
 
 const styles = StyleSheet.create({
   playCover: {
-    position: "absolute",
+    position: 'absolute',
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
     zIndex: 99,
@@ -53,9 +47,9 @@ const styles = StyleSheet.create({
     // borderColor: "red",
   },
   pauseCover: {
-    position: "absolute",
-    justifyContent: "center",
-    alignItems: "center",
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
     zIndex: 99,

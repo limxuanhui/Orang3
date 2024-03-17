@@ -1,8 +1,8 @@
-import { useCallback } from "react";
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import type { TaleThumbnailsFilterProps } from "./types/types";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
+import { useCallback } from 'react';
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import type { TaleThumbnailsFilterProps } from './types/types';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
 
 const TaleThumbnailsFilter = ({ filter }: TaleThumbnailsFilterProps) => {
   const onPressFilter = useCallback((item: string) => {
@@ -36,8 +36,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   filterTab: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     height: 40,
     minWidth: 80,
     marginHorizontal: 4,
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   filterText: {
     fontSize: 16,
-    fontWeight: "normal",
+    fontWeight: 'normal',
   },
 });
 
