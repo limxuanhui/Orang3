@@ -1,39 +1,36 @@
-import { memo, useContext, useMemo } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ActivityIndicator } from "react-native-paper";
-import MasonryList from "@react-native-seoul/masonry-list";
-import FeedThumbnail from "../feed/FeedThumbnail";
-import type { FeedThumbnailInfo } from "../feed/types/types";
-import type { MyFeedsProps } from "./types/types";
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
-import { PALETTE } from "../../utils/constants/palette";
+import { memo, useContext, useMemo } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ActivityIndicator } from 'react-native-paper';
+import MasonryList from '@react-native-seoul/masonry-list';
+import FeedThumbnail from '@components/feed/FeedThumbnail';
+import type { FeedThumbnailInfo } from '@components/feed/types/types';
+import type { MyFeedsProps } from './types/types';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
+import { PALETTE } from '@constants/palette';
 
 const MyFeeds = memo(({ data }: MyFeedsProps) => {
   const insets = useSafeAreaInsets();
   const bh = useContext(BottomTabBarHeightContext) || insets.bottom;
-  const height = useMemo(
-    () => (1 - 0.25 - 0.05) * DEVICE_HEIGHT - bh,
-    [DEVICE_HEIGHT, bh],
-  );
+  const height = useMemo(() => (1 - 0.25 - 0.05) * DEVICE_HEIGHT - bh, [bh]);
 
   return (
     <View style={[styles.container, { height }]}>
       {!data ? (
         <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <ActivityIndicator size={48} color={PALETTE.ORANGE} />
         </View>
       ) : data.length === 0 ? (
         <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text
             style={{
               color: PALETTE.GREY,
-              fontFamily: "Futura",
+              fontFamily: 'Futura',
               fontSize: 24,
-              fontWeight: "bold",
+              fontWeight: 'bold',
             }}>
             You have no feeds...
           </Text>

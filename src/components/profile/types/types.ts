@@ -1,5 +1,5 @@
-import type { FeedThumbnailInfo } from "../../feed/types/types";
-import type { TaleThumbnailInfo } from "../../tale/types/types";
+import type { FeedThumbnailInfo } from '@components/feed/types/types';
+import type { TaleThumbnailInfo } from '@components/tale/types/types';
 
 export type MyTalesProps = {
   data: TaleThumbnailInfo[];

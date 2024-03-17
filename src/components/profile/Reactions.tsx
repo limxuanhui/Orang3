@@ -1,16 +1,16 @@
 // import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import { Dimensions, StyleSheet, Text, View } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { PALETTE } from "../../utils/constants/palette";
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { PALETTE } from '@constants/palette';
 
 const Reactions = () => {
   // const BOTTOM_TAB_BAR_HEIGHT = useBottomTabBarHeight();
-  const BOTTOM_TAB_BAR_HEIGHT = 100;
-  const percentage =
-    Math.round(
-      100 - (BOTTOM_TAB_BAR_HEIGHT / Dimensions.get("window").height) * 100,
-    ).toString() + "%";
-  const percentage2 = 0.62 * Dimensions.get("window").height;
+  // const BOTTOM_TAB_BAR_HEIGHT = 100;
+  // const percentage =
+  //   Math.round(
+  //     100 - (BOTTOM_TAB_BAR_HEIGHT / Dimensions.get('window').height) * 100,
+  //   ).toString() + '%';
+  const percentage2 = 0.62 * Dimensions.get('window').height;
   return (
     <View style={[styles.container, { height: percentage2 - 60 }]}>
       <View style={styles.section}>
@@ -51,27 +51,27 @@ const styles = StyleSheet.create({
   },
   section: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     // height: 100,
     // width: DIMENSION.HUNDRED_PERCENT,
     // marginTop: 20,
     borderWidth: 1,
-    borderColor: "green",
+    borderColor: 'green',
   },
   sectionIcon: {
-    position: "absolute",    
+    position: 'absolute',
     right: 0,
     width: 30,
     height: 30,
     borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
   },
   tempText: {
     fontSize: 30,
-    fontWeight: "900",
+    fontWeight: '900',
     color: PALETTE.GREY,
   },
 });
