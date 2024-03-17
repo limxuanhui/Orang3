@@ -4,6 +4,8 @@
     // "typeRoots": ["./src/types"],
     "baseUrl": ".",
     "paths": {
+      "*": ["src/*"],
+      "tests": ["tests/*"],
       "@components/*": ["src/components/*"],
       "@screens/*": ["src/components/screens/*"],
       "@navigators/*": ["src/components/navigators/*"],
