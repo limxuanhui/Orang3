@@ -1,19 +1,18 @@
-import React, { useContext } from "react";
-import { useColorScheme } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { PortalProvider } from "@gorhom/portal";
-import { AuthContext } from "../../utils/contexts/AuthContext";
-import AppStackNavigator from "./AppStackNavigator";
-import AuthStackNavigator from "./AuthStackNavigator";
-import type { RootStackNavigatorParamList } from "./types/types";
-import { SCREEN_OPTIONS } from "../../utils/constants/constants";
+import React, { useContext } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { PortalProvider } from '@gorhom/portal';
+import { AuthContext } from '@contexts/AuthContext';
+import AppStackNavigator from '@navigators/AppStackNavigator';
+import AuthStackNavigator from '@navigators/AuthStackNavigator';
+import type { RootStackNavigatorParamList } from './types/types';
+import { SCREEN_OPTIONS } from '@constants/constants';
 
 const RootStack = createStackNavigator<RootStackNavigatorParamList>();
 
 const RootStackNavigator = () => {
   console.log(
-    "@@@@@@@@@@@@@@@@@ RootStackNavigator rerendered @@@@@@@@@@@@@@@@@",
+    '@@@@@@@@@@@@@@@@@ RootStackNavigator rerendered @@@@@@@@@@@@@@@@@',
   );
   const { isLoggedIn } = useContext(AuthContext);
 

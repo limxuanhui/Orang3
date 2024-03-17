@@ -1,21 +1,20 @@
-import { NavigatorScreenParams } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { User } from "@react-native-google-signin/google-signin";
-import type { FeedScreenParams } from "../../screens/feed/types/types";
-import type { AuthStackNavigatorParamList } from "../../screens/auth/types/types";
+import { NavigatorScreenParams } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import type { FeedScreenParams } from '../../screens/feed/types/types';
+import type { AuthStackNavigatorParamList } from '../../screens/auth/types/types';
 import type {
   ItineraryScreenParams,
   PlaceSearchScreenParams,
-} from "../../screens/tale/types/types";
+} from '@screens/tale/types/types';
 import type {
   AvatarScreenParams,
   ProfileScreenParams,
-} from "../../screens/profile/types/types";
+} from '@screens/profile/types/types';
 import {
   TaleViewScreenParams,
   WriteTaleScreenParams,
-} from "../../screens/post/types/types";
-import type { Media } from "../../feed/types/types";
+} from '@screens/post/types/types';
+import type { Media } from '@components/feed/types/types';
 
 // declare global {
 //   namespace ReactNavigation {
@@ -52,7 +51,7 @@ export type BottomTabNavigatorParamList = {
 // --------------------------- ModalNavigator ---------------------------
 export type ModalNavigatorNavigationProp = StackNavigationProp<
   AppStackNavigatorParamList,
-  "Modal"
+  'Modal'
 >;
 
 export type ModalNavigatorParamList = {

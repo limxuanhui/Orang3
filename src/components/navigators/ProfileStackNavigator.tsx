@@ -1,19 +1,19 @@
-import { useContext } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import AccountScreen from "../screens/profile/AccountScreen";
-import PrivacyScreen from "../screens/profile/PrivacyScreen";
-import ProfileScreen from "../screens/profile/ProfileScreen";
-import SettingsScreen from "../screens/profile/SettingsScreen";
-import { AuthContext } from "../../utils/contexts/AuthContext";
-import type { ProfileStackNavigatorParamList } from "../screens/profile/types/types";
-import { PALETTE } from "../../utils/constants/palette";
+import { useContext } from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import AccountScreen from '@screens/profile/AccountScreen';
+import PrivacyScreen from '@screens/profile/PrivacyScreen';
+import ProfileScreen from '@screens/profile/ProfileScreen';
+import SettingsScreen from '@screens/profile/SettingsScreen';
+import { AuthContext } from '@contexts/AuthContext';
+import type { ProfileStackNavigatorParamList } from '@screens/profile/types/types';
+import { PALETTE } from '@constants/palette';
 
 const ProfileStack = createStackNavigator<ProfileStackNavigatorParamList>();
 
 const ProfileStackNavigator = () => {
   const { user } = useContext(AuthContext);
   const userId = user?.id;
-  const avatarUri = user?.avatar?.uri; 
+  const avatarUri = user?.avatar?.uri;
 
   return (
     <ProfileStack.Navigator
@@ -29,7 +29,7 @@ const ProfileStackNavigator = () => {
         options={{
           // headerShown: true,
           headerBackTitleVisible: true,
-          headerTitle: "profile",
+          headerTitle: 'profile',
           // headerStyle: { backgroundColor: PALETTE.BLACK },
           headerTintColor: PALETTE.BLACK,
           // headerShadowVisible: false,
@@ -41,7 +41,7 @@ const ProfileStackNavigator = () => {
         options={{
           headerShown: true,
           headerBackTitleVisible: false,
-          headerTitle: "",
+          headerTitle: '',
           headerStyle: { backgroundColor: PALETTE.OFFWHITE },
           headerTintColor: PALETTE.BLACK,
           headerShadowVisible: false,
@@ -53,7 +53,7 @@ const ProfileStackNavigator = () => {
         options={{
           headerShown: true,
           headerBackTitleVisible: false,
-          headerTitle: "Account",
+          headerTitle: 'Account',
           headerStyle: { backgroundColor: PALETTE.OFFWHITE },
           headerTintColor: PALETTE.BLACK,
           headerShadowVisible: false,
@@ -65,7 +65,7 @@ const ProfileStackNavigator = () => {
         options={{
           headerShown: true,
           headerBackTitleVisible: false,
-          headerTitle: "Privacy",
+          headerTitle: 'Privacy',
           headerStyle: { backgroundColor: PALETTE.OFFWHITE },
           headerTintColor: PALETTE.BLACK,
           headerShadowVisible: false,

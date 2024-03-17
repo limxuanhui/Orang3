@@ -1,18 +1,16 @@
-import { useCallback, useContext } from "react";
-import { Image, StyleSheet } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import DriversOverviewScreen from "../screens/driver/DriversOverviewScreen";
-import HomeScreen from "../screens/feed/HomeScreen";
-import TaleStackNavigator from "./TaleStackNavigator";
-import ProfileStackNavigator from "./ProfileStackNavigator";
-import type { BottomTabNavigatorParamList } from "./types/types";
-import { PALETTE } from "../../utils/constants/palette";
-import { AuthContext } from "../../utils/contexts/AuthContext";
-import NewPostOptions from "../post/NewPostOptions";
-import BookOpenIcon from "../common/icons/BookOpenIcon";
-import BookIcon from "../common/icons/BookIcon";
+import { useCallback, useContext } from 'react';
+import { Image, StyleSheet } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import HomeScreen from '@screens/feed/HomeScreen';
+import TaleStackNavigator from '@navigators/TaleStackNavigator';
+import ProfileStackNavigator from '@navigators/ProfileStackNavigator';
+import type { BottomTabNavigatorParamList } from './types/types';
+import { PALETTE } from '@constants/palette';
+import { AuthContext } from '@contexts/AuthContext';
+import NewPostOptions from '@components/post/NewPostOptions';
+import BookOpenIcon from '@icons/BookOpenIcon';
+import BookIcon from '@icons/BookIcon';
 
 const BottomTab = createBottomTabNavigator<BottomTabNavigatorParamList>();
 
@@ -26,23 +24,23 @@ const BottomTabNavigator = () => {
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
-      screenOptions={({ navigation, route }) => {
+      screenOptions={({ route }) => {
         return {
           animationEnabled: false,
           headerShown: false,
           tabBarStyle: {
             backgroundColor:
-              route.name === "ProfileStack" ||
-              route.name === "TaleStack" ||
-              route.name === "DriverStack"
+              route.name === 'ProfileStack' ||
+              route.name === 'TaleStack' ||
+              route.name === 'DriverStack'
                 ? PALETTE.GREYISHBLUE
                 : PALETTE.TRANSPARENT,
-            position: "absolute",
+            position: 'absolute',
             bottom: 0,
 
             // Remove border top on both android & ios
             borderTopWidth: 0,
-            borderTopColor: "transparent",
+            borderTopColor: 'transparent',
             elevation: 0,
             shadowOpacity: 0,
             shadowOffset: {

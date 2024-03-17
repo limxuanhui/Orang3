@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
-import TalesOverviewScreen from "../screens/tale/TalesOverviewScreen";
-import type { TaleStackNavigatorParamList } from "../screens/tale/types/types";
-import { PALETTE } from "../../utils/constants/palette";
+import { StyleSheet, Text, View } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import TalesOverviewScreen from '@screens/tale/TalesOverviewScreen';
+import type { TaleStackNavigatorParamList } from '@screens/tale/types/types';
+import { PALETTE } from '@constants/palette';
 
 const TaleStack = createStackNavigator<TaleStackNavigatorParamList>();
 
@@ -27,7 +27,7 @@ const TaleStackNavigator = () => {
   return (
     <TaleStack.Navigator
       initialRouteName="TalesOverview"
-      screenOptions={({ navigation, route }) => {
+      screenOptions={({}) => {
         return { headerShown: false };
       }}>
       <TaleStack.Screen
@@ -37,7 +37,7 @@ const TaleStackNavigator = () => {
           headerShown: true,
           headerLeft: Title,
           headerLeftContainerStyle: { paddingLeft: 20 },
-          headerTitle: "",
+          headerTitle: '',
           headerStyle: { backgroundColor: PALETTE.WHITE },
           headerShadowVisible: false,
         }}
@@ -48,10 +48,10 @@ const TaleStackNavigator = () => {
 
 const styles = StyleSheet.create({
   titleContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   titleText: {
-    fontFamily: "Lilita One",
+    fontFamily: 'Lilita One',
     fontSize: 24,
     color: PALETTE.GREYISHBLUE,
   },
