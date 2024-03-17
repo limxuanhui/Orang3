@@ -1,6 +1,6 @@
-import { Pressable, StyleSheet, Text } from "react-native";
-import type { LinkButtonProps } from "./types/types";
-import { GYPSIE_THEME } from "../../../utils/constants/palette";
+import { Pressable, StyleSheet, Text } from 'react-native';
+import type { LinkButtonProps } from './types/types';
+import { GYPSIE_THEME } from '@constants/palette';
 
 const LinkButton = ({
   customLinkButtonStyles,
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   linkButton: {},
   linkText: {
     color: GYPSIE_THEME.SECONDARY,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });
 

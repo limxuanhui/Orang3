@@ -1,6 +1,6 @@
-import { ActivityIndicator, Pressable, StyleSheet, Text } from "react-native";
-import type { GypsieButtonProps } from "./types/types";
-import { DIMENSION } from "../../../utils/constants/dimensions";
+import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
+import type { GypsieButtonProps } from './types/types';
+import { DIMENSION } from '@constants/dimensions';
 
 const GypsieButton = ({
   customButtonStyles,
@@ -17,7 +17,7 @@ const GypsieButton = ({
       style={({ pressed }) => [
         { opacity: pressed ? 0.7 : 1 },
         styles.defaultButtonStyles,
-        typeof customButtonStyles === "function"
+        typeof customButtonStyles === 'function'
           ? customButtonStyles({ pressed })
           : customButtonStyles,
       ]}
@@ -35,8 +35,8 @@ const GypsieButton = ({
 
 const styles = StyleSheet.create({
   defaultButtonStyles: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     width: DIMENSION.HUNDRED_PERCENT,
     borderRadius: 4,
   },
