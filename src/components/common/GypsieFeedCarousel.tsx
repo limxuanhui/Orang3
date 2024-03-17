@@ -5,16 +5,16 @@ import {
   Text,
   View,
   ViewToken,
-} from "react-native";
-import EmptyFeed from "../feed/EmptyFeed";
-import FeedDescription from "../feed/FeedDescription";
-import VlogPlayer from "../vlog/VlogPlayer";
-import PageIndicator from "./PageIndicator";
-import type { FeedItem } from "../feed/types/types";
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
-import { VIEWABILITY_CONFIG } from "../../utils/constants/feed";
+} from 'react-native';
+import EmptyFeed from '../feed/EmptyFeed';
+import FeedDescription from '../feed/FeedDescription';
+import VlogPlayer from '../vlog/VlogPlayer';
+import PageIndicator from './PageIndicator';
+import type { FeedItem } from '../feed/types/types';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '../../utils/constants/constants';
+import { DIMENSION } from '../../utils/constants/dimensions';
+import { PALETTE } from '../../utils/constants/palette';
+import { VIEWABILITY_CONFIG } from '../../utils/constants/feed';
 
 type GypsieFeedCarouselProps = {
   items: FeedItem[];
@@ -30,7 +30,7 @@ type GypsieFeedCarouselProps = {
 const GypsieFeedCarousel = ({
   items,
   currIndex,
-  handle = "",
+  handle = '',
   inView = true,
   onViewableItemsChanged,
 }: GypsieFeedCarouselProps) => {
@@ -49,22 +49,22 @@ const GypsieFeedCarousel = ({
         keyExtractor={el => el.id}
         renderItem={({ item, index }) => {
           if (item.media) {
-            const media = item.media.type.split("/");
+            const media = item.media.type.split('/');
             const mediaType = media[0]; // video, image
-            const mediaFormat = media[1]; // mp4, jpg
-            if (mediaType === "video") {
+            // const mediaFormat = media[1]; // mp4, jpg
+            if (mediaType === 'video') {
               return (
                 <VlogPlayer
                   vlog={item}
                   shouldPlay={inView && index === currIndex}
                 />
               );
-            } else if (mediaType === "image") {
+            } else if (mediaType === 'image') {
               return (
                 <View
                   style={{
-                    justifyContent: "center",
-                    alignItems: "center",
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     height: DEVICE_HEIGHT,
                     width: DEVICE_WIDTH,
                   }}>
@@ -117,17 +117,17 @@ const styles = StyleSheet.create({
     backgroundColor: PALETTE.BLACK,
   },
   errorTextWrapper: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
     padding: 16,
   },
   errorText: {
     width: DIMENSION.HUNDRED_PERCENT,
-    fontFamily: "Futura",
+    fontFamily: 'Futura',
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     color: PALETTE.OFFWHITE,
   },
 });

@@ -4,8 +4,8 @@ import {
   TextInput,
   TextStyle,
   View,
-} from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
+} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 type GypsieTextBoxProps = {
   customTextBoxStyles?: StyleProp<TextStyle>;
@@ -25,13 +25,12 @@ const GypsieTextBox = ({
   return (
     <View style={styles.textBoxWrapper}>
       {icon && (
-          <Icon name={icon} style={[styles.icon, customIconStyles]} size={20} />
-        )}
+        <Icon name={icon} style={[styles.icon, customIconStyles]} size={20} />
+      )}
       <TextInput
         style={[styles.textbox, customTextBoxStyles]}
         placeholder={placeholder}
-        secureTextEntry={secureTextEntry}>        
-      </TextInput>
+        secureTextEntry={secureTextEntry}></TextInput>
     </View>
   );
 };
@@ -44,18 +43,18 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   icon: {
-    position: "absolute",
+    position: 'absolute',
     top: 10,
     left: 20,
     zIndex: 1,
-    color: "#aaaaaa"
+    color: '#aaaaaa',
   },
   textbox: {
-    width: "100%",
-    height: 40,    
+    width: '100%',
+    height: 40,
     paddingLeft: 50,
     borderWidth: 1,
-    borderColor: "#dddddd",
+    borderColor: '#dddddd',
   },
 });
 

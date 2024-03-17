@@ -1,16 +1,16 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { forwardRef, useCallback, useEffect, useImperativeHandle } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   Extrapolate,
   interpolate,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from "react-native-reanimated";
-import { getStatusBarHeight } from "react-native-status-bar-height";
+} from 'react-native-reanimated';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '../../utils/constants/constants';
 
 type BottomSheetProps = {
   children?: React.ReactNode;
@@ -19,8 +19,8 @@ type BottomSheetProps = {
   maxTranslateY: number;
 };
 
-type BottomSheetRefProps = {
-  scrollTo: (destination: number) => void;
+export type BottomSheetRefProps = {
+  scrollTo: (destination: number, damping?: number) => void;
 };
 
 const BottomSheet = forwardRef<BottomSheetRefProps, BottomSheetProps>(
@@ -29,9 +29,12 @@ const BottomSheet = forwardRef<BottomSheetRefProps, BottomSheetProps>(
     const context = useSharedValue({ y: 0 });
 
     const scrollTo = useCallback(
-      (destination: number, damping: number = 20): void => {
-        "worklet";
-        translateY.value = withSpring(destination, { damping });
+      (destination: number): void => {
+        'worklet';
+        translateY.value = withSpring(destination, {
+          dampingRatio: 1,
+          duration: 1000,
+        });
         // translateY.value = Math.max(translateY.value, maxTranslateY);
       },
       [translateY],
@@ -49,15 +52,20 @@ const BottomSheet = forwardRef<BottomSheetRefProps, BottomSheetProps>(
         translateY.value = Math.max(translateY.value, maxTranslateY);
       })
       .onEnd(() => {
-        if (translateY.value > -DEVICE_HEIGHT / 3) {
+        if (translateY.value > -DEVICE_HEIGHT / 4) {
+          scrollTo(DEVICE_HEIGHT);
+        } else if (
+          translateY.value < -DEVICE_HEIGHT / 4 &&
+          translateY.value > -DEVICE_HEIGHT / 3
+        ) {
           scrollTo(-DEVICE_HEIGHT / 4);
         } else if (
-          translateY.value > -DEVICE_HEIGHT / 2 ||
-          translateY.value > (-2 * DEVICE_HEIGHT) / 3
+          translateY.value > -DEVICE_HEIGHT / 2 &&
+          translateY.value < -DEVICE_HEIGHT / 3
         ) {
           scrollTo(-DEVICE_HEIGHT / 2);
         } else {
-          scrollTo(maxTranslateY + STATUS_BAR_HEIGHT);
+          scrollTo(maxTranslateY);
         }
       });
 
@@ -84,7 +92,7 @@ const BottomSheet = forwardRef<BottomSheetRefProps, BottomSheetProps>(
 
     useEffect(() => {
       scrollTo(-DEVICE_HEIGHT / 4);
-    }, []);
+    }, [scrollTo]);
 
     return (
       <Animated.View
@@ -106,30 +114,30 @@ const BottomSheet = forwardRef<BottomSheetRefProps, BottomSheetProps>(
 
 const styles = StyleSheet.create({
   bottomSheet: {
-    position: "absolute",
-    alignSelf: "center",
+    position: 'absolute',
+    alignSelf: 'center',
     top: DEVICE_HEIGHT,
     padding: 20,
     paddingBottom: 0,
-    backgroundColor: "#ffffff",
-    shadowColor: "#888888",
+    backgroundColor: '#ffffff',
+    shadowColor: '#888888',
     shadowOpacity: 0.6,
     shadowOffset: { height: 2, width: 0 },
     zIndex: 2,
   },
   panLineBox: {
-    position: "absolute",
-    alignSelf: "center",
-    justifyContent: "center",
-    alignItems: "center",
+    position: 'absolute',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
     height: 20,
-    width: "100%",
+    width: '100%',
   },
   panLine: {
     height: 4,
     width: 75,
     borderRadius: 2,
-    backgroundColor: "#aaaaaa",
+    backgroundColor: '#aaaaaa',
   },
 });
 

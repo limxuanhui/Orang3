@@ -1,8 +1,5 @@
-import { Image, StyleSheet, View } from "react-native";
-import { PALETTE } from "../../utils/constants/palette";
-import { DEVICE_WIDTH } from "../../utils/constants/constants";
-import { PropsWithChildren, useState } from "react";
-import LinearGradient from "react-native-linear-gradient";
+import { Image, StyleSheet, View } from 'react-native';
+import { PALETTE } from '../../utils/constants/palette';
 
 // Create an avatar that shows GypsieSkeleton when loading image,
 // is pressable, scale on press and navigates to profile page
@@ -50,8 +47,8 @@ const GypsieAvatar = ({ uri }: GypsieAvatarProps) => {
     <View
       style={{
         // backgroundColor: "green",
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
       }}>
       <Image
         style={styles.avatar}

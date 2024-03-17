@@ -1,20 +1,20 @@
-import { Children, PropsWithChildren, useMemo } from "react";
-import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
+import { Children, PropsWithChildren, useMemo } from 'react';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '../../utils/constants/constants';
 
 export type AuxiliaryControlsProps = {
   customStyle?: StyleProp<ViewStyle>;
-  orientation?: "horizontal" | "vertical";
+  orientation?: 'horizontal' | 'vertical';
   position?:
-    | "top-left"
-    | "top-centre"
-    | "top-right"
-    | "centre-left"
-    | "centre"
-    | "centre-right"
-    | "bottom-left"
-    | "bottom-centre"
-    | "bottom-right";
+    | 'top-left'
+    | 'top-centre'
+    | 'top-right'
+    | 'centre-left'
+    | 'centre'
+    | 'centre-right'
+    | 'bottom-left'
+    | 'bottom-centre'
+    | 'bottom-right';
 };
 
 const VERTICAL_MARGIN = Math.max(0.02 * DEVICE_HEIGHT, 8);
@@ -32,13 +32,13 @@ const ROW_WIDTH = Math.max(0.8 * DEVICE_WIDTH, 200);
 */
 const AuxiliaryControls = ({
   customStyle,
-  orientation = "vertical",
-  position = "centre-right",
+  orientation = 'vertical',
+  position = 'centre-right',
   children,
 }: PropsWithChildren<AuxiliaryControlsProps>) => {
   const numOfItems = useMemo(() => Children.count(children), [children]);
   const HEIGHT =
-    orientation === "vertical"
+    orientation === 'vertical'
       ? numOfItems <= 3
         ? SMALL_COLUMN_HEIGHT
         : numOfItems <= 6
@@ -47,79 +47,79 @@ const AuxiliaryControls = ({
         ? LARGE_COLUMN_HEIGHT
         : DEVICE_HEIGHT
       : ROW_HEIGHT;
-  const WIDTH = orientation === "vertical" ? COLUMN_WIDTH : ROW_WIDTH;
+  const WIDTH = orientation === 'vertical' ? COLUMN_WIDTH : ROW_WIDTH;
 
   const orientationStyle: StyleProp<ViewStyle> = useMemo(() => {
-    return orientation === "vertical"
+    return orientation === 'vertical'
       ? {
-          flexDirection: "column",
+          flexDirection: 'column',
           height: HEIGHT,
           width: WIDTH,
-          justifyContent: "space-evenly",
-          alignItems: "center",
+          justifyContent: 'space-evenly',
+          alignItems: 'center',
         }
       : {
-          flexDirection: "row",
+          flexDirection: 'row',
           height: HEIGHT,
           width: WIDTH,
-          justifyContent: "space-evenly",
-          alignItems: "center",
+          justifyContent: 'space-evenly',
+          alignItems: 'center',
         };
-  }, [orientation]);
+  }, [HEIGHT, WIDTH, orientation]);
 
   const positionStyle: StyleProp<ViewStyle> = useMemo(() => {
     switch (position) {
-      case "top-left":
+      case 'top-left':
         return {
           top: 0,
           left: 0,
           marginTop: VERTICAL_MARGIN,
           marginLeft: HORIZONTAL_MARGIN,
         };
-      case "top-centre":
+      case 'top-centre':
         return {
           top: 0,
           left: DEVICE_WIDTH / 2 - WIDTH / 2,
           marginTop: VERTICAL_MARGIN,
         };
-      case "top-right":
+      case 'top-right':
         return {
           top: 0,
           right: 0,
           marginTop: VERTICAL_MARGIN,
           marginRight: HORIZONTAL_MARGIN,
         };
-      case "centre-left":
+      case 'centre-left':
         return {
           top: DEVICE_HEIGHT / 2 - HEIGHT / 2,
           left: 0,
           marginLeft: HORIZONTAL_MARGIN,
         };
-      case "centre":
+      case 'centre':
         return {
           top: DEVICE_HEIGHT / 2 - HEIGHT / 2,
           left: DEVICE_WIDTH / 2 - WIDTH / 2,
         };
-      case "centre-right":
+      case 'centre-right':
         return {
           top: DEVICE_HEIGHT / 2 - HEIGHT / 2,
           right: 0,
           marginRight: HORIZONTAL_MARGIN,
         };
-      case "bottom-left":
+      case 'bottom-left':
         return {
           bottom: 0,
           left: 0,
           marginBottom: VERTICAL_MARGIN,
           marginLeft: HORIZONTAL_MARGIN,
         };
-      case "bottom-centre":
+      case 'bottom-centre':
         return {
           bottom: 0,
           left: DEVICE_WIDTH / 2 - WIDTH / 2,
           marginBottom: VERTICAL_MARGIN,
         };
-      case "bottom-right":
+      case 'bottom-right':
         return {
           bottom: 0,
           right: 0,
@@ -129,7 +129,7 @@ const AuxiliaryControls = ({
       default:
         return {};
     }
-  }, [position]);
+  }, [HEIGHT, WIDTH, position]);
 
   return (
     <View
@@ -141,7 +141,7 @@ const AuxiliaryControls = ({
 
 const styles = StyleSheet.create({
   container: {
-    position: "absolute",
+    position: 'absolute',
     // backgroundColor: "#ffffff55",
     borderRadius: 8,
     zIndex: 100,

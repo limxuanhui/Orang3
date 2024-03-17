@@ -1,35 +1,23 @@
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
-
-enum Thickness {
-  "thin",
-  "normal",
-  "thick",
-}
-
-enum Shade {
-  "light",
-  "normal",
-  "dark",
-}
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
+import { DIMENSION } from '../../utils/constants/dimensions';
+import { PALETTE } from '../../utils/constants/palette';
 
 type DividerProps = {
   style?: StyleProp<ViewStyle>;
-  thickness?: "thin" | "normal" | "thick";
-  shade?: "light" | "normal" | "dark";
+  thickness?: 'thin' | 'normal' | 'thick';
+  shade?: 'light' | 'normal' | 'dark';
 };
 
 const Divider = ({
-  thickness = "normal",
-  shade = "normal",
+  thickness = 'normal',
+  shade = 'normal',
   style,
 }: DividerProps) => {
-  const height = thickness === "thin" ? 1 : thickness === "thick" ? 3 : 2;
+  const height = thickness === 'thin' ? 1 : thickness === 'thick' ? 3 : 2;
   const backgroundColor =
-    shade === "light"
+    shade === 'light'
       ? PALETTE.LIGHTGREY
-      : shade === "dark"
+      : shade === 'dark'
       ? PALETTE.DARKGREY
       : PALETTE.GREY;
 

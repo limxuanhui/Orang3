@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import { Animated, Image, StyleSheet, Text, View } from "react-native";
-import { useAnimatedStyle, useSharedValue } from "react-native-reanimated";
-import type { SupermanProps } from "./types/types";
-import { DEVICE_HEIGHT } from "../../../utils/constants/constants";
+import { useEffect } from 'react';
+import { Animated, StyleSheet } from 'react-native';
+import { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import type { SupermanProps } from './types/types';
+import { DEVICE_HEIGHT } from '../../../utils/constants/constants';
 
 const Superman = ({ progress }: SupermanProps) => {
   const translateX = useSharedValue(-100);
@@ -18,7 +18,7 @@ const Superman = ({ progress }: SupermanProps) => {
   }, [translateX.value]);
 
   useEffect(() => {
-    console.log("Progress: " + progress);
+    console.log('Progress: ' + progress);
     // translateX.value =
   }, [progress]);
 
@@ -26,7 +26,7 @@ const Superman = ({ progress }: SupermanProps) => {
     <Animated.Image
       style={[styles.superman, animatedStyle]}
       source={{
-        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/superman.png",
+        uri: '/Users/limxuanhui/bluextech/gypsie/assets/images/superman.png',
       }}
     />
   );
@@ -34,13 +34,13 @@ const Superman = ({ progress }: SupermanProps) => {
 
 const styles = StyleSheet.create({
   superman: {
-    position: "absolute",
+    position: 'absolute',
     // left: -100,
     bottom: DEVICE_HEIGHT / 3,
     height: 50,
     width: 100,
     borderWidth: 1,
-    borderColor: "green",
+    borderColor: 'green',
   },
 });
 

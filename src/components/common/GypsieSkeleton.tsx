@@ -1,11 +1,11 @@
-import { useEffect } from "react";
-import { StyleSheet } from "react-native";
+import { useEffect } from 'react';
+import { StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withTiming,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
 const GypsieSkeleton = () => {
   const opacity = useSharedValue<number>(1);
@@ -24,7 +24,7 @@ const GypsieSkeleton = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#b6c0ca" },
+  container: { flex: 1, backgroundColor: '#b6c0ca' },
 });
 
 export default GypsieSkeleton;

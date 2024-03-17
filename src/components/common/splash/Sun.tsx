@@ -1,13 +1,13 @@
-import { useEffect } from "react";
-import { StyleSheet } from "react-native";
+import { useEffect } from 'react';
+import { StyleSheet } from 'react-native';
 import Animated, {
-    Easing,
-    useAnimatedStyle,
-    useSharedValue,
-    withRepeat,
-    withTiming,
-} from "react-native-reanimated";
-import { DEVICE_WIDTH } from "../../../utils/constants/constants";
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from 'react-native-reanimated';
+import { DEVICE_WIDTH } from '../../../utils/constants/constants';
 
 const Sun = () => {
   const rotation = useSharedValue(0);
@@ -27,13 +27,13 @@ const Sun = () => {
       withTiming(360, { duration: 36000, easing: Easing.linear }),
       -1,
     );
-  }, []);
+  }, [rotation]);
 
   return (
     <Animated.Image
       style={[styles.sun, animatedStyle]}
       source={{
-        uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/sun_design3.png",
+        uri: '/Users/limxuanhui/bluextech/gypsie/assets/images/sun_design3.png',
       }}
       resizeMode="contain"
     />
@@ -42,7 +42,7 @@ const Sun = () => {
 
 const styles = StyleSheet.create({
   sun: {
-    position: "absolute",
+    position: 'absolute',
     top: -DEVICE_WIDTH * 0.4,
     right: -DEVICE_WIDTH * 0.4,
     width: DEVICE_WIDTH * 0.8,
