@@ -1,7 +1,7 @@
-import { StyleSheet, View } from "react-native";
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
-import { PALETTE } from "../../utils/constants/palette";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
+import { PALETTE } from '@constants/palette';
 
 type EmptyFeedProps = {};
 
@@ -11,8 +11,8 @@ const EmptyFeed = ({ children }: PropsWithChildren<EmptyFeedProps>) => {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
     backgroundColor: PALETTE.BLACK,

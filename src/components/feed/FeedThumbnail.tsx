@@ -1,20 +1,20 @@
-import { memo, useCallback } from "react";
-import { Image, Pressable, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import type { FeedThumbnailProps } from "./types/types";
-import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
-import { DEVICE_WIDTH } from "../../utils/constants/constants";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
+import { memo, useCallback } from 'react';
+import { Image, Pressable, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { FeedThumbnailProps } from './types/types';
+import type { ModalNavigatorNavigationProp } from '../navigators/types/types';
+import { DEVICE_WIDTH } from '@constants/constants';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
 
 const FeedThumbnail = memo(({ data }: FeedThumbnailProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const uri =
-    "/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png";
+    '/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png';
 
   const onPressThumbnail = useCallback(() => {
-    navigation.push("Modal", {
-      screen: "Feed",
+    navigation.push('Modal', {
+      screen: 'Feed',
       params: {
         feedId: data.feedId,
       },
@@ -37,7 +37,7 @@ const FeedThumbnail = memo(({ data }: FeedThumbnailProps) => {
           { aspectRatio: data.cover.width / data.cover.height || 1 },
         ]}
         source={{
-          uri: data.cover?.type.startsWith("image") ? data.cover.uri : uri,
+          uri: data.cover?.type.startsWith('image') ? data.cover.uri : uri,
         }}
         resizeMode="contain"
       />
@@ -47,8 +47,8 @@ const FeedThumbnail = memo(({ data }: FeedThumbnailProps) => {
 
 const styles = StyleSheet.create({
   thumbnail: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     width: DEVICE_WIDTH / 3 - 8,
     backgroundColor: PALETTE.OFFWHITE,
     margin: 3,
@@ -56,13 +56,13 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: DIMENSION.HUNDRED_PERCENT,
-    backgroundColor: "green",
+    backgroundColor: 'green',
   },
   image: {
     width: DIMENSION.HUNDRED_PERCENT,
     borderRadius: 8,
   },
-  stackIcon: { position: "absolute", bottom: 8, right: 8 },
+  stackIcon: { position: 'absolute', bottom: 8, right: 8 },
 });
 
 export default FeedThumbnail;

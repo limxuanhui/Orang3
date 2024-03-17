@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import type { FeedDescriptionProps } from "./types/types";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
+import { StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { FeedDescriptionProps } from './types/types';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
 
 const FeedDescription = ({ handle, caption }: FeedDescriptionProps) => {
   const insets = useSafeAreaInsets();
@@ -21,8 +21,8 @@ const FeedDescription = ({ handle, caption }: FeedDescriptionProps) => {
 
 const styles = StyleSheet.create({
   descriptionBox: {
-    justifyContent: "space-evenly",
-    position: "absolute",
+    justifyContent: 'space-evenly',
+    position: 'absolute',
     minHeight: DIMENSION.FIFTEEN_PERCENT,
     width: DIMENSION.SEVENTY_PERCENT,
     paddingHorizontal: 16,
@@ -30,9 +30,9 @@ const styles = StyleSheet.create({
   },
   handleBox: {},
   handle: {
-    fontFamily: "Lilita One",
+    fontFamily: 'Lilita One',
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     color: PALETTE.WHITE,
   },
   captionBox: {},

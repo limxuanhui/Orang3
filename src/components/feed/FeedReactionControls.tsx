@@ -1,49 +1,44 @@
-import { useCallback, useState } from "react";
+import { useCallback } from 'react';
 import {
   Image,
   Pressable,
   PressableStateCallbackType,
   StyleSheet,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import AuxiliaryControls from "../common/AuxiliaryControls";
-import BookmarkIcon from "../common/icons/BookmarkIcon";
-import CommentIcon from "../common/icons/CommentIcon";
-import GypsieButton from "../common/buttons/GypsieButton";
-import HeartIcon from "../common/icons/HeartIcon";
-import ShareIcon from "../common/icons/ShareIcon";
-import type { FeedReactionControlsProps } from "./types/types";
-import type { ModalNavigatorNavigationProp } from "../navigators/types/types";
-import { DIMENSION } from "../../utils/constants/dimensions";
-import { PALETTE } from "../../utils/constants/palette";
-import LinkIcon from "../common/icons/LinkIcon";
-import { AWS_S3_MEDIA_URL } from "@env";
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import AuxiliaryControls from '../common/AuxiliaryControls';
+import GypsieButton from '../common/buttons/GypsieButton';
+import type { FeedReactionControlsProps } from './types/types';
+import type { ModalNavigatorNavigationProp } from '../navigators/types/types';
+import { DIMENSION } from '../../utils/constants/dimensions';
+import { PALETTE } from '../../utils/constants/palette';
+import LinkIcon from '../common/icons/LinkIcon';
 
 const FeedReactionControls = ({
   creator,
-  isLiked,
-  isBookmarked,
-  likes,
-  comments,
-  bookmarks,
-  shares,
   taleId,
-  onPressComments,
-}: FeedReactionControlsProps) => {
+}: // isLiked,
+// isBookmarked,
+// likes,
+// comments,
+// bookmarks,
+// shares,
+// onPressComments,
+FeedReactionControlsProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
-  const [reactionCounts, setReactionCounts] = useState<{
-    likes: number;
-    comments: number;
-    bookmarks: number;
-    shares: number;
-  }>({
-    likes: likes ?? 0,
-    comments: comments ?? 0,
-    bookmarks: bookmarks ?? 0,
-    shares: shares ?? 0,
-  });
-  const [liked, setLiked] = useState<boolean>(isLiked || false);
-  const [bookmarked, setBookmarked] = useState<boolean>(isBookmarked || false);
+  // const [reactionCounts, setReactionCounts] = useState<{
+  //   likes: number;
+  //   comments: number;
+  //   bookmarks: number;
+  //   shares: number;
+  // }>({
+  //   likes: likes ?? 0,
+  //   comments: comments ?? 0,
+  //   bookmarks: bookmarks ?? 0,
+  //   shares: shares ?? 0,
+  // });
+  // const [liked, setLiked] = useState<boolean>(isLiked || false);
+  // const [bookmarked, setBookmarked] = useState<boolean>(isBookmarked || false);
 
   const onPressReactionControlStyle = useCallback(
     ({ pressed }: PressableStateCallbackType) => {
@@ -59,11 +54,11 @@ const FeedReactionControls = ({
   );
 
   const onPressAvatar = useCallback(() => {
-    navigation.push("Modal", {
-      screen: "Profile",
+    navigation.push('Modal', {
+      screen: 'Profile',
       params: { userId: creator.id, avatarUri: creator.avatar?.uri },
     });
-  }, [navigation]);
+  }, [creator, navigation]);
 
   // const parseCount = useCallback((count: number): string => {
   //   const parsedCount =
@@ -104,15 +99,15 @@ const FeedReactionControls = ({
 
   const onPressLink = useCallback(() => {
     if (taleId) {
-      navigation.navigate("Modal", {
-        screen: "TaleView",
+      navigation.navigate('Modal', {
+        screen: 'TaleView',
         params: {
           id: taleId,
           creator,
         },
       });
     }
-  }, [navigation]);
+  }, [creator, navigation, taleId]);
 
   return (
     <AuxiliaryControls>
@@ -120,7 +115,8 @@ const FeedReactionControls = ({
         <Image
           style={styles.avatar}
           source={{
-            uri: `${AWS_S3_MEDIA_URL}/${creator.avatar?.uri}`,
+            // uri: `${AWS_S3_MEDIA_URL}/${creator.avatar?.uri}`,
+            uri: creator.avatar?.uri,
           }}
         />
       </Pressable>
@@ -205,8 +201,8 @@ const styles = StyleSheet.create({
     borderColor: PALETTE.WHITE,
   },
   reactionControl: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     height: 40,
     width: 40,
   },
@@ -216,8 +212,8 @@ const styles = StyleSheet.create({
   reactionCount: {
     marginTop: 2,
     color: PALETTE.WHITE,
-    fontWeight: "500",
-    textAlign: "center",
+    fontWeight: '500',
+    textAlign: 'center',
   },
 });
 

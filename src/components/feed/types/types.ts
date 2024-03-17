@@ -1,11 +1,18 @@
-import { GypsieUser } from "../../navigators/types/types";
-// import type { Creator } from "../../tale/types/types";
+import { GypsieUser } from '../../navigators/types/types';
 
 // Data types
 export type BaseFeed = {
-  id: string;
-  creator: GypsieUser;
-  items: FeedItem[];
+  metadata: {
+    id: string;
+    creator: GypsieUser;
+    thumbnail?: Media;
+    taleId?: string;
+    pk?: string;
+    sk?: string;
+    gsi1PK?: string;
+    gsi1SK?: string;
+  };
+  feedItems: FeedItem[];
 };
 
 export type Feed = BaseFeed & {
@@ -15,7 +22,6 @@ export type Feed = BaseFeed & {
   comments?: number;
   bookmarks?: number;
   shares?: number;
-  taleId?: string;
 };
 
 export type FeedItem = {
@@ -31,12 +37,12 @@ export type FeedThumbnailInfo = {
 };
 
 export type MediaMimeType =
-  | "image/jpg"
-  | "image/jpeg"
-  | "image/png"
-  | "image/gif"
-  | "video/mp4"
-  | "image/unknown";
+  | 'image/jpg'
+  | 'image/jpeg'
+  | 'image/png'
+  | 'image/gif'
+  | 'video/mp4'
+  | 'image/unknown';
 
 export type Media = {
   id: string;

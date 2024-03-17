@@ -1,35 +1,40 @@
-import { StyleSheet, View } from "react-native";
-import FeedCarousel from "./FeedCarousel";
-import FeedReactionControls from "./FeedReactionControls";
-import type { FeedDisplayProps } from "./types/types";
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../../utils/constants/constants";
-import { PALETTE } from "../../utils/constants/palette";
+import { StyleSheet, View } from 'react-native';
+import FeedCarousel from './FeedCarousel';
+import FeedReactionControls from './FeedReactionControls';
+import type { FeedDisplayProps } from './types/types';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
+import { PALETTE } from '@constants/palette';
 
 const FeedDisplay = ({ data, inView }: FeedDisplayProps) => {
   const {
-    creator,
-    items,
+    metadata,
+    feedItems,
     isLiked,
     isBookmarked,
     likes,
     comments,
     bookmarks,
     shares,
-    taleId,
   } = data;
-  console.log("DATA: ", JSON.stringify(data, null,4));
+  if (data.feedItems[0].media.type === 'video/mp4') {
+    console.log('data in view? ', inView);
+  }
   return (
     <View style={styles.container}>
-      <FeedCarousel handle={creator.handle} items={items} inView={inView} />
+      <FeedCarousel
+        handle={metadata.creator.handle}
+        items={feedItems}
+        inView={inView}
+      />
       <FeedReactionControls
-        creator={creator}
+        creator={metadata.creator}
+        taleId={metadata.taleId}
         isLiked={isLiked}
         isBookmarked={isBookmarked}
         likes={likes}
         comments={comments}
         bookmarks={bookmarks}
         shares={shares}
-        taleId={taleId}
         // onPressComments={() => openBottomSheet()}
       />
     </View>

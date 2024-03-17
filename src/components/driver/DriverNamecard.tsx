@@ -1,42 +1,42 @@
-import { StyleSheet, Text, View } from "react-native";
-import { Card, Image, Rating, SocialIcon } from "@rneui/themed";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { DriverNamecardInfo } from "../screens/driver/DriversOverviewScreen";
+import { StyleSheet, Text, View } from 'react-native';
+import { Card, Image, SocialIcon } from '@rneui/themed';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { DriverNamecardInfo } from '../screens/driver/DriversOverviewScreen';
 
 type DriverNamecardProps = {
   data: DriverNamecardInfo;
 };
 
 const DriverNamecard = ({ data }: DriverNamecardProps) => {
-  const driver = {
-    title: "The Jeju Expert",
-    name: "Joseph Lim",
-    avatarUri: "/Users/limxuanhui/bluextech/gypsie/assets/avatars/joseph.jpg",
-  };
+  // const driver = {
+  //   title: 'The Jeju Expert',
+  //   name: 'Joseph Lim',
+  //   avatarUri: '/Users/limxuanhui/bluextech/gypsie/assets/avatars/joseph.jpg',
+  // };
   return (
     <Card containerStyle={styles.container}>
       <Card.Title>{data.title}</Card.Title>
       <Card.Divider />
-      <View style={{ flexDirection: "row" }}>
-        <View style={{ width:'30%' }}>
+      <View style={{ flexDirection: 'row' }}>
+        <View style={{ width: '30%' }}>
           <Image
             style={{ width: 100, height: 100 }}
             resizeMode="contain"
             source={{
               uri: data.avatarUri,
-            }}            
+            }}
           />
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-evenly",
-              width: "100%",
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              width: '100%',
               borderWidth: 1,
-              borderColor: "red",
+              borderColor: 'red',
               padding: 8,
             }}>
-            <FontAwesome name="heart" size={20} color={"orange"} />
-            <FontAwesome name="thumbs-up" size={20} color={"orange"} />
+            <FontAwesome name="heart" size={20} color={'orange'} />
+            <FontAwesome name="thumbs-up" size={20} color={'orange'} />
           </View>
         </View>
         <View>
