@@ -7,8 +7,8 @@ import {
 } from 'react-native-image-picker';
 import { v4 as uuidv4 } from 'uuid';
 import { ulid } from 'ulid';
-import axios, { AxiosResponse } from 'axios';
-import { FeedItem } from '@components/feed/types/types';
+import { AxiosResponse } from 'axios';
+import { FeedItem, FeedMetadata } from '@components/feed/types/types';
 import type { ModalNavigatorNavigationProp } from '@components/navigators/types/types';
 import useModalHandlers from '@hooks/useModalHandlers';
 import { useAppDispatch, useAppSelector } from '@redux/hooks';
@@ -21,11 +21,14 @@ import {
 } from '@redux/reducers/writeFeedSlice';
 import { AuthContext } from '@contexts/AuthContext';
 import {
+  UploadMediaDetails,
   getBlobsFromLocalUris,
   getPresignedUrls,
   uploadMediaFiles,
 } from '@helpers/functions';
-import { BACKEND_BASE_URL } from '@env';
+// import { BACKEND_BASE_URL } from '@env';
+import { axiosClient, queryClient } from '@helpers/singletons';
+import { useMutation } from '@tanstack/react-query';
 
 const imageLibraryOptions: ImageLibraryOptions = {
   mediaType: 'mixed',
@@ -44,13 +47,6 @@ const useWriteFeedManager = () => {
     posting,
   } = useAppSelector(state => state.writeFeed);
   const dispatch = useAppDispatch();
-
-  const onChangeCaption = useCallback(
-    (text: string) => {
-      setCaptionWritten(text);
-    },
-    [setCaptionWritten],
-  );
 
   const openGallery = useCallback(async () => {
     await launchImageLibrary(imageLibraryOptions, res => {
@@ -75,6 +71,13 @@ const useWriteFeedManager = () => {
     });
   }, [currIndex, dispatch]);
 
+  const onChangeCaption = useCallback(
+    (text: string) => {
+      setCaptionWritten(text);
+    },
+    [setCaptionWritten],
+  );
+
   const onPressAdd = useCallback(() => {
     openGallery();
   }, [openGallery]);
@@ -92,6 +95,12 @@ const useWriteFeedManager = () => {
     openModal();
   }, [openModal]);
 
+  const onSaveEditCaption = useCallback(() => {
+    Keyboard.dismiss();
+    dispatch(writeFeed_editCaption({ id: currIndex, caption: captionWritten }));
+    closeModal();
+  }, [captionWritten, currIndex, closeModal, dispatch]);
+
   const onPressPost = useCallback(async () => {
     dispatch(writeFeed_setPosting(true));
     if (!user) {
@@ -99,15 +108,18 @@ const useWriteFeedManager = () => {
     }
 
     console.warn('Posting!');
-    const url = `${BACKEND_BASE_URL}/feeds/new`;
+    const url = '/feeds/new';
 
     // For new feed
     const blobs = await getBlobsFromLocalUris(items.map(el => el.media.uri));
-    const { presignedUrls, keys } = await getPresignedUrls(
+    const uploadMediaDetailsList: UploadMediaDetails[] = await getPresignedUrls(
       items.map(el => el.media.type),
     );
-    if (blobs.length !== presignedUrls.length) return;
-    // axios.post(url,{},{onUploadProgress: (progressEvent)=> {console.log("Progress: ", progressEvent)}})
+    if (blobs.length !== uploadMediaDetailsList.length) {
+      return;
+    }
+    const presignedUrls = uploadMediaDetailsList.map(el => el.presignedUrl);
+    const keys = uploadMediaDetailsList.map(el => el.key);
 
     const uploadMediaFilesResponse: AxiosResponse[] | null =
       await uploadMediaFiles(presignedUrls, blobs);
@@ -118,11 +130,26 @@ const useWriteFeedManager = () => {
     }
 
     // Success in uploading all media files, dispatch to save the new media file names
-    const feedData = items.map((el: FeedItem, index: number) => {
+    const feedData: FeedItem[] = items.map((el: FeedItem, index: number) => {
       return { ...el, media: { ...el.media, uri: keys[index] } };
     });
-    const requestData = {
-      metadata: { id: ulid(), creator: user },
+    const thumbnailSrc = feedData[0];
+    const requestData: { metadata: FeedMetadata; feedItems: FeedItem[] } = {
+      metadata: {
+        id: ulid(),
+        creator: user,
+        thumbnail: {
+          ...thumbnailSrc.media,
+          type: thumbnailSrc.media.type.startsWith('image')
+            ? thumbnailSrc.media.type
+            : 'image/gif',
+          width: 200,
+          height: (thumbnailSrc.media.height / thumbnailSrc.media.width) * 200,
+          uri: thumbnailSrc.media.type.startsWith('image')
+            ? thumbnailSrc.media.uri
+            : `${thumbnailSrc.media.uri.split('.')[0]}.gif`,
+        },
+      },
       feedItems: feedData,
     };
     console.log(
@@ -131,7 +158,7 @@ const useWriteFeedManager = () => {
     );
 
     // Upload feed to backend url at /api/v1/feeds with axios.post (or axios.put/patch)
-    const uploadMetadataResponse = await axios.post(url, requestData);
+    const uploadMetadataResponse = await axiosClient.post(url, requestData);
     console.log(
       'Metadata response: ',
       JSON.stringify(uploadMetadataResponse, null, 4),
@@ -140,19 +167,16 @@ const useWriteFeedManager = () => {
     // If success in uploading feed, proceed
     // Else try to try to check for uploaded media files, and delete them.
 
-    // Dispatch resetWriteFeedSlice, invalidate query cache for feeds, feeds-md
+    // Dispatch resetWriteFeedSlice, invalidate query cache for feeds, feeds-md, then go back to previous screen
     dispatch(writeFeed_setPosting(false));
     dispatch(writeFeed_resetWriteFeedSlice());
-
-    // Navigate back to home screen with navigation.goBack(),
+    queryClient.invalidateQueries({ queryKey: ['feeds'] });
     navigation.goBack();
   }, [items, navigation, user, dispatch]);
 
-  const onSaveEditCaption = useCallback(() => {
-    Keyboard.dismiss();
-    dispatch(writeFeed_editCaption({ id: currIndex, caption: captionWritten }));
-    closeModal();
-  }, [captionWritten, currIndex, closeModal, dispatch]);
+  const { mutate } = useMutation({
+    mutationFn: onPressPost,
+  });
 
   useEffect(() => {
     setCaptionWritten(items[currIndex]?.caption || '');
@@ -169,7 +193,7 @@ const useWriteFeedManager = () => {
     onPressAdd,
     onPressDelete,
     onPressEdit,
-    onPressPost,
+    onPressPost: mutate,
     onSaveEditCaption,
   };
 };

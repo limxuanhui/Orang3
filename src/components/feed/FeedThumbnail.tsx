@@ -2,14 +2,15 @@ import { memo, useCallback } from 'react';
 import { Image, Pressable, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { FeedThumbnailProps } from './types/types';
-import type { ModalNavigatorNavigationProp } from '../navigators/types/types';
+import type { ModalNavigatorNavigationProp } from '@navigators/types/types';
 import { DEVICE_WIDTH } from '@constants/constants';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
+import { AWS_CLOUDFRONT_URL_THUMBNAIL } from '@env';
 
 const FeedThumbnail = memo(({ data }: FeedThumbnailProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
-  const uri =
+  const defaultUri =
     '/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png';
 
   const onPressThumbnail = useCallback(() => {
@@ -34,11 +35,14 @@ const FeedThumbnail = memo(({ data }: FeedThumbnailProps) => {
       <Image
         style={[
           styles.image,
-          { aspectRatio: data.cover.width / data.cover.height || 1 },
+          { aspectRatio: data.media.width / data.media.height || 1 },
         ]}
         source={{
-          uri: data.cover?.type.startsWith('image') ? data.cover.uri : uri,
+          uri: data.media?.type.startsWith('image')
+            ? `${AWS_CLOUDFRONT_URL_THUMBNAIL}/${data.media.uri}`
+            : defaultUri,
         }}
+        // onLoad={(props) => console.log(props)}
         resizeMode="contain"
       />
     </Pressable>

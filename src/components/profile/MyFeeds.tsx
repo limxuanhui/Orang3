@@ -1,4 +1,4 @@
-import { memo, useContext, useMemo } from 'react';
+import { memo, useCallback, useContext, useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -7,43 +7,42 @@ import MasonryList from '@react-native-seoul/masonry-list';
 import FeedThumbnail from '@components/feed/FeedThumbnail';
 import type { FeedThumbnailInfo } from '@components/feed/types/types';
 import type { MyFeedsProps } from './types/types';
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
+import { DEVICE_HEIGHT } from '@constants/constants';
 import { PALETTE } from '@constants/palette';
+import { useQueryClient } from '@tanstack/react-query';
 
 const MyFeeds = memo(({ data }: MyFeedsProps) => {
   const insets = useSafeAreaInsets();
   const bh = useContext(BottomTabBarHeightContext) || insets.bottom;
   const height = useMemo(() => (1 - 0.25 - 0.05) * DEVICE_HEIGHT - bh, [bh]);
+  const queryClient = useQueryClient();
+
+  const onRefresh = useCallback(() => {
+    console.warn('Refreshing!');
+    // Do we want to invalidate all feeds metadata for all user profiles, or just the current loaded one?
+    queryClient.invalidateQueries({ queryKey: ['feeds-md'] });
+  }, [queryClient]);
 
   return (
     <View style={[styles.container, { height }]}>
       {!data ? (
-        <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={styles.flexCenter}>
           <ActivityIndicator size={48} color={PALETTE.ORANGE} />
         </View>
       ) : data.length === 0 ? (
-        <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text
-            style={{
-              color: PALETTE.GREY,
-              fontFamily: 'Futura',
-              fontSize: 24,
-              fontWeight: 'bold',
-            }}>
-            You have no feeds...
-          </Text>
+        <View style={styles.flexCenter}>
+          <Text style={styles.message}>No feeds to show...</Text>
         </View>
       ) : (
         <MasonryList
-          contentContainerStyle={{ paddingHorizontal: 2 }}
+          contentContainerStyle={styles.masonryListContentContainer}
           data={data}
           renderItem={el => (
             <FeedThumbnail data={el.item as FeedThumbnailInfo} />
           )}
           numColumns={3}
           showsVerticalScrollIndicator={false}
+          onRefresh={onRefresh}
         />
       )}
     </View>
@@ -51,11 +50,15 @@ const MyFeeds = memo(({ data }: MyFeedsProps) => {
 });
 
 const styles = StyleSheet.create({
-  container: {
-    // backgroundColor: PALETTE.GREYISHBLUE,
-    height: DEVICE_HEIGHT,
-    width: DEVICE_WIDTH,
+  container: {},
+  flexCenter: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  message: {
+    color: PALETTE.GREY,
+    fontFamily: 'Futura',
+    fontSize: 24,
+    fontWeight: 'bold',
   },
+  masonryListContentContainer: { paddingHorizontal: 2 },
 });
 
 export default MyFeeds;

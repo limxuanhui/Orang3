@@ -12,8 +12,6 @@ const ProfileStack = createStackNavigator<ProfileStackNavigatorParamList>();
 
 const ProfileStackNavigator = () => {
   const { user } = useContext(AuthContext);
-  const userId = user?.id;
-  const avatarUri = user?.avatar?.uri;
 
   return (
     <ProfileStack.Navigator
@@ -22,10 +20,7 @@ const ProfileStackNavigator = () => {
       <ProfileStack.Screen
         name="Profile"
         component={ProfileScreen}
-        initialParams={{
-          userId,
-          avatarUri,
-        }}
+        initialParams={{ user }}
         options={{
           // headerShown: true,
           headerBackTitleVisible: true,

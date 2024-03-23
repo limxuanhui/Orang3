@@ -5,12 +5,12 @@ import type {
 import type { StackNavigationProp } from '@react-navigation/stack';
 import type {
   AppStackNavigatorParamList,
+  GypsieUser,
   ModalNavigatorParamList,
 } from '@navigators/types/types';
 
 export type ProfileScreenParams = {
-  userId?: string;
-  avatarUri?: string;
+  user: GypsieUser;
 };
 
 export type ProfileStackNavigatorParamList = {

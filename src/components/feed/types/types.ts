@@ -1,17 +1,15 @@
 import { GypsieUser } from '../../navigators/types/types';
 
 // Data types
+export type FeedMetadata = {
+  id: string;
+  creator: GypsieUser;
+  thumbnail: Media;
+  taleId?: string;
+};
+
 export type BaseFeed = {
-  metadata: {
-    id: string;
-    creator: GypsieUser;
-    thumbnail?: Media;
-    taleId?: string;
-    pk?: string;
-    sk?: string;
-    gsi1PK?: string;
-    gsi1SK?: string;
-  };
+  metadata: FeedMetadata;
   feedItems: FeedItem[];
 };
 
@@ -33,7 +31,7 @@ export type FeedItem = {
 export type FeedThumbnailInfo = {
   feedId: string;
   creator: GypsieUser;
-  cover: Media;
+  media: Media;
 };
 
 export type MediaMimeType =
@@ -50,7 +48,6 @@ export type Media = {
   uri: string;
   height: number;
   width: number;
-  // aspectRatio: number;
 };
 
 // Component properties

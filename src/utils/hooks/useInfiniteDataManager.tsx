@@ -4,10 +4,9 @@ import {
   useInfiniteQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import axios from 'axios';
-import { BACKEND_BASE_URL } from '@env';
 import { DUMMY_DATABASE } from '@data/database';
 import type { DataKey, DataMode } from '@data/types/types';
+import { axiosClient } from '@helpers/singletons';
 
 /**
  * useInfiniteDataManager manages the lifecycle of data (fetching, caching, invalidating)
@@ -26,14 +25,11 @@ const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
       switch (dataMode) {
         case 'prod':
           try {
-            let url = `${BACKEND_BASE_URL}/${key}`;
+            let url = `/${key}`;
             if (pageParam) {
               url = `${url}?base64Key=${pageParam}`;
             }
-            console.log('Querying infinite data for: ', key, ' @ ', url);
-            const response = await axios.get(url);
-            // printPrettyJson(response);
-
+            const response = await axiosClient.get(url);
             return response.data;
           } catch (err) {
             console.error(err);
@@ -64,46 +60,11 @@ const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
       infiniteQueryOptions({
         queryKey: [dataKey],
         queryFn,
-        // gcTime,
-        // enabled,
         networkMode: dataMode === 'prod' ? 'online' : 'always',
         getNextPageParam: lastPage => {
-          console.log('in getNextPageParam: ', lastPage.lastEvaluatedKey);
-          //   console.log("=======getNextPageParam=========");
-          //   console.log("lastPage len: ", lastPage.length);
-          //   console.log("allPages len: ", allPages.length);
-          //   console.log("lastPageParam: ", lastPageParam);
-          //   console.log("allPageParams: ", allPageParams);
-          //   console.log("===========================\n");
           return lastPage.lastEvaluatedKey || undefined;
         },
-        // getPreviousPageParam: (
-        //   firstPage,
-        //   allPages,
-        //   firstPageParam,
-        //   allPageParams,
-        // ) => {
-        //   return firstPageParam;
-        // },
         initialPageParam: null,
-        // initialData,
-        // initialDataUpdatedAt,
-        // meta,
-        // notifyOnChangeProps,
-        // placeholderData,
-        // queryKeyHashFn,
-        // refetchInterval,
-        // refetchIntervalInBackground,
-        // refetchOnMount,
-        // refetchOnReconnect,
-        // refetchOnWindowFocus,
-        // retry,
-        // retryOnMount,
-        // retryDelay,
-        // select,
-        staleTime: 15000,
-        // structuralSharing,
-        // throwOnError,
       }),
     [dataKey, dataMode, queryFn],
   );

@@ -26,9 +26,14 @@ export const getBlobsFromLocalUris = async (
   return blobs;
 };
 
+export type UploadMediaDetails = {
+  presignedUrl: string;
+  key: string;
+};
+
 export const getPresignedUrls = async (
   items: MediaMimeType[],
-): Promise<{ presignedUrls: string[]; keys: string[] }> => {
+): Promise<UploadMediaDetails[]> => {
   let getPresignedUrlsResponse: AxiosResponse;
   try {
     getPresignedUrlsResponse = await axios.post(
@@ -37,24 +42,18 @@ export const getPresignedUrls = async (
     );
   } catch (err) {
     console.error(err);
-    return { presignedUrls: [], keys: [] };
+    return [];
   }
 
-  const presignedUrls = getPresignedUrlsResponse.data.map(
-    (el: { data: any }) => {
+  const uploadMediaDetails = getPresignedUrlsResponse.data.map(
+    (el: { data: { url: string; key: string } }) => {
       if (el.data) {
-        return el.data.url;
+        return { presignedUrl: el.data.url, key: el.data.key };
       }
     },
   );
 
-  const keys = getPresignedUrlsResponse.data.map((el: { data: any }) => {
-    if (el.data) {
-      return el.data.key;
-    }
-  });
-
-  return { presignedUrls, keys };
+  return uploadMediaDetails;
 };
 
 export const uploadMediaFiles = async (

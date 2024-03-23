@@ -56,7 +56,7 @@ FeedReactionControlsProps) => {
   const onPressAvatar = useCallback(() => {
     navigation.push('Modal', {
       screen: 'Profile',
-      params: { userId: creator.id, avatarUri: creator.avatar?.uri },
+      params: { user: creator },
     });
   }, [creator, navigation]);
 

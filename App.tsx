@@ -3,35 +3,62 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { Provider } from 'react-redux';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { AuthContext } from '@contexts/AuthContext';
 import useAuthManager from '@hooks/useAuthManager';
 import RootStackNavigator from '@navigators/RootStackNavigator';
 import store from '@redux/store';
 import { GOOGLE_IOS_CLIENT_ID } from '@env';
+// import NetInfo, { useNetInfo } from '@react-native-community/netinfo';
+// import { useEffect } from 'react';
+// import { ActivityIndicator } from 'react-native-paper';
+// import { PALETTE } from '@constants/palette';
+// import { Text, View } from 'react-native';
+// import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
+import { queryClient } from '@helpers/singletons';
 
 GoogleSignin.configure({
   iosClientId: GOOGLE_IOS_CLIENT_ID,
 });
 
-const queryClient = new QueryClient();
-
 const App = (): JSX.Element => {
   const authInfo = useAuthManager();
-  // const isDarkMode = useColorScheme() === "dark";
-  // const dataKey = 'key0';
-  // const dataMode = 'prod';
-  // const x = 'key1';
-  // const {} = useQuery({
-  //   queryKey: [dataKey],
-  //   queryFn: () => {
-  //     return x;
-  //   },
-  //   networkMode: dataMode === 'prod' ? 'online' : 'always',
-  //   // initialPageParam: null,
-  //   // getNextPageParam: (lastPage: { lastEvaluatedKey: any; }) => lastPage.lastEvaluatedKey,
-  //   staleTime: 15000,
-  // });
+  // const { isConnected } = useNetInfo();
+
+  // useEffect(() => {
+  //   NetInfo.addEventListener(state => {
+  //     console.log('Connection type', state.type);
+  //     console.log('Is connected?', state.isConnected);
+  //   });
+  // }, []);
+
+  // // useEffect(() => {
+  // //   // queryClient.prefetchQuery({ queryKey: ['feeds'], queryFn: () => {} });
+  // // }, []);
+
+  // if (!isConnected) {
+  //   return (
+  //     <View
+  //       style={{
+  //         justifyContent: 'center',
+  //         alignItems: 'center',
+  //         width: DEVICE_WIDTH,
+  //         height: DEVICE_HEIGHT,
+  //         backgroundColor: PALETTE.GREYISHBLUE,
+  //       }}>
+  //       <ActivityIndicator size={60} color={PALETTE.ORANGE} />
+  //       {/* <Text
+  //         style={{
+  //           margin: 16,
+  //           fontFamily: 'Futura',
+  //           fontSize: 24,
+  //           color: PALETTE.OFFWHITE,
+  //         }}>
+  //         Trying to find a connection...
+  //       </Text> */}
+  //     </View>
+  //   );
+  // }
 
   return (
     <KeyboardProvider>

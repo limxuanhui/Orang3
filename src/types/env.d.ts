@@ -7,4 +7,6 @@ declare module '@env' {
   export const AWS_API_GATEWAY_S3_PRESIGNED_URL: string;
   export const AWS_API_GATEWAY_S3_PRESIGNED_URLS_LIST: string;
   export const AWS_S3_MEDIA_URL: string;
+  export const AWS_CLOUDFRONT_URL_RAW: string;
+  export const AWS_CLOUDFRONT_URL_THUMBNAIL: string;
 }

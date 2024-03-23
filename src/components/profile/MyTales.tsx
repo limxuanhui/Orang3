@@ -18,26 +18,16 @@ const MyTales = memo(({ data }: MyTalesProps) => {
   return (
     <View style={[styles.container, { height: height }]}>
       {!data ? (
-        <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={styles.flexCenter}>
           <ActivityIndicator size={48} color={PALETTE.ORANGE} />
         </View>
       ) : data.length === 0 ? (
-        <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text
-            style={{
-              color: PALETTE.GREY,
-              fontFamily: 'Futura',
-              fontSize: 24,
-              fontWeight: 'bold',
-            }}>
-            You have no tales...
-          </Text>
+        <View style={styles.flexCenter}>
+          <Text style={styles.message}>No tales to show...</Text>
         </View>
       ) : (
         <MasonryList
-          contentContainerStyle={{ paddingHorizontal: 2 }}
+          contentContainerStyle={styles.masonryListContentContainer}
           data={data}
           renderItem={el => (
             <TaleThumbnail data={el.item as TaleThumbnailInfo} />
@@ -52,6 +42,14 @@ const MyTales = memo(({ data }: MyTalesProps) => {
 
 const styles = StyleSheet.create({
   container: {},
+  flexCenter: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  message: {
+    color: PALETTE.GREY,
+    fontFamily: 'Futura',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  masonryListContentContainer: { paddingHorizontal: 2 },
 });
 
 export default MyTales;
