@@ -5,6 +5,7 @@ import type { FeedItemThumbnailsCarouselProps } from './types/types';
 import type { ModalNavigatorNavigationProp } from '@components/navigators/types/types';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
+import { AWS_CLOUDFRONT_URL_THUMBNAIL } from '@env';
 
 const FeedItemThumbnailsCarousel = ({
   data,
@@ -12,18 +13,18 @@ const FeedItemThumbnailsCarousel = ({
 }: FeedItemThumbnailsCarouselProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
 
-  const onPressLinkedFeed = useCallback(
-    (feedId: string) => {
-      navigation.navigate('Modal', { screen: 'Feed', params: { feedId } });
-    },
-    [navigation],
-  );
+  const onPressLinkedFeed = useCallback(() => {
+    navigation.navigate('Modal', {
+      screen: 'Feed',
+      params: { feedId: data.metadata.id },
+    });
+  }, [data.metadata.id, navigation]);
 
   return (
     <FlatList
       style={[styles.linkedFeeds, style]}
       contentContainerStyle={styles.linkedFeedsContentContainer}
-      data={data}
+      data={data.feedItems}
       renderItem={el => (
         <Pressable
           style={({ pressed }) => [
@@ -34,11 +35,11 @@ const FeedItemThumbnailsCarousel = ({
             },
             style,
           ]}
-          onPress={() => onPressLinkedFeed(el.item.feedId)}>
+          onPress={onPressLinkedFeed}>
           <Image
             style={styles.imageStyle}
             source={{
-              uri: el.item.uri,
+              uri: `${AWS_CLOUDFRONT_URL_THUMBNAIL}/${el.item.thumbnail.uri}`,
             }}
           />
         </Pressable>

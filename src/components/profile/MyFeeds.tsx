@@ -19,9 +19,13 @@ const MyFeeds = memo(({ data }: MyFeedsProps) => {
 
   const onRefresh = useCallback(() => {
     console.warn('Refreshing!');
-    // Do we want to invalidate all feeds metadata for all user profiles, or just the current loaded one?
-    queryClient.invalidateQueries({ queryKey: ['feeds-md'] });
-  }, [queryClient]);
+    if (data.length > 0) {
+      // const creatorId: string = data[0].creator.id;
+      console.warn('reached inside refresh');
+      // Do we want to invalidate all feeds metadata for all user profiles, or just the current loaded one?
+      queryClient.invalidateQueries({ queryKey: ['feeds'] });
+    }
+  }, [data, queryClient]);
 
   return (
     <View style={[styles.container, { height }]}>

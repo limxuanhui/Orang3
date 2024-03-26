@@ -1,14 +1,8 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import type { Itinerary } from '@components/itinerary/types/types';
 import type { Story } from '@components/post/types/types';
-import type { Media } from '@components/feed/types/types';
+import type { Feed, Media } from '@components/feed/types/types';
 import type { GypsieUser } from '@navigators/types/types';
-
-// export type Creator = {
-//   id: string;
-//   handle: string;
-//   avatarUri: string;
-// }
 
 export type Tale = {
   metadata: {
@@ -25,11 +19,6 @@ export type Tale = {
 export type WriteTale = Tale & {
   posting: boolean;
   saving: boolean;
-  feedItemThumbnails: {
-    data: FeedItemThumbnail[][];
-    status: 'idle' | 'pending' | 'succeeded' | 'failed';
-    error?: string;
-  };
 };
 
 export type TaleThumbnailInfo = {
@@ -53,6 +42,6 @@ export type FeedItemThumbnail = {
 };
 
 export type FeedItemThumbnailsCarouselProps = {
-  data: FeedItemThumbnail[];
+  data: Feed;
   style?: StyleProp<ViewStyle>;
 };

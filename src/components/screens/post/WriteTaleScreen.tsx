@@ -39,6 +39,7 @@ import { DIMENSION } from '@components/../utils/constants/dimensions';
 import { PALETTE } from '@components/../utils/constants/palette';
 import { nanoid } from '@reduxjs/toolkit';
 import { StoryItem } from '@components/post/types/types';
+import { Feed } from '@components/feed/types/types';
 
 const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
   const insets = useSafeAreaInsets();
@@ -54,9 +55,11 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
     itinerary,
     story,
     posting,
-    feedItemThumbnails,
+    // feedItemThumbnails,
     // data,
     isLoading,
+    feedsThumbnails,
+    feedsThumbnailsIsLoading,
     closeKeyboard,
     renderBackdrop,
     onPressAddCover,
@@ -67,7 +70,7 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
     onPressAddParagraph,
     onPressShowLinkedFeeds,
     onPressAddLinkedFeed,
-    onPressDeleteLinkedFeed,
+    onPressDeleteStoryItem,
     onSubmitPost,
   } = useWriteTaleManager(taleId);
 
@@ -99,12 +102,12 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
 
   return isLoading ? (
     <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: PALETTE.GREYISHBLUE,
-      }}>
+      style={[
+        styles.flexCenter,
+        {
+          backgroundColor: PALETTE.GREYISHBLUE,
+        },
+      ]}>
       <ActivityIndicator size={48} color={PALETTE.ORANGE} />
     </View>
   ) : (
@@ -147,12 +150,18 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
                     orientation="vertical"
                     position="bottom-right">
                     <GypsieButton
-                      customIconStyles={{ color: PALETTE.WHITE, fontSize: 24 }}
+                      customIconStyles={{
+                        color: PALETTE.OFFWHITE,
+                        fontSize: 24,
+                      }}
                       Icon={DeleteOutlineIcon}
                       onPress={onPressClearCover}
                     />
                     <GypsieButton
-                      customIconStyles={{ color: PALETTE.WHITE, fontSize: 24 }}
+                      customIconStyles={{
+                        color: PALETTE.OFFWHITE,
+                        fontSize: 24,
+                      }}
                       Icon={ChangeSwapIcon}
                       onPress={onPressAddCover}
                     />
@@ -161,7 +170,7 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
               ) : (
                 <GypsieButton
                   customButtonStyles={styles.addCoverButton}
-                  customIconStyles={{ fontSize: 64, color: PALETTE.LIGHTGREY }}
+                  customIconStyles={{ fontSize: 64, color: PALETTE.OFFWHITE }}
                   Icon={CameraOutlineIcon}
                   onPress={onPressAddCover}
                 />
@@ -195,9 +204,7 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
                     key={el.id}
                     item={el}
                     onStoryItemTextChange={onStoryItemTextChange}
-                    onPressDeleteLinkedFeed={() =>
-                      onPressDeleteLinkedFeed(index)
-                    }
+                    onPressDeleteStoryItem={() => onPressDeleteStoryItem(index)}
                   />
                 ))}
               </View>
@@ -209,71 +216,43 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
               backdropComponent={renderBackdrop}
               index={-1}
               snapPoints={snapPoints}>
-              {feedItemThumbnails.status === 'succeeded' ? (
-                <BottomSheetScrollView
-                  style={{
-                    padding: 8,
-                  }}
-                  showsVerticalScrollIndicator={false}>
-                  {feedItemThumbnails.data.map(el => (
-                    <View style={styles.feedItemThumbnailsList} key={nanoid()}>
-                      <FeedItemThumbnailsCarousel data={el} />
-                      <GypsieButton
-                        customButtonStyles={styles.addLinkedFeedButton}
-                        customIconStyles={{ fontSize: 32 }}
-                        Icon={AddIcon}
-                        onPress={onPressAddLinkedFeed}
-                      />
-                    </View>
-                  ))}
-                </BottomSheetScrollView>
-              ) : feedItemThumbnails.status === 'failed' ? (
-                <View
-                  style={{
-                    flex: 1,
-                    // flexDirection: 'row',
-                    borderWidth: 1,
-                    borderColor: 'red',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text
-                    style={{
-                      fontFamily: 'Futura',
-                      fontSize: 24,
-                      color: PALETTE.GREY,
-                    }}>
-                    Unable to load your feeds...
-                  </Text>
-                  <GypsieButton
-                    customButtonStyles={{
-                      margin: 16,
-                      borderWidth: 1,
-                      borderColor: PALETTE.LIGHTERGREY,
-                      width: 'auto',
-                      paddingVertical: 8,
-                      paddingHorizontal: 16,
-                    }}
-                    customTextStyles={{
-                      fontFamily: 'Futura',
-                      fontSize: 16,
-                      fontWeight: 'bold',
-                      color: PALETTE.GREYISHBLUE,
-                    }}
-                    customIconStyles={{ fontSize: 16, color: PALETTE.ORANGE }}
-                    Icon={ChangeSwapIcon}
-                    text="Try again"
-                    onPress={() => {}}
-                  />
-                </View>
-              ) : (
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
+              {feedsThumbnailsIsLoading ? (
+                <View style={styles.flexCenter}>
                   <ActivityIndicator size={60} color={PALETTE.ORANGE} />
+                </View>
+              ) : feedsThumbnails ? (
+                feedsThumbnails.length === 0 ? (
+                  <View style={styles.flexCenter}>
+                    <Text style={styles.flexCenterDescription}>
+                      You don't have any feeds...
+                    </Text>
+                  </View>
+                ) : (
+                  <BottomSheetScrollView
+                    style={{
+                      padding: 8,
+                    }}
+                    showsVerticalScrollIndicator={false}>
+                    {feedsThumbnails.map((feed: Feed, index: number) => (
+                      <View
+                        style={styles.feedItemThumbnailsList}
+                        key={nanoid()}>
+                        <FeedItemThumbnailsCarousel data={feed} />
+                        <GypsieButton
+                          customButtonStyles={styles.addLinkedFeedButton}
+                          customIconStyles={styles.addLinkedFeedIcon}
+                          Icon={AddIcon}
+                          onPress={() => onPressAddLinkedFeed(index)}
+                        />
+                      </View>
+                    ))}
+                  </BottomSheetScrollView>
+                )
+              ) : (
+                <View style={styles.flexCenter}>
+                  <Text style={styles.flexCenterDescription}>
+                    Could not find your feeds at the moment...
+                  </Text>
                 </View>
               )}
             </BottomSheet>
@@ -374,8 +353,11 @@ const styles = StyleSheet.create({
   },
   titleInput: {
     width: DIMENSION.HUNDRED_PERCENT,
+    padding: 8,
+    paddingBottom: 4,
     fontFamily: 'Futura',
     fontSize: 40,
+    fontWeight: 'bold',
     borderBottomWidth: 1,
     borderBottomColor: PALETTE.LIGHTERGREY,
   },
@@ -404,16 +386,36 @@ const styles = StyleSheet.create({
   },
   addLinkedFeedButton: {
     marginHorizontal: 8,
-    height: 40,
-    width: 40,
+    height: 32,
+    width: 32,
     borderRadius: 24,
-    backgroundColor: PALETTE.ORANGE,
+    backgroundColor: PALETTE.OFFWHITE,
+    shadowColor: PALETTE.BLACK,
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    shadowOffset: { height: 0, width: 0 },
+  },
+  addLinkedFeedIcon: {
+    fontSize: 32,
+    color: PALETTE.ORANGE,
   },
   feedItemThumbnailsList: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 16,
+  },
+  flexCenter: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  flexCenterDescription: {
+    color: PALETTE.GREY,
+    fontFamily: 'Futura',
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 

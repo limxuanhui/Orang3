@@ -10,7 +10,7 @@ import { PALETTE } from '@constants/palette';
 
 const VlogPlayer = ({ vlog, shouldPlay }: VlogPlayerProps) => {
   const { media } = vlog;
-  console.log('Vlog player: ', media);
+  // console.log('Vlog player: ', media);
   const [status, setStatus] = useState<VlogPlayerStatus>(
     VlogPlayerStatus.PLAYING,
   );

@@ -1,9 +1,9 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
-import type { FeedItemThumbnail } from '@components/tale/types/types';
 import type { WriteTale } from '@components/tale/types/types';
-import { DUMMY_FEEDS_ITEMS_THUMBNAILS } from '@data/feeds-thumbnails-list';
-import { BACKEND_BASE_URL } from '@env';
+// import type { FeedItemThumbnail } from '@components/tale/types/types';
+// import { DUMMY_FEEDS_ITEMS_THUMBNAILS } from '@data/feeds-thumbnails-list';
+// import { BACKEND_BASE_URL } from '@env';
 
 type WriteTaleState = Readonly<WriteTale>;
 
@@ -36,42 +36,7 @@ const initialState: WriteTaleState = {
   story: [],
   posting: false,
   saving: false,
-  feedItemThumbnails: {
-    data: [],
-    status: 'idle',
-    error: '',
-  },
 };
-
-// Replace with useQuery
-export const writeTale_fetchFeeds = createAsyncThunk(
-  'newTale/fetchFeeds',
-  async (userId: string, thunkAPI) => {
-    try {
-      const url = BACKEND_BASE_URL + '/api/userId';
-      // const response = await axios.get(url);
-      // console.log(JSON.stringify(response.data, null, 4));
-      // return response.data;
-
-      // ----------- Sample code for testing request -----------
-      const fetchFeedsListPromise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve(DUMMY_FEEDS_ITEMS_THUMBNAILS);
-        }, 3000);
-      });
-      const result = fetchFeedsListPromise.then(v => v);
-      console.log(result);
-      // -------------------------------------------------------
-
-      return result;
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        return err.message;
-      }
-      // else if (err instanceof AxiosError) {}
-    }
-  },
-);
 
 const writeTaleSlice = createSlice({
   name: 'writeTale',
@@ -137,21 +102,6 @@ const writeTaleSlice = createSlice({
     //   state.saving = action.payload;
     // },
     writeTale_resetWriteTaleSlice: () => initialState,
-  },
-  extraReducers: builder => {
-    // fetchFeeds
-    builder
-      .addCase(writeTale_fetchFeeds.pending, (state, action) => {
-        state.feedItemThumbnails.status = 'pending';
-      })
-      .addCase(writeTale_fetchFeeds.fulfilled, (state, action) => {
-        state.feedItemThumbnails.status = 'succeeded';
-        state.feedItemThumbnails.data = action.payload as FeedItemThumbnail[][];
-      })
-      .addCase(writeTale_fetchFeeds.rejected, (state, action) => {
-        state.feedItemThumbnails.status = 'failed';
-        state.feedItemThumbnails.error = action.error.message;
-      });
   },
 });
 

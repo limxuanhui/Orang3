@@ -24,8 +24,10 @@ export type Feed = BaseFeed & {
 
 export type FeedItem = {
   id: string;
+  thumbnail: Media;
   media: Media;
   caption: string;
+  feedId: string;
 };
 
 export type FeedThumbnailInfo = {

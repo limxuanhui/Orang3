@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useMemo } from 'react';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '@redux/hooks';
 import {
   Asset,
   ImageLibraryOptions,
@@ -13,38 +13,42 @@ import {
   writeTale_deleteStoryItem,
   writeTale_setStoryItemText,
   writeTale_setPosting,
-  writeTale_fetchFeeds,
+  // writeTale_fetchFeeds,
   writeTale_setFetchedTale,
   writeTale_resetWriteTaleSlice,
-} from '../redux/reducers/writeTaleSlice';
-import useMediaHandlers from './useMediaHandlers';
-import { StoryItem, StoryItemType } from '../../components/post/types/types';
-import axios from 'axios';
-import { storyTitleStyle, storyBodyStyle } from '../constants/text';
-import useKeyboardHandlers from './useKeyboardHandlers';
-import useBottomSheetHandlers from './useBottomSheetHandlers';
+} from '@redux/reducers/writeTaleSlice';
+import useMediaHandlers from '@hooks/useMediaHandlers';
+import { StoryItem, StoryItemType } from '@components/post/types/types';
+import { storyTitleStyle, storyBodyStyle } from '@constants/text';
+import useKeyboardHandlers from '@hooks/useKeyboardHandlers';
+import useBottomSheetHandlers from '@hooks/useBottomSheetHandlers';
 import { nanoid } from '@reduxjs/toolkit';
-import { AWS_API_GATEWAY_S3_PRESIGNED_URL, BACKEND_BASE_URL } from '@env';
 // import { Feed, Media, MediaMimeType } from '../../components/feed/types/types';
-import { Media, MediaMimeType } from '@components/feed/types/types';
+import { Feed, Media, MediaMimeType } from '@components/feed/types/types';
 import {
   QueryKey,
   queryOptions,
-  useMutation,
+  // useMutation,
   useQuery,
 } from '@tanstack/react-query';
-import { DUMMY_DATABASE } from '../../data/database';
-import { Tale } from '../../components/tale/types/types';
+// import { DUMMY_DATABASE } from '@data/database';
+import { Tale } from '@components/tale/types/types';
 import {
   itineraryPlanner_createItinerary,
   itineraryPlanner_resetItineraryPlannerSlice,
   itineraryPlanner_setItinerary,
   itineraryPlanner_setMode,
-} from '../redux/reducers/itineraryPlannerSlice';
-import type { DataKey } from '../../data/types/types';
-import { AuthContext } from '../contexts/AuthContext';
+} from '@redux/reducers/itineraryPlannerSlice';
+// import type { DataKey } from '@data/types/types';
+import { AuthContext } from '@contexts/AuthContext';
 import { ulid } from 'ulid';
-import { printPrettyJson } from '../helpers/functions';
+import {
+  // UploadMediaDetails,
+  // getPresignedUrls,
+  printPrettyJson,
+} from '@helpers/functions';
+import { axiosClient } from '@helpers/singletons';
+import useGlobals from '@hooks/useGlobals';
 
 const imageLibraryOptions: ImageLibraryOptions = {
   mediaType: 'mixed',
@@ -52,10 +56,11 @@ const imageLibraryOptions: ImageLibraryOptions = {
   selectionLimit: 1,
 };
 
-const url = `${BACKEND_BASE_URL}/tales/new`;
+const url = '/tales/new';
 
-const useWriteTaleManager = (taleId?: string, mode: 'dev' | 'prod' = 'dev') => {
+const useWriteTaleManager = (taleId?: string) => {
   const { user } = useContext(AuthContext);
+  const { mode } = useGlobals();
   const { openGallery } = useMediaHandlers(imageLibraryOptions);
   const { keyboardIsVisible, closeKeyboard } = useKeyboardHandlers();
   const { bottomSheetRef, snapPoints, renderBackdrop } = useBottomSheetHandlers(
@@ -64,44 +69,38 @@ const useWriteTaleManager = (taleId?: string, mode: 'dev' | 'prod' = 'dev') => {
     },
   );
   const dispatch = useAppDispatch();
-  const { metadata, itinerary, story, feedItemThumbnails, posting } =
-    useAppSelector(state => state.writeTale);
+  const { metadata, itinerary, story, posting } = useAppSelector(
+    state => state.writeTale,
+  );
   const { itinerary: itineraryInProgress } = useAppSelector(
     state => state.itineraryPlanner,
   );
 
-  const mutationFn = useCallback(async () => {
+  // const mutationFn = useCallback(async () => {}, []);
 
-  }, []);
-
-  const { mutate } = useMutation({
-    // mutationKey: [],
-    mutationFn,
-    onSuccess: () => {},
-  });
+  // const { mutate } = useMutation({
+  //   // mutationKey: [],
+  //   mutationFn,
+  //   onSuccess: () => {},
+  // });
 
   // useQuery to fetch tale from api based on taleId from hook argument
   const queryFn = useCallback(
     async ({ queryKey }: { queryKey: QueryKey }): Promise<Tale | null> => {
+      const [key, tid] = queryKey;
+      console.log('Refreshing queryKey: ', queryKey);
       switch (mode) {
-        case 'prod':
-          return null;
-        case 'dev':
+        case 'production':
           try {
-            // 1) get tale data from Ordika.
-            // 2) this tale data will look like: {}
-          } catch (err) {}
-
-          const [key, taleId] = queryKey;
-          console.log('QUERY FUNCTION CALLED with taleId: ', taleId);
-          return new Promise((resolve, _reject) => {
-            const tales: Tale[] = DUMMY_DATABASE[key as DataKey] as Tale[];
-            const result =
-              tales.find((el: Tale) => el.metadata.id === taleId) ?? null;
-            setTimeout(() => {
-              resolve(result);
-            }, 2000);
-          });
+            const response = await axiosClient.get(`/${key}/${tid}`);
+            return response.data;
+          } catch (err) {
+            console.error(err);
+            return null;
+          }
+        case 'development':
+        default:
+          return null;
       }
     },
     [mode],
@@ -119,14 +118,47 @@ const useWriteTaleManager = (taleId?: string, mode: 'dev' | 'prod' = 'dev') => {
   }, [taleId, queryFn]);
   const { data, isLoading } = useQuery(options);
 
-  useEffect(() => {
-    // Fetch current user's fetchItemThumbnails
-    console.log('status: ', feedItemThumbnails.status);
-    if (feedItemThumbnails.status === 'idle') {
-      console.log('in useEffect for loading linked feeds list');
-      dispatch(writeTale_fetchFeeds(metadata.creator.id));
+  // useQuery to fetch tale from api based on taleId from hook argument
+  const feedsThumbnailsQueryFn = useCallback(
+    async ({ queryKey }: { queryKey: QueryKey }): Promise<Feed[] | null> => {
+      const [key, key1, uid] = queryKey;
+      console.log('Refreshing queryKey: ', queryKey);
+      switch (mode) {
+        case 'production':
+          console.log('Fetching feedsThumbnails');
+          const response = await axiosClient.get(`/${key}/${key1}/${uid}`);
+          return response.data.items;
+        case 'development':
+        default:
+          return null;
+      }
+    },
+    [mode],
+  );
+  const feedsThumbnailsOptions = useMemo(() => {
+    if (user) {
+      const queryKey = ['feeds', 'user', user.id];
+      return queryOptions({
+        queryKey,
+        queryFn: feedsThumbnailsQueryFn,
+        networkMode: 'online',
+        enabled: !taleId,
+        // gcTime: 1000 * 60 * 5,
+        gcTime: 0,
+        staleTime: 1000 * 60 * 5,
+      });
     }
-  }, [metadata, feedItemThumbnails, dispatch]);
+    return queryOptions({
+      queryKey: [''] as QueryKey,
+      queryFn: () => {
+        return null;
+      },
+      enabled: false,
+      initialData: [] as Feed[],
+    });
+  }, [user, feedsThumbnailsQueryFn, taleId]);
+  const { data: feedsThumbnails, isLoading: feedsThumbnailsIsLoading } =
+    useQuery(feedsThumbnailsOptions);
 
   /**
    * Set writeTaleSlice itinerary to that of the itineraryPlannerSlice whenever it changes.
@@ -235,26 +267,30 @@ const useWriteTaleManager = (taleId?: string, mode: 'dev' | 'prod' = 'dev') => {
     bottomSheetRef.current?.expand();
   }, [bottomSheetRef, keyboardIsVisible, closeKeyboard]);
 
-  const onPressAddLinkedFeed = useCallback(() => {
-    const selectedLinkedFeedId = 0;
-    const selectedLinkedFeed = feedItemThumbnails.data[selectedLinkedFeedId];
-    console.log(selectedLinkedFeed);
-    dispatch(
-      writeTale_addStoryItem({
-        newStoryItem: {
-          id: nanoid(), // or use the id of the item that is fetched from api
-          type: StoryItemType.Media,
-          data: selectedLinkedFeed,
-        },
-      }),
-    );
+  const onPressAddLinkedFeed = useCallback(
+    (index: number) => {
+      if (!feedsThumbnails) {
+        return;
+      }
+      const selectedLinkedFeed = feedsThumbnails[index];
+      dispatch(
+        writeTale_addStoryItem({
+          newStoryItem: {
+            id: nanoid(), // or use the id of the item that is fetched from api
+            type: StoryItemType.Media,
+            data: selectedLinkedFeed,
+          },
+        }),
+      );
 
-    // Close bottomsheet
-    bottomSheetRef.current?.close();
-    return selectedLinkedFeedId;
-  }, [bottomSheetRef, feedItemThumbnails, dispatch]);
+      // Close bottomsheet
+      bottomSheetRef.current?.close();
+      // return selectedLinkedFeedId;
+    },
+    [bottomSheetRef, dispatch, feedsThumbnails],
+  );
 
-  const onPressDeleteLinkedFeed = useCallback(
+  const onPressDeleteStoryItem = useCallback(
     (index: number) => {
       dispatch(writeTale_deleteStoryItem({ itemId: index }));
     },
@@ -300,11 +336,12 @@ const useWriteTaleManager = (taleId?: string, mode: 'dev' | 'prod' = 'dev') => {
    * Check if we are creating a new tale or editing a tale.
    */
   const onSubmitPost = useCallback(async () => {
+    dispatch(writeTale_setPosting(true));
     if (!user) {
+      dispatch(writeTale_setPosting(false));
       return;
     }
 
-    writeTale_setPosting(true);
     if (taleId) {
       // Check what tale data has changed. If changed cover, ask backend to delete original cover, and store new one.
       return;
@@ -312,7 +349,11 @@ const useWriteTaleManager = (taleId?: string, mode: 'dev' | 'prod' = 'dev') => {
 
     // Save cover if it exists
     if (data?.metadata.cover) {
-      saveCoverToS3(data.metadata.cover);
+      // const uploadMediaDetailsList: UploadMediaDetails[] =
+      // await getPresignedUrls([data.metadata.cover.type]);
+      // const presignedUrl = uploadMediaDetailsList.map(el => el.presignedUrl)[0];
+      // const key = uploadMediaDetailsList.map(el => el.key)[0];
+      // saveCoverToS3(data.metadata.cover);
       // If response not ok, throw Error and stop saving tale data.
       // AWS S3 will never store partial objects, so response ok means the entire object is stored successfully.
     }
@@ -332,7 +373,7 @@ const useWriteTaleManager = (taleId?: string, mode: 'dev' | 'prod' = 'dev') => {
     console.log('====== New tale ======');
     printPrettyJson(newTale);
     try {
-
+      await axiosClient.post(url, newTale);
     } catch (err) {
       console.error(err);
     }
@@ -343,9 +384,11 @@ const useWriteTaleManager = (taleId?: string, mode: 'dev' | 'prod' = 'dev') => {
     // navigation.goBack()
     // }, [cover, title, story, posting]);
   }, [
-    taleId,
-    data?.metadata.cover,
+    dispatch,
     user,
+    taleId,
+    // data.metadata.cover,
+    data,
     metadata.cover,
     metadata.title,
     itinerary,
@@ -360,9 +403,10 @@ const useWriteTaleManager = (taleId?: string, mode: 'dev' | 'prod' = 'dev') => {
     itinerary,
     story,
     posting,
-    feedItemThumbnails,
     data,
     isLoading,
+    feedsThumbnails,
+    feedsThumbnailsIsLoading,
     closeKeyboard,
     renderBackdrop,
     onPressAddCover,
@@ -373,7 +417,7 @@ const useWriteTaleManager = (taleId?: string, mode: 'dev' | 'prod' = 'dev') => {
     onPressAddParagraph,
     onPressShowLinkedFeeds,
     onPressAddLinkedFeed,
-    onPressDeleteLinkedFeed,
+    onPressDeleteStoryItem,
     onSubmitPost,
   };
 };

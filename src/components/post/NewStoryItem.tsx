@@ -1,30 +1,34 @@
 import { StyleSheet, TextInput, View } from 'react-native';
 import GypsieButton from '@components/common/buttons/GypsieButton';
-import SquaredCrossIcon from '@icons/SquaredCrossIcon';
 import FeedItemThumbnailsCarousel from '@components/tale/FeedItemThumbnailsCarousel';
 import { type StoryItem, StoryItemType } from './types/types';
 import { PALETTE } from '@constants/palette';
 import { DIMENSION } from '@constants/dimensions';
+import CrossIcon from '@icons/CrossIcon';
 
 type NewStoryItemProps = {
   item: StoryItem;
   onStoryItemTextChange: (id: string, text: string) => void;
-  onPressDeleteLinkedFeed: () => void;
+  onPressDeleteStoryItem: (index: string) => void;
 };
 
 const NewStoryItem = ({
   item,
   onStoryItemTextChange,
-  onPressDeleteLinkedFeed,
+  onPressDeleteStoryItem,
 }: NewStoryItemProps) => {
   console.log('Investigate why is this component rendering 3 times');
-
+  console.log('ITEM: ', item);
   if (item.type === StoryItemType.Text) {
     return (
       <View style={styles.storyItemText}>
         <TextInput
           style={[styles.storyItemTextInput, item.style]}
-          // onKeyPress={}
+          onKeyPress={({ nativeEvent }) => {
+            if (nativeEvent.key === 'Backspace' && item.text.trim() === '') {
+              onPressDeleteStoryItem(item.id);
+            }
+          }}
           // onFocus={e => {
           //   console.log(e.nativeEvent.text);
           //   setFocusedText(e.nativeEvent.text);
@@ -36,12 +40,6 @@ const NewStoryItem = ({
           selectionColor={PALETTE.ORANGE}
           scrollEnabled={false}
         />
-        <GypsieButton
-          customButtonStyles={styles.deleteButton}
-          customIconStyles={styles.deleteIcon}
-          Icon={SquaredCrossIcon}
-          onPress={onPressDeleteLinkedFeed}
-        />
       </View>
     );
   } else if (item.type === StoryItemType.Media) {
@@ -51,12 +49,14 @@ const NewStoryItem = ({
         <GypsieButton
           customButtonStyles={styles.deleteButton}
           customIconStyles={styles.deleteIcon}
-          Icon={SquaredCrossIcon}
-          onPress={onPressDeleteLinkedFeed}
+          Icon={CrossIcon}
+          onPress={() => onPressDeleteStoryItem(item.id)}
         />
       </View>
     );
-  } else return null;
+  } else {
+    return null;
+  }
 };
 
 const styles = StyleSheet.create({
@@ -67,8 +67,8 @@ const styles = StyleSheet.create({
     height: DIMENSION.HUNDRED_PERCENT,
     width: DIMENSION.HUNDRED_PERCENT,
     marginBottom: 8,
-    borderBottomWidth: 1,
-    borderColor: PALETTE.LIGHTERGREY,
+    // borderBottomWidth: 1,
+    // borderColor: PALETTE.LIGHTERGREY,
   },
   storyItemMedia: {
     flexDirection: 'row',
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   deleteIcon: {
     fontSize: 24,
-    color: PALETTE.RED,
+    color: PALETTE.GREY,
   },
 });
 

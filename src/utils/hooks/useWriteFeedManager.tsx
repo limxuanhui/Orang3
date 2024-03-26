@@ -8,7 +8,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { ulid } from 'ulid';
 import { AxiosResponse } from 'axios';
-import { FeedItem, FeedMetadata } from '@components/feed/types/types';
+import { Feed, FeedItem } from '@components/feed/types/types';
 import type { ModalNavigatorNavigationProp } from '@components/navigators/types/types';
 import useModalHandlers from '@hooks/useModalHandlers';
 import { useAppDispatch, useAppSelector } from '@redux/hooks';
@@ -104,6 +104,7 @@ const useWriteFeedManager = () => {
   const onPressPost = useCallback(async () => {
     dispatch(writeFeed_setPosting(true));
     if (!user) {
+      dispatch(writeFeed_setPosting(false));
       return;
     }
 
@@ -130,25 +131,28 @@ const useWriteFeedManager = () => {
     }
 
     // Success in uploading all media files, dispatch to save the new media file names
+    const newFeedId: string = ulid();
     const feedData: FeedItem[] = items.map((el: FeedItem, index: number) => {
-      return { ...el, media: { ...el.media, uri: keys[index] } };
+      const isVideo = el.media.type.startsWith('video');
+      return {
+        ...el,
+        media: { ...el.media, uri: keys[index] },
+        thumbnail: {
+          ...el.media,
+          type: isVideo ? 'image/gif' : el.media.type,
+          uri: isVideo ? `${keys[index].split('.')[0]}.gif` : keys[index],
+          width: 200,
+          height: (el.media.height / el.media.width) * 200,
+        },
+        feedId: newFeedId,
+      };
     });
     const thumbnailSrc = feedData[0];
-    const requestData: { metadata: FeedMetadata; feedItems: FeedItem[] } = {
+    const requestData: Feed = {
       metadata: {
-        id: ulid(),
+        id: newFeedId,
         creator: user,
-        thumbnail: {
-          ...thumbnailSrc.media,
-          type: thumbnailSrc.media.type.startsWith('image')
-            ? thumbnailSrc.media.type
-            : 'image/gif',
-          width: 200,
-          height: (thumbnailSrc.media.height / thumbnailSrc.media.width) * 200,
-          uri: thumbnailSrc.media.type.startsWith('image')
-            ? thumbnailSrc.media.uri
-            : `${thumbnailSrc.media.uri.split('.')[0]}.gif`,
-        },
+        thumbnail: thumbnailSrc.thumbnail,
       },
       feedItems: feedData,
     };
@@ -170,7 +174,10 @@ const useWriteFeedManager = () => {
     // Dispatch resetWriteFeedSlice, invalidate query cache for feeds, feeds-md, then go back to previous screen
     dispatch(writeFeed_setPosting(false));
     dispatch(writeFeed_resetWriteFeedSlice());
+    // queryClient.invalidateQueries();
     queryClient.invalidateQueries({ queryKey: ['feeds'] });
+    // queryClient.invalidateQueries({ queryKey: ['feeds', 'user'] });
+    // queryClient.invalidateQueries({ queryKey: ['feeds', 'user', 'metadata'] });
     navigation.goBack();
   }, [items, navigation, user, dispatch]);
 

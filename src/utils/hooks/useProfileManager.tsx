@@ -8,11 +8,11 @@ import { DUMMY_DATABASE } from '@data/database';
 import { DataKey } from '@data/types/types';
 import { GypsieUser } from '@navigators/types/types';
 import { axiosClient } from '@helpers/singletons';
-import { printPrettyJson } from '@helpers/functions';
+import useGlobals from '@hooks/useGlobals';
 
 const useProfileManager = (user: GypsieUser) => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
-  const mode = 1 ? 'prod' : 'dev';
+  const { mode } = useGlobals();
 
   const onPressAvatar = useCallback(() => {
     if (user.avatar) {
@@ -33,15 +33,13 @@ const useProfileManager = (user: GypsieUser) => {
     }: {
       queryKey: QueryKey;
     }): Promise<FeedThumbnailInfo[]> => {
-      console.log('Feeds metadata QUERY FUNCTION CALLED');
-      const [key, uid] = queryKey;
+      const [key, key1, key2, uid] = queryKey;
+      console.log('Refreshing queryKey: ', queryKey);
       switch (mode) {
-        case 'prod':
+        case 'production':
           try {
-            const url = `/feeds/metadata/${user.id}`;
+            const url = `/${key}/${key1}/${key2}/${uid}`;
             const response = await axiosClient.get(url);
-            console.log('feeds metadata response: ');
-            printPrettyJson(response.data);
             return response.data.items.map((el: FeedMetadata) => ({
               feedId: el.id,
               creator: el.creator,
@@ -49,9 +47,9 @@ const useProfileManager = (user: GypsieUser) => {
             }));
           } catch (err) {
             console.error(err);
+            return [];
           }
-          return [];
-        case 'dev':
+        case 'development':
           return new Promise((resolve, _reject) => {
             const feedsThumbnails: FeedThumbnailInfo[] = DUMMY_DATABASE[
               key as DataKey
@@ -64,13 +62,15 @@ const useProfileManager = (user: GypsieUser) => {
               resolve(userfeedsThumbnails);
             }, 2000);
           });
+        default:
+          return [];
       }
     },
-    [mode, user.id],
+    [mode],
   );
 
   const feedsMetadataOptions = useMemo(() => {
-    const queryKey = ['feeds-md', user.id];
+    const queryKey = ['feeds', 'user', 'metadata', user.id];
     return queryOptions({
       queryKey,
       queryFn: feedsMetadataQueryFn,

@@ -9,22 +9,39 @@ import type { DataKey } from '@data/types/types';
 import { DUMMY_DATABASE } from '@data/database';
 import { PALETTE } from '@constants/palette';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
+import useGlobals from '@hooks/useGlobals';
+import { axiosClient } from '@helpers/singletons';
+import { printPrettyJson } from '@helpers/functions';
 
 const FeedScreen = ({ route }: FeedScreenProps) => {
+  const { mode } = useGlobals();
   const { feedId } = route.params;
 
   const queryFn = useCallback(
     async ({ queryKey }: { queryKey: QueryKey }): Promise<Feed | undefined> => {
-      const [key, feedId] = queryKey;
       console.log('QUERY FUNCTION CALLED');
-      return new Promise((resolve, _reject) => {
-        const feeds: Feed[] = DUMMY_DATABASE[key as DataKey] as Feed[];
-        setTimeout(() => {
-          resolve(feeds.find((el: Feed) => el.metadata.id === feedId));
-        }, 2000);
-      });
+      const [key, feedId] = queryKey;
+      switch (mode) {
+        case 'development':
+          return new Promise((resolve, _reject) => {
+            const feeds: Feed[] = DUMMY_DATABASE[key as DataKey] as Feed[];
+            setTimeout(() => {
+              resolve(feeds.find((el: Feed) => el.metadata.id === feedId));
+            }, 2000);
+          });
+
+        case 'production':
+          try {
+            const response = await axiosClient.get(`/feeds/${feedId}`);
+            printPrettyJson(response);
+            return response.data;
+          } catch (err) {
+            console.error(err);
+          }
+          break;
+      }
     },
-    [],
+    [mode],
   );
 
   const options = useMemo(() => {
