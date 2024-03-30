@@ -40,10 +40,12 @@ import { PALETTE } from '@components/../utils/constants/palette';
 import { nanoid } from '@reduxjs/toolkit';
 import { StoryItem } from '@components/post/types/types';
 import { Feed } from '@components/feed/types/types';
+import { FeedItemThumbnailsDisplayFormat } from '@components/tale/types/types';
 
 const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
   const insets = useSafeAreaInsets();
   const userInfo = useContext(AuthContext);
+  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const { taleId } = route.params;
   console.log('TALE ID:', taleId);
 
@@ -55,7 +57,6 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
     itinerary,
     story,
     posting,
-    // feedItemThumbnails,
     // data,
     isLoading,
     feedsThumbnails,
@@ -76,7 +77,6 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
 
   // const [currScrollPosition, setCurrScrollPosition] = useState<number>(0);
   // const [prevHeight, setPrevHeight] = useState<number>(DEVICE_HEIGHT);
-  const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
 
   // // Called every scrollEventThrottle ms (60 ms)
   // const onScroll = useCallback(
@@ -179,7 +179,7 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
             <View
               style={[
                 styles.blogContainer,
-                { marginBottom: 46 + insets.bottom },
+                { marginBottom: 100 + insets.bottom },
               ]}>
               <TextInput
                 style={styles.titleInput}
@@ -195,8 +195,8 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
                 scrollEnabled={false}
               />
               <ItineraryMapOverview
-                itineraryId={itinerary.id}
-                creatorId={userInfo.user?.id || ''}
+                itineraryId={itinerary.metadata.id}
+                creatorId={userInfo.user?.id || ''} // TODO: Use itinerary.metadata.creator?
               />
               <View style={{}}>
                 {story.map((el: StoryItem, index: number) => (
@@ -233,19 +233,44 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
                       padding: 8,
                     }}
                     showsVerticalScrollIndicator={false}>
-                    {feedsThumbnails.map((feed: Feed, index: number) => (
-                      <View
-                        style={styles.feedItemThumbnailsList}
-                        key={nanoid()}>
-                        <FeedItemThumbnailsCarousel data={feed} />
-                        <GypsieButton
-                          customButtonStyles={styles.addLinkedFeedButton}
-                          customIconStyles={styles.addLinkedFeedIcon}
-                          Icon={AddIcon}
-                          onPress={() => onPressAddLinkedFeed(index)}
-                        />
-                      </View>
-                    ))}
+                    {feedsThumbnails.map((feed: Feed, index: number) => {
+                      const alreadyAdded: boolean = !!story.find(
+                        (el: StoryItem) => el.id === feed.metadata.id,
+                      );
+                      return (
+                        <View
+                          style={styles.feedItemThumbnailsList}
+                          key={nanoid()}>
+                          <FeedItemThumbnailsCarousel
+                            feedId={feed.metadata.id}
+                            displayFormat={
+                              FeedItemThumbnailsDisplayFormat.CAROUSEL
+                            }
+                          />
+                          <GypsieButton
+                            customButtonStyles={[
+                              styles.addLinkedFeedButton,
+                              {
+                                backgroundColor: alreadyAdded
+                                  ? PALETTE.LIGHTERGREY
+                                  : PALETTE.OFFWHITE,
+                              },
+                            ]}
+                            customIconStyles={[
+                              styles.addLinkedFeedIcon,
+                              {
+                                color: alreadyAdded
+                                  ? PALETTE.WHITE
+                                  : PALETTE.ORANGE,
+                              },
+                            ]}
+                            Icon={AddIcon}
+                            onPress={() => onPressAddLinkedFeed(index)}
+                            disabled={alreadyAdded}
+                          />
+                        </View>
+                      );
+                    })}
                   </BottomSheetScrollView>
                 )
               ) : (
@@ -325,8 +350,9 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     backgroundColor: PALETTE.OFFWHITE,
+    // backgroundColor: PALETTE.GREYISHBLUE,
   },
-  scrollView: { flexGrow: 1 },
+  scrollView: { flexGrow: 1, backgroundColor: PALETTE.OFFWHITE },
   coverContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -348,13 +374,13 @@ const styles = StyleSheet.create({
     shadowOffset: { height: 0, width: 0 },
   },
   blogContainer: {
-    padding: 8,
     backgroundColor: PALETTE.OFFWHITE,
   },
   titleInput: {
     width: DIMENSION.HUNDRED_PERCENT,
-    padding: 8,
+    paddingTop: 16,
     paddingBottom: 4,
+    paddingHorizontal: 8,
     fontFamily: 'Futura',
     fontSize: 40,
     fontWeight: 'bold',
@@ -389,7 +415,6 @@ const styles = StyleSheet.create({
     height: 32,
     width: 32,
     borderRadius: 24,
-    backgroundColor: PALETTE.OFFWHITE,
     shadowColor: PALETTE.BLACK,
     shadowOpacity: 0.1,
     shadowRadius: 2,

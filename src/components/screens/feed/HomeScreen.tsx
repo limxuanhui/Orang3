@@ -14,8 +14,8 @@ const HomeScreen = ({}: HomeScreenProps) => {
   const [homeScreenIsFocused, setHomeScreenIsFocused] = useState<boolean>(true);
   const [activePostIndex, setActivePostIndex] = useState<number>(0);
   const { data, isLoading, isRefetching, onEndReached, onRefresh } =
-    useInfiniteDataManager('feeds', 'prod');
-  // console.log('Data!!!: ', data?.pages[0].items[0].metadata);
+    useInfiniteDataManager('feeds');
+
   const onViewableItemsChanged = useCallback(
     // Change type to more suitable one
     ({ viewableItems, _changed }: any) => {

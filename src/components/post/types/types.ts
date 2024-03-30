@@ -1,6 +1,4 @@
-import type { StyleProp, TextStyle } from 'react-native';
-// import type { FeedItemThumbnail } from '@components/tale/types/types';
-import { Feed } from 'components/feed/types/types';
+// import type { StyleProp, TextStyle } from 'react-native';
 
 // Feed
 export type WriteFeedSideControlsProps = {
@@ -16,17 +14,28 @@ export type ItineraryMapOverviewProps = {
   itineraryId?: string;
 };
 
+export enum StoryTextStyle {
+  'TITLE',
+  'PARAGRAPH',
+}
+
 export type StoryText = {
   id: string;
   type: StoryItemType.Text;
-  text: string;
-  style: StyleProp<TextStyle>;
+  data: {
+    text: string;
+    style: StoryTextStyle;
+  };
+  order: number;
 };
 
 export type StoryMedia = {
   id: string;
   type: StoryItemType.Media;
-  data: Feed;
+  data: {
+    feedId: string;
+  };
+  order: number;
 };
 
 export enum StoryItemType {

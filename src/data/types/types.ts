@@ -5,8 +5,8 @@ export type DataKey =
   | 'tales'
   | 'tales-md'
   | 'users';
-export type DataMode = 'dev' | 'test' | 'prod';
+// export type DataMode = 'dev' | 'test' | 'prod';
 export type DataOptions = {
   dataKey: DataKey;
-  dataMode?: DataMode;
+  // dataMode?: DataMode;
 };

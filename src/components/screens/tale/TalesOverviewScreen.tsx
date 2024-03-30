@@ -94,7 +94,7 @@ const TalesOverviewScreen = () => {
     isRefetching,
     onEndReached,
     onRefresh,
-  } = useInfiniteDataManager('tales-md', 'dev');
+  } = useInfiniteDataManager('tales');
 
   const dataFetched = data && data.pages && data.pages[0];
   const dataFetchedIsEmpty = dataFetched && data.pages[0].length === 0;

@@ -17,13 +17,13 @@ const MyFeeds = memo(({ data }: MyFeedsProps) => {
   const height = useMemo(() => (1 - 0.25 - 0.05) * DEVICE_HEIGHT - bh, [bh]);
   const queryClient = useQueryClient();
 
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async () => {
     console.warn('Refreshing!');
     if (data.length > 0) {
       // const creatorId: string = data[0].creator.id;
       console.warn('reached inside refresh');
       // Do we want to invalidate all feeds metadata for all user profiles, or just the current loaded one?
-      queryClient.invalidateQueries({ queryKey: ['feeds'] });
+      await queryClient.invalidateQueries({ queryKey: ['feeds'] });
     }
   }, [data, queryClient]);
 

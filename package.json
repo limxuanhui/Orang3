@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@flyerhq/react-native-keyboard-accessory-view": "^2.4.0",
+    "@googlemaps/polyline-codec": "^1.0.28",
     "@gorhom/bottom-sheet": "^4.4.7",
     "@gorhom/portal": "^1.0.14",
     "@mapbox/polyline": "^1.2.0",

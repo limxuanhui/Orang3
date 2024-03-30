@@ -12,7 +12,7 @@ import BottomSheet, { type BottomSheetRefProps } from '../common/BottomSheet';
 import MapPin from './MapPin';
 import RoutePlanner from './RoutePlanner';
 import RouteNameModal from './RouteNameModal';
-import type { RouteInfo, RouteNodeInfo } from './types/types';
+import type { Route, RouteNode } from './types/types';
 import {
   CUSTOM_DARK_MAP_STYLE,
   DEVICE_HEIGHT,
@@ -29,10 +29,7 @@ import ColourPickerModal from './ColourPickerModal';
 import GypsieButton from '../common/buttons/GypsieButton';
 import ChevronsUpIcon from '../common/icons/ChevronsUp';
 
-type ItineraryPlannerProps = {
-  // mode: ItineraryPlannerMode;
-  // itineraryId?: string;
-};
+type ItineraryPlannerProps = {};
 
 const ItineraryPlanner = ({}: ItineraryPlannerProps) => {
   const bottomSheetRef = useRef<BottomSheetRefProps>(null);
@@ -47,10 +44,9 @@ const ItineraryPlanner = ({}: ItineraryPlannerProps) => {
     modalType,
     itinerary,
   } = useAppSelector(state => state.itineraryPlanner);
-  const { itinerary: iti } = useAppSelector(state => state.writeTale);
   const routes = itinerary.routes;
   const selectedRoute = routes.filter(
-    (route: RouteInfo) => route.id === selectedRouteId,
+    (route: Route) => route.id === selectedRouteId,
   )[0];
 
   const onCloseModal = useCallback(
@@ -80,9 +76,7 @@ const ItineraryPlanner = ({}: ItineraryPlannerProps) => {
     } else if (selectedRoute?.routeNodes.length > 1) {
       console.log('Animating to coords');
       mapRef.current?.fitToCoordinates(
-        selectedRoute.routeNodes.map(
-          (routeNode: RouteNodeInfo) => routeNode.coord,
-        ),
+        selectedRoute.routeNodes.map((routeNode: RouteNode) => routeNode.coord),
         {
           edgePadding: { top: 160, right: 100, bottom: 240, left: 100 },
           animated: true,
@@ -90,16 +84,6 @@ const ItineraryPlanner = ({}: ItineraryPlannerProps) => {
       );
     }
   }, [mapRef, selectedRoute]);
-
-  // useEffect(() => {
-  //   dispatch(itineraryPlanner_createItinerary());
-  // }, [itineraryPlanner_createItinerary, dispatch]);
-
-  console.log(
-    'itinerary in itineraryPlanner: ',
-    JSON.stringify(itinerary, null, 4),
-  );
-  console.log('itinerary in writeTale: ', JSON.stringify(iti, null, 4));
 
   return (
     <View style={styles.container}>
@@ -121,8 +105,8 @@ const ItineraryPlanner = ({}: ItineraryPlannerProps) => {
         customMapStyle={CUSTOM_DARK_MAP_STYLE}
         provider={provider}
         region={INITIAL_POSITION}>
-        {selectedRoute.routeNodes.map((routeNode: RouteNodeInfo) => (
-          <MapPin routeNode={routeNode} />
+        {selectedRoute.routeNodes.map((routeNode: RouteNode) => (
+          <MapPin key={routeNode.id} routeNode={routeNode} />
         ))}
         {selectedRoute.polyline && selectedRoute.polyline.length > 0 && (
           <Polyline
@@ -196,89 +180,3 @@ const styles = StyleSheet.create({
 });
 
 export default ItineraryPlanner;
-
-{
-  /* <Portal>
-        <BottomSheet
-          ref={bottomSheetRef}
-          style={[
-            styles.bottomSheet,
-            { paddingTop: 0, paddingBottom: insets.bottom },
-          ]}
-          handleIndicatorStyle={{
-            backgroundColor: PALETTE.GREYISHBLUE,
-            borderRadius: 8,
-          }}
-          // index={1}
-          snapPoints={snapPoints}
-          enablePanDownToClose>
-          <BottomSheetView style={{ height: "100%" }}>
-            {selectedRoute ? (
-              <RoutePlanner
-                routes={routes}
-                selectedRouteId={selectedRouteId}
-                selectedRoute={selectedRoute}
-              />
-            ) : (
-              <View style={{ width: "100%", height: "100%" }}>
-                <ActivityIndicator size={24} color={PALETTE.ORANGE} />
-              </View>
-            )}
-          </BottomSheetView>
-        </BottomSheet>
-      </Portal> */
-}
-
-// const {
-//   mapRef,
-//   routes,
-//   selectedRouteId,
-//   selectedRoute,
-//   // modalIsOpen,
-//   // modalInitialValue,
-//   onAddRoute,
-//   onClearRoute,
-//   onDeleteRoute,
-//   // onHoldRoute,
-//   onSelectRoute,
-//   onAddMarker,
-//   onDeleteMarker,
-//   onAddPlace,
-//   onDeletePlace,
-//   onMapPress,
-//   onUpdateRouteName,
-//   onStartRouting,
-//   onCloseModal,
-// } = useMapHandlers({ mode, itineraryId });
-
-// const { modalIsOpen, closeModal, openModal } = useModalHandlers();
-
-// const [modalInitialValue, setModalInitialValue] = useState<string>(
-//   selectedRoute.name,
-// );
-
-// const onHoldRoute = useCallback(
-//   (routeName: string) => {
-//     console.warn("clicked holdroute")
-//     setModalInitialValue(routeName);
-//     openModal();
-//   },
-//   [openModal, setModalInitialValue],
-// );
-
-// useEffect(() => {
-//   console.log("ItineraryPlanner mounted");
-//   // If itinerary id does not exist, create itinerary
-//   if (!itinerary.id) {
-//     // Use user id from global object as creatorId
-//     dispatch(createItinerary({ creatorId: "" }));
-//   }
-
-//   // Load routes from backend based on itineraryId and call setRoutes
-
-//   return () => {
-//     console.log("ItineraryPlanner unmounted");
-//     // Dispatch an action to update itinerary in NewItineraryPost.
-//     dispatch(setItinerary({ routes }));
-//   };
-// }, [routes, createItinerary, setItinerary, dispatch]);

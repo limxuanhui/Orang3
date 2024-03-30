@@ -45,11 +45,11 @@ const NewItineraryPostHandleBar = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     width: DIMENSION.HUNDRED_PERCENT,
     height: 90,
     borderRadius: 16,
-    backgroundColor: PALETTE.LIGHTERGREY,
+    // backgroundColor: PALETTE.LIGHTERGREY,
     alignItems: 'center',
     padding: 16,
   },
@@ -65,7 +65,11 @@ const styles = StyleSheet.create({
     width: 60,
     borderRadius: 30,
   },
-  description: { fontFamily: 'Lilita One', fontSize: 20 },
+  description: {
+    fontFamily: 'Lilita One',
+    fontSize: 20,
+    color: PALETTE.OFFWHITE,
+  },
   followButton: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',

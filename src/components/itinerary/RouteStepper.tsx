@@ -1,10 +1,12 @@
 import { ScrollView, StyleSheet } from 'react-native';
-import RouteConnector from './RouteConnector';
+// import RouteConnector from './RouteConnector';
 import RouteNode from './RouteNode';
-import type { RouteNodeInfo, RouteStepperProps } from './types/types';
+import type {
+  RouteNode as RouteNodeInfo,
+  RouteStepperProps,
+} from './types/types';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
-import { nanoid } from '@reduxjs/toolkit';
 
 const RouteStepper = ({ route }: RouteStepperProps) => {
   return (
@@ -12,13 +14,13 @@ const RouteStepper = ({ route }: RouteStepperProps) => {
       style={styles.routeStepper}
       contentContainerStyle={styles.contentContainerStyle}
       showsVerticalScrollIndicator={false}>
-      {route?.routeNodes.map((routeNode: RouteNodeInfo, index: number) => (
-        <>
-          <RouteNode key={nanoid()} routeNode={routeNode} />
-          {index !== route.routeNodes.length - 1 ? (
-            <RouteConnector horizontal={false} />
-          ) : null}
-        </>
+      {route?.routeNodes.map((routeNode: RouteNodeInfo, _index: number) => (
+        <RouteNode key={routeNode.id} routeNode={routeNode} />
+        // <>
+        //   {index !== route.routeNodes.length - 1 ? (
+        //     <RouteConnector horizontal={false} />
+        //   ) : null}
+        // </>
       ))}
     </ScrollView>
   );

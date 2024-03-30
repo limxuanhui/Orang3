@@ -16,10 +16,13 @@ import { GOOGLE_IOS_CLIENT_ID } from '@env';
 // import { Text, View } from 'react-native';
 // import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
 import { queryClient } from '@helpers/singletons';
+import { enableFreeze } from 'react-native-screens';
 
 GoogleSignin.configure({
   iosClientId: GOOGLE_IOS_CLIENT_ID,
 });
+
+enableFreeze(true);
 
 const App = (): JSX.Element => {
   const authInfo = useAuthManager();

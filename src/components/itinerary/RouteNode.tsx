@@ -4,7 +4,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import type { RouteNodeProps } from './types/types';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
-import { useAppDispatch, useAppSelector } from '@redux/hooks';
+import { useAppDispatch } from '@redux/hooks';
 import {
   itineraryPlanner_deletePlace,
   itineraryPlanner_openModal,
@@ -16,7 +16,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 
 const RouteNode = ({ routeNode }: RouteNodeProps) => {
   const dispatch = useAppDispatch();
-  const { mode } = useAppSelector(state => state.itineraryPlanner);
+  // const { mode } = useAppSelector(state => state.itineraryPlanner);
 
   const onDeletePlace = useCallback(
     (routeNodeId: string) => {
@@ -84,11 +84,11 @@ const RouteNode = ({ routeNode }: RouteNodeProps) => {
         />
       </View>
       <Text style={styles.routeNodeAddress}>{routeNode.address}</Text>
-      {mode === 'edit' ? (
-        <Pressable style={styles.deleteButton} onPress={onPressDelete}>
-          <Entypo name="cross" size={16} color={PALETTE.GREY} />
-        </Pressable>
-      ) : null}
+      {/* {mode === 'edit' ? ( */}
+      <Pressable style={styles.deleteButton} onPress={onPressDelete}>
+        <Entypo name="cross" size={16} color={PALETTE.GREY} />
+      </Pressable>
+      {/* ) : null} */}
     </View>
   );
 };

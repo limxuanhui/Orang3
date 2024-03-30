@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { QueryKey, queryOptions, useQuery } from '@tanstack/react-query';
 import { ProfileScreenNavigationProp } from '@screens/profile/types/types';
 import { FeedMetadata, FeedThumbnailInfo } from '@components/feed/types/types';
-import { TaleThumbnailInfo } from '@components/tale/types/types';
+import { TaleMetadata, TaleThumbnailInfo } from '@components/tale/types/types';
 import { DUMMY_DATABASE } from '@data/database';
 import { DataKey } from '@data/types/types';
 import { GypsieUser } from '@navigators/types/types';
@@ -94,25 +94,45 @@ const useProfileManager = (user: GypsieUser) => {
     }: {
       queryKey: QueryKey;
     }): Promise<TaleThumbnailInfo[]> => {
-      const [key, uid] = queryKey;
-      console.log('QUERY FUNCTION CALLED');
-      return new Promise((resolve, _reject) => {
-        const talesThumbnails: TaleThumbnailInfo[] = DUMMY_DATABASE[
-          key as DataKey
-        ] as TaleThumbnailInfo[];
-        const userTalesThumbnails: TaleThumbnailInfo[] = talesThumbnails.filter(
-          (el: TaleThumbnailInfo) => el.creator.id === uid,
-        );
-        setTimeout(() => {
-          resolve(userTalesThumbnails);
-        }, 2000);
-      });
+      const [key, key1, key2, uid] = queryKey;
+      console.log('Refreshing queryKey: ', queryKey);
+      switch (mode) {
+        case 'production':
+          try {
+            const url = `/${key}/${key1}/${key2}/${uid}`;
+            const response = await axiosClient.get(url);
+            return response.data.items.map((el: TaleMetadata) => ({
+              taleId: el.id,
+              creator: el.creator,
+              thumbnail: el.thumbnail,
+              title: el.title,
+            }));
+          } catch (err) {
+            console.error(err);
+            return [];
+          }
+        case 'development':
+          return new Promise((resolve, _reject) => {
+            const talesThumbnails: TaleThumbnailInfo[] = DUMMY_DATABASE[
+              key as DataKey
+            ] as TaleThumbnailInfo[];
+            const userTalesThumbnails: TaleThumbnailInfo[] =
+              talesThumbnails.filter(
+                (el: TaleThumbnailInfo) => el.creator.id === uid,
+              );
+            setTimeout(() => {
+              resolve(userTalesThumbnails);
+            }, 2000);
+          });
+        default:
+          return [];
+      }
     },
-    [],
+    [mode],
   );
 
   const talesMetadataOptions = useMemo(() => {
-    const queryKey = ['tales-md', user.id];
+    const queryKey = ['tales', 'user', 'metadata', user.id];
     return queryOptions({
       queryKey,
       queryFn: talesMetadataQueryFn,

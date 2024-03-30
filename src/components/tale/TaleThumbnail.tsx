@@ -9,6 +9,7 @@ import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
 import GypsieAvatar from '@components/common/GypsieAvatar';
 import GypsieSkeleton from '@components/common/GypsieSkeleton';
+import { AWS_CLOUDFRONT_URL_THUMBNAIL } from '@env';
 
 const CARD_WIDTH = DEVICE_WIDTH / 2 - 8;
 
@@ -69,7 +70,7 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const [paused, setPaused] = useState<boolean>(true);
 
-  const onPressFeed = useCallback(() => {
+  const onPressTaleThumbnail = useCallback(() => {
     navigation.push('Modal', {
       screen: 'TaleView',
       params: { id: data.taleId, creator: data.creator },
@@ -94,27 +95,30 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
       onTouchEnd={onPauseToggle}
       // onTouchStart={() => setPaused(false)}
       // onTouchEnd={() => setPaused(true)}
-      onPress={onPressFeed}>
-      {data &&
-        data.cover &&
-        (data.cover.type.startsWith('image') ? (
+      onPress={onPressTaleThumbnail}>
+      {data.thumbnail ? (
+        data.thumbnail.type.startsWith('image') ? (
           <Image
             style={[
               styles.feedCardMedia,
-              { aspectRatio: data.cover.width / data.cover.height },
+              { aspectRatio: data.thumbnail.width / data.thumbnail.height },
             ]}
-            source={{ uri: data.cover.uri }}
+            source={{
+              uri: `${AWS_CLOUDFRONT_URL_THUMBNAIL}/${data.thumbnail.uri}`,
+            }}
             progressiveRenderingEnabled
             resizeMode="contain"
-            // defaultSource={{uri: "/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg"}}
+            // defaultSource={{
+            //   uri: '/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg',
+            // }}
           />
-        ) : data.cover.type.startsWith('video') ? (
+        ) : (
           <Video
             style={[
               styles.feedCardMedia,
-              { aspectRatio: data.cover.width / data.cover.height },
+              { aspectRatio: data.thumbnail.width / data.thumbnail.height },
             ]}
-            source={{ uri: data.cover.uri }}
+            source={{ uri: data.thumbnail.uri }}
             // posterResizeMode="contain"
             resizeMode="contain"
             // onLoadStart={() => console.log("Video thumbnail is loading@components.")}
@@ -123,9 +127,17 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
             paused={paused}
             volume={0}
           />
-        ) : (
-          <Text>Nothing to display@components.</Text>
-        ))}
+        )
+      ) : (
+        <Image
+          style={styles.feedCardMedia}
+          source={{
+            uri: '/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png',
+          }}
+          progressiveRenderingEnabled
+          resizeMode="contain"
+        />
+      )}
       <View style={styles.feedCardFooter}>
         <GypsieAvatar uri={data.creator.avatar?.uri || PLACEHOLDER_IMAGE_URI} />
         <View style={styles.feedCardTextWrapper}>
@@ -158,6 +170,7 @@ const styles = StyleSheet.create({
     width: DIMENSION.HUNDRED_PERCENT,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
+    aspectRatio: 1,
   },
   feedCardFooter: {
     flexDirection: 'row',

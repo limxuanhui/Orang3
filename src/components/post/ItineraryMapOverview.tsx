@@ -52,7 +52,8 @@ const ItineraryMapOverview = ({
 const styles = StyleSheet.create({
   container: {
     height: 180,
-    width: DIMENSION.HUNDRED_PERCENT,
+    width: '95%',
+    alignSelf: 'center',
     marginVertical: 8,
     borderRadius: 8,
     shadowOffset: { width: 0, height: 2 },
@@ -64,6 +65,7 @@ const styles = StyleSheet.create({
     height: DIMENSION.HUNDRED_PERCENT,
     width: DIMENSION.HUNDRED_PERCENT,
     borderRadius: 8,
+    opacity: 0.7,
   },
   footerText: {
     fontWeight: 'bold',

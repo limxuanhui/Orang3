@@ -4,11 +4,6 @@ import ItineraryPlanner from '@components/itinerary/ItineraryPlanner';
 import { type ItineraryScreenProps } from './types/types';
 
 const ItineraryScreen = ({}: ItineraryScreenProps) => {
-  // const { user } = useContext(AuthContext);
-  // const { params } = useRoute<ItineraryRouteProp>();
-  // const dispatch = useAppDispatch();
-  // const { mode } = useAppSelector(state => state.itineraryPlanner);
-
   return (
     <View style={styles.container}>
       <ItineraryPlanner />

@@ -4,25 +4,21 @@ import RouteControls from './RouteControls';
 import RouteDisplay from './RouteDisplay';
 import type { RoutePlannerProps } from './types/types';
 import { DIMENSION } from '@constants/dimensions';
-import { useAppSelector } from '@redux/hooks';
 
 const RoutePlanner = ({
   routes,
   selectedRouteId,
   selectedRoute,
 }: RoutePlannerProps) => {
-  const { mode } = useAppSelector(state => state.itineraryPlanner);
   return (
     <View style={styles.planner}>
       <RouteControls routes={routes} selectedRouteId={selectedRouteId} />
       <RouteDisplay selectedRoute={selectedRoute} />
-      {mode === 'edit' ? (
-        <RouteBottomControls
-          isRouted={selectedRoute.encodedPolyline !== ''}
-          oneRouteLeft={routes.length === 1}
-          routeLength={selectedRoute.routeNodes.length}
-        />
-      ) : null}
+      <RouteBottomControls
+        isRouted={selectedRoute.encodedPolyline !== ''}
+        oneRouteLeft={routes.length === 1}
+        routeLength={selectedRoute.routeNodes.length}
+      />
     </View>
   );
 };

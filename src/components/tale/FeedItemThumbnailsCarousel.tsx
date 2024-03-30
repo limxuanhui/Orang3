@@ -1,30 +1,71 @@
 import { useCallback } from 'react';
-import { FlatList, Image, Pressable, StyleSheet } from 'react-native';
+import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import type { FeedItemThumbnailsCarouselProps } from './types/types';
+import {
+  FEED_ITEM_THUMBNAILS_DISPLAY_STYLES,
+  type FeedItemThumbnailsCarouselProps,
+} from './types/types';
 import type { ModalNavigatorNavigationProp } from '@components/navigators/types/types';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
 import { AWS_CLOUDFRONT_URL_THUMBNAIL } from '@env';
+import { QueryKey, useQuery } from '@tanstack/react-query';
+import { axiosClient } from '@helpers/singletons';
+import { ActivityIndicator } from 'react-native-paper';
+import { Feed } from '@components/feed/types/types';
 
 const FeedItemThumbnailsCarousel = ({
-  data,
-  style,
+  feedId,
+  displayFormat,
 }: FeedItemThumbnailsCarouselProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
 
   const onPressLinkedFeed = useCallback(() => {
     navigation.navigate('Modal', {
       screen: 'Feed',
-      params: { feedId: data.metadata.id },
+      params: { feedId },
     });
-  }, [data.metadata.id, navigation]);
+  }, [feedId, navigation]);
+
+  const queryFn = useCallback(
+    async ({ queryKey }: { queryKey: QueryKey }): Promise<Feed | null> => {
+      const [key, fid] = queryKey;
+      try {
+        const response = await axiosClient.get(`/${key}/${fid}`);
+        return response.data;
+      } catch (err) {
+        console.error(err);
+        return null;
+      }
+    },
+    [],
+  );
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['feeds', feedId],
+    queryFn,
+    enabled: !!feedId,
+    staleTime: Infinity,
+  });
+
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ActivityIndicator size={24} color={PALETTE.ORANGE} />
+      </View>
+    );
+  }
 
   return (
     <FlatList
-      style={[styles.linkedFeeds, style]}
+      style={[styles.linkedFeeds]}
       contentContainerStyle={styles.linkedFeedsContentContainer}
-      data={data.feedItems}
+      data={data?.feedItems}
       renderItem={el => (
         <Pressable
           style={({ pressed }) => [
@@ -33,7 +74,7 @@ const FeedItemThumbnailsCarousel = ({
               marginLeft: el.index === 0 ? 0 : 8,
               transform: [{ scale: pressed ? 0.99 : 1 }],
             },
-            style,
+            FEED_ITEM_THUMBNAILS_DISPLAY_STYLES[displayFormat],
           ]}
           onPress={onPressLinkedFeed}>
           <Image

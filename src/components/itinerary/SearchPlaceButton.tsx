@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
 import type { ModalNavigatorNavigationProp } from '../navigators/types/types';
-import type { RouteNodeInfo, SearchPlaceButtonProps } from './types/types';
+import type { RouteNode, SearchPlaceButtonProps } from './types/types';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
 import { itineraryPlanner_addPlace } from '@redux/reducers/itineraryPlannerSlice';
@@ -14,7 +14,7 @@ const SearchPlaceButton = ({}: SearchPlaceButtonProps) => {
   const dispatch = useAppDispatch();
 
   const onAddPlace = useCallback(
-    (routeNode: RouteNodeInfo) => {
+    (routeNode: RouteNode) => {
       dispatch(itineraryPlanner_addPlace({ routeNode }));
     },
     [dispatch],

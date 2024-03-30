@@ -1,3 +1,4 @@
+import { memo, useCallback } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 import GypsieButton from '@components/common/buttons/GypsieButton';
 import FeedItemThumbnailsCarousel from '@components/tale/FeedItemThumbnailsCarousel';
@@ -5,6 +6,11 @@ import { type StoryItem, StoryItemType } from './types/types';
 import { PALETTE } from '@constants/palette';
 import { DIMENSION } from '@constants/dimensions';
 import CrossIcon from '@icons/CrossIcon';
+import { useAppDispatch, useAppSelector } from '@redux/hooks';
+import { writeTale_setSelectedStoryItemIndex } from '@redux/reducers/writeTaleSlice';
+import { printPrettyJson } from '@helpers/functions';
+import { FeedItemThumbnailsDisplayFormat } from '@components/tale/types/types';
+import { STORY_TEXT_STYLES } from '@constants/text';
 
 type NewStoryItemProps = {
   item: StoryItem;
@@ -18,22 +24,44 @@ const NewStoryItem = ({
   onPressDeleteStoryItem,
 }: NewStoryItemProps) => {
   console.log('Investigate why is this component rendering 3 times');
-  console.log('ITEM: ', item);
+  printPrettyJson(item);
+  const dispatch = useAppDispatch();
+  const { selectedStoryItemIndex } = useAppSelector(state => state.writeTale);
+
+  const onTextInputFocus = useCallback(() => {
+    dispatch(
+      writeTale_setSelectedStoryItemIndex({
+        selectedStoryItemIndex: item.order,
+      }),
+    );
+  }, [dispatch, item.order]);
+
   if (item.type === StoryItemType.Text) {
     return (
       <View style={styles.storyItemText}>
         <TextInput
-          style={[styles.storyItemTextInput, item.style]}
+          style={[
+            styles.storyItemTextInput,
+            STORY_TEXT_STYLES[item.data.style],
+            selectedStoryItemIndex === item.order
+              ? // eslint-disable-next-line react-native/no-inline-styles
+                {
+                  borderLeftWidth: 5,
+                  borderLeftColor: PALETTE.ORANGE,
+                  backgroundColor: PALETTE.OFFWHITE,
+                }
+              : {},
+          ]}
           onKeyPress={({ nativeEvent }) => {
-            if (nativeEvent.key === 'Backspace' && item.text.trim() === '') {
+            if (
+              nativeEvent.key === 'Backspace' &&
+              item.data.text.trim() === ''
+            ) {
               onPressDeleteStoryItem(item.id);
             }
           }}
-          // onFocus={e => {
-          //   console.log(e.nativeEvent.text);
-          //   setFocusedText(e.nativeEvent.text);
-          // }}
-          value={item.text}
+          onFocus={onTextInputFocus}
+          value={item.data.text}
           onChangeText={text => onStoryItemTextChange(item.id, text)}
           autoFocus
           multiline
@@ -45,7 +73,10 @@ const NewStoryItem = ({
   } else if (item.type === StoryItemType.Media) {
     return (
       <View style={styles.storyItemMedia} key={item.id}>
-        <FeedItemThumbnailsCarousel data={item.data} />
+        <FeedItemThumbnailsCarousel
+          feedId={item.data.feedId}
+          displayFormat={FeedItemThumbnailsDisplayFormat.CAROUSEL}
+        />
         <GypsieButton
           customButtonStyles={styles.deleteButton}
           customIconStyles={styles.deleteIcon}
@@ -66,9 +97,10 @@ const styles = StyleSheet.create({
   storyItemTextInput: {
     height: DIMENSION.HUNDRED_PERCENT,
     width: DIMENSION.HUNDRED_PERCENT,
-    marginBottom: 8,
-    // borderBottomWidth: 1,
-    // borderColor: PALETTE.LIGHTERGREY,
+    marginVertical: 8,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 0,
   },
   storyItemMedia: {
     flexDirection: 'row',
@@ -94,4 +126,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewStoryItem;
+export default memo(NewStoryItem);

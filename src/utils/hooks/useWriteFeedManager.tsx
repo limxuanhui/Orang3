@@ -174,10 +174,7 @@ const useWriteFeedManager = () => {
     // Dispatch resetWriteFeedSlice, invalidate query cache for feeds, feeds-md, then go back to previous screen
     dispatch(writeFeed_setPosting(false));
     dispatch(writeFeed_resetWriteFeedSlice());
-    // queryClient.invalidateQueries();
-    queryClient.invalidateQueries({ queryKey: ['feeds'] });
-    // queryClient.invalidateQueries({ queryKey: ['feeds', 'user'] });
-    // queryClient.invalidateQueries({ queryKey: ['feeds', 'user', 'metadata'] });
+    await queryClient.invalidateQueries({ queryKey: ['feeds'] });
     navigation.goBack();
   }, [items, navigation, user, dispatch]);
 

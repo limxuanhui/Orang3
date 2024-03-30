@@ -1,6 +1,9 @@
 import { AWS_API_GATEWAY_S3_PRESIGNED_URLS_LIST } from '@env';
 import axios, { AxiosResponse } from 'axios';
 import { MediaMimeType } from '@components/feed/types/types';
+import Polyline from '@mapbox/polyline';
+import { RouteNodeCoord } from '@components/itinerary/types/types';
+import { LatLngTuple, decode } from '@googlemaps/polyline-codec';
 
 export const printPrettyJson = (text: object) => {
   console.info(JSON.stringify(text, null, 4));
@@ -78,4 +81,19 @@ export const uploadMediaFiles = async (
   }
 
   return uploadMediaFilesResponse;
+};
+
+export const decodePolyline = (encodedPolyline: string): RouteNodeCoord[] => {
+  const coordinates: LatLngTuple[] = decode(encodedPolyline);
+  return coordinates.map(coord => ({
+    latitude: coord[0],
+    longitude: coord[1],
+  }));
+};
+
+export const encodePolyline = (polyline: RouteNodeCoord[]) => {
+  const encodedPolyline = Polyline.encode(
+    polyline.map(coord => [coord.latitude, coord.longitude]),
+  );
+  return encodedPolyline;
 };

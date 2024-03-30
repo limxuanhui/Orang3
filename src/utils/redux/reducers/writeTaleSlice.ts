@@ -1,9 +1,8 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { Draft, PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 import type { WriteTale } from '@components/tale/types/types';
-// import type { FeedItemThumbnail } from '@components/tale/types/types';
-// import { DUMMY_FEEDS_ITEMS_THUMBNAILS } from '@data/feeds-thumbnails-list';
-// import { BACKEND_BASE_URL } from '@env';
+import { StoryItem, StoryText } from 'components/post/types/types';
+import { ulid } from 'ulid';
 
 type WriteTaleState = Readonly<WriteTale>;
 
@@ -22,8 +21,16 @@ const initialState: WriteTaleState = {
     title: '',
   },
   itinerary: {
-    id: '',
-    creatorId: '',
+    metadata: {
+      id: '',
+      creator: {
+        id: '',
+        name: '',
+        handle: '',
+        email: '',
+        avatar: undefined,
+      },
+    },
     routes: [
       {
         id: '',
@@ -36,13 +43,14 @@ const initialState: WriteTaleState = {
   story: [],
   posting: false,
   saving: false,
+  selectedStoryItemIndex: 0,
 };
 
 const writeTaleSlice = createSlice({
   name: 'writeTale',
   initialState,
   reducers: {
-    writeTale_setFetchedTale: (state, action) => {
+    writeTale_initTale: (state, action) => {
       state.metadata = action.payload.tale.metadata;
       state.itinerary = action.payload.tale.itinerary;
       state.story = action.payload.tale.story;
@@ -55,8 +63,10 @@ const writeTaleSlice = createSlice({
     },
     writeTale_createTaleItinerary: (state, action) => {
       state.itinerary = {
-        id: uuidv4(),
-        creatorId: action.payload.creatorId,
+        metadata: {
+          id: ulid(),
+          creator: action.payload.creator,
+        },
         routes: [
           {
             id: uuidv4(),
@@ -72,11 +82,36 @@ const writeTaleSlice = createSlice({
       state.itinerary = action.payload.itinerary;
     },
 
-    writeTale_addStoryItem: (state, action) => {
-      state.story.push(action.payload.newStoryItem);
+    writeTale_addStoryItem: (
+      state,
+      action: PayloadAction<{
+        newStoryItem: Draft<StoryItem>;
+        insertAtIndex: number;
+      }>,
+    ) => {
+      state.story.splice(
+        action.payload.insertAtIndex,
+        0,
+        action.payload.newStoryItem,
+      );
     },
-    writeTale_deleteStoryItem: (state, action) => {
-      state.story.splice(action.payload.itemId, 1);
+    writeTale_deleteStoryItem: (
+      state,
+      action: PayloadAction<{ deleteFromIndex: number }>,
+    ) => {
+      state.story.splice(action.payload.deleteFromIndex, 1);
+    },
+    writeTale_setSelectedStoryItemIndex: (
+      state,
+      action: PayloadAction<{ selectedStoryItemIndex: number }>,
+    ) => {
+      state.selectedStoryItemIndex = action.payload.selectedStoryItemIndex;
+    },
+    writeTale_reorderStoryItems: state => {
+      state.story = state.story.map((storyItem, index) => ({
+        ...storyItem,
+        order: index,
+      }));
     },
     writeTale_setStoryItemText: (
       state,
@@ -85,13 +120,19 @@ const writeTaleSlice = createSlice({
       const currIndex = state.story.findIndex(
         el => el.id === action.payload.id,
       );
-      const updatedStory = {
+      const selectedStoryItem = state.story[currIndex] as Draft<StoryText>;
+
+      const updatedStoryText = {
         ...state.story[currIndex],
-        text: action.payload.text,
-      };
+        data: {
+          ...selectedStoryItem.data,
+          text: action.payload.text,
+        },
+      } as Draft<StoryText>;
+
       state.story = [
         ...state.story.slice(0, currIndex),
-        updatedStory,
+        updatedStoryText,
         ...state.story.slice(currIndex + 1),
       ];
     },
@@ -106,13 +147,15 @@ const writeTaleSlice = createSlice({
 });
 
 export const {
-  writeTale_setFetchedTale,
+  writeTale_initTale,
   writeTale_setCover,
   writeTale_setTitle,
   writeTale_createTaleItinerary,
   writeTale_setTaleItinerary,
   writeTale_addStoryItem,
   writeTale_deleteStoryItem,
+  writeTale_setSelectedStoryItemIndex,
+  writeTale_reorderStoryItems,
   writeTale_setStoryItemText,
   writeTale_setPosting,
   // writeTale_setSaving,

@@ -1,9 +1,15 @@
 import { useCallback, useMemo } from 'react';
-import axios from 'axios';
 import { QueryKey, queryOptions, useQuery } from '@tanstack/react-query';
-import { BACKEND_BASE_URL } from '@env';
 import { DUMMY_DATABASE } from '@data/database';
-import type { DataKey, DataMode } from '@data/types/types';
+import type { DataKey } from '@data/types/types';
+import { axiosClient } from '@helpers/singletons';
+import useGlobals from './useGlobals';
+import { printPrettyJson } from '@helpers/functions';
+import { AxiosResponse } from 'axios';
+
+const generateGetTaleByIdsKey = (taleIds: string[]): [string, string[]] => {
+  return ['tales', taleIds];
+};
 
 /**
  * This hook manages all the data of the app components, except components with infinite scrolling.
@@ -11,22 +17,47 @@ import type { DataKey, DataMode } from '@data/types/types';
  * @param dataKey
  * @returns
  */
-const useDataManager = (dataKey: DataKey, dataMode: DataMode = 'prod') => {
+const useDataManager = (key: DataKey, ids: string[]) => {
+  const { mode } = useGlobals();
+  // use some form of a key factory
+
   const queryFn = useCallback(
     async ({ queryKey }: { queryKey: QueryKey }) => {
-      const [key] = queryKey;
+      const [itemKey, itemIds] = queryKey;
+      console.log('QUERY FUNCTION CALLED IN USEDATAMANAGER');
 
-      switch (dataMode) {
-        case 'prod':
+      const idsList = itemIds as string[];
+      switch (mode) {
+        case 'production':
           try {
-            const response = await axios.get(`${BACKEND_BASE_URL}/api/${key}`);
+            let response: AxiosResponse;
+            if (idsList.length === 1) {
+              console.log(
+                `Production axios client getting data for /${itemKey}/${idsList[0]}`,
+              );
+              response = await axiosClient.get(`/${itemKey}/${idsList[0]}`);
+            } else if (idsList.length > 1) {
+              response = await axiosClient.post(`/${itemKey}/list`, {
+                data: idsList,
+              });
+              console.log('FEEDS FETCHED!');
+              console.log(response.data);
+              return response.data;
+            } else {
+              return null;
+            }
+
+            printPrettyJson(response.data);
+            console.log('==================== THE END ====================');
             return response.data;
           } catch (err) {
             console.error(err);
           }
           break;
 
-        case 'dev':
+        case 'testing':
+          break;
+        case 'development':
           return new Promise((resolve, _reject) => {
             setTimeout(() => {
               resolve(DUMMY_DATABASE[key as DataKey]);
@@ -34,25 +65,26 @@ const useDataManager = (dataKey: DataKey, dataMode: DataMode = 'prod') => {
           });
         default:
           // Do I need to return a promise here?
-          console.info(`${dataMode} mode is not handled.`);
+          console.info(`${mode} mode is not handled.`);
       }
     },
-    [dataMode],
+    [key, mode],
   );
 
   const options = useMemo(() => {
     return queryOptions({
-      queryKey: [dataKey],
+      queryKey: generateGetTaleByIdsKey(ids),
       queryFn,
+      // initialData: null,
+      enabled: true,
       staleTime: 1000 * 60 * 10, // 10 min
-      initialData: null,
+      gcTime: 1000 * 60 * 5, // 5 min
       // _defaulted: false,
       // _optimisticResults:null,
       // behavior,
-      enabled: false,
-      gcTime: 1000 * 60 * 5,
+      // select: () => {}
     });
-  }, [dataKey, queryFn]);
+  }, [ids, queryFn]);
 
   const {
     data,
@@ -79,8 +111,6 @@ const useDataManager = (dataKey: DataKey, dataMode: DataMode = 'prod') => {
     status,
     refetch,
   } = useQuery(options);
-
-  // const mutation = useMutation({});
 
   return {
     data,

@@ -1,14 +1,25 @@
+import { GypsieUser } from 'components/navigators/types/types';
 import { GooglePlaceDetail } from 'react-native-google-places-autocomplete';
 import { LatLng } from 'react-native-maps';
 
 // Data types
 export type Itinerary = {
-  id: string;
-  creatorId: string;
-  routes: RouteInfo[];
+  metadata: {
+    id: string;
+    creator: GypsieUser;
+  };
+  routes: Route[];
 };
 
-export type RouteNodeInfo = {
+export type ItineraryDto = {
+  metadata: {
+    id: string;
+    creator: GypsieUser;
+  };
+  routes: RouteDto[];
+};
+
+export type RouteNode = {
   id: string;
   placeId: string;
   name: string;
@@ -19,12 +30,19 @@ export type RouteNodeInfo = {
   openNow?: boolean;
 };
 
-export type RouteInfo = {
+export type Route = {
   id: string;
   name: string;
-  routeNodes: RouteNodeInfo[];
+  routeNodes: RouteNode[];
   encodedPolyline: string;
   polyline?: RouteNodeCoord[];
+};
+
+export type RouteDto = {
+  id: string;
+  name: string;
+  routeNodes: RouteNode[];
+  encodedPolyline: string;
 };
 
 export type RouteNodeCoord = LatLng;
@@ -33,8 +51,7 @@ export type RouteNodeCoord = LatLng;
 export type ItineraryPlannerMode = 'view' | 'edit';
 
 export type MapPinProps = {
-  routeNode: RouteNodeInfo;
-  // color: string;
+  routeNode: RouteNode;
 };
 
 export type RouteBottomControlsProps = {
@@ -44,12 +61,12 @@ export type RouteBottomControlsProps = {
 };
 
 export type RouteButtonProps = {
-  route: RouteInfo;
+  route: Route;
   selected: boolean;
 };
 
 export type RouteNodeProps = {
-  routeNode: RouteNodeInfo;
+  routeNode: RouteNode;
 };
 
 export type RouteConnectorProps = {
@@ -58,16 +75,16 @@ export type RouteConnectorProps = {
 };
 
 export type RouteStepperProps = {
-  route: RouteInfo | null;
+  route: Route | null;
 };
 
 export type RouteControlsProps = {
-  routes: RouteInfo[];
+  routes: Route[];
   selectedRouteId: string;
 };
 
 export type RouteDisplayProps = {
-  selectedRoute: RouteInfo;
+  selectedRoute: Route;
 };
 
 export type RouteNameModalProps = {
@@ -75,9 +92,9 @@ export type RouteNameModalProps = {
 };
 
 export type RoutePlannerProps = {
-  routes: RouteInfo[];
+  routes: Route[];
   selectedRouteId: string;
-  selectedRoute: RouteInfo;
+  selectedRoute: Route;
 };
 
 export type SearchPlaceButtonProps = {};

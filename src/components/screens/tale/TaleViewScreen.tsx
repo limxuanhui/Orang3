@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ActivityIndicator } from 'react-native-paper';
@@ -8,12 +8,16 @@ import BottomSheet, {
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
-import { QueryKey, queryOptions, useQuery } from '@tanstack/react-query';
 
 import GypsieButton from '@components/common/buttons/GypsieButton';
 import NewItineraryPostHandleBar from '@components/post/NewItineraryPostHandleBar';
 import FeedCarousel from '@components/feed/FeedCarousel';
-import { type StoryItemType } from '@components/post/types/types';
+import {
+  StoryItem,
+  StoryItemType,
+  StoryMedia,
+  StoryText,
+} from '@components/post/types/types';
 
 import type {
   TaleViewScreenProps,
@@ -23,8 +27,6 @@ import ItineraryMapOverview from '@components/post/ItineraryMapOverview';
 
 import { BaseFeed, Feed, FeedItem } from '@components/feed/types/types';
 import FeedItemThumbnailsCarousel from '@components/tale/FeedItemThumbnailsCarousel';
-import AuxiliaryControls from '@components/common/AuxiliaryControls';
-import { Tale } from '@components/tale/types/types';
 
 import { PALETTE } from '@constants/palette';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
@@ -32,107 +34,51 @@ import { VIEWABILITY_CONFIG } from '@constants/feed';
 import { DIMENSION } from '@constants/dimensions';
 
 import useBottomSheetHandlers from '@hooks/useBottomSheetHandlers';
-import { AuthContext } from '@contexts/AuthContext';
-import { useAppDispatch, useAppSelector } from '@redux/hooks';
+import { useAppDispatch } from '@redux/hooks';
 import {
+  itineraryPlanner_initItinerary,
   itineraryPlanner_resetItineraryPlannerSlice,
-  itineraryPlanner_setItinerary,
-  itineraryPlanner_setMode,
 } from '@redux/reducers/itineraryPlannerSlice';
 
 import ChevronsUpIcon from '@icons/ChevronsUp';
-import EditIcon from '@icons/EditIcon';
-import { DUMMY_DATABASE } from '@data/database';
-import type { DataKey } from '@data/types/types';
+import useDataManager from '@hooks/useDataManager';
+import { STORY_TEXT_STYLES } from '@constants/text';
+import { FeedItemThumbnailsDisplayFormat } from '@components/tale/types/types';
+import { decodePolyline, printPrettyJson } from '@helpers/functions';
+import { Itinerary, Route } from '@components/itinerary/types/types';
 
-const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
+const TaleViewScreen = ({}: TaleViewScreenProps) => {
   const insets = useSafeAreaInsets();
-  const userInfo = useContext(AuthContext);
   const dispatch = useAppDispatch();
-  const { mode } = useAppSelector(state => state.itineraryPlanner);
   const { params } = useRoute<TaleViewScreenRouteProp>();
   const { id, creator } = params;
+  const { data, isLoading } = useDataManager('tales', [id]);
 
-  /**
-   * onPressChangeMode: allows user to change to edit mode to edit the tale if he/she is the creator.
-   */
-  const onPressChangeMode = useCallback(() => {
-    if (mode === 'view') {
-      dispatch(itineraryPlanner_setMode({ mode: 'edit' }));
-      navigation.navigate('WriteTale', { taleId: id });
-    }
-  }, [mode, dispatch, navigation, id]);
-
-  const taleQueryFn = useCallback(
-    async ({ queryKey }: { queryKey: QueryKey }): Promise<Tale | undefined> => {
-      const [key, taleId] = queryKey;
-      console.log('QUERY FUNCTION CALLED');
-      return new Promise((resolve, _reject) => {
-        const tales: Tale[] = DUMMY_DATABASE[key as DataKey] as Tale[];
-        setTimeout(() => {
-          resolve(tales.find((el: Tale) => el.metadata.id === taleId));
-        }, 2000);
-      });
-    },
-    [],
-  );
-
-  const taleQueryOptions = useMemo(() => {
-    const queryKey = ['tales', id];
-    return queryOptions({
-      queryKey,
-      queryFn: taleQueryFn,
-      networkMode: 'online',
-      // initialData: {
-      //   id: "",
-      //   creator: {
-      //     id: "",
-      //     handle: "",
-      //     avatar: "",
-      //   },
-      //   cover: null,
-      //   title: "",
-      //   itinerary: {
-      //     id: "",
-      //     creatorId: "",
-      //     routes: [
-      //       {
-      //         id: "",
-      //         name: "Day 1",
-      //         routeNodes: [],
-      //         isRouted: false,
-      //         polyline: [],
-      //       },
-      //     ],
-      //   },
-      //   story: [],
-      // },
-      enabled: true,
-      gcTime: 1000 * 60 * 5,
-      // staleTime: 1000,
-    });
-  }, [id, taleQueryFn]);
-
-  const { data, isLoading } = useQuery(taleQueryOptions);
-
-  // use useQueries to fetch feeds with the array of feed id
-
-  // Should I create this in useState and useEffect on mount?
   let renderedData: Feed[] = data?.feeds || [];
-  if (data && data.id && data.cover) {
+  if (
+    data &&
+    data.tale &&
+    data.tale.metadata &&
+    data.tale.metadata.id &&
+    data.tale.metadata.cover
+  ) {
     const cover: FeedItem = {
-      id: data.cover.id,
-      media: data.cover,
+      id: data.tale.metadata.cover.id,
+      media: data.tale.metadata.cover,
       caption: '',
+      thumbnail: data.tale.metadata.thumbnail,
+      feedId: '',
     };
     const coverFeed: BaseFeed = {
       metadata: {
-        id: data.cover.id,
-        creator: data.creator,
+        id: data.tale.metadata.cover.id,
+        creator: data.tale.metadata.creator,
+        thumbnail: data.tale.metadata.thumbnail,
+        taleId: '',
       },
       feedItems: [cover],
     };
-    renderedData = [coverFeed, ...data.feeds];
+    renderedData = [coverFeed, ...data.feedList];
   }
 
   const [activePostIndex, setActivePostIndex] = useState<number>(0);
@@ -166,9 +112,13 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
         opacity={1}
         disappearsOnIndex={-1}
         appearsOnIndex={0}>
-        {data?.title && (
+        {data.tale.metadata.title && (
           <View style={styles.headerTextBox}>
-            <Text style={styles.headerText}>{data?.title}</Text>
+            <Text style={styles.headerText}>{data.tale.metadata.title}</Text>
+            <NewItineraryPostHandleBar
+              name={data.tale.metadata.creator.handle || ''}
+              avatarUri={data.tale.metadata.creator.avatar?.uri || ''}
+            />
           </View>
         )}
       </BottomSheetBackdrop>
@@ -181,26 +131,32 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
    */
   useEffect(() => {
     if (data) {
-      dispatch(itineraryPlanner_setItinerary({ itinerary: data.itinerary }));
+      console.log('Setting itinerary in itineraryPlannerSlice');
+      const itinerary: Itinerary = {
+        metadata: data.tale.itinerary.metadata,
+        routes: data.tale.itinerary.routes.map((route: Route) => {
+          const decodedRoute = {
+            ...route,
+            polyline: decodePolyline(route.encodedPolyline),
+          };
+          return decodedRoute;
+        }),
+      };
+      printPrettyJson(itinerary);
+      dispatch(itineraryPlanner_initItinerary({ itinerary }));
     }
     return () => {
       dispatch(itineraryPlanner_resetItineraryPlannerSlice());
     };
-  }, [
-    data,
-    itineraryPlanner_setItinerary,
-    itineraryPlanner_resetItineraryPlannerSlice,
-    dispatch,
-  ]);
+  }, [data, dispatch]);
 
   return (
     <View style={styles.container}>
-      {!data && isLoading ? (
-        <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      {isLoading ? (
+        <View style={styles.flexCenter}>
           <ActivityIndicator size={48} color={PALETTE.ORANGE} />
         </View>
-      ) : (
+      ) : data ? (
         <>
           <FlatList
             data={renderedData}
@@ -225,32 +181,6 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
             Icon={ChevronsUpIcon}
             onPress={onPressExpandBottomSheet}
           />
-          {/* Render a button here for creator to change default mode to edit */}
-          {creator.id !== userInfo.user?.id ? (
-            <AuxiliaryControls
-              customStyle={{
-                top: insets.top,
-                justifyContent: 'flex-start',
-                height: 'auto',
-                // backgroundColor: "red",
-              }}
-              position="top-right">
-              <GypsieButton
-                customButtonStyles={{
-                  width: 40,
-                  height: 40,
-                  backgroundColor: '#00000044',
-                  borderRadius: 20,
-                }}
-                customIconStyles={{
-                  fontSize: 24,
-                  color: PALETTE.ORANGE,
-                }}
-                Icon={EditIcon}
-                onPress={onPressChangeMode}
-              />
-            </AuxiliaryControls>
-          ) : null}
           <BottomSheet
             ref={bottomSheetRef}
             style={styles.bottomSheet}
@@ -264,39 +194,50 @@ const TaleViewScreen = ({ navigation }: TaleViewScreenProps) => {
             // onAnimate={() => console.log("animating bottomsheet")}
             // onChange={() => console.log("moving bottomsheet")}
           >
-            {/* To be changed (NewItineraryPostHandlerBar) */}
-            <NewItineraryPostHandleBar
-              avatarUri={data?.creator.avatar?.uri || ''}
-              name={data?.creator.handle || ''}
-            />
             <BottomSheetScrollView
               contentContainerStyle={{ paddingBottom: insets.bottom }}
               showsVerticalScrollIndicator={false}>
-              {data && data.itinerary.routes.length > 0 ? (
+              {data && data.tale && data.tale.itinerary.routes.length > 0 ? (
                 <ItineraryMapOverview
                   itineraryId={''}
                   creatorId={params.creator.id}
                 />
               ) : null}
-              {data?.story.map(el => {
+              {data.tale.story.map((el: StoryItem) => {
                 if (el.type === StoryItemType.Text) {
+                  const textEl = el as StoryText;
                   return (
-                    <View style={styles.storyItem} key={el.id}>
-                      <Text style={el.style}>{el.text}</Text>
+                    <View style={styles.storyText} key={el.id}>
+                      <Text
+                        style={[
+                          STORY_TEXT_STYLES[textEl.data.style],
+                          {
+                            paddingHorizontal:
+                              textEl.data.style.toString() === '0' ? 16 : 24,
+                          },
+                        ]}>
+                        {textEl.data.text}
+                      </Text>
                     </View>
                   );
                 } else if (el.type === StoryItemType.Media) {
+                  const mediaEl = el as StoryMedia;
                   return (
-                    <View style={styles.storyItem} key={el.id}>
-                      <FeedItemThumbnailsCarousel data={el.data} />
+                    <View style={styles.storyMedia} key={mediaEl.id}>
+                      <FeedItemThumbnailsCarousel
+                        feedId={mediaEl.data.feedId}
+                        displayFormat={FeedItemThumbnailsDisplayFormat.CAROUSEL}
+                      />
                     </View>
                   );
-                } else return null;
+                } else {
+                  return null;
+                }
               })}
             </BottomSheetScrollView>
           </BottomSheet>
         </>
-      )}
+      ) : null}
     </View>
   );
 };
@@ -309,7 +250,7 @@ const styles = StyleSheet.create({
   },
   bottomSheet: {
     height: 'auto',
-    padding: 16,
+    // paddingVertical: 8,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     backgroundColor: PALETTE.OFFWHITE,
@@ -329,10 +270,13 @@ const styles = StyleSheet.create({
     lineHeight: 40,
     fontFamily: 'Lilita One',
   },
-
-  storyItem: {
+  storyText: {
     marginVertical: 8,
   },
+  storyMedia: {
+    marginVertical: 16,
+  },
+  flexCenter: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });
 
 export default TaleViewScreen;

@@ -5,12 +5,13 @@ import { GooglePlaceDetail } from 'react-native-google-places-autocomplete';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { nanoid } from '@reduxjs/toolkit';
 import GooglePlacesInput from '@components/itinerary/GooglePlacesInput';
-import type { RouteNodeInfo } from '@components/itinerary/types/types';
+import type { RouteNode } from '@components/itinerary/types/types';
 import type { PlaceSearchScreenProps } from './types/types';
 import type { ModalNavigatorNavigationProp } from '@navigators/types/types';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
+import { printPrettyJson } from '@helpers/functions';
 
 const PlaceSearchScreen = ({ route }: PlaceSearchScreenProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
@@ -28,7 +29,7 @@ const PlaceSearchScreen = ({ route }: PlaceSearchScreenProps) => {
       }
 
       const location = details.geometry.location;
-      const newRouteNode: RouteNodeInfo = {
+      const newRouteNode: RouteNode = {
         id: nanoid(),
         placeId: details.place_id,
         name: details.name,
@@ -38,6 +39,7 @@ const PlaceSearchScreen = ({ route }: PlaceSearchScreenProps) => {
         order: undefined,
         // openNow: details.opening_hours?.open_now,
       };
+      printPrettyJson(newRouteNode);
       onAddPlace(newRouteNode);
       onExit();
     },

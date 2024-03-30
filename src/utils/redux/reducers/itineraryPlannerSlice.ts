@@ -1,17 +1,17 @@
 import { createAsyncThunk, createSlice, nanoid } from '@reduxjs/toolkit';
-import Polyline from '@mapbox/polyline';
+// import Polyline from '@mapbox/polyline';
 import { ulid } from 'ulid';
 import {
   Itinerary,
-  ItineraryPlannerMode,
-  RouteInfo,
+  Route,
   RouteNodeCoord,
-  RouteNodeInfo,
+  RouteNode,
 } from '@components/itinerary/types/types';
 import { BACKEND_BASE_URL } from '@env';
+import { decode, encode } from '@googlemaps/polyline-codec';
 
 type ItineraryPlanner = {
-  mode: ItineraryPlannerMode;
+  // mode: ItineraryPlannerMode;
   selectedRouteId: string;
   selectedRouteNodeId: string;
   modalInitialValue: string;
@@ -22,15 +22,22 @@ type ItineraryPlanner = {
 type ItineraryState = Readonly<ItineraryPlanner>;
 
 const initialState: ItineraryState = {
-  mode: 'view',
   selectedRouteId: '',
   selectedRouteNodeId: '',
   modalInitialValue: '',
   modalIsOpen: false,
   modalType: 'ROUTE_NAME',
   itinerary: {
-    id: '',
-    creatorId: '',
+    metadata: {
+      id: '',
+      creator: {
+        id: '',
+        name: '',
+        handle: '',
+        email: '',
+        avatar: undefined,
+      },
+    },
     routes: [
       {
         id: '',
@@ -45,11 +52,11 @@ const initialState: ItineraryState = {
 
 export const itineraryPlanner_startRouting = createAsyncThunk(
   'itineraryPlanner/startRouting',
-  async (selectedRoute: RouteInfo, _thunkAPI) => {
+  async (selectedRoute: Route, _thunkAPI) => {
     console.log('Data prepared. Beginning to hit api');
     const url = BACKEND_BASE_URL + '/directions';
     const data = selectedRoute.routeNodes.map(
-      (routeNode: RouteNodeInfo) => routeNode.coord,
+      (routeNode: RouteNode) => routeNode.coord,
     );
     const options = {
       method: 'POST',
@@ -64,7 +71,7 @@ export const itineraryPlanner_startRouting = createAsyncThunk(
       const response = await fetch(url, options);
       const directionsResponse = await response.json();
 
-      let orderedRouteNodes: RouteNodeInfo[] = [];
+      let orderedRouteNodes: RouteNode[] = [];
       directionsResponse.order.forEach((id: number) => {
         const currentNode = selectedRoute.routeNodes[id];
         if (currentNode) {
@@ -89,7 +96,8 @@ export const itineraryPlanner_startRouting = createAsyncThunk(
         (direction: {
           routes: { overviewPolyline: { encodedPath: string } }[];
         }) => {
-          const directionCoords = Polyline.decode(
+          // const directionCoords = Polyline.decode(
+          const directionCoords = decode(
             direction.routes[0].overviewPolyline.encodedPath,
           ).map((coord: any[]) => ({
             latitude: coord[0],
@@ -100,7 +108,10 @@ export const itineraryPlanner_startRouting = createAsyncThunk(
         },
       );
 
-      const encodedPolyline = Polyline.encode(
+      // const encodedPolyline = Polyline.encode(
+      //   polyline.map(coord => [coord.latitude, coord.longitude]),
+      // );
+      const encodedPolyline = encode(
         polyline.map(coord => [coord.latitude, coord.longitude]),
       );
 
@@ -120,14 +131,17 @@ const itineraryPlannerSlice = createSlice({
   name: 'itineraryPlanner',
   initialState,
   reducers: {
-    itineraryPlanner_setMode: (state, action) => {
-      state.mode = action.payload.mode;
+    itineraryPlanner_initItinerary: (state, action) => {
+      state.itinerary = action.payload.itinerary;
+      state.selectedRouteId = state.itinerary.routes[0].id;
     },
     itineraryPlanner_createItinerary: (state, action) => {
       const initialRouteId = ulid();
       state.itinerary = {
-        id: ulid(),
-        creatorId: action.payload.creatorId,
+        metadata: {
+          id: ulid(),
+          creator: action.payload.creator,
+        },
         routes: [
           {
             id: initialRouteId,
@@ -142,17 +156,11 @@ const itineraryPlannerSlice = createSlice({
     },
     itineraryPlanner_setItinerary: (state, action) => {
       console.log('itineraryPlanner_setItinerary called');
-      state.itinerary.id = action.payload.itinerary.id;
-      state.itinerary.creatorId = action.payload.itinerary.creatorId;
-      state.itinerary.routes = action.payload.itinerary.routes;
+      state.itinerary = action.payload.itinerary;
     },
-
-    // itineraryPlanner_setSelectedRouteId: state => {
-    //   state.selectedRouteId = state.itinerary.routes[0].id;
-    // },
     itineraryPlanner_addRoute: (state, action) => {
       const newId = nanoid();
-      const newRoute: RouteInfo = {
+      const newRoute: Route = {
         id: newId,
         name: action.payload.name,
         routeNodes: [],
@@ -230,11 +238,6 @@ const itineraryPlannerSlice = createSlice({
     itineraryPlanner_addPlace: (state, action) => {
       state.itinerary.routes = state.itinerary.routes.map(route => {
         if (route.id === state.selectedRouteId) {
-          // return {
-          //   ...route,
-          //   routeNodes: [...route.routeNodes, action.payload.routeNode],
-          //   encodedPolyline: "",
-          // };
           return {
             ...route,
             routeNodes: [
@@ -256,7 +259,7 @@ const itineraryPlannerSlice = createSlice({
             ...route,
             routeNodes: route.routeNodes
               .filter(
-                (routeNode: RouteNodeInfo) =>
+                (routeNode: RouteNode) =>
                   routeNode.id !== action.payload.routeNodeId,
               )
               .map(routeNode => ({ ...routeNode, order: undefined })),
@@ -278,16 +281,16 @@ const itineraryPlannerSlice = createSlice({
     },
     itineraryPlanner_resetItineraryPlannerSlice: () => initialState,
   },
-  extraReducers: builder => {
-    builder
-      .addCase(itineraryPlanner_startRouting.pending, (state, action) => {})
-      .addCase(itineraryPlanner_startRouting.fulfilled, (state, action) => {})
-      .addCase(itineraryPlanner_startRouting.rejected, (state, action) => {});
-  },
+  // extraReducers: builder => {
+  //   builder
+  //     .addCase(itineraryPlanner_startRouting.pending, (state, action) => {})
+  //     .addCase(itineraryPlanner_startRouting.fulfilled, (state, action) => {})
+  //     .addCase(itineraryPlanner_startRouting.rejected, (state, action) => {});
+  // },
 });
 
 export const {
-  itineraryPlanner_setMode,
+  itineraryPlanner_initItinerary,
   itineraryPlanner_createItinerary,
   itineraryPlanner_setItinerary,
 

@@ -3,15 +3,14 @@ import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { nanoid } from '@reduxjs/toolkit';
 import RouteButton from './RouteButton';
-import type { RouteControlsProps, RouteInfo } from './types/types';
+import type { RouteControlsProps, Route } from './types/types';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
-import { useAppDispatch, useAppSelector } from '@redux/hooks';
+import { useAppDispatch } from '@redux/hooks';
 import { itineraryPlanner_openModal } from '@redux/reducers/itineraryPlannerSlice';
 
 const RouteControls = ({ routes, selectedRouteId }: RouteControlsProps) => {
   const dispatch = useAppDispatch();
-  const { mode } = useAppSelector(state => state.itineraryPlanner);
 
   const onPressAdd = useCallback(() => {
     dispatch(
@@ -24,11 +23,10 @@ const RouteControls = ({ routes, selectedRouteId }: RouteControlsProps) => {
 
   const sliderBorderRightStyle = useMemo(
     () => ({
-      borderRightWidth: mode === 'edit' ? 1 : 0,
-      borderRightColor:
-        mode === 'edit' ? PALETTE.LIGHTERGREY : PALETTE.TRANSPARENT,
+      borderRightWidth: 1,
+      borderRightColor: PALETTE.LIGHTERGREY,
     }),
-    [mode],
+    [],
   );
 
   return (
@@ -38,7 +36,7 @@ const RouteControls = ({ routes, selectedRouteId }: RouteControlsProps) => {
           style={[styles.routeSlider, sliderBorderRightStyle]}
           horizontal
           showsHorizontalScrollIndicator={false}>
-          {routes.map((route: RouteInfo) => (
+          {routes.map((route: Route) => (
             <RouteButton
               key={nanoid()}
               route={route}
@@ -47,16 +45,14 @@ const RouteControls = ({ routes, selectedRouteId }: RouteControlsProps) => {
           ))}
         </ScrollView>
       </View>
-      {mode === 'edit' ? (
-        <Pressable
-          style={({ pressed }) => [
-            styles.addButton,
-            { opacity: pressed ? 0.7 : 1 },
-          ]}
-          onPress={onPressAdd}>
-          <Ionicons name="add-circle" size={24} color={PALETTE.ORANGE} />
-        </Pressable>
-      ) : null}
+      <Pressable
+        style={({ pressed }) => [
+          styles.addButton,
+          { opacity: pressed ? 0.7 : 1 },
+        ]}
+        onPress={onPressAdd}>
+        <Ionicons name="add-circle" size={24} color={PALETTE.ORANGE} />
+      </Pressable>
     </View>
   );
 };

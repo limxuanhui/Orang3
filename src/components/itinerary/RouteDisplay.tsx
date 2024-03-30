@@ -3,16 +3,13 @@ import RouteStepper from './RouteStepper';
 import SearchPlaceButton from './SearchPlaceButton';
 import type { RouteDisplayProps } from './types/types';
 import { DIMENSION } from '@constants/dimensions';
-import { useAppSelector } from '@redux/hooks';
 
 const RouteDisplay = ({ selectedRoute }: RouteDisplayProps) => {
-  const { mode } = useAppSelector(state => state.itineraryPlanner);
-
   return (
     <View style={styles.routeContainer}>
       <View style={styles.routeDisplayBox}>
         <RouteStepper route={selectedRoute} />
-        {mode === 'edit' ? <SearchPlaceButton /> : null}
+        <SearchPlaceButton />
       </View>
     </View>
   );

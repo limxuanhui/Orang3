@@ -5,8 +5,9 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { DUMMY_DATABASE } from '@data/database';
-import type { DataKey, DataMode } from '@data/types/types';
+import type { DataKey } from '@data/types/types';
 import { axiosClient } from '@helpers/singletons';
+import useGlobals from './useGlobals';
 
 /**
  * useInfiniteDataManager manages the lifecycle of data (fetching, caching, invalidating)
@@ -15,15 +16,16 @@ import { axiosClient } from '@helpers/singletons';
  * @param dataKey
  * @returns
  */
-const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
+const useInfiniteDataManager = (dataKey: DataKey) => {
+  const { mode } = useGlobals();
   const queryClient = useQueryClient();
   const queryFn = useCallback(
     // @ts-ignore
     async ({ queryKey, pageParam }) => {
       console.log('Query function running...');
       const [key] = queryKey;
-      switch (dataMode) {
-        case 'prod':
+      switch (mode) {
+        case 'production':
           try {
             let url = `/${key}`;
             if (pageParam) {
@@ -35,8 +37,9 @@ const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
             console.error(err);
           }
           break;
-
-        case 'dev':
+        case 'testing':
+          break;
+        case 'development':
           return new Promise((resolve, _reject) => {
             const data =
               DUMMY_DATABASE[key as DataKey].length > 0
@@ -49,10 +52,10 @@ const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
 
         default:
           // Do I need to return a promise here?
-          console.info(`${dataMode} mode is not handled.`);
+          console.info(`${mode} mode is not handled.`);
       }
     },
-    [dataMode],
+    [mode],
   );
 
   const options = useMemo(
@@ -60,13 +63,13 @@ const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
       infiniteQueryOptions({
         queryKey: [dataKey],
         queryFn,
-        networkMode: dataMode === 'prod' ? 'online' : 'always',
+        networkMode: mode === 'production' ? 'online' : 'always',
         getNextPageParam: lastPage => {
           return lastPage.lastEvaluatedKey || undefined;
         },
         initialPageParam: null,
       }),
-    [dataKey, dataMode, queryFn],
+    [dataKey, mode, queryFn],
   );
 
   const {
@@ -94,11 +97,11 @@ const useInfiniteDataManager = (dataKey: DataKey, dataMode?: DataMode) => {
    * Refreshing will invalidate/reset cache and fetch new set of data.
    * If the number of pages is > 2, reset cache.
    */
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async () => {
     if (data && data?.pageParams.length > 2) {
-      queryClient.resetQueries({ queryKey: [dataKey] });
+      await queryClient.resetQueries({ queryKey: [dataKey] });
     } else {
-      queryClient.invalidateQueries({ queryKey: [dataKey] });
+      await queryClient.invalidateQueries({ queryKey: [dataKey] });
     }
   }, [data, dataKey, queryClient]);
 
