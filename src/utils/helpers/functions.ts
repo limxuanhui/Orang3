@@ -1,9 +1,9 @@
 import { AWS_API_GATEWAY_S3_PRESIGNED_URLS_LIST } from '@env';
 import axios, { AxiosResponse } from 'axios';
 import { MediaMimeType } from '@components/feed/types/types';
-import Polyline from '@mapbox/polyline';
+// import Polyline from '@mapbox/polyline';
 import { RouteNodeCoord } from '@components/itinerary/types/types';
-import { LatLngTuple, decode } from '@googlemaps/polyline-codec';
+import { LatLngTuple, decode, encode } from '@googlemaps/polyline-codec';
 
 export const printPrettyJson = (text: object) => {
   console.info(JSON.stringify(text, null, 4));
@@ -92,8 +92,37 @@ export const decodePolyline = (encodedPolyline: string): RouteNodeCoord[] => {
 };
 
 export const encodePolyline = (polyline: RouteNodeCoord[]) => {
-  const encodedPolyline = Polyline.encode(
+  const encodedPolyline = encode(
     polyline.map(coord => [coord.latitude, coord.longitude]),
   );
   return encodedPolyline;
+};
+
+export const ellipsizeText = (text: string, maxLength: number) => {
+  const ending = '...';
+  if (text.length <= maxLength) {
+    return text;
+  }
+
+  const maxShortenedLength = maxLength - ending.length;
+  if (maxShortenedLength <= 0) {
+    return text;
+  }
+
+  let lastSpaceIndex;
+  for (var i = maxShortenedLength; i >= 0; i--) {
+    if (text.charAt(i) !== ' ') {
+      continue;
+    } else {
+      lastSpaceIndex = i;
+      break;
+    }
+  }
+
+  if (lastSpaceIndex === 0) {
+    return text;
+  }
+
+  const shortenedText = text.slice(0, lastSpaceIndex) + ending;
+  return shortenedText;
 };
