@@ -37,6 +37,8 @@ const initialState: WriteTaleState = {
         name: '',
         routeNodes: [],
         encodedPolyline: '',
+        polyline: [],
+        order: 0,
       },
     ],
   },
@@ -51,6 +53,8 @@ const writeTaleSlice = createSlice({
   initialState,
   reducers: {
     writeTale_initTale: (state, action) => {
+      console.log('Initialising tale in writeTaleSlice');
+      console.log(action.payload.tale);
       state.metadata = action.payload.tale.metadata;
       state.itinerary = action.payload.tale.itinerary;
       state.story = action.payload.tale.story;
@@ -74,6 +78,7 @@ const writeTaleSlice = createSlice({
             routeNodes: [],
             polyline: [],
             encodedPolyline: '',
+            order: 0,
           },
         ],
       };

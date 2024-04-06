@@ -6,7 +6,7 @@ import { AuthContext } from '@contexts/AuthContext';
 
 const WriteFeedCarousel = () => {
   const { user } = useContext(AuthContext);
-  const handle = user ? `@${user.handle}` : '';
+  const handle = user ? `${user.handle}` : '';
 
   const { items, selectedItemId: currIndex } = useAppSelector(
     state => state.writeFeed,

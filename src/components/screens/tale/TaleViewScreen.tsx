@@ -1,8 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ActivityIndicator } from 'react-native-paper';
-import { useRoute } from '@react-navigation/native';
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetScrollView,
@@ -19,13 +17,10 @@ import {
   StoryText,
 } from '@components/post/types/types';
 
-import type {
-  TaleViewScreenProps,
-  TaleViewScreenRouteProp,
-} from '../post/types/types';
+import type { TaleViewScreenProps } from '../post/types/types';
 import ItineraryMapOverview from '@components/post/ItineraryMapOverview';
 
-import { BaseFeed, Feed, FeedItem } from '@components/feed/types/types';
+import { BaseFeed, Feed, FeedItem, Media } from '@components/feed/types/types';
 import FeedItemThumbnailsCarousel from '@components/tale/FeedItemThumbnailsCarousel';
 
 import { PALETTE } from '@constants/palette';
@@ -43,18 +38,37 @@ import {
 import ChevronsUpIcon from '@icons/ChevronsUp';
 import useDataManager from '@hooks/useDataManager';
 import { STORY_TEXT_STYLES } from '@constants/text';
-import { FeedItemThumbnailsDisplayFormat } from '@components/tale/types/types';
+import {
+  FeedItemThumbnailsDisplayFormat,
+  Tale,
+} from '@components/tale/types/types';
 import { decodePolyline, printPrettyJson } from '@helpers/functions';
 import { Itinerary, Route } from '@components/itinerary/types/types';
+import { AuthContext } from '@contexts/AuthContext';
+import MessageDisplay from '@components/common/MessageDisplay';
+import EditIcon from '@icons/EditIcon';
+import AuxiliaryControls from '@components/common/AuxiliaryControls';
+import FullScreenLoading from '@components/common/FullScreenLoading';
 
-const TaleViewScreen = ({}: TaleViewScreenProps) => {
+export type TaleView = { tale: Tale; feedList: Feed[] };
+const SUNDAY_FEED_THUMBNAIL: Media = {
+  id: 'ADAWDZSDADS',
+  type: 'image/png',
+  // uri: 'assets/images/logo-no-background.png',
+  uri: '/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png',
+  height: 429 * (200 / 1000),
+  width: 200,
+};
+const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
+  const { user } = useContext(AuthContext);
+  const { id, creator } = route.params;
+  const loggedInUserIsCreator: boolean = user?.id === creator.id;
+  console.log(loggedInUserIsCreator);
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
-  const { params } = useRoute<TaleViewScreenRouteProp>();
-  const { id, creator } = params;
-  const { data, isLoading } = useDataManager('tales', [id]);
+  const { data, isLoading } = useDataManager<TaleView>('tale-by-taleid', id);
 
-  let renderedData: Feed[] = data?.feeds || [];
+  let renderedData: Feed[] = data?.feedList || [];
   if (
     data &&
     data.tale &&
@@ -66,14 +80,14 @@ const TaleViewScreen = ({}: TaleViewScreenProps) => {
       id: data.tale.metadata.cover.id,
       media: data.tale.metadata.cover,
       caption: '',
-      thumbnail: data.tale.metadata.thumbnail,
+      thumbnail: data.tale.metadata.thumbnail || SUNDAY_FEED_THUMBNAIL,
       feedId: '',
     };
     const coverFeed: BaseFeed = {
       metadata: {
         id: data.tale.metadata.cover.id,
         creator: data.tale.metadata.creator,
-        thumbnail: data.tale.metadata.thumbnail,
+        thumbnail: data.tale.metadata.thumbnail || SUNDAY_FEED_THUMBNAIL,
         taleId: '',
       },
       feedItems: [cover],
@@ -100,31 +114,42 @@ const TaleViewScreen = ({}: TaleViewScreenProps) => {
   }, [bottomSheetRef]);
   // Can I generalise this to useBottomSheetHandlers?
   const renderBackdrop = useCallback(
-    (props: BottomSheetDefaultBackdropProps) => (
-      <BottomSheetBackdrop
-        {...props}
-        style={[
-          props.style,
-          {
-            backgroundColor: PALETTE.TRANSPARENT,
-          },
-        ]}
-        opacity={1}
-        disappearsOnIndex={-1}
-        appearsOnIndex={0}>
-        {data.tale.metadata.title && (
-          <View style={styles.headerTextBox}>
-            <Text style={styles.headerText}>{data.tale.metadata.title}</Text>
-            <NewItineraryPostHandleBar
-              name={data.tale.metadata.creator.handle || ''}
-              avatarUri={data.tale.metadata.creator.avatar?.uri || ''}
-            />
-          </View>
-        )}
-      </BottomSheetBackdrop>
-    ),
+    (props: BottomSheetDefaultBackdropProps) => {
+      if (data) {
+        return (
+          <BottomSheetBackdrop
+            {...props}
+            style={[
+              props.style,
+              {
+                backgroundColor: PALETTE.TRANSPARENT,
+              },
+            ]}
+            opacity={1}
+            disappearsOnIndex={-1}
+            appearsOnIndex={0}>
+            {data.tale.metadata.title && (
+              <View style={styles.headerTextBox}>
+                <Text style={styles.headerText}>
+                  {data.tale.metadata.title}
+                </Text>
+                <NewItineraryPostHandleBar
+                  name={data.tale.metadata.creator.handle || ''}
+                  avatarUri={data.tale.metadata.creator.avatar?.uri || ''}
+                />
+              </View>
+            )}
+          </BottomSheetBackdrop>
+        );
+      }
+      return null;
+    },
     [data],
   );
+
+  const onPressEdit = useCallback(() => {
+    navigation.push('WriteTale', { taleId: id });
+  }, [id, navigation]);
 
   /**
    * This useEffect is for pre-setting itineraryPlannerSlice data if tale data has been loaded, and resets the slice on unmount.
@@ -150,14 +175,32 @@ const TaleViewScreen = ({}: TaleViewScreenProps) => {
     };
   }, [data, dispatch]);
 
+  if (isLoading) {
+    return <FullScreenLoading />;
+  }
+
   return (
     <View style={styles.container}>
-      {isLoading ? (
-        <View style={styles.flexCenter}>
-          <ActivityIndicator size={48} color={PALETTE.ORANGE} />
-        </View>
-      ) : data ? (
+      {data ? (
         <>
+          {loggedInUserIsCreator ? (
+            <AuxiliaryControls
+              customStyle={{
+                top: 50,
+                justifyContent: 'flex-start',
+              }}
+              position="top-right">
+              <GypsieButton
+                customButtonStyles={{
+                  width: 32,
+                  height: 32,
+                }}
+                customIconStyles={{ color: PALETTE.ORANGE, fontSize: 24 }}
+                Icon={EditIcon}
+                onPress={onPressEdit}
+              />
+            </AuxiliaryControls>
+          ) : null}
           <FlatList
             data={renderedData}
             renderItem={({ item, index }) => (
@@ -167,7 +210,7 @@ const TaleViewScreen = ({}: TaleViewScreenProps) => {
                 inView={index === activePostIndex}
               />
             )}
-            ListEmptyComponent={<Text>Loading tale data...</Text>}
+            // ListEmptyComponent={<Text>Loading tale data...</Text>}
             showsVerticalScrollIndicator={false}
             snapToInterval={DEVICE_HEIGHT}
             snapToAlignment="start"
@@ -197,11 +240,11 @@ const TaleViewScreen = ({}: TaleViewScreenProps) => {
             <BottomSheetScrollView
               contentContainerStyle={{ paddingBottom: insets.bottom }}
               showsVerticalScrollIndicator={false}>
-              {data && data.tale && data.tale.itinerary.routes.length > 0 ? (
-                <ItineraryMapOverview
-                  itineraryId={''}
-                  creatorId={params.creator.id}
-                />
+              {data &&
+              data.tale &&
+              data.tale.itinerary &&
+              data.tale.itinerary.routes.length > 0 ? (
+                <ItineraryMapOverview />
               ) : null}
               {data.tale.story.map((el: StoryItem) => {
                 if (el.type === StoryItemType.Text) {
@@ -237,7 +280,9 @@ const TaleViewScreen = ({}: TaleViewScreenProps) => {
             </BottomSheetScrollView>
           </BottomSheet>
         </>
-      ) : null}
+      ) : (
+        <MessageDisplay message="Unable to display tale..." />
+      )}
     </View>
   );
 };

@@ -1,14 +1,14 @@
 import { useCallback, useState } from 'react';
-import { FlatList, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { ActivityIndicator } from 'react-native-paper';
 import useInfiniteDataManager from '@hooks/useInfiniteDataManager';
 import FeedDisplay from '@components/feed/FeedDisplay';
-import EmptyFeed from '@components/feed/EmptyFeed';
 import type { HomeScreenProps } from './types/types';
-import { DEVICE_HEIGHT } from '@constants/constants';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
 import { PALETTE } from '@constants/palette';
 import { VIEWABILITY_CONFIG } from '@constants/feed';
+import FullScreenLoading from '@components/common/FullScreenLoading';
+import MessageDisplay from '@components/common/MessageDisplay';
 
 const HomeScreen = ({}: HomeScreenProps) => {
   const [homeScreenIsFocused, setHomeScreenIsFocused] = useState<boolean>(true);
@@ -39,10 +39,10 @@ const HomeScreen = ({}: HomeScreenProps) => {
   const dataFetchedIsNotEmpty =
     dataIsFetched && data.pages.length > 0 && data?.pages[0].items.length > 0;
 
-  // console.log("Data fetched: ",  dataIsFetched);
-  // console.log("Data fetched is empty: ",  dataFetchedIsEmpty);
-  // console.log("Data fetched is not empty: ",  dataFetchedIsNotEmpty);
-  // console.log("Data pages: ",  data?.pages);
+  console.log('Data fetched: ', dataIsFetched);
+  console.log('Data fetched is empty: ', dataFetchedIsEmpty);
+  console.log('Data fetched is not empty: ', dataFetchedIsNotEmpty);
+  console.log('Data pages: ', data?.pages);
   console.log('Number of pages: ', data?.pages.length);
   console.log(data?.pages.flat(1));
   // if (dataFetchedIsEmpty) {
@@ -53,21 +53,18 @@ const HomeScreen = ({}: HomeScreenProps) => {
   //   );
   // }
 
+  if (isLoading) {
+    return <FullScreenLoading />;
+  }
+
   return (
     <View style={styles.container}>
-      {isLoading ? (
-        <View style={styles.flexCenter}>
-          <ActivityIndicator size={48} color={PALETTE.ORANGE} />
-        </View>
-      ) : dataFetchedIsEmpty ? (
-        <View style={styles.flexCenter}>
-          <Text style={styles.description}>No feeds at the moment...</Text>
-        </View>
+      {dataFetchedIsEmpty ? (
+        <MessageDisplay message="No feeds at the moment..." />
       ) : dataFetchedIsNotEmpty ? (
         <FlatList
-          // data={data.pages.flat(1)}
-          data={data.pages.flatMap(el => el.items)}
           // initialNumToRender={2}
+          data={data.pages.flatMap(el => el.items)}
           renderItem={({ item, index }) => (
             <FeedDisplay
               data={item}
@@ -95,11 +92,7 @@ const HomeScreen = ({}: HomeScreenProps) => {
           }
         />
       ) : (
-        <EmptyFeed>
-          <Text style={styles.description}>
-            Unable to get feeds for you at the moment...
-          </Text>
-        </EmptyFeed>
+        <MessageDisplay message="Unable to get feeds for you at the moment..." />
       )}
     </View>
   );
@@ -107,10 +100,11 @@ const HomeScreen = ({}: HomeScreenProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: DEVICE_HEIGHT,
+    width: DEVICE_WIDTH,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: PALETTE.BLACK,
+    backgroundColor: PALETTE.GREYISHBLUE,
   },
   flexCenter: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   description: {

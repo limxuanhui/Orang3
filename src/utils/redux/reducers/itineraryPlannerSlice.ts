@@ -1,17 +1,18 @@
 import { createAsyncThunk, createSlice, nanoid } from '@reduxjs/toolkit';
-// import Polyline from '@mapbox/polyline';
+import { decode, encode } from '@googlemaps/polyline-codec';
 import { ulid } from 'ulid';
 import {
   Itinerary,
   Route,
   RouteNodeCoord,
   RouteNode,
+  ItineraryPlannerMode,
 } from '@components/itinerary/types/types';
-import { BACKEND_BASE_URL } from '@env';
-import { decode, encode } from '@googlemaps/polyline-codec';
+import { ITINERARY_ROUTING_URL } from '@constants/urls';
+import { axiosClient } from '@helpers/singletons';
 
 type ItineraryPlanner = {
-  // mode: ItineraryPlannerMode;
+  mode: ItineraryPlannerMode;
   selectedRouteId: string;
   selectedRouteNodeId: string;
   modalInitialValue: string;
@@ -22,6 +23,7 @@ type ItineraryPlanner = {
 type ItineraryState = Readonly<ItineraryPlanner>;
 
 const initialState: ItineraryState = {
+  mode: 'VIEW',
   selectedRouteId: '',
   selectedRouteNodeId: '',
   modalInitialValue: '',
@@ -45,6 +47,7 @@ const initialState: ItineraryState = {
         routeNodes: [],
         polyline: [],
         encodedPolyline: '',
+        order: 0,
       },
     ],
   },
@@ -54,31 +57,31 @@ export const itineraryPlanner_startRouting = createAsyncThunk(
   'itineraryPlanner/startRouting',
   async (selectedRoute: Route, _thunkAPI) => {
     console.log('Data prepared. Beginning to hit api');
-    const url = BACKEND_BASE_URL + '/directions';
     const data = selectedRoute.routeNodes.map(
       (routeNode: RouteNode) => routeNode.coord,
     );
     const options = {
-      method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
     };
 
     try {
-      const response = await fetch(url, options);
-      const directionsResponse = await response.json();
+      const directionsResponse = await axiosClient.post(
+        ITINERARY_ROUTING_URL,
+        JSON.stringify(data),
+        options,
+      );
 
       let orderedRouteNodes: RouteNode[] = [];
-      directionsResponse.order.forEach((id: number) => {
+      directionsResponse.data.order.forEach((id: number) => {
         const currentNode = selectedRoute.routeNodes[id];
         if (currentNode) {
           orderedRouteNodes.push(currentNode);
         }
       });
-      console.log(directionsResponse.order);
+      console.log(directionsResponse.data.order);
       orderedRouteNodes = orderedRouteNodes.map((routeNode, index) => ({
         ...routeNode,
         order: index + 1,
@@ -87,12 +90,12 @@ export const itineraryPlanner_startRouting = createAsyncThunk(
       let polyline: RouteNodeCoord[] = [];
       console.log('\n======Results======');
       console.log(
-        JSON.stringify(directionsResponse.directionsResultList, null, 4),
+        JSON.stringify(directionsResponse.data.directionsResultList, null, 4),
       );
       console.log('\n');
       // Backend will return an array of polylines,
       // where each polyline defines the route between two places
-      directionsResponse.directionsResultList.forEach(
+      directionsResponse.data.directionsResultList.forEach(
         (direction: {
           routes: { overviewPolyline: { encodedPath: string } }[];
         }) => {
@@ -108,9 +111,6 @@ export const itineraryPlanner_startRouting = createAsyncThunk(
         },
       );
 
-      // const encodedPolyline = Polyline.encode(
-      //   polyline.map(coord => [coord.latitude, coord.longitude]),
-      // );
       const encodedPolyline = encode(
         polyline.map(coord => [coord.latitude, coord.longitude]),
       );
@@ -133,6 +133,16 @@ const itineraryPlannerSlice = createSlice({
   reducers: {
     itineraryPlanner_initItinerary: (state, action) => {
       state.itinerary = action.payload.itinerary;
+      if (state.itinerary.routes.length === 0) {
+        state.itinerary.routes.push({
+          id: '',
+          name: 'Day 1',
+          routeNodes: [],
+          polyline: [],
+          encodedPolyline: '',
+          order: 0,
+        });
+      }
       state.selectedRouteId = state.itinerary.routes[0].id;
     },
     itineraryPlanner_createItinerary: (state, action) => {
@@ -147,16 +157,24 @@ const itineraryPlannerSlice = createSlice({
             id: initialRouteId,
             name: 'Day 1',
             routeNodes: [],
-            polyline: [],
             encodedPolyline: '',
+            polyline: [],
+            order: 0,
           },
         ],
       };
       state.selectedRouteId = initialRouteId;
     },
-    itineraryPlanner_setItinerary: (state, action) => {
-      console.log('itineraryPlanner_setItinerary called');
-      state.itinerary = action.payload.itinerary;
+    itineraryPlanner_setMode: (state, action) => {
+      state.mode = action.payload.mode;
+    },
+    itineraryPlanner_reorderRoutes: state => {
+      state.itinerary.routes = state.itinerary.routes.map(
+        (route: Route, index: number) => ({
+          ...route,
+          order: index,
+        }),
+      );
     },
     itineraryPlanner_addRoute: (state, action) => {
       const newId = nanoid();
@@ -166,6 +184,7 @@ const itineraryPlannerSlice = createSlice({
         routeNodes: [],
         polyline: [],
         encodedPolyline: '',
+        order: state.itinerary.routes.length,
       };
       state.itinerary.routes.push(newRoute);
       state.modalIsOpen = false;
@@ -292,9 +311,10 @@ const itineraryPlannerSlice = createSlice({
 export const {
   itineraryPlanner_initItinerary,
   itineraryPlanner_createItinerary,
-  itineraryPlanner_setItinerary,
+  itineraryPlanner_setMode,
 
   // itineraryPlanner_setSelectedRouteId,
+  itineraryPlanner_reorderRoutes,
   itineraryPlanner_addRoute,
   itineraryPlanner_clearRoute,
   itineraryPlanner_deleteRoute,

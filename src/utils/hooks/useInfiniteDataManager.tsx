@@ -4,15 +4,15 @@ import {
   useInfiniteQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { DUMMY_DATABASE } from '@data/database';
 import type { DataKey } from '@data/types/types';
 import { axiosClient } from '@helpers/singletons';
-import useGlobals from './useGlobals';
+import useGlobals from '@hooks/useGlobals';
+import { AxiosResponse } from 'axios';
+import { urlFactory } from '@helpers/factory';
 
 /**
  * useInfiniteDataManager manages the lifecycle of data (fetching, caching, invalidating)
  * that is used in screens with infinite scrolling.
- * @param dataMode
  * @param dataKey
  * @returns
  */
@@ -22,16 +22,17 @@ const useInfiniteDataManager = (dataKey: DataKey) => {
   const queryFn = useCallback(
     // @ts-ignore
     async ({ queryKey, pageParam }) => {
-      console.log('Query function running...');
       const [key] = queryKey;
       switch (mode) {
         case 'production':
           try {
-            let url = `/${key}`;
+            let url;
             if (pageParam) {
-              url = `${url}?base64Key=${pageParam}`;
+              url = urlFactory(key, { base64Key: pageParam });
+            } else {
+              url = urlFactory(key);
             }
-            const response = await axiosClient.get(url);
+            const response: AxiosResponse = await axiosClient.get(url);
             return response.data;
           } catch (err) {
             console.error(err);
@@ -40,16 +41,7 @@ const useInfiniteDataManager = (dataKey: DataKey) => {
         case 'testing':
           break;
         case 'development':
-          return new Promise((resolve, _reject) => {
-            const data =
-              DUMMY_DATABASE[key as DataKey].length > 0
-                ? DUMMY_DATABASE[key as DataKey]
-                : [];
-            setTimeout(() => {
-              resolve(data);
-            }, 2000);
-          });
-
+          break;
         default:
           // Do I need to return a promise here?
           console.info(`${mode} mode is not handled.`);

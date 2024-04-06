@@ -1,32 +1,26 @@
-import { useCallback, useContext, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { AuthContext } from '@contexts/AuthContext';
 import type { ItineraryMapOverviewProps } from './types/types';
 import type { ModalNavigatorNavigationProp } from '@navigators/types/types';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
 
-const ItineraryMapOverview = ({
-  itineraryId,
-  creatorId,
-}: ItineraryMapOverviewProps) => {
+const ItineraryMapOverview = ({ canEdit }: ItineraryMapOverviewProps) => {
   // Pass itinerary data into navigation options parameters. If null/empty, then it is new plan
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
-  const userInfo = useContext(AuthContext);
 
   const onPressOverview = useCallback(() => {
     navigation.push('Modal', {
       screen: 'Itinerary',
-      params: { id: itineraryId, creatorId: '' },
+      params: {},
+      // params: { id: itineraryId, creatorId: '' },
     });
-  }, [itineraryId, navigation]);
+  }, [navigation]);
 
   const footerText = useMemo(() => {
-    return creatorId === userInfo.user?.id
-      ? 'Start adding plans'
-      : 'View plans';
-  }, [creatorId, userInfo]);
+    return canEdit ? 'Start adding plans' : 'View plans';
+  }, [canEdit]);
 
   return (
     <Pressable

@@ -4,8 +4,18 @@ import FeedReactionControls from './FeedReactionControls';
 import type { FeedDisplayProps } from './types/types';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
 import { PALETTE } from '@constants/palette';
+import { useCallback, useContext } from 'react';
+import { AuthContext } from '@contexts/AuthContext';
+import GypsieButton from '@components/common/buttons/GypsieButton';
+import { useNavigation } from '@react-navigation/native';
+import { ModalNavigatorNavigationProp } from '@navigators/types/types';
+import EditIcon from '@icons/EditIcon';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const FeedDisplay = ({ data, inView }: FeedDisplayProps) => {
+  const insets = useSafeAreaInsets();
+  const { user } = useContext(AuthContext);
+  const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const {
     metadata,
     feedItems,
@@ -16,11 +26,36 @@ const FeedDisplay = ({ data, inView }: FeedDisplayProps) => {
     bookmarks,
     shares,
   } = data;
-  if (data.feedItems[0].media.type === 'video/mp4') {
-    console.log('data in view? ', inView);
-  }
+
+  const viewerIsCreator = user?.id === metadata.creator.id;
+  const onPressEdit = useCallback(() => {
+    //dispatch setFeed
+    navigation.push('Modal', {
+      screen: 'WriteFeed',
+      params: { feedId: metadata.id },
+    });
+  }, [metadata.id, navigation]);
+
   return (
     <View style={styles.container}>
+      {viewerIsCreator ? (
+        <GypsieButton
+          customButtonStyles={{
+            position: 'absolute',
+            top: insets.top,
+            right: 10,
+            backgroundColor: 'red',
+            width: 'auto',
+            zIndex: 1,
+          }}
+          customIconStyles={{
+            fontSize: 24,
+            color: PALETTE.ORANGE,
+          }}
+          Icon={EditIcon}
+          onPress={onPressEdit}
+        />
+      ) : null}
       <FeedCarousel
         handle={metadata.creator.handle}
         items={feedItems}

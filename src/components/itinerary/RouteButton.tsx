@@ -20,7 +20,7 @@ const RouteButton = ({ route, selected }: RouteButtonProps) => {
   }, [selected, dispatch, route.id]);
 
   const onLongPress = useCallback(() => {
-    if (mode === 'edit') {
+    if (mode === 'EDIT') {
       onPress();
       dispatch(
         itineraryPlanner_openModal({

@@ -1,5 +1,5 @@
 import { Image, Text } from 'react-native';
-import { useContext, useRef } from 'react';
+import { useRef } from 'react';
 import {
   GestureResponderHandlers,
   StyleSheet,
@@ -32,7 +32,6 @@ import useWriteTaleManager from '@components/../utils/hooks/useWriteTaleManager'
 import type { WriteTaleScreenProps } from './types/types';
 
 import NewStoryItem from '@components/post/NewStoryItem';
-import { AuthContext } from '@components/../utils/contexts/AuthContext';
 
 import { FULL_SCREEN } from '@components/../utils/constants/constants';
 import { DIMENSION } from '@components/../utils/constants/dimensions';
@@ -41,10 +40,10 @@ import { nanoid } from '@reduxjs/toolkit';
 import { StoryItem } from '@components/post/types/types';
 import { Feed } from '@components/feed/types/types';
 import { FeedItemThumbnailsDisplayFormat } from '@components/tale/types/types';
+import { AWS_CLOUDFRONT_URL_RAW } from '@env';
 
 const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
   const insets = useSafeAreaInsets();
-  const userInfo = useContext(AuthContext);
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const { taleId } = route.params;
   console.log('TALE ID:', taleId);
@@ -54,7 +53,7 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
     snapPoints,
     keyboardIsVisible,
     metadata,
-    itinerary,
+    // itinerary,
     story,
     posting,
     // data,
@@ -74,31 +73,6 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
     onPressDeleteStoryItem,
     onSubmitPost,
   } = useWriteTaleManager(taleId);
-
-  // const [currScrollPosition, setCurrScrollPosition] = useState<number>(0);
-  // const [prevHeight, setPrevHeight] = useState<number>(DEVICE_HEIGHT);
-
-  // // Called every scrollEventThrottle ms (60 ms)
-  // const onScroll = useCallback(
-  //   (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-  //     console.log('Scrolling...');
-  //     setCurrScrollPosition(e.nativeEvent.contentOffset.y);
-  //   },
-  //   [setCurrScrollPosition],
-  // );
-
-  // // Scroll up or down depending on content size change
-  // const onContentSizeChange = useCallback((w: number, h: number) => {
-  //   console.log('W: ', w, ' | h: ', h);
-  //   // if (scrollViewRef !== null)
-  //   //   scrollViewRef.current?.scrollToPosition(
-  //   //     0,
-  //   //     currScrollPosition + h - prevHeight + 10,
-  //   //     true,
-  //   //   );
-  //   // setPrevHeight(h);
-  //   // setCurrScrollPosition(h);
-  // }, []);
 
   return isLoading ? (
     <View
@@ -126,12 +100,16 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
             scrollEventThrottle={60}
             {...panHandlers}>
             <View style={styles.coverContainer}>
-              {metadata.cover !== undefined ? (
+              {metadata.cover ? (
                 <>
                   {metadata.cover.type?.startsWith('video') ? (
                     <Video
                       style={styles.cover}
-                      source={{ uri: metadata.cover.uri }}
+                      source={{
+                        uri: taleId
+                          ? `${AWS_CLOUDFRONT_URL_RAW}/${metadata.cover.uri}`
+                          : metadata.cover.uri,
+                      }}
                       controls
                       repeat
                       resizeMode="contain"
@@ -139,7 +117,11 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
                   ) : (
                     <Image
                       style={styles.cover}
-                      source={{ uri: metadata.cover.uri }}
+                      source={{
+                        uri: taleId
+                          ? `${AWS_CLOUDFRONT_URL_RAW}/${metadata.cover.uri}`
+                          : metadata.cover.uri,
+                      }}
                       resizeMode="cover"
                     />
                   )}
@@ -194,10 +176,7 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
                 }}
                 scrollEnabled={false}
               />
-              <ItineraryMapOverview
-                itineraryId={itinerary.metadata.id}
-                creatorId={userInfo.user?.id || ''} // TODO: Use itinerary.metadata.creator?
-              />
+              <ItineraryMapOverview canEdit />
               <View style={{}}>
                 {story.map((el: StoryItem, index: number) => (
                   <NewStoryItem
@@ -445,3 +424,28 @@ const styles = StyleSheet.create({
 });
 
 export default WriteTaleScreen;
+
+// const [currScrollPosition, setCurrScrollPosition] = useState<number>(0);
+// const [prevHeight, setPrevHeight] = useState<number>(DEVICE_HEIGHT);
+
+// // Called every scrollEventThrottle ms (60 ms)
+// const onScroll = useCallback(
+//   (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+//     console.log('Scrolling...');
+//     setCurrScrollPosition(e.nativeEvent.contentOffset.y);
+//   },
+//   [setCurrScrollPosition],
+// );
+
+// // Scroll up or down depending on content size change
+// const onContentSizeChange = useCallback((w: number, h: number) => {
+//   console.log('W: ', w, ' | h: ', h);
+//   // if (scrollViewRef !== null)
+//   //   scrollViewRef.current?.scrollToPosition(
+//   //     0,
+//   //     currScrollPosition + h - prevHeight + 10,
+//   //     true,
+//   //   );
+//   // setPrevHeight(h);
+//   // setCurrScrollPosition(h);
+// }, []);

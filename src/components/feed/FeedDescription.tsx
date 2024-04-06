@@ -25,7 +25,6 @@ const FeedDescription = ({ handle, caption }: FeedDescriptionProps) => {
       colors={
         collapsed ? ['transparent'] : ['#00000010', '#00000055', '#000000aa']
       }>
-      {/* <View style={[styles.descriptionBox, { bottom: insets.bottom + 60 }]}> */}
       <View style={styles.handleBox}>
         <Text style={styles.handle}>{handle}</Text>
       </View>
@@ -50,7 +49,6 @@ const FeedDescription = ({ handle, caption }: FeedDescriptionProps) => {
           <Text style={styles.caption}>{caption}</Text>
         </View>
       )}
-      {/* </View> */}
     </LinearGradient>
   );
 };
@@ -84,7 +82,7 @@ const styles = StyleSheet.create({
   toggleButton: {
     position: 'absolute',
     width: 'auto',
-    right: 16,
+    right: 60,
     bottom: 0,
     // borderWidth: 1,
     // borderColor: 'red',

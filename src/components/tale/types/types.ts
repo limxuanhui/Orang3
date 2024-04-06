@@ -38,15 +38,8 @@ export type WriteTale = Tale & {
   selectedStoryItemIndex: number;
 };
 
-export type TaleThumbnailInfo = {
-  taleId: string;
-  creator: GypsieUser;
-  thumbnail: Media;
-  title: string;
-};
-
 export type TaleThumbnailProps = {
-  data: TaleThumbnailInfo;
+  data: TaleMetadata;
 };
 
 export type TaleThumbnailsFilterProps = {

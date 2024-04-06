@@ -16,6 +16,7 @@ import {
   writeFeed_addItems,
   writeFeed_deleteItemById,
   writeFeed_editCaption,
+  writeFeed_initFeed,
   writeFeed_resetWriteFeedSlice,
   writeFeed_setPosting,
 } from '@redux/reducers/writeFeedSlice';
@@ -26,9 +27,10 @@ import {
   getPresignedUrls,
   uploadMediaFiles,
 } from '@helpers/functions';
-// import { BACKEND_BASE_URL } from '@env';
 import { axiosClient, queryClient } from '@helpers/singletons';
 import { useMutation } from '@tanstack/react-query';
+import useDataManager from '@hooks/useDataManager';
+import { NEW_FEED_URL } from '@constants/urls';
 
 const imageLibraryOptions: ImageLibraryOptions = {
   mediaType: 'mixed',
@@ -36,7 +38,7 @@ const imageLibraryOptions: ImageLibraryOptions = {
   selectionLimit: 10,
 };
 
-const useWriteFeedManager = () => {
+const useWriteFeedManager = (feedId?: string) => {
   const { user } = useContext(AuthContext);
   const { modalIsOpen, closeModal, openModal } = useModalHandlers();
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
@@ -101,15 +103,10 @@ const useWriteFeedManager = () => {
     closeModal();
   }, [captionWritten, currIndex, closeModal, dispatch]);
 
-  const onPressPost = useCallback(async () => {
-    dispatch(writeFeed_setPosting(true));
+  const createNewFeed = useCallback(async () => {
     if (!user) {
-      dispatch(writeFeed_setPosting(false));
       return;
     }
-
-    console.warn('Posting!');
-    const url = '/feeds/new';
 
     // For new feed
     const blobs = await getBlobsFromLocalUris(items.map(el => el.media.uri));
@@ -162,31 +159,80 @@ const useWriteFeedManager = () => {
     );
 
     // Upload feed to backend url at /api/v1/feeds with axios.post (or axios.put/patch)
-    const uploadMetadataResponse = await axiosClient.post(url, requestData);
-    console.log(
-      'Metadata response: ',
-      JSON.stringify(uploadMetadataResponse, null, 4),
-    );
+    try {
+      const uploadMetadataResponse = await axiosClient.post(
+        NEW_FEED_URL,
+        requestData,
+      );
+      console.log(
+        'Metadata response: ',
+        JSON.stringify(uploadMetadataResponse, null, 4),
+      );
+    } catch (err) {
+      console.error(err);
+      return;
+    }
 
     // If success in uploading feed, proceed
     // Else try to try to check for uploaded media files, and delete them.
+  }, [items, user]);
+
+  const updateExistingFeed = useCallback(async () => {
+    if (!user) {
+      return;
+    }
+
+    // compare each object in write feed state
+
+    // items, posting, selectedItemId, mode
+    // we only need to check items array
+    // how will we check items array for changes?
+    // we need original array, and keep track of changes
+    // (possibly in a custom itemsChange array, where each itemChange object consists of the object id, action performed, resource update),
+    // in this updateExistingFeed function
+
+    // ADD feed item action: push new feed item into array -> trigger reorder
+    // DELETE feed item action: remove feed item from array -> trigger reorder
+    // UPDATE feed item media: change the uri of the feed item media and thumbnail
+    // UPDATE feed item caption action: change the caption of the feed item
+  }, [user]);
+
+  const onPressPost = useCallback(async () => {
+    dispatch(writeFeed_setPosting(true));
+    console.warn('Posting!');
+
+    if (feedId) {
+      updateExistingFeed();
+    } else {
+      createNewFeed();
+    }
 
     // Dispatch resetWriteFeedSlice, invalidate query cache for feeds, feeds-md, then go back to previous screen
     dispatch(writeFeed_setPosting(false));
     dispatch(writeFeed_resetWriteFeedSlice());
     await queryClient.invalidateQueries({ queryKey: ['feeds'] });
     navigation.goBack();
-  }, [items, navigation, user, dispatch]);
+  }, [dispatch, feedId, navigation, updateExistingFeed, createNewFeed]);
 
   const { mutate } = useMutation({
     mutationFn: onPressPost,
   });
+
+  const { data, isLoading } = useDataManager<Feed>('feeds', feedId);
+
+  useEffect(() => {
+    if (data) {
+      dispatch(writeFeed_initFeed({ items: data.feedItems }));
+    }
+  }, [data, dispatch]);
 
   useEffect(() => {
     setCaptionWritten(items[currIndex]?.caption || '');
   }, [currIndex, items, setCaptionWritten]);
 
   return {
+    data,
+    isLoading,
     captionWritten,
     modalIsOpen,
     posting,

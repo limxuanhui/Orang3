@@ -10,8 +10,9 @@ export type WriteFeedSideControlsProps = {
 
 // Tale
 export type ItineraryMapOverviewProps = {
-  creatorId: string;
-  itineraryId?: string;
+  canEdit?: boolean;
+  // creatorId: string;
+  // itineraryId?: string;
 };
 
 export enum StoryTextStyle {

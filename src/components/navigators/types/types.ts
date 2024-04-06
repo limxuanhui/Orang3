@@ -1,7 +1,7 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import type { FeedScreenParams } from '../../screens/feed/types/types';
-import type { AuthStackNavigatorParamList } from '../../screens/auth/types/types';
+import type { FeedScreenParams } from '@screens/feed/types/types';
+import type { AuthStackNavigatorParamList } from '@screens/auth/types/types';
 import type {
   ItineraryScreenParams,
   PlaceSearchScreenParams,
@@ -12,6 +12,7 @@ import type {
 } from '@screens/profile/types/types';
 import {
   TaleViewScreenParams,
+  WriteFeedScreenParams,
   WriteTaleScreenParams,
 } from '@screens/post/types/types';
 import type { Media } from '@components/feed/types/types';
@@ -55,7 +56,7 @@ export type ModalNavigatorNavigationProp = StackNavigationProp<
 >;
 
 export type ModalNavigatorParamList = {
-  WriteFeed: undefined;
+  WriteFeed: WriteFeedScreenParams;
   WriteTale: WriteTaleScreenParams;
   TaleView: TaleViewScreenParams;
   Itinerary: ItineraryScreenParams;

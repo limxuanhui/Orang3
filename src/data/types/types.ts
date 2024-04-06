@@ -1,12 +1,17 @@
 export type DataKey =
   | 'feeds'
-  | 'feeds-md'
-  | 'itineraries'
-  | 'tales'
-  | 'tales-md'
+  | 'feed-by-feedid'
+  | 'feeds-by-userid'
+  | 'feeds-metadata-by-userid'
+  | 'tale-by-taleid'
+  | 'tales-metadata'
+  | 'tales-metadata-by-userid'
   | 'users';
-// export type DataMode = 'dev' | 'test' | 'prod';
-export type DataOptions = {
-  dataKey: DataKey;
-  // dataMode?: DataMode;
-};
+
+// type DataAction =
+//   | 'GET_NEXT_FEEDS_PAGE'
+//   | 'GET_NEXT_FEEDS_METADATA_PAGE_BY_USERID'
+//   | 'GET_FEED_BY_FEEDID'
+//   | 'GET_NEXT_TALES_METADATA_PAGE'
+//   | 'GET_NEXT_TALES_METADATA_PAGE_BY_USERID'
+//   | 'GET_TALE_BY_TALEID';

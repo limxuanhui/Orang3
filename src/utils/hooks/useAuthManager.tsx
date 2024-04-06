@@ -6,17 +6,13 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import { AuthorizeResult, authorize } from 'react-native-app-auth';
-import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import { v4 as uuidv4 } from 'uuid';
 import type { GypsieUser } from '@navigators/types/types';
 import { printPrettyJson } from '@helpers/functions';
-import {
-  BACKEND_BASE_URL,
-  GOOGLE_IOS_CLIENT_ID,
-  GOOGLE_ISSUER_URL,
-  REDIRECT_URL,
-} from '@env';
+import { GOOGLE_IOS_CLIENT_ID, GOOGLE_ISSUER_URL, REDIRECT_URL } from '@env';
+import { axiosClient } from '@helpers/singletons';
+import { AUTH_SIGNIN_URL } from '@constants/urls';
 
 type GoogleIdToken = {
   iss: string;
@@ -40,7 +36,6 @@ const useAuthManager = () => {
   const [user, setUser] = useState<GypsieUser>();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const url = `${BACKEND_BASE_URL}/users/auth/signin`;
 
   const retrieveUserIdToken = useCallback(async () => {
     console.info('Retrieving user id token...');
@@ -204,7 +199,11 @@ const useAuthManager = () => {
           idToken: userInfo.idToken,
         };
 
-        const response = await axios.post(url, requestBody, {});
+        const response = await axiosClient.post(
+          AUTH_SIGNIN_URL,
+          requestBody,
+          {},
+        );
         if (response.data) {
           await storeUserIdToken(userInfo.idToken);
           await storeUserData(response.data);
@@ -235,7 +234,7 @@ const useAuthManager = () => {
       setLoading(false);
     }
     setLoading(false);
-  }, [decodeIdToken, url, storeUserIdToken, storeUserData]);
+  }, [decodeIdToken, storeUserIdToken, storeUserData]);
 
   const googleAuthHandler = async () => {
     const config = {

@@ -12,6 +12,7 @@ export const queryClient: QueryClient = new QueryClient({
       staleTime: 600000, // 10 minutes
       gcTime: 900000, // 15 minutes
       refetchOnMount: false,
+      networkMode: 'online',
     },
   },
   queryCache: new QueryCache({

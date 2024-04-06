@@ -1,5 +1,5 @@
 import { memo, useCallback, useContext, useMemo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ActivityIndicator } from 'react-native-paper';
@@ -10,6 +10,7 @@ import type { MyFeedsProps } from './types/types';
 import { DEVICE_HEIGHT } from '@constants/constants';
 import { PALETTE } from '@constants/palette';
 import { useQueryClient } from '@tanstack/react-query';
+import MessageDisplay from '@components/common/MessageDisplay';
 
 const MyFeeds = memo(({ data }: MyFeedsProps) => {
   const insets = useSafeAreaInsets();
@@ -34,9 +35,7 @@ const MyFeeds = memo(({ data }: MyFeedsProps) => {
           <ActivityIndicator size={48} color={PALETTE.ORANGE} />
         </View>
       ) : data.length === 0 ? (
-        <View style={styles.flexCenter}>
-          <Text style={styles.message}>No feeds to show...</Text>
-        </View>
+        <MessageDisplay message="No feeds to show..." />
       ) : (
         <MasonryList
           contentContainerStyle={styles.masonryListContentContainer}

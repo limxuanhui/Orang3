@@ -6,15 +6,17 @@ import {
   View,
   ViewToken,
 } from 'react-native';
-import EmptyFeed from '../feed/EmptyFeed';
-import FeedDescription from '../feed/FeedDescription';
-import VlogPlayer from '../vlog/VlogPlayer';
-import PageIndicator from './PageIndicator';
-import type { FeedItem } from '../feed/types/types';
-import { DEVICE_HEIGHT, DEVICE_WIDTH } from '../../utils/constants/constants';
-import { DIMENSION } from '../../utils/constants/dimensions';
-import { PALETTE } from '../../utils/constants/palette';
-import { VIEWABILITY_CONFIG } from '../../utils/constants/feed';
+import EmptyFeed from '@components/feed/EmptyFeed';
+import FeedDescription from '@components/feed/FeedDescription';
+import VlogPlayer from '@components/vlog/VlogPlayer';
+import PageIndicator from '@components/common/PageIndicator';
+import type { FeedItem } from '@components/feed/types/types';
+import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
+import { VIEWABILITY_CONFIG } from '@constants/feed';
+import { useAppSelector } from '@redux/hooks';
+import { AWS_CLOUDFRONT_URL_RAW } from '@env';
 
 type GypsieFeedCarouselProps = {
   items: FeedItem[];
@@ -34,6 +36,8 @@ const GypsieFeedCarousel = ({
   inView = true,
   onViewableItemsChanged,
 }: GypsieFeedCarouselProps) => {
+  const { mode } = useAppSelector(state => state.writeFeed);
+
   return (
     <View style={styles.container}>
       <Animated.FlatList
@@ -49,31 +53,27 @@ const GypsieFeedCarousel = ({
         keyExtractor={el => el.id}
         renderItem={({ item, index }) => {
           if (item.media) {
-            const media = item.media.type.split('/');
-            const mediaType = media[0]; // video, image
-            // const mediaFormat = media[1]; // mp4, jpg
-            if (mediaType === 'video') {
+            if (item.media.type.startsWith('video')) {
               return (
                 <VlogPlayer
                   vlog={item}
                   shouldPlay={inView && index === currIndex}
                 />
               );
-            } else if (mediaType === 'image') {
+            } else if (item.media.type.startsWith('image')) {
               return (
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: DEVICE_HEIGHT,
-                    width: DEVICE_WIDTH,
-                  }}>
+                <View style={styles.imageContainer}>
                   <Image
                     style={[
                       styles.image,
                       { aspectRatio: item.media.width / item.media.height },
                     ]}
-                    source={{ uri: item.media.uri }}
+                    source={{
+                      uri:
+                        mode === 'EDIT'
+                          ? `${AWS_CLOUDFRONT_URL_RAW}/${item.media.uri}`
+                          : item.media.uri,
+                    }}
                     resizeMode="contain"
                   />
                 </View>
@@ -95,7 +95,7 @@ const GypsieFeedCarousel = ({
       {items.length > 1 ? (
         <PageIndicator index={currIndex + 1} maxIndex={items.length} />
       ) : null}
-      {!!items[currIndex]?.caption ? (
+      {items[currIndex]?.caption ? (
         <FeedDescription handle={handle} caption={items[currIndex]?.caption} />
       ) : null}
     </View>
@@ -110,6 +110,15 @@ const styles = StyleSheet.create({
   contentContainer: {
     height: DIMENSION.HUNDRED_PERCENT,
     paddingBottom: 100,
+  },
+  imageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: DEVICE_HEIGHT,
+    width: DEVICE_WIDTH,
+    // flex: 1,
+    // borderWidth:4,
+    // borderColor:'red'
   },
   image: {
     // height: DEVICE_HEIGHT,

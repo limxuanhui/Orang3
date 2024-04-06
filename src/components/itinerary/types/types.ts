@@ -35,6 +35,7 @@ export type Route = {
   name: string;
   routeNodes: RouteNode[];
   encodedPolyline: string;
+  order: number;
   polyline?: RouteNodeCoord[];
 };
 
@@ -43,12 +44,13 @@ export type RouteDto = {
   name: string;
   routeNodes: RouteNode[];
   encodedPolyline: string;
+  order: number;
 };
 
 export type RouteNodeCoord = LatLng;
 
 // Component properties
-export type ItineraryPlannerMode = 'view' | 'edit';
+export type ItineraryPlannerMode = 'VIEW' | 'EDIT';
 
 export type MapPinProps = {
   routeNode: RouteNode;

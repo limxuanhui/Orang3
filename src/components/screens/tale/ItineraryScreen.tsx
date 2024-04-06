@@ -2,11 +2,14 @@ import { StyleSheet, View } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import ItineraryPlanner from '@components/itinerary/ItineraryPlanner';
 import { type ItineraryScreenProps } from './types/types';
+import { useAppSelector } from '@redux/hooks';
+import ItineraryViewer from '@components/itinerary/ItineraryViewer';
 
 const ItineraryScreen = ({}: ItineraryScreenProps) => {
+  const { mode } = useAppSelector(state => state.itineraryPlanner);
   return (
     <View style={styles.container}>
-      <ItineraryPlanner />
+      {mode === 'EDIT' ? <ItineraryPlanner /> : <ItineraryViewer />}
     </View>
   );
 };

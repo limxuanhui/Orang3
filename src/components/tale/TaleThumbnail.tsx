@@ -73,7 +73,8 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
   const onPressTaleThumbnail = useCallback(() => {
     navigation.push('Modal', {
       screen: 'TaleView',
-      params: { id: data.taleId, creator: data.creator },
+      // params: { id: data.taleId, creator: data.creator },
+      params: { id: data.id, creator: data.creator },
     });
   }, [navigation, data]);
 
@@ -84,6 +85,10 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
   if (!data) {
     return <SkeletonThumbnail />;
   }
+
+  console.log('==== Tale thumbnail ==== ');
+  console.log(data);
+  console.log('========================');
 
   return (
     <Pressable

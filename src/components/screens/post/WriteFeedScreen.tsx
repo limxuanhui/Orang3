@@ -20,10 +20,15 @@ import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
 import { useAppDispatch } from '@redux/hooks';
 import { writeFeed_resetWriteFeedSlice } from '@redux/reducers/writeFeedSlice';
+import { WriteFeedScreenProps } from './types/types';
+import FullScreenLoading from '@components/common/FullScreenLoading';
 
-const WriteFeedScreen = () => {
+const WriteFeedScreen = ({ route }: WriteFeedScreenProps) => {
   const insets = useSafeAreaInsets();
+  const { feedId } = route.params;
   const {
+    // data,
+    isLoading,
     captionWritten,
     modalIsOpen,
     closeModal,
@@ -34,9 +39,9 @@ const WriteFeedScreen = () => {
     onPressEdit,
     onPressPost,
     onSaveEditCaption,
-  } = useWriteFeedManager();
-  // const { saving } = useAppSelector(state => state.writeFeed);
+  } = useWriteFeedManager(feedId);
   const dispatch = useAppDispatch();
+  // const { saving } = useAppSelector(state => state.writeFeed);
 
   useEffect(() => {
     console.log('WriteFeedScreen focused');
@@ -45,6 +50,10 @@ const WriteFeedScreen = () => {
       dispatch(writeFeed_resetWriteFeedSlice());
     };
   }, [dispatch]);
+
+  if (isLoading) {
+    return <FullScreenLoading />;
+  }
 
   return (
     <View style={styles.container}>

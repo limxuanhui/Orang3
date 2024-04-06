@@ -10,7 +10,7 @@ import type { ProfileScreenProps } from './types/types';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
 import type { FeedThumbnailInfo } from '@components/feed/types/types';
-import type { TaleThumbnailInfo } from '@components/tale/types/types';
+import type { TaleMetadata } from '@components/tale/types/types';
 import useProfileManager from '@hooks/useProfileManager';
 import { AuthContext } from '@contexts/AuthContext';
 
@@ -89,9 +89,7 @@ const ProfileScreen = ({ route }: ProfileScreenProps) => {
         />
         <Tab.Screen
           name="mytales"
-          children={() => (
-            <MyTales data={talesMetadata as TaleThumbnailInfo[]} />
-          )}
+          children={() => <MyTales data={talesMetadata as TaleMetadata[]} />}
           options={{
             tabBarIcon: ({ focused }) =>
               focused ? (

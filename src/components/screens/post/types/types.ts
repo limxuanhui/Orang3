@@ -27,7 +27,6 @@ export type TaleViewScreenParams = {
 };
 
 // --------------------------- WriteTaleScreen ---------------------------
-
 export type WriteTaleScreenNavigationProp = StackNavigationProp<
   ModalNavigatorParamList,
   'WriteTale'
@@ -44,4 +43,23 @@ export type WriteTaleScreenProps = {
 
 export type WriteTaleScreenParams = {
   taleId?: string;
+};
+
+// --------------------------- WriteFeedScreen ---------------------------
+export type WriteFeedScreenNavigationProp = StackNavigationProp<
+  ModalNavigatorParamList,
+  'WriteFeed'
+>;
+export type WriteFeedScreenRouteProp = RouteProp<
+  ModalNavigatorParamList,
+  'WriteFeed'
+>;
+
+export type WriteFeedScreenProps = {
+  navigation: WriteFeedScreenNavigationProp;
+  route: WriteFeedScreenRouteProp;
+};
+
+export type WriteFeedScreenParams = {
+  feedId?: string;
 };

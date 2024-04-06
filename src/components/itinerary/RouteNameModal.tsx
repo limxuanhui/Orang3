@@ -7,6 +7,7 @@ import { PALETTE } from '@constants/palette';
 import {
   itineraryPlanner_addRoute,
   itineraryPlanner_closeModal,
+  itineraryPlanner_reorderRoutes,
   itineraryPlanner_updateRouteName,
 } from '@redux/reducers/itineraryPlannerSlice';
 import { useAppDispatch } from '@redux/hooks';
@@ -18,6 +19,7 @@ const RouteNameModal = ({ initialValue }: RouteNameModalProps) => {
   const onConfirm = useCallback(() => {
     if (initialValue === '') {
       dispatch(itineraryPlanner_addRoute({ name }));
+      dispatch(itineraryPlanner_reorderRoutes());
     } else {
       dispatch(itineraryPlanner_updateRouteName({ name }));
     }

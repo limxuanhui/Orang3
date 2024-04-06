@@ -31,7 +31,7 @@ const NewPostOptions = () => {
 
   const onPressNewFeed = useCallback(() => {
     closeBottomSheet();
-    navigation.navigate('Modal', { screen: 'WriteFeed' });
+    navigation.navigate('Modal', { screen: 'WriteFeed', params: {} });
   }, [closeBottomSheet, navigation]);
 
   const onPressNewTale = useCallback(() => {

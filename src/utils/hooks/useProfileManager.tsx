@@ -3,12 +3,12 @@ import { useNavigation } from '@react-navigation/native';
 import { QueryKey, queryOptions, useQuery } from '@tanstack/react-query';
 import { ProfileScreenNavigationProp } from '@screens/profile/types/types';
 import { FeedMetadata, FeedThumbnailInfo } from '@components/feed/types/types';
-import { TaleMetadata, TaleThumbnailInfo } from '@components/tale/types/types';
-import { DUMMY_DATABASE } from '@data/database';
-import { DataKey } from '@data/types/types';
+import { TaleMetadata } from '@components/tale/types/types';
 import { GypsieUser } from '@navigators/types/types';
 import { axiosClient } from '@helpers/singletons';
 import useGlobals from '@hooks/useGlobals';
+import { urlFactory } from '@helpers/factory';
+import { DataKey } from '@data/types/types';
 
 const useProfileManager = (user: GypsieUser) => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
@@ -32,13 +32,15 @@ const useProfileManager = (user: GypsieUser) => {
       queryKey,
     }: {
       queryKey: QueryKey;
-    }): Promise<FeedThumbnailInfo[]> => {
-      const [key, key1, key2, uid] = queryKey;
+    }): Promise<FeedThumbnailInfo[] | null> => {
+      const [dKey, uId] = queryKey;
+      const key = dKey as DataKey;
+      const id = uId as string;
       console.log('Refreshing queryKey: ', queryKey);
       switch (mode) {
         case 'production':
           try {
-            const url = `/${key}/${key1}/${key2}/${uid}`;
+            const url = urlFactory(key, { id });
             const response = await axiosClient.get(url);
             return response.data.items.map((el: FeedMetadata) => ({
               feedId: el.id,
@@ -49,28 +51,19 @@ const useProfileManager = (user: GypsieUser) => {
             console.error(err);
             return [];
           }
+        case 'testing':
+          return null;
         case 'development':
-          return new Promise((resolve, _reject) => {
-            const feedsThumbnails: FeedThumbnailInfo[] = DUMMY_DATABASE[
-              key as DataKey
-            ] as FeedThumbnailInfo[];
-            const userfeedsThumbnails: FeedThumbnailInfo[] =
-              feedsThumbnails.filter(
-                (el: FeedThumbnailInfo) => el.creator.id === uid,
-              );
-            setTimeout(() => {
-              resolve(userfeedsThumbnails);
-            }, 2000);
-          });
+          return null;
         default:
-          return [];
+          return null;
       }
     },
     [mode],
   );
 
   const feedsMetadataOptions = useMemo(() => {
-    const queryKey = ['feeds', 'user', 'metadata', user.id];
+    const queryKey = ['feeds-metadata-by-userid', user.id];
     return queryOptions({
       queryKey,
       queryFn: feedsMetadataQueryFn,
@@ -78,11 +71,6 @@ const useProfileManager = (user: GypsieUser) => {
       enabled: true,
       gcTime: 1000 * 60 * 5,
       staleTime: Infinity,
-      // select: (data: FeedMetadata[]) => {
-      //   return data.map((el: FeedMetadata) => {
-      //     return { feedId: el.id, creator: el.creator, media: el.thumbnail };
-      //   });
-      // },
     });
   }, [feedsMetadataQueryFn, user.id]);
 
@@ -93,46 +81,34 @@ const useProfileManager = (user: GypsieUser) => {
       queryKey,
     }: {
       queryKey: QueryKey;
-    }): Promise<TaleThumbnailInfo[]> => {
-      const [key, key1, key2, uid] = queryKey;
+    }): Promise<TaleMetadata[] | null> => {
+      const [dKey, uId] = queryKey;
+      const key = dKey as DataKey;
+      const id = uId as string;
       console.log('Refreshing queryKey: ', queryKey);
       switch (mode) {
         case 'production':
           try {
-            const url = `/${key}/${key1}/${key2}/${uid}`;
+            const url = urlFactory(key, { id });
             const response = await axiosClient.get(url);
-            return response.data.items.map((el: TaleMetadata) => ({
-              taleId: el.id,
-              creator: el.creator,
-              thumbnail: el.thumbnail,
-              title: el.title,
-            }));
+            return response.data.items;
           } catch (err) {
             console.error(err);
             return [];
           }
+        case 'testing':
+          return null;
         case 'development':
-          return new Promise((resolve, _reject) => {
-            const talesThumbnails: TaleThumbnailInfo[] = DUMMY_DATABASE[
-              key as DataKey
-            ] as TaleThumbnailInfo[];
-            const userTalesThumbnails: TaleThumbnailInfo[] =
-              talesThumbnails.filter(
-                (el: TaleThumbnailInfo) => el.creator.id === uid,
-              );
-            setTimeout(() => {
-              resolve(userTalesThumbnails);
-            }, 2000);
-          });
+          return null;
         default:
-          return [];
+          return null;
       }
     },
     [mode],
   );
 
   const talesMetadataOptions = useMemo(() => {
-    const queryKey = ['tales', 'user', 'metadata', user.id];
+    const queryKey = ['tales-metadata-by-userid', user.id];
     return queryOptions({
       queryKey,
       queryFn: talesMetadataQueryFn,

@@ -1,17 +1,19 @@
 import { memo, useEffect } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ActivityIndicator } from 'react-native-paper';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import MasonryList from '@react-native-seoul/masonry-list';
-import type { TaleThumbnailInfo } from '@components/tale/types/types';
+import type { TaleMetadata } from '@components/tale/types/types';
 import TaleThumbnail from '@components/tale/TaleThumbnail';
 import GypsieSkeleton from '@components/common/GypsieSkeleton';
 import useInfiniteDataManager from '@hooks/useInfiniteDataManager';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
 import { PALETTE } from '@constants/palette';
 import { DIMENSION } from '@constants/dimensions';
+import FullScreenLoading from '@components/common/FullScreenLoading';
+import MessageDisplay from '@components/common/MessageDisplay';
 
 const SkeletonThumbnail = memo(() => {
   return (
@@ -94,13 +96,20 @@ const TalesOverviewScreen = () => {
     isRefetching,
     onEndReached,
     onRefresh,
-  } = useInfiniteDataManager('tales');
+  } = useInfiniteDataManager('tales-metadata');
 
-  const dataFetched = data && data.pages && data.pages[0];
-  const dataFetchedIsEmpty = dataFetched && data.pages[0].length === 0;
-  // const dataFetchedIsNotEmpty = dataFetched && data.pages[0].length > 0;
+  const dataIsFetched = data && !!data.pages;
+  const dataFetchedIsEmpty = dataIsFetched && data?.pages[0].items.length === 0;
+  const dataFetchedIsNotEmpty =
+    dataIsFetched && data.pages.length > 0 && data?.pages[0].items.length > 0;
 
   console.log('===========================');
+  console.log(
+    'tale metadata thumbnail fetched: ',
+    data?.pages[0].items.forEach((el: TaleMetadata) => {
+      console.log(el.thumbnail);
+    }),
+  );
   console.log('isFetching: ', isFetching);
   console.log('isRefetching: ', isRefetching);
   console.log('isLoading: ', isLoading);
@@ -115,38 +124,46 @@ const TalesOverviewScreen = () => {
     };
   }, []);
 
+  if (isLoading) {
+    return <FullScreenLoading />;
+  }
+
   return (
     <View style={styles.container}>
       <View
         style={[
           styles.masonryListContainer,
-          { height, paddingTop: 8, paddingBottom: insets.bottom + 8 },
+          { height, paddingTop: 8, paddingBottom: insets.bottom + 16 },
         ]}>
         {dataFetchedIsEmpty ? (
-          <View style={styles.flexCenter}>
-            <Text style={styles.description}>No tales at the moment...</Text>
-          </View>
-        ) : (
+          <MessageDisplay message="No tales at the moment..." />
+        ) : dataFetchedIsNotEmpty ? (
           <MasonryList
             containerStyle={styles.masonryList}
-            data={
-              dataFetched ? data.pages.flat(1) : ([] as TaleThumbnailInfo[])
-            }
+            data={data.pages.flatMap(el => el.items)}
             numColumns={2}
             renderItem={({ item }) => (
-              <TaleThumbnail data={item as TaleThumbnailInfo} />
+              <TaleThumbnail data={item as TaleMetadata} />
             )}
             ListEmptyComponent={<SkeletonThumbnailList />}
             ListFooterComponent={
-              <ActivityIndicator
-                style={{ marginVertical: 8 }}
-                size={24}
-                color={PALETTE.ORANGE}
-              />
+              isLoading || isFetching ? (
+                <ActivityIndicator
+                  style={{ marginVertical: 8 }}
+                  size={24}
+                  color={PALETTE.ORANGE}
+                />
+              ) : (
+                <MessageDisplay
+                  containerStyle={styles.footerContainer}
+                  textStyle={styles.footerText}
+                  message="You've caught up with the latest tales :p"
+                />
+              )
             }
             showsVerticalScrollIndicator={false}
             onEndReached={onEndReached}
-            onEndReachedThreshold={0.5}
+            onEndReachedThreshold={0.8}
             onRefresh={onRefresh}
             refreshing={isRefetching}
             refreshControlProps={{
@@ -155,6 +172,8 @@ const TalesOverviewScreen = () => {
               tintColor: PALETTE.ORANGE,
             }}
           />
+        ) : (
+          <MessageDisplay message="Unable to get tales for you at the moment..." />
         )}
       </View>
     </View>
@@ -167,12 +186,6 @@ const styles = StyleSheet.create({
     width: DEVICE_WIDTH,
     backgroundColor: PALETTE.OFFWHITE,
   },
-  flexCenter: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  description: {
-    fontFamily: 'Futura',
-    fontSize: 24,
-    color: PALETTE.ORANGE,
-  },
   masonryListContainer: {
     width: DIMENSION.HUNDRED_PERCENT,
   },
@@ -180,6 +193,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 2,
   },
   refreshControl: { backgroundColor: PALETTE.OFFWHITE },
+  footerContainer: {
+    height: 60,
+    width: DIMENSION.HUNDRED_PERCENT,
+  },
+  footerText: {
+    fontFamily: 'Futura',
+    fontSize: 16,
+    color: PALETTE.GREY,
+  },
 });
 
 export default TalesOverviewScreen;

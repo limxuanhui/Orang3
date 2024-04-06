@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { DEVICE_WIDTH } from '../../utils/constants/constants';
+import { DEVICE_WIDTH } from '@constants/constants';
+import { PALETTE } from '@constants/palette';
 
 type PageIndicatorProps = {
   index: number;
@@ -30,6 +31,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff77',
   },
   pageIndicatorText: {
+    fontFamily: 'Futura',
+    color: PALETTE.GREYISHBLUE,
     textAlign: 'center',
     textAlignVertical: 'center',
   },

@@ -1,16 +1,17 @@
 import { memo, useCallback, useContext, useMemo } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
 import { ActivityIndicator } from 'react-native-paper';
 import MasonryList from '@react-native-seoul/masonry-list';
 import TaleThumbnail from '@components/tale/TaleThumbnail';
-import type { TaleThumbnailInfo } from '@components/tale/types/types';
+import type { TaleMetadata } from '@components/tale/types/types';
 import type { MyTalesProps } from './types/types';
 import { DEVICE_HEIGHT } from '@constants/constants';
 import { PALETTE } from '@constants/palette';
 import { useQueryClient } from '@tanstack/react-query';
 import { printPrettyJson } from '@helpers/functions';
+import MessageDisplay from '@components/common/MessageDisplay';
 
 const MyTales = memo(({ data }: MyTalesProps) => {
   const insets = useSafeAreaInsets();
@@ -37,16 +38,12 @@ const MyTales = memo(({ data }: MyTalesProps) => {
           <ActivityIndicator size={48} color={PALETTE.ORANGE} />
         </View>
       ) : data.length === 0 ? (
-        <View style={styles.flexCenter}>
-          <Text style={styles.message}>No tales to show...</Text>
-        </View>
+        <MessageDisplay message="No tales to show..." />
       ) : (
         <MasonryList
           contentContainerStyle={styles.masonryListContentContainer}
           data={data}
-          renderItem={el => (
-            <TaleThumbnail data={el.item as TaleThumbnailInfo} />
-          )}
+          renderItem={el => <TaleThumbnail data={el.item as TaleMetadata} />}
           numColumns={2}
           showsVerticalScrollIndicator={false}
           onRefresh={onRefresh}

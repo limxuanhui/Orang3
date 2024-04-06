@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@redux/hooks';
 import {
   Asset,
@@ -30,29 +30,32 @@ import useKeyboardHandlers from '@hooks/useKeyboardHandlers';
 import useBottomSheetHandlers from '@hooks/useBottomSheetHandlers';
 import { Draft, nanoid } from '@reduxjs/toolkit';
 import { Feed, Media, MediaMimeType } from '@components/feed/types/types';
-import { QueryKey, queryOptions, useQuery } from '@tanstack/react-query';
 
-import { Tale, TaleDto } from '@components/tale/types/types';
+import { TaleDto } from '@components/tale/types/types';
 import {
   itineraryPlanner_createItinerary,
+  itineraryPlanner_initItinerary,
   itineraryPlanner_resetItineraryPlannerSlice,
-  itineraryPlanner_setItinerary,
+  itineraryPlanner_setMode,
 } from '@redux/reducers/itineraryPlannerSlice';
 import { AuthContext } from '@contexts/AuthContext';
 import { ulid } from 'ulid';
 import {
   UploadMediaDetails,
+  decodePolyline,
   getBlobsFromLocalUris,
   getPresignedUrls,
   printPrettyJson,
   uploadMediaFiles,
 } from '@helpers/functions';
 import { axiosClient } from '@helpers/singletons';
-import useGlobals from '@hooks/useGlobals';
 import { ModalNavigatorNavigationProp } from '@navigators/types/types';
 import { useNavigation } from '@react-navigation/native';
 import { AxiosResponse } from 'axios';
-import { Route, RouteDto } from 'components/itinerary/types/types';
+import { Itinerary, Route, RouteDto } from '@components/itinerary/types/types';
+import useDataManager from '@hooks/useDataManager';
+import { NEW_TALE_URL } from '@constants/urls';
+import { TaleView } from '@components/screens/tale/TaleViewScreen';
 
 const imageLibraryOptions: ImageLibraryOptions = {
   mediaType: 'mixed',
@@ -60,10 +63,7 @@ const imageLibraryOptions: ImageLibraryOptions = {
   selectionLimit: 1,
 };
 
-const url = '/tales/new';
-
 const useWriteTaleManager = (taleId?: string) => {
-  const { mode } = useGlobals();
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const { user } = useContext(AuthContext);
   const { openGallery } = useMediaHandlers(imageLibraryOptions);
@@ -76,84 +76,22 @@ const useWriteTaleManager = (taleId?: string) => {
   const dispatch = useAppDispatch();
   const { metadata, itinerary, story, posting, selectedStoryItemIndex } =
     useAppSelector(state => state.writeTale);
+  console.log('=== useWriteTaleManager ===');
+  console.log('useWriteTaleManager metadata: ', metadata);
+  console.log('useWriteTaleManager itinerary: ', itinerary);
+  console.log('useWriteTaleManager story: ', story);
+
   const { itinerary: itineraryInProgress } = useAppSelector(
     state => state.itineraryPlanner,
   );
 
   // useQuery to fetch tale from api based on taleId from hook argument
-  const queryFn = useCallback(
-    async ({ queryKey }: { queryKey: QueryKey }): Promise<Tale | null> => {
-      const [key, tid] = queryKey;
-      console.log('Refreshing queryKey: ', queryKey);
-      switch (mode) {
-        case 'production':
-          try {
-            const response = await axiosClient.get(`/${key}/${tid}`);
-            return response.data;
-          } catch (err) {
-            console.error(err);
-            return null;
-          }
-        case 'development':
-        default:
-          return null;
-      }
-    },
-    [mode],
+  const { data, isLoading } = useDataManager<TaleView>(
+    'tale-by-taleid',
+    taleId,
   );
-  const options = useMemo(() => {
-    const queryKey = ['tales', taleId];
-    return queryOptions({
-      queryKey,
-      queryFn,
-      networkMode: 'online',
-      enabled: !!taleId,
-      gcTime: Infinity,
-      staleTime: Infinity,
-    });
-  }, [taleId, queryFn]);
-  const { data, isLoading } = useQuery(options);
-
-  // useQuery to fetch tale from api based on taleId from hook argument
-  const feedsThumbnailsQueryFn = useCallback(
-    async ({ queryKey }: { queryKey: QueryKey }): Promise<Feed[] | null> => {
-      const [key, key1, uid] = queryKey;
-      console.log('Refreshing queryKey: ', queryKey);
-      switch (mode) {
-        case 'production':
-          const response = await axiosClient.get(`/${key}/${key1}/${uid}`);
-          return response.data.items;
-        case 'development':
-        default:
-          return null;
-      }
-    },
-    [mode],
-  );
-  const feedsThumbnailsOptions = useMemo(() => {
-    if (user) {
-      const queryKey = ['feeds', 'user', user.id];
-      return queryOptions({
-        queryKey,
-        queryFn: feedsThumbnailsQueryFn,
-        networkMode: 'online',
-        enabled: !taleId,
-        // gcTime: 1000 * 60 * 5,
-        gcTime: 0,
-        staleTime: 1000 * 60 * 5,
-      });
-    }
-    return queryOptions({
-      queryKey: [''] as QueryKey,
-      queryFn: () => {
-        return null;
-      },
-      enabled: false,
-      initialData: [] as Feed[],
-    });
-  }, [user, feedsThumbnailsQueryFn, taleId]);
   const { data: feedsThumbnails, isLoading: feedsThumbnailsIsLoading } =
-    useQuery(feedsThumbnailsOptions);
+    useDataManager<Feed[]>('feeds-by-userid', user?.id);
 
   const onPressAddCover = useCallback(async () => {
     const coverResponse: ImagePickerResponse = await openGallery();
@@ -198,7 +136,6 @@ const useWriteTaleManager = (taleId?: string) => {
       data: {
         text: '',
         style: StoryTextStyle.TITLE,
-        // style: storyTitleStyle as Draft<StyleProp<TextStyle>>,
       },
       order: newSelectedStoryItemIndex,
     };
@@ -224,7 +161,6 @@ const useWriteTaleManager = (taleId?: string) => {
       data: {
         text: '',
         style: StoryTextStyle.PARAGRAPH,
-        // style: storyBodyStyle as Draft<StyleProp<TextStyle>>,
       },
       order: newSelectedStoryItemIndex,
     };
@@ -290,18 +226,8 @@ const useWriteTaleManager = (taleId?: string) => {
     [dispatch],
   );
 
-  /**
-   * Check if we are creating a new tale or editing a tale.
-   */
-  const onSubmitPost = useCallback(async () => {
-    dispatch(writeTale_setPosting(true));
+  const createNewTale = useCallback(async () => {
     if (!user) {
-      dispatch(writeTale_setPosting(false));
-      return;
-    }
-
-    if (taleId) {
-      // Check what tale data has changed. If changed cover, ask backend to delete original cover, and store new one.
       return;
     }
 
@@ -317,11 +243,12 @@ const useWriteTaleManager = (taleId?: string) => {
       itinerary: {
         metadata: itinerary.metadata,
         routes: itinerary.routes.map(
-          (route: Route): RouteDto => ({
+          (route: Route, index: number): RouteDto => ({
             id: route.id,
             name: route.name,
             routeNodes: route.routeNodes,
             encodedPolyline: route.encodedPolyline,
+            order: index, // route.order
           }),
         ),
       },
@@ -374,37 +301,70 @@ const useWriteTaleManager = (taleId?: string) => {
     console.log('====== New tale ======');
     printPrettyJson(newTale);
     try {
-      const response = await axiosClient.post(url, newTale);
+      const response = await axiosClient.post(NEW_TALE_URL, newTale);
       printPrettyJson(response);
     } catch (err) {
       console.error(err);
     }
-    writeTale_setPosting(false);
-    // dispatch(setMode({ mode: "view" }));
+  }, [itinerary, metadata.cover, metadata.id, metadata.title, story, user]);
+
+  const updateExistingTale = useCallback(() => {
+    if (!user) {
+      return;
+    }
+
+    // Check what tale data has changed. If changed cover, ask backend to delete original cover, and store new one.
+    // Can I get a list of primary keys (PK,SK) that changed, map it to an action and a resource
+    // If there is a reorder of storyitems/routes, perform updates for all since the all their orders have changed
+
+    // metadata
+
+    // itinerary
+
+    // story
+  }, [user]);
+
+  /**
+   * Check if we are creating a new tale or editing a tale.
+   */
+  const onSubmitPost = useCallback(async () => {
+    dispatch(writeTale_setPosting(true));
+
+    if (taleId) {
+      updateExistingTale();
+    } else {
+      createNewTale();
+    }
+
+    dispatch(writeTale_setPosting(false));
     dispatch(writeTale_resetWriteTaleSlice());
     dispatch(itineraryPlanner_resetItineraryPlannerSlice());
     navigation.goBack();
-  }, [
-    dispatch,
-    user,
-    taleId,
-    metadata.title,
-    metadata.cover,
-    metadata.id,
-    itinerary,
-    story,
-    navigation,
-  ]);
+  }, [dispatch, taleId, navigation, updateExistingTale, createNewTale]);
 
   useEffect(() => {
+    dispatch(itineraryPlanner_setMode({ mode: 'EDIT' }));
     if (!taleId) {
       // if no taleId passed into useWriteTaleManager => create new tale
       dispatch(itineraryPlanner_createItinerary({ creator: user }));
     } else {
       if (data) {
         // if taleId is passed into useWriteTaleManager => edit existing tale
-        dispatch(writeTale_initTale({ tale: data }));
-        dispatch(itineraryPlanner_setItinerary({ itinerary: data.itinerary }));
+        console.log('Initialising tale...');
+        console.log('data:::', data);
+
+        const itinerary: Itinerary = {
+          metadata: data.tale.itinerary.metadata,
+          routes: data.tale.itinerary.routes.map((route: Route) => {
+            const decodedRoute = {
+              ...route,
+              polyline: decodePolyline(route.encodedPolyline),
+            };
+            return decodedRoute;
+          }),
+        };
+        dispatch(writeTale_initTale({ tale: data.tale }));
+        dispatch(itineraryPlanner_initItinerary({ itinerary }));
       }
     }
 
@@ -462,3 +422,37 @@ const useWriteTaleManager = (taleId?: string) => {
 };
 
 export default useWriteTaleManager;
+
+// const queryFn = useCallback(
+//   async ({ queryKey }: { queryKey: QueryKey }): Promise<Tale | null> => {
+//     const [key, tid] = queryKey;
+//     console.log('Refreshing queryKey: ', queryKey);
+//     switch (mode) {
+//       case 'production':
+//         try {
+//           const response = await axiosClient.get(`/${key}/${tid}`);
+//           return response.data.tale;
+//         } catch (err) {
+//           console.error(err);
+//           return null;
+//         }
+//       case 'development':
+//       default:
+//         return null;
+//     }
+//   },
+//   [mode],
+// );
+// const options = useMemo(() => {
+//   const queryKey = ['tales', taleId];
+//   return queryOptions({
+//     queryKey,
+//     queryFn,
+//     networkMode: 'online',
+//     enabled: !!taleId,
+//     gcTime: Infinity,
+//     staleTime: Infinity,
+//   });
+// }, [taleId, queryFn]);
+// const { data, isLoading } = useQuery(options);
+// console.log('useWriteTaleManager: ', data);

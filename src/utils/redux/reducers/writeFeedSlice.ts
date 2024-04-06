@@ -5,18 +5,25 @@ export type WriteFeedState = Readonly<{
   items: FeedItem[];
   posting: boolean;
   selectedItemId: number;
+  mode: 'NEW' | 'EDIT';
 }>;
 
 const initialState: WriteFeedState = {
   items: [],
   posting: false,
   selectedItemId: 0,
+  mode: 'NEW',
 };
 
 const writeFeedSlice = createSlice({
   name: 'writeFeed',
   initialState,
   reducers: {
+    writeFeed_initFeed: (state, action) => {
+      console.warn('Init feed in slice');
+      state.items = action.payload.items;
+      state.mode = 'EDIT';
+    },
     writeFeed_addItems: (state, action) => {
       console.log('Before: ', state.items);
       state.items.splice(action.payload.id, 0, ...action.payload.items);
@@ -53,6 +60,7 @@ const writeFeedSlice = createSlice({
 });
 
 export const {
+  writeFeed_initFeed,
   writeFeed_addItems,
   writeFeed_deleteItemById,
   writeFeed_editCaption,

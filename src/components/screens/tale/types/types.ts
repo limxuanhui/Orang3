@@ -1,6 +1,6 @@
 import type { RouteProp } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import type { RouteNodeInfo } from '@components/itinerary/types/types';
+import type { RouteNode } from '@components/itinerary/types/types';
 import type { ModalNavigatorParamList } from '@navigators/types/types';
 
 export type TaleStackNavigatorParamList = {
@@ -10,8 +10,8 @@ export type TaleStackNavigatorParamList = {
 
 // --------------------------- ItineraryScreen ---------------------------
 export type ItineraryScreenParams = {
-  id?: string;
-  creatorId: string;
+  // id?: string;
+  // creatorId: string;
 };
 
 export type ItineraryScreenProps = {
@@ -31,7 +31,7 @@ export type ItineraryRouteProp = RouteProp<
 // --------------------------- PlaceSearchScreen ---------------------------
 
 export type PlaceSearchScreenParams = {
-  onAddPlace: (routeNode: RouteNodeInfo) => void;
+  onAddPlace: (routeNode: RouteNode) => void;
 };
 
 export type PlaceSearchScreenProps = {
