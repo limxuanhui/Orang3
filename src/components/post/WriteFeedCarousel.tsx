@@ -1,8 +1,11 @@
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '@redux/hooks';
 import { writeFeed_setSelectedItemId } from '@redux/reducers/writeFeedSlice';
 import GypsieFeedCarousel from '@components/common/GypsieFeedCarousel';
 import { AuthContext } from '@contexts/AuthContext';
+import { type FeedItem } from '@components/feed/types/types';
+import { AWS_CLOUDFRONT_URL_RAW } from '@env';
+import { printPrettyJson } from '@helpers/functions';
 
 const WriteFeedCarousel = () => {
   const { user } = useContext(AuthContext);
@@ -14,17 +17,41 @@ const WriteFeedCarousel = () => {
   const dispatch = useAppDispatch();
 
   const onViewableItemsChanged = useCallback(
-    ({ viewableItems }: any) => {
+    ({ viewableItems, changed }: any) => {
       if (viewableItems && viewableItems.length > 0) {
-        dispatch(writeFeed_setSelectedItemId(viewableItems[0].index));
+        console.log('Viewable items: ');
+        printPrettyJson(viewableItems);
+        console.log('Changed items: ');
+        printPrettyJson(changed);
+
+        dispatch(writeFeed_setSelectedItemId({ id: viewableItems[0].index }));
       }
     },
     [dispatch],
   );
 
+  const itemsToRender: FeedItem[] = items.map(el => {
+    if (el.isRemote) {
+      const uri = `${AWS_CLOUDFRONT_URL_RAW}/${el.media.uri}`;
+      const item = {
+        ...el,
+        media: {
+          ...el.media,
+          uri,
+        },
+      };
+      return item;
+    }
+    return el;
+  });
+
+  useEffect(() => {
+    console.log('WriteFeedCarousel useEffect: currIndex', currIndex);
+  }, [currIndex]);
+
   return (
     <GypsieFeedCarousel
-      items={items}
+      items={itemsToRender}
       currIndex={currIndex}
       handle={handle}
       onViewableItemsChanged={onViewableItemsChanged}

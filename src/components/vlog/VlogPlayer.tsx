@@ -7,11 +7,8 @@ import { type VlogPlayerProps, VlogPlayerStatus } from './types/types';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
-import { useAppSelector } from '@redux/hooks';
-import { AWS_CLOUDFRONT_URL_RAW } from '@env';
 
 const VlogPlayer = ({ vlog, shouldPlay }: VlogPlayerProps) => {
-  const { mode } = useAppSelector(state => state.writeFeed);
   const { media } = vlog;
   const [status, setStatus] = useState<VlogPlayerStatus>(
     VlogPlayerStatus.PLAYING,
@@ -32,10 +29,7 @@ const VlogPlayer = ({ vlog, shouldPlay }: VlogPlayerProps) => {
       <Video
         style={[styles.video, { aspectRatio: media.width / media.height }]}
         source={{
-          uri:
-            mode === 'EDIT'
-              ? `${AWS_CLOUDFRONT_URL_RAW}/${media.uri}`
-              : media.uri,
+          uri: media.uri,
         }}
         paused={!shouldPlay || status === VlogPlayerStatus.PAUSED}
         controls={false}

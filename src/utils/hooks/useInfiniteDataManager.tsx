@@ -1,5 +1,9 @@
 import { useCallback, useMemo } from 'react';
 import {
+  InfiniteData,
+  QueryFunctionContext,
+  QueryKey,
+  UndefinedInitialDataInfiniteOptions,
   infiniteQueryOptions,
   useInfiniteQuery,
   useQueryClient,
@@ -8,43 +12,71 @@ import type { DataKey } from '@data/types/types';
 import { axiosClient } from '@helpers/singletons';
 import useGlobals from '@hooks/useGlobals';
 import { AxiosResponse } from 'axios';
-import { urlFactory } from '@helpers/factory';
+import { keyFactory, urlFactory } from '@helpers/factory';
+import { printPrettyJson } from '@helpers/functions';
+
+export type TInfiniteData<T> = {
+  items: T;
+  lastEvaluatedKey: string | null;
+};
 
 /**
  * useInfiniteDataManager manages the lifecycle of data (fetching, caching, invalidating)
  * that is used in screens with infinite scrolling.
  * @param dataKey
+ * @param dataId
+ * @param dataOptions
  * @returns
  */
-const useInfiniteDataManager = (dataKey: DataKey) => {
+const useInfiniteDataManager = <T,>(
+  dataKey: DataKey,
+  dataId?: string,
+  dataOptions?: Omit<
+    UndefinedInitialDataInfiniteOptions<
+      TInfiniteData<T>,
+      Error,
+      InfiniteData<TInfiniteData<T>>,
+      QueryKey,
+      unknown
+    >,
+    'queryKey' | 'queryFn' | 'getNextPageParam' | 'initialPageParam'
+  >,
+) => {
   const { mode } = useGlobals();
   const queryClient = useQueryClient();
   const queryFn = useCallback(
     // @ts-ignore
-    async ({ queryKey, pageParam }) => {
-      const [key] = queryKey;
+    async ({
+      queryKey,
+      pageParam,
+    }: QueryFunctionContext<QueryKey, unknown>): Promise<TInfiniteData<T>> => {
+      const [dKey, dId] = queryKey;
+      const key = dKey as DataKey;
+      const id = dId as string;
+      const base64Key = pageParam as string;
       switch (mode) {
         case 'production':
           try {
             let url;
             if (pageParam) {
-              url = urlFactory(key, { base64Key: pageParam });
+              url = urlFactory(key, { id, base64Key });
             } else {
-              url = urlFactory(key);
+              url = urlFactory(key, { id });
             }
             const response: AxiosResponse = await axiosClient.get(url);
+            printPrettyJson(response.data);
             return response.data;
           } catch (err) {
             console.error(err);
+            return { items: [] as T, lastEvaluatedKey: null };
           }
-          break;
         case 'testing':
-          break;
+          return { items: [] as T, lastEvaluatedKey: null };
         case 'development':
-          break;
+          return { items: [] as T, lastEvaluatedKey: null };
         default:
-          // Do I need to return a promise here?
           console.info(`${mode} mode is not handled.`);
+          return { items: [] as T, lastEvaluatedKey: null };
       }
     },
     [mode],
@@ -53,15 +85,16 @@ const useInfiniteDataManager = (dataKey: DataKey) => {
   const options = useMemo(
     () =>
       infiniteQueryOptions({
-        queryKey: [dataKey],
+        queryKey: keyFactory(dataKey, dataId),
         queryFn,
         networkMode: mode === 'production' ? 'online' : 'always',
         getNextPageParam: lastPage => {
           return lastPage.lastEvaluatedKey || undefined;
         },
         initialPageParam: null,
+        ...dataOptions,
       }),
-    [dataKey, mode, queryFn],
+    [dataId, dataKey, dataOptions, mode, queryFn],
   );
 
   const {
@@ -74,7 +107,7 @@ const useInfiniteDataManager = (dataKey: DataKey) => {
     hasNextPage,
     fetchNextPage,
     refetch,
-  } = useInfiniteQuery(options);
+  } = useInfiniteQuery<TInfiniteData<T>>(options);
 
   /**
    * onEndReached is called when end of list (determined by onEndReachedThreshold prop in Flatlist or similar components) is reached.
@@ -90,12 +123,16 @@ const useInfiniteDataManager = (dataKey: DataKey) => {
    * If the number of pages is > 2, reset cache.
    */
   const onRefresh = useCallback(async () => {
-    if (data && data?.pageParams.length > 2) {
-      await queryClient.resetQueries({ queryKey: [dataKey] });
-    } else {
-      await queryClient.invalidateQueries({ queryKey: [dataKey] });
-    }
-  }, [data, dataKey, queryClient]);
+    // if (data && data?.pageParams.length > 2) {
+    //   await queryClient.resetQueries({ queryKey: [dataKey] });
+    // } else {
+    //   await queryClient.invalidateQueries({ queryKey: [dataKey] });
+    // }
+    await queryClient.invalidateQueries({
+      queryKey: keyFactory(dataKey, dataId),
+    });
+    // }, [data, dataKey, queryClient]);
+  }, [dataId, dataKey, queryClient]);
 
   return {
     data,

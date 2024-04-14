@@ -25,7 +25,6 @@ import {
   StoryText,
   StoryTextStyle,
 } from '@components/post/types/types';
-// import { storyTitleStyle, storyBodyStyle } from '@constants/text';
 import useKeyboardHandlers from '@hooks/useKeyboardHandlers';
 import useBottomSheetHandlers from '@hooks/useBottomSheetHandlers';
 import { Draft, nanoid } from '@reduxjs/toolkit';
@@ -56,6 +55,7 @@ import { Itinerary, Route, RouteDto } from '@components/itinerary/types/types';
 import useDataManager from '@hooks/useDataManager';
 import { NEW_TALE_URL } from '@constants/urls';
 import { TaleView } from '@components/screens/tale/TaleViewScreen';
+import useInfiniteDataManager from '@hooks/useInfiniteDataManager';
 
 const imageLibraryOptions: ImageLibraryOptions = {
   mediaType: 'mixed',
@@ -91,7 +91,11 @@ const useWriteTaleManager = (taleId?: string) => {
     taleId,
   );
   const { data: feedsThumbnails, isLoading: feedsThumbnailsIsLoading } =
-    useDataManager<Feed[]>('feeds-by-userid', user?.id);
+    useInfiniteDataManager<Feed[]>('feeds-by-userid', user?.id);
+
+  const closeBottomSheet = useCallback(() => {
+    bottomSheetRef.current?.close();
+  }, [bottomSheetRef]);
 
   const onPressAddCover = useCallback(async () => {
     const coverResponse: ImagePickerResponse = await openGallery();
@@ -193,7 +197,7 @@ const useWriteTaleManager = (taleId?: string) => {
       if (!feedsThumbnails) {
         return;
       }
-      const selectedLinkedFeed = feedsThumbnails[index];
+      const selectedLinkedFeed = feedsThumbnails.pages[0].items[index];
       const newSelectedStoryItemIndex = selectedStoryItemIndex + 1;
       dispatch(
         writeTale_addStoryItem({
@@ -214,9 +218,9 @@ const useWriteTaleManager = (taleId?: string) => {
           selectedStoryItemIndex: newSelectedStoryItemIndex,
         }),
       );
-      bottomSheetRef.current?.close();
+      closeBottomSheet();
     },
-    [bottomSheetRef, dispatch, feedsThumbnails, selectedStoryItemIndex],
+    [closeBottomSheet, dispatch, feedsThumbnails, selectedStoryItemIndex],
   );
 
   const onPressDeleteStoryItem = useCallback(
@@ -404,9 +408,10 @@ const useWriteTaleManager = (taleId?: string) => {
     posting,
     data,
     isLoading,
-    feedsThumbnails,
+    feedsThumbnails: feedsThumbnails?.pages[0].items,
     feedsThumbnailsIsLoading,
     closeKeyboard,
+    closeBottomSheet,
     renderBackdrop,
     onPressAddCover,
     onPressClearCover,

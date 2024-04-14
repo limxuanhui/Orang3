@@ -3,6 +3,7 @@ export const ITINERARY_ROUTING_URL: string = '/directions';
 
 export const FEEDS_URL: string = '/feeds';
 export const NEW_FEED_URL: string = '/feeds/new';
+export const EDIT_FEED_URL: string = '/feeds/edit';
 export const FEEDS_METADATA_BY_USERID_URL: string = '/feeds/metadata/user';
 export const FEEDS_BY_USERID_URL: string = '/feeds/user';
 

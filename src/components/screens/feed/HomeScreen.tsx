@@ -9,12 +9,13 @@ import { PALETTE } from '@constants/palette';
 import { VIEWABILITY_CONFIG } from '@constants/feed';
 import FullScreenLoading from '@components/common/FullScreenLoading';
 import MessageDisplay from '@components/common/MessageDisplay';
+import { Feed } from '@components/feed/types/types';
 
 const HomeScreen = ({}: HomeScreenProps) => {
   const [homeScreenIsFocused, setHomeScreenIsFocused] = useState<boolean>(true);
   const [activePostIndex, setActivePostIndex] = useState<number>(0);
   const { data, isLoading, isRefetching, onEndReached, onRefresh } =
-    useInfiniteDataManager('feeds');
+    useInfiniteDataManager<Feed[]>('feeds');
 
   const onViewableItemsChanged = useCallback(
     // Change type to more suitable one
@@ -35,23 +36,17 @@ const HomeScreen = ({}: HomeScreenProps) => {
   );
 
   const dataIsFetched = data && !!data.pages;
+  // const dataFetchedIsEmpty = dataIsFetched && data?.pages[0].items.length === 0;
   const dataFetchedIsEmpty = dataIsFetched && data?.pages[0].items.length === 0;
   const dataFetchedIsNotEmpty =
     dataIsFetched && data.pages.length > 0 && data?.pages[0].items.length > 0;
 
-  console.log('Data fetched: ', dataIsFetched);
-  console.log('Data fetched is empty: ', dataFetchedIsEmpty);
-  console.log('Data fetched is not empty: ', dataFetchedIsNotEmpty);
-  console.log('Data pages: ', data?.pages);
-  console.log('Number of pages: ', data?.pages.length);
-  console.log(data?.pages.flat(1));
-  // if (dataFetchedIsEmpty) {
-  //   return (
-  //     <View style={[styles.flexCenter, { width: '100%', height: '100%' }]}>
-  //       <ActivityIndicator size={48} color={PALETTE.ORANGE} />
-  //     </View>
-  //   );
-  // }
+  // console.log('Home screen data fetched: ', data);
+  // console.log('Data fetched is empty: ', dataFetchedIsEmpty);
+  // console.log('Data fetched is not empty: ', dataFetchedIsNotEmpty);
+  // console.log('Data pages: ', data?.pages);
+  // console.log('Number of pages: ', data?.pages.length);
+  // console.log(data?.pages.flat(1));
 
   if (isLoading) {
     return <FullScreenLoading />;
@@ -65,6 +60,7 @@ const HomeScreen = ({}: HomeScreenProps) => {
         <FlatList
           // initialNumToRender={2}
           data={data.pages.flatMap(el => el.items)}
+          // data={data.pages[0].items}
           renderItem={({ item, index }) => (
             <FeedDisplay
               data={item}

@@ -1,5 +1,7 @@
 export type DataKey =
   | 'feeds'
+  | 'feed-new'
+  | 'feed-edit'
   | 'feed-by-feedid'
   | 'feeds-by-userid'
   | 'feeds-metadata-by-userid'

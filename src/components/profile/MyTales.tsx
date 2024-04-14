@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useMemo } from 'react';
+import { memo, useContext, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
@@ -9,28 +9,13 @@ import type { TaleMetadata } from '@components/tale/types/types';
 import type { MyTalesProps } from './types/types';
 import { DEVICE_HEIGHT } from '@constants/constants';
 import { PALETTE } from '@constants/palette';
-import { useQueryClient } from '@tanstack/react-query';
-import { printPrettyJson } from '@helpers/functions';
 import MessageDisplay from '@components/common/MessageDisplay';
 
-const MyTales = memo(({ data }: MyTalesProps) => {
+const MyTales = memo(({ data, onRefresh }: MyTalesProps) => {
   const insets = useSafeAreaInsets();
   const bh = useContext(BottomTabBarHeightContext) || insets.bottom;
   const height = useMemo(() => (1 - 0.25 - 0.05) * DEVICE_HEIGHT - bh, [bh]);
-  const queryClient = useQueryClient();
 
-  const onRefresh = useCallback(async () => {
-    console.warn('Refreshing!');
-    if (data.length > 0) {
-      // const creatorId: string = data[0].creator.id;
-      console.warn('reached inside refresh');
-      // Do we want to invalidate all feeds metadata for all user profiles, or just the current loaded one?
-      await queryClient.invalidateQueries({ queryKey: ['tales'] });
-    }
-  }, [data, queryClient]);
-
-  console.log('MyTalesData: ');
-  printPrettyJson(data);
   return (
     <View style={[styles.container, { height: height }]}>
       {!data ? (

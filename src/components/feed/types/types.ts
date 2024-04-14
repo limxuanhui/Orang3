@@ -28,12 +28,14 @@ export type FeedItem = {
   media: Media;
   caption: string;
   feedId: string;
+  order: number;
+  isRemote?: boolean;
 };
 
-export type FeedThumbnailInfo = {
-  feedId: string;
-  creator: GypsieUser;
-  media: Media;
+export type UpdateFeedDto = {
+  metadata: FeedMetadata | null;
+  modified: FeedItem[];
+  deleted: FeedItem[];
 };
 
 export type MediaMimeType =
@@ -59,7 +61,7 @@ export type FeedDisplayProps = {
 };
 
 export type FeedThumbnailProps = {
-  data: FeedThumbnailInfo;
+  data: FeedMetadata;
 };
 
 export type FeedDescriptionProps = {

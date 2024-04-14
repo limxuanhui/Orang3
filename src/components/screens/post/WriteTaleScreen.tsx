@@ -61,6 +61,7 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
     feedsThumbnails,
     feedsThumbnailsIsLoading,
     closeKeyboard,
+    closeBottomSheet,
     renderBackdrop,
     onPressAddCover,
     onPressClearCover,
@@ -225,6 +226,7 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
                             displayFormat={
                               FeedItemThumbnailsDisplayFormat.CAROUSEL
                             }
+                            closeBottomSheet={closeBottomSheet}
                           />
                           <GypsieButton
                             customButtonStyles={[

@@ -1,5 +1,6 @@
+import { useCallback, useEffect, useRef } from 'react';
 import {
-  Animated,
+  FlatList,
   Image,
   StyleSheet,
   Text,
@@ -15,8 +16,6 @@ import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
 import { VIEWABILITY_CONFIG } from '@constants/feed';
-import { useAppSelector } from '@redux/hooks';
-import { AWS_CLOUDFRONT_URL_RAW } from '@env';
 
 type GypsieFeedCarouselProps = {
   items: FeedItem[];
@@ -36,13 +35,34 @@ const GypsieFeedCarousel = ({
   inView = true,
   onViewableItemsChanged,
 }: GypsieFeedCarouselProps) => {
-  const { mode } = useAppSelector(state => state.writeFeed);
+  const ref = useRef<FlatList>(null);
+
+  useEffect(() => {
+    if (items.length > 0) {
+      ref.current?.scrollToIndex({
+        index: currIndex,
+        animated: false,
+      });
+    }
+  }, [currIndex, items.length]);
+
+  const getItemLayout = useCallback(
+    (data: any[] | null | undefined, index: number) => ({
+      length: DEVICE_WIDTH,
+      offset: DEVICE_WIDTH * index,
+      index,
+    }),
+    [],
+  );
 
   return (
     <View style={styles.container}>
-      <Animated.FlatList
+      <FlatList
+        ref={ref}
+        getItemLayout={getItemLayout}
         contentContainerStyle={styles.contentContainer}
         data={items}
+        // initialScrollIndex={currIndex}
         horizontal
         showsHorizontalScrollIndicator={false}
         scrollEventThrottle={32}
@@ -51,28 +71,26 @@ const GypsieFeedCarousel = ({
         pagingEnabled
         scrollEnabled={items.length > 1}
         keyExtractor={el => el.id}
-        renderItem={({ item, index }) => {
+        renderItem={({ item, index }: { item: FeedItem; index: number }) => {
           if (item.media) {
             if (item.media.type.startsWith('video')) {
               return (
                 <VlogPlayer
+                  key={item.id}
                   vlog={item}
                   shouldPlay={inView && index === currIndex}
                 />
               );
             } else if (item.media.type.startsWith('image')) {
               return (
-                <View style={styles.imageContainer}>
+                <View key={item.id} style={styles.imageContainer}>
                   <Image
                     style={[
                       styles.image,
                       { aspectRatio: item.media.width / item.media.height },
                     ]}
                     source={{
-                      uri:
-                        mode === 'EDIT'
-                          ? `${AWS_CLOUDFRONT_URL_RAW}/${item.media.uri}`
-                          : item.media.uri,
+                      uri: item.media.uri,
                     }}
                     resizeMode="contain"
                   />
@@ -80,7 +98,7 @@ const GypsieFeedCarousel = ({
               );
             } else {
               return (
-                <View style={styles.errorTextWrapper}>
+                <View key={item.id} style={styles.errorTextWrapper}>
                   <Text style={styles.errorText}>
                     Media format not supported at the moment
                   </Text>
@@ -88,7 +106,7 @@ const GypsieFeedCarousel = ({
               );
             }
           } else {
-            return <EmptyFeed />;
+            return <EmptyFeed key={item.id} />;
           }
         }}
       />

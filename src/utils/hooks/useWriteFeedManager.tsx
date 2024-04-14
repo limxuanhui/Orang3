@@ -8,7 +8,12 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { ulid } from 'ulid';
 import { AxiosResponse } from 'axios';
-import { Feed, FeedItem } from '@components/feed/types/types';
+import {
+  Feed,
+  FeedItem,
+  FeedMetadata,
+  UpdateFeedDto,
+} from '@components/feed/types/types';
 import type { ModalNavigatorNavigationProp } from '@components/navigators/types/types';
 import useModalHandlers from '@hooks/useModalHandlers';
 import { useAppDispatch, useAppSelector } from '@redux/hooks';
@@ -17,20 +22,25 @@ import {
   writeFeed_deleteItemById,
   writeFeed_editCaption,
   writeFeed_initFeed,
+  writeFeed_reorderFeedItems,
   writeFeed_resetWriteFeedSlice,
   writeFeed_setPosting,
+  writeFeed_setSelectedItemId,
+  writeFeed_updateModified,
 } from '@redux/reducers/writeFeedSlice';
 import { AuthContext } from '@contexts/AuthContext';
 import {
   UploadMediaDetails,
   getBlobsFromLocalUris,
   getPresignedUrls,
+  printPrettyJson,
   uploadMediaFiles,
 } from '@helpers/functions';
 import { axiosClient, queryClient } from '@helpers/singletons';
 import { useMutation } from '@tanstack/react-query';
 import useDataManager from '@hooks/useDataManager';
-import { NEW_FEED_URL } from '@constants/urls';
+import { MEDIA_THUMBNAIL_MAX_WIDTH } from '@constants/constants';
+import { keyFactory, urlFactory } from '@helpers/factory';
 
 const imageLibraryOptions: ImageLibraryOptions = {
   mediaType: 'mixed',
@@ -42,11 +52,14 @@ const useWriteFeedManager = (feedId?: string) => {
   const { user } = useContext(AuthContext);
   const { modalIsOpen, closeModal, openModal } = useModalHandlers();
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
+  const [originalThumbnailId, setOriginalThumbnailId] = useState<string>('');
   const [captionWritten, setCaptionWritten] = useState<string>('');
   const {
+    metadata,
     items,
     selectedItemId: currIndex,
     posting,
+    changes,
   } = useAppSelector(state => state.writeFeed);
   const dispatch = useAppDispatch();
 
@@ -65,13 +78,20 @@ const useWriteFeedManager = (feedId?: string) => {
               width: el.width,
             },
             caption: '',
+            feedId,
           } as FeedItem;
         });
         dispatch(writeFeed_addItems({ id: currIndex, items: newFeedItems }));
-        console.log(JSON.stringify(newFeedItems, null, 4));
+
+        if (!(currIndex === 0 && items.length === 0)) {
+          dispatch(writeFeed_setSelectedItemId({ id: currIndex + 1 }));
+        }
+
+        dispatch(writeFeed_reorderFeedItems());
+        dispatch(writeFeed_updateModified());
       }
     });
-  }, [currIndex, dispatch]);
+  }, [currIndex, dispatch, feedId, items.length]);
 
   const onChangeCaption = useCallback(
     (text: string) => {
@@ -85,8 +105,17 @@ const useWriteFeedManager = (feedId?: string) => {
   }, [openGallery]);
 
   const onPressDelete = useCallback(() => {
-    dispatch(writeFeed_deleteItemById(currIndex));
-  }, [currIndex, dispatch]);
+    const deleteIndex = currIndex;
+    if (currIndex === items.length - 1) {
+      dispatch(
+        writeFeed_setSelectedItemId({ id: Math.max(items.length - 2, 0) }),
+      );
+    }
+
+    dispatch(writeFeed_deleteItemById({ id: deleteIndex }));
+    dispatch(writeFeed_reorderFeedItems());
+    dispatch(writeFeed_updateModified());
+  }, [currIndex, dispatch, items.length]);
 
   const onDismissEditCaption = useCallback(() => {
     setCaptionWritten(items[currIndex]?.caption || '');
@@ -124,7 +153,8 @@ const useWriteFeedManager = (feedId?: string) => {
 
     // If success from Promise.all, proceed, else try to check for uploaded media files, and delete them.
     if (uploadMediaFilesResponse) {
-      console.log(JSON.stringify(uploadMediaFilesResponse[0].status, null, 4));
+      console.log('FUCKed');
+      console.log(JSON.stringify(uploadMediaFilesResponse, null, 4));
     }
 
     // Success in uploading all media files, dispatch to save the new media file names
@@ -138,8 +168,9 @@ const useWriteFeedManager = (feedId?: string) => {
           ...el.media,
           type: isVideo ? 'image/gif' : el.media.type,
           uri: isVideo ? `${keys[index].split('.')[0]}.gif` : keys[index],
-          width: 200,
-          height: (el.media.height / el.media.width) * 200,
+          width: MEDIA_THUMBNAIL_MAX_WIDTH,
+          height:
+            (el.media.height / el.media.width) * MEDIA_THUMBNAIL_MAX_WIDTH,
         },
         feedId: newFeedId,
       };
@@ -161,13 +192,10 @@ const useWriteFeedManager = (feedId?: string) => {
     // Upload feed to backend url at /api/v1/feeds with axios.post (or axios.put/patch)
     try {
       const uploadMetadataResponse = await axiosClient.post(
-        NEW_FEED_URL,
+        urlFactory('feed-new'),
         requestData,
       );
-      console.log(
-        'Metadata response: ',
-        JSON.stringify(uploadMetadataResponse, null, 4),
-      );
+      console.log('Upload metadata response: ', uploadMetadataResponse.status);
     } catch (err) {
       console.error(err);
       return;
@@ -178,53 +206,200 @@ const useWriteFeedManager = (feedId?: string) => {
   }, [items, user]);
 
   const updateExistingFeed = useCallback(async () => {
-    if (!user) {
+    if (!user || !feedId) {
       return;
     }
 
-    // compare each object in write feed state
+    console.log('====== CHANGES ======');
+    printPrettyJson(changes);
+    switch (changes.type) {
+      case 'NONE':
+        return;
+      case 'ONLY_CAPTIONS':
+        try {
+          // exclude isRemote property when sending to backend
+          const modifiedFeedData: FeedItem[] = changes.modified.map(
+            (el: FeedItem, index: number) => {
+              return {
+                id: el.id,
+                media: el.media,
+                thumbnail: el.thumbnail,
+                caption: el.caption,
+                feedId: el.feedId,
+                order: el.order || index,
+              };
+            },
+          );
+          const requestData = {
+            metadata: null,
+            modified: modifiedFeedData,
+            deleted: [],
+          };
+          const response = await axiosClient.put(
+            urlFactory('feed-edit'),
+            requestData,
+          );
 
-    // items, posting, selectedItemId, mode
-    // we only need to check items array
-    // how will we check items array for changes?
-    // we need original array, and keep track of changes
-    // (possibly in a custom itemsChange array, where each itemChange object consists of the object id, action performed, resource update),
-    // in this updateExistingFeed function
+          console.log('Upload modified feeds response: ', response.status);
 
-    // ADD feed item action: push new feed item into array -> trigger reorder
-    // DELETE feed item action: remove feed item from array -> trigger reorder
-    // UPDATE feed item media: change the uri of the feed item media and thumbnail
-    // UPDATE feed item caption action: change the caption of the feed item
-  }, [user]);
+          await queryClient.invalidateQueries({
+            queryKey: keyFactory('feed-by-feedid', changes.modified[0].feedId),
+          });
+        } catch (err) {
+          console.error(err);
+          return;
+        }
+        break;
+      case 'MUTATE':
+        // [1,(2),3,(4),5] ---> [2,4]
+        const newlyAddedFeedItems: FeedItem[] = changes.modified.filter(
+          (el: FeedItem) => {
+            return !el.isRemote;
+          },
+        );
+        const blobs: Blob[] = await getBlobsFromLocalUris(
+          newlyAddedFeedItems.map((el: FeedItem) => el.media.uri),
+        );
+        const uploadMediaDetailsList: UploadMediaDetails[] =
+          await getPresignedUrls(
+            newlyAddedFeedItems.map((el: FeedItem) => el.media.type),
+          );
+        if (blobs.length !== uploadMediaDetailsList.length) {
+          return;
+        }
+        const presignedUrls = uploadMediaDetailsList.map(el => el.presignedUrl);
+        const keys = uploadMediaDetailsList.map(el => el.key);
+
+        const uploadMediaFilesResponse: AxiosResponse[] | null =
+          await uploadMediaFiles(presignedUrls, blobs);
+        uploadMediaFilesResponse?.forEach((el, index) =>
+          console.log(`Upload item ${index} status ${el.status}`),
+        );
+
+        const modifiedFeedItems: FeedItem[] = changes.modified.map(
+          (el: FeedItem) => {
+            const isVideo = el.media.type.startsWith('video');
+            if (el.isRemote) {
+              return el;
+            }
+            const changedIndex = newlyAddedFeedItems.findIndex(
+              item => item.id === el.id,
+            );
+            return {
+              ...el,
+              media: {
+                ...el.media,
+                uri: keys[changedIndex],
+              },
+              thumbnail: {
+                ...changes.modified[changedIndex].media,
+                type: isVideo ? 'image/gif' : el.media.type,
+                uri: isVideo
+                  ? `${keys[changedIndex].split('.')[0]}.gif`
+                  : keys[changedIndex],
+                width: MEDIA_THUMBNAIL_MAX_WIDTH,
+                height:
+                  (el.media.height / el.media.width) *
+                  MEDIA_THUMBNAIL_MAX_WIDTH,
+              },
+            };
+          },
+        );
+
+        // check if feed thumbnail (first feed item) has changed
+        const feedThumbnailChanged: boolean =
+          modifiedFeedItems[0].thumbnail.id !== originalThumbnailId;
+
+        let modifiedFeedMetadata: FeedMetadata | null = null;
+        if (feedThumbnailChanged) {
+          modifiedFeedMetadata = {
+            ...metadata,
+            thumbnail: modifiedFeedItems[0].thumbnail,
+          };
+        }
+
+        const requestData: UpdateFeedDto = {
+          metadata: modifiedFeedMetadata,
+          modified: modifiedFeedItems,
+          deleted: changes.deleted,
+        };
+        console.log('Data to be sent to backend');
+        printPrettyJson(requestData);
+
+        try {
+          const uploadMetadataResponse = await axiosClient.put(
+            urlFactory('feed-edit'),
+            requestData,
+          );
+          console.log(
+            'Upload metadata response: ',
+            uploadMetadataResponse.status,
+          );
+          await queryClient.invalidateQueries({
+            queryKey: keyFactory('feed-by-feedid', feedId),
+          });
+        } catch (err) {
+          console.error(err);
+          return;
+        }
+
+        break;
+      default:
+        return;
+    }
+  }, [changes, feedId, metadata, originalThumbnailId, user]);
 
   const onPressPost = useCallback(async () => {
     dispatch(writeFeed_setPosting(true));
-    console.warn('Posting!');
 
     if (feedId) {
-      updateExistingFeed();
+      await updateExistingFeed();
     } else {
-      createNewFeed();
+      await createNewFeed();
     }
 
     // Dispatch resetWriteFeedSlice, invalidate query cache for feeds, feeds-md, then go back to previous screen
+    await queryClient.invalidateQueries({ queryKey: keyFactory('feeds') });
+    await queryClient.invalidateQueries({
+      queryKey: keyFactory('feeds-by-userid', user?.id),
+    });
+    await queryClient.invalidateQueries({
+      queryKey: keyFactory('feeds-metadata-by-userid', user?.id),
+    });
     dispatch(writeFeed_setPosting(false));
     dispatch(writeFeed_resetWriteFeedSlice());
-    await queryClient.invalidateQueries({ queryKey: ['feeds'] });
     navigation.goBack();
-  }, [dispatch, feedId, navigation, updateExistingFeed, createNewFeed]);
+  }, [
+    dispatch,
+    feedId,
+    user?.id,
+    navigation,
+    updateExistingFeed,
+    createNewFeed,
+  ]);
 
   const { mutate } = useMutation({
     mutationFn: onPressPost,
+    // mutationKey: keyFactory('feed-by-feedid', feedId),
   });
 
-  const { data, isLoading } = useDataManager<Feed>('feeds', feedId);
+  const { data, isLoading } = useDataManager<Feed>('feed-by-feedid', feedId);
 
   useEffect(() => {
     if (data) {
-      dispatch(writeFeed_initFeed({ items: data.feedItems }));
+      console.log('Data =====', data);
+      dispatch(
+        writeFeed_initFeed({ metadata: data.metadata, items: data.feedItems }),
+      );
     }
   }, [data, dispatch]);
+
+  useEffect(() => {
+    if (data) {
+      setOriginalThumbnailId(data.metadata.thumbnail.id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     setCaptionWritten(items[currIndex]?.caption || '');

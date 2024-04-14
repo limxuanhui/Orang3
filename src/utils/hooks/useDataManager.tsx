@@ -1,25 +1,38 @@
 import { useCallback, useMemo } from 'react';
-import { QueryKey, queryOptions, useQuery } from '@tanstack/react-query';
+import {
+  QueryFunction,
+  QueryKey,
+  UndefinedInitialDataOptions,
+  queryOptions,
+  useQuery,
+} from '@tanstack/react-query';
 import type { DataKey } from '@data/types/types';
 import { axiosClient } from '@helpers/singletons';
 import useGlobals from './useGlobals';
-import { printPrettyJson } from '@helpers/functions';
 import { AxiosResponse } from 'axios';
 import { keyFactory, urlFactory } from '@helpers/factory';
+import { printPrettyJson } from '@helpers/functions';
 
 /**
  * This hook manages all the data of the app components, except components with infinite scrolling.
- * @param key
- * @param id
- * @returns
+ * @param dataKey
+ * @param dataId
+ * @param dataOptions
+ * @returns T
  */
-const useDataManager = <T,>(dataKey: DataKey, dataId?: string) => {
+const useDataManager = <T,>(
+  dataKey: DataKey,
+  dataId?: string,
+  dataOptions?: Omit<
+    UndefinedInitialDataOptions<T | null>,
+    'queryKey' | 'queryFn'
+  >,
+) => {
   const { mode } = useGlobals();
-  // use some form of a key factory
 
-  const queryFn = useCallback(
+  const queryFn: QueryFunction<T | null, QueryKey, never> = useCallback(
     async ({ queryKey }: { queryKey: QueryKey }): Promise<T | null> => {
-      console.log('QUERY FUNCTION CALLED IN USEDATAMANAGER');
+      // async ({ queryKey }: { queryKey: QueryKey }) => {
       const [dKey, dId] = queryKey;
       const key = dKey as DataKey;
       const id = dId as string;
@@ -27,14 +40,13 @@ const useDataManager = <T,>(dataKey: DataKey, dataId?: string) => {
       switch (mode) {
         case 'production':
           try {
-            const url = urlFactory(key, { id });
-            console.log(`Production axios client getting data for ${url}`);
+            const url: string = urlFactory(key, { id });
             const response: AxiosResponse = await axiosClient.get(url);
-            if (response.data.items) {
-              return response.data.items;
-            }
             printPrettyJson(response.data);
-            console.log('==================== THE END ====================');
+            if (response.data.items) {
+              return response.data.items as T;
+            }
+
             return response.data;
           } catch (err) {
             console.error(err);
@@ -46,7 +58,6 @@ const useDataManager = <T,>(dataKey: DataKey, dataId?: string) => {
         case 'development':
           return null;
         default:
-          // Do I need to return a promise here?
           console.info(`${mode} mode is not handled.`);
           return null;
       }
@@ -55,19 +66,15 @@ const useDataManager = <T,>(dataKey: DataKey, dataId?: string) => {
   );
 
   const options = useMemo(() => {
-    return queryOptions({
-      queryKey: keyFactory(dataKey, dataId),
+    return queryOptions<T | null, Error, T | null, QueryKey>({
+      queryKey: dataId ? keyFactory(dataKey, dataId) : [],
       queryFn,
       enabled: !!dataId,
       // initialData: null,
-      // staleTime: 1000 * 60 * 10, // 10 min
-      // gcTime: 1000 * 60 * 5, // 5 min
-      // _defaulted: false,
-      // _optimisticResults:null,
-      // behavior,
-      // select: () => {}
+      staleTime: 0,
+      ...dataOptions,
     });
-  }, [dataId, dataKey, queryFn]);
+  }, [dataId, dataKey, dataOptions, queryFn]);
 
   const {
     data,
@@ -93,7 +100,7 @@ const useDataManager = <T,>(dataKey: DataKey, dataId?: string) => {
     isStale,
     status,
     refetch,
-  } = useQuery(options);
+  } = useQuery<T | null>(options);
 
   return {
     data,

@@ -62,4 +62,5 @@ export const FEED_ITEM_THUMBNAILS_DISPLAY_STYLES = {
 export type FeedItemThumbnailsCarouselProps = {
   feedId: string;
   displayFormat: FeedItemThumbnailsDisplayFormat.CAROUSEL;
+  closeBottomSheet: () => void;
 };

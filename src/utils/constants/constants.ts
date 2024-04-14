@@ -192,10 +192,6 @@ export const CUSTOM_DARK_MAP_STYLE = [
   },
 ];
 
-export const COLOR_PALETTE = {
-  PRIMARY_PINK: '#f019ff',
-};
-
 export const GOOGLE_PLACES_AUTOCOMPLETE_QUERY_OPTIONS = {
   key: GOOGLE_MAPS_API_KEY,
   language: 'en',
@@ -219,5 +215,8 @@ export const HEADER_SHOWN_FALSE = { headerShown: false };
 
 export const SCREEN_OPTIONS: StackNavigationOptions = { headerShown: false };
 
+// TODO: change to relative path
 export const PLACEHOLDER_IMAGE_URI: string =
   '/Users/limxuanhui/bluextech/gypsie/assets/images/sun_design3.png';
+
+export const MEDIA_THUMBNAIL_MAX_WIDTH: number = 200;

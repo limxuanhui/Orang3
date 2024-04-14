@@ -17,7 +17,7 @@ const FeedThumbnail = memo(({ data }: FeedThumbnailProps) => {
     navigation.push('Modal', {
       screen: 'Feed',
       params: {
-        feedId: data.feedId,
+        feedId: data.id,
       },
     });
   }, [data, navigation]);
@@ -35,11 +35,11 @@ const FeedThumbnail = memo(({ data }: FeedThumbnailProps) => {
       <Image
         style={[
           styles.image,
-          { aspectRatio: data.media.width / data.media.height || 1 },
+          { aspectRatio: data.thumbnail.width / data.thumbnail.height || 1 },
         ]}
         source={{
-          uri: data.media?.type.startsWith('image')
-            ? `${AWS_CLOUDFRONT_URL_THUMBNAIL}/${data.media.uri}`
+          uri: data.thumbnail?.type.startsWith('image')
+            ? `${AWS_CLOUDFRONT_URL_THUMBNAIL}/${data.thumbnail.uri}`
             : defaultUri,
         }}
         // onLoad={(props) => console.log(props)}

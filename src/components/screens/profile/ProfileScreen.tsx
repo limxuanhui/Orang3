@@ -9,7 +9,7 @@ import MyTales from '@components/profile/MyTales';
 import type { ProfileScreenProps } from './types/types';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
-import type { FeedThumbnailInfo } from '@components/feed/types/types';
+import type { FeedMetadata } from '@components/feed/types/types';
 import type { TaleMetadata } from '@components/tale/types/types';
 import useProfileManager from '@hooks/useProfileManager';
 import { AuthContext } from '@contexts/AuthContext';
@@ -19,13 +19,14 @@ const Tab = createMaterialTopTabNavigator();
 const ProfileScreen = ({ route }: ProfileScreenProps) => {
   const { user: currentUser } = useContext(AuthContext);
   const profileUser = route.params.user;
-  const { feedsMetadata, talesMetadata, onPressAvatar, onPressSettings } =
-    useProfileManager(profileUser);
-  console.log('\n');
-  console.log('route: ', route);
-  console.log('profile user: ', profileUser);
-  console.log('logged in user: ', currentUser);
-  console.log('\n');
+  const {
+    feedsMetadata,
+    talesMetadata,
+    onRefreshFeedsMetadata,
+    onRefreshTalesMetadata,
+    onPressAvatar,
+    onPressSettings,
+  } = useProfileManager(profileUser);
 
   return (
     <View style={styles.container}>
@@ -75,7 +76,10 @@ const ProfileScreen = ({ route }: ProfileScreenProps) => {
         <Tab.Screen
           name="myfeeds"
           children={() => (
-            <MyFeeds data={feedsMetadata as FeedThumbnailInfo[]} />
+            <MyFeeds
+              data={feedsMetadata as FeedMetadata[]}
+              onRefresh={onRefreshFeedsMetadata}
+            />
           )}
           options={{
             tabBarIcon: ({ focused }) => (
@@ -89,7 +93,12 @@ const ProfileScreen = ({ route }: ProfileScreenProps) => {
         />
         <Tab.Screen
           name="mytales"
-          children={() => <MyTales data={talesMetadata as TaleMetadata[]} />}
+          children={() => (
+            <MyTales
+              data={talesMetadata as TaleMetadata[]}
+              onRefresh={onRefreshTalesMetadata}
+            />
+          )}
           options={{
             tabBarIcon: ({ focused }) =>
               focused ? (

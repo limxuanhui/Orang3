@@ -96,7 +96,7 @@ const TalesOverviewScreen = () => {
     isRefetching,
     onEndReached,
     onRefresh,
-  } = useInfiniteDataManager('tales-metadata');
+  } = useInfiniteDataManager<TaleMetadata[]>('tales-metadata');
 
   const dataIsFetched = data && !!data.pages;
   const dataFetchedIsEmpty = dataIsFetched && data?.pages[0].items.length === 0;
@@ -104,12 +104,7 @@ const TalesOverviewScreen = () => {
     dataIsFetched && data.pages.length > 0 && data?.pages[0].items.length > 0;
 
   console.log('===========================');
-  console.log(
-    'tale metadata thumbnail fetched: ',
-    data?.pages[0].items.forEach((el: TaleMetadata) => {
-      console.log(el.thumbnail);
-    }),
-  );
+  console.log('taleoverviewscreen data fetched: ', data?.pages[0]);
   console.log('isFetching: ', isFetching);
   console.log('isRefetching: ', isRefetching);
   console.log('isLoading: ', isLoading);

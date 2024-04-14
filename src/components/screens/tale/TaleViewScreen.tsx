@@ -176,6 +176,7 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
   }, [data, dispatch]);
 
   if (isLoading) {
+    console.log('Is loading in taleview');
     return <FullScreenLoading />;
   }
 

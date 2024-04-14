@@ -9,53 +9,29 @@ import type { ModalNavigatorNavigationProp } from '@components/navigators/types/
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
 import { AWS_CLOUDFRONT_URL_THUMBNAIL } from '@env';
-import { QueryKey, useQuery } from '@tanstack/react-query';
-import { axiosClient } from '@helpers/singletons';
 import { ActivityIndicator } from 'react-native-paper';
 import { Feed } from '@components/feed/types/types';
+import useDataManager from '@hooks/useDataManager';
 
 const FeedItemThumbnailsCarousel = ({
   feedId,
   displayFormat,
+  closeBottomSheet,
 }: FeedItemThumbnailsCarouselProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
+  const { data, isLoading } = useDataManager<Feed>('feed-by-feedid', feedId);
 
   const onPressLinkedFeed = useCallback(() => {
+    closeBottomSheet();
     navigation.navigate('Modal', {
       screen: 'Feed',
       params: { feedId },
     });
-  }, [feedId, navigation]);
-
-  const queryFn = useCallback(
-    async ({ queryKey }: { queryKey: QueryKey }): Promise<Feed | null> => {
-      const [key, fid] = queryKey;
-      try {
-        const response = await axiosClient.get(`/${key}/${fid}`);
-        return response.data;
-      } catch (err) {
-        console.error(err);
-        return null;
-      }
-    },
-    [],
-  );
-
-  const { data, isLoading } = useQuery({
-    queryKey: ['feeds', feedId],
-    queryFn,
-    enabled: !!feedId,
-    staleTime: Infinity,
-  });
+  }, [closeBottomSheet, feedId, navigation]);
 
   if (isLoading) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
+      <View style={styles.flexCenter}>
         <ActivityIndicator size={24} color={PALETTE.ORANGE} />
       </View>
     );
@@ -92,6 +68,11 @@ const FeedItemThumbnailsCarousel = ({
 };
 
 const styles = StyleSheet.create({
+  flexCenter: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   linkedFeeds: {
     zIndex: 1,
   },
@@ -113,3 +94,24 @@ const styles = StyleSheet.create({
 });
 
 export default FeedItemThumbnailsCarousel;
+
+// const queryFn = useCallback(
+//   async ({ queryKey }: { queryKey: QueryKey }): Promise<Feed | null> => {
+//     const [key, fid] = queryKey;
+//     try {
+//       const response = await axiosClient.get(`/${key}/${fid}`);
+//       return response.data;
+//     } catch (err) {
+//       console.error(err);
+//       return null;
+//     }
+//   },
+//   [],
+// );
+
+// const { data, isLoading } = useQuery({
+//   queryKey: ['feeds', feedId],
+//   queryFn,
+//   enabled: !!feedId,
+//   staleTime: Infinity,
+// });
