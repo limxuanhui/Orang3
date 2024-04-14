@@ -52,8 +52,8 @@ const useWriteFeedManager = (feedId?: string) => {
   const { user } = useContext(AuthContext);
   const { modalIsOpen, closeModal, openModal } = useModalHandlers();
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
-  const [originalThumbnailId, setOriginalThumbnailId] = useState<string>('');
   const [captionWritten, setCaptionWritten] = useState<string>('');
+  const dispatch = useAppDispatch();
   const {
     metadata,
     items,
@@ -61,7 +61,7 @@ const useWriteFeedManager = (feedId?: string) => {
     posting,
     changes,
   } = useAppSelector(state => state.writeFeed);
-  const dispatch = useAppDispatch();
+  const { data, isLoading } = useDataManager<Feed>('feed-by-feedid', feedId);
 
   const openGallery = useCallback(async () => {
     await launchImageLibrary(imageLibraryOptions, res => {
@@ -210,8 +210,6 @@ const useWriteFeedManager = (feedId?: string) => {
       return;
     }
 
-    console.log('====== CHANGES ======');
-    printPrettyJson(changes);
     switch (changes.type) {
       case 'NONE':
         return;
@@ -308,7 +306,7 @@ const useWriteFeedManager = (feedId?: string) => {
 
         // check if feed thumbnail (first feed item) has changed
         const feedThumbnailChanged: boolean =
-          modifiedFeedItems[0].thumbnail.id !== originalThumbnailId;
+          modifiedFeedItems[0].thumbnail.id !== data?.metadata.thumbnail.id;
 
         let modifiedFeedMetadata: FeedMetadata | null = null;
         if (feedThumbnailChanged) {
@@ -347,7 +345,15 @@ const useWriteFeedManager = (feedId?: string) => {
       default:
         return;
     }
-  }, [changes, feedId, metadata, originalThumbnailId, user]);
+  }, [
+    changes.deleted,
+    changes.modified,
+    changes.type,
+    data?.metadata.thumbnail.id,
+    feedId,
+    metadata,
+    user,
+  ]);
 
   const onPressPost = useCallback(async () => {
     dispatch(writeFeed_setPosting(true));
@@ -383,23 +389,16 @@ const useWriteFeedManager = (feedId?: string) => {
     // mutationKey: keyFactory('feed-by-feedid', feedId),
   });
 
-  const { data, isLoading } = useDataManager<Feed>('feed-by-feedid', feedId);
-
   useEffect(() => {
     if (data) {
-      console.log('Data =====', data);
       dispatch(
         writeFeed_initFeed({ metadata: data.metadata, items: data.feedItems }),
       );
     }
+    return () => {
+      dispatch(writeFeed_resetWriteFeedSlice());
+    };
   }, [data, dispatch]);
-
-  useEffect(() => {
-    if (data) {
-      setOriginalThumbnailId(data.metadata.thumbnail.id);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     setCaptionWritten(items[currIndex]?.caption || '');
