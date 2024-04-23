@@ -10,20 +10,34 @@ import {
   itineraryPlanner_reorderRoutes,
   itineraryPlanner_updateRouteName,
 } from '@redux/reducers/itineraryPlannerSlice';
-import { useAppDispatch } from '@redux/hooks';
+import { useAppDispatch, useAppSelector } from '@redux/hooks';
+import { writeTale_updateRoutesType } from '@redux/reducers/writeTaleSlice';
 
 const RouteNameModal = ({ initialValue }: RouteNameModalProps) => {
   const [name, setName] = useState<string>(initialValue);
   const dispatch = useAppDispatch();
+  const { mode, changes } = useAppSelector(state => state.writeTale);
 
   const onConfirm = useCallback(() => {
     if (initialValue === '') {
       dispatch(itineraryPlanner_addRoute({ name }));
       dispatch(itineraryPlanner_reorderRoutes());
+
+      if (mode === 'EDIT') {
+        if (changes.routes.type !== 'MUTATE') {
+          dispatch(writeTale_updateRoutesType({ type: 'MUTATE' }));
+        }
+      }
     } else {
       dispatch(itineraryPlanner_updateRouteName({ name }));
+
+      if (mode === 'EDIT') {
+        if (changes.routes.type === 'NONE') {
+          dispatch(writeTale_updateRoutesType({ type: 'ONLY_EDITED_ROUTES' }));
+        }
+      }
     }
-  }, [initialValue, name, dispatch]);
+  }, [initialValue, dispatch, name, mode, changes.routes.type]);
 
   const onCancel = useCallback(() => {
     dispatch(itineraryPlanner_closeModal());

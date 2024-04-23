@@ -120,7 +120,11 @@ const TalesOverviewScreen = () => {
   }, []);
 
   if (isLoading) {
-    return <FullScreenLoading />;
+    return (
+      <FullScreenLoading
+        customContainerStyle={{ backgroundColor: PALETTE.TRANSPARENT }}
+      />
+    );
   }
 
   return (

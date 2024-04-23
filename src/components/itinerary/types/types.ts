@@ -37,6 +37,7 @@ export type Route = {
   encodedPolyline: string;
   order: number;
   polyline?: RouteNodeCoord[];
+  isRemote?: boolean;
 };
 
 export type RouteDto = {

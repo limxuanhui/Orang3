@@ -19,6 +19,7 @@ type ItineraryPlanner = {
   modalIsOpen: boolean;
   modalType: 'ROUTE_NAME' | 'COLOUR_PICKER';
   itinerary: Itinerary;
+  isRouting: boolean;
 };
 type ItineraryState = Readonly<ItineraryPlanner>;
 
@@ -51,6 +52,7 @@ const initialState: ItineraryState = {
       },
     ],
   },
+  isRouting: false,
 };
 
 export const itineraryPlanner_startRouting = createAsyncThunk(
@@ -168,6 +170,9 @@ const itineraryPlannerSlice = createSlice({
     itineraryPlanner_setMode: (state, action) => {
       state.mode = action.payload.mode;
     },
+    itineraryPlanner_setIsRouting: (state, action) => {
+      state.isRouting = action.payload.isRouting;
+    },
     itineraryPlanner_reorderRoutes: state => {
       state.itinerary.routes = state.itinerary.routes.map(
         (route: Route, index: number) => ({
@@ -266,6 +271,7 @@ const itineraryPlannerSlice = createSlice({
               action.payload.routeNode,
             ],
             encodedPolyline: '',
+            polyline: [],
           };
         }
         return route;
@@ -283,6 +289,7 @@ const itineraryPlannerSlice = createSlice({
               )
               .map(routeNode => ({ ...routeNode, order: undefined })),
             encodedPolyline: '',
+            polyline: [],
           };
         }
         return route;
@@ -300,20 +307,13 @@ const itineraryPlannerSlice = createSlice({
     },
     itineraryPlanner_resetItineraryPlannerSlice: () => initialState,
   },
-  // extraReducers: builder => {
-  //   builder
-  //     .addCase(itineraryPlanner_startRouting.pending, (state, action) => {})
-  //     .addCase(itineraryPlanner_startRouting.fulfilled, (state, action) => {})
-  //     .addCase(itineraryPlanner_startRouting.rejected, (state, action) => {});
-  // },
 });
 
 export const {
   itineraryPlanner_initItinerary,
   itineraryPlanner_createItinerary,
   itineraryPlanner_setMode,
-
-  // itineraryPlanner_setSelectedRouteId,
+  itineraryPlanner_setIsRouting,
   itineraryPlanner_reorderRoutes,
   itineraryPlanner_addRoute,
   itineraryPlanner_clearRoute,

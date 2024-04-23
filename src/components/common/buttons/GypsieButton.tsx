@@ -1,6 +1,8 @@
-import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
+import { Pressable, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
 import type { GypsieButtonProps } from './types/types';
 import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
 
 const GypsieButton = ({
   customButtonStyles,
@@ -25,7 +27,7 @@ const GypsieButton = ({
       onPress={onPress}>
       {!loading && Icon ? <Icon style={customIconStyles} /> : null}
       {loading ? (
-        <ActivityIndicator />
+        <ActivityIndicator color={PALETTE.LIGHTGREY} size={24} />
       ) : text ? (
         <Text style={[styles.defaultTextStyles, customTextStyles]}>{text}</Text>
       ) : null}

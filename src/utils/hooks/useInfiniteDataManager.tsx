@@ -66,9 +66,10 @@ const useInfiniteDataManager = <T,>(
             const response: AxiosResponse = await axiosClient.get(url);
             printPrettyJson(response.data);
             return response.data;
-          } catch (err) {
+          } catch (err: unknown) {
             console.error(err);
-            return { items: [] as T, lastEvaluatedKey: null };
+            throw new Error('Unable to get content for you at the moment...');
+            // return { items: [] as T, lastEvaluatedKey: null };
           }
         case 'testing':
           return { items: [] as T, lastEvaluatedKey: null };

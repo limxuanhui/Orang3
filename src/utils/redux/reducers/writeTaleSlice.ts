@@ -1,12 +1,16 @@
 import { Draft, PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
-import type { WriteTale } from '@components/tale/types/types';
+import type { Tale, WriteTale } from '@components/tale/types/types';
 import { StoryItem, StoryText } from 'components/post/types/types';
 import { ulid } from 'ulid';
+import { Itinerary, Route } from '@components/itinerary/types/types';
+import { GypsieUser } from '@navigators/types/types';
+import { Media } from '@components/feed/types/types';
 
 type WriteTaleState = Readonly<WriteTale>;
 
 const initialState: WriteTaleState = {
+  mode: 'NEW',
   metadata: {
     id: '',
     creator: {
@@ -45,27 +49,64 @@ const initialState: WriteTaleState = {
   story: [],
   posting: false,
   saving: false,
-  selectedStoryItemIndex: 0,
+  selectedStoryItemIndex: -1,
+  changes: {
+    metadata: {
+      type: 'NONE',
+      modified: {
+        id: '',
+        creator: {
+          id: '',
+          name: '',
+          handle: '',
+          email: '',
+          avatar: undefined,
+        },
+        cover: undefined,
+        thumbnail: undefined,
+        title: '',
+      },
+    },
+    routes: {
+      type: 'NONE',
+      modified: [],
+      deleted: [],
+    },
+    storyItems: {
+      type: 'NONE',
+      modified: [],
+      deleted: [],
+    },
+  },
 };
 
 const writeTaleSlice = createSlice({
   name: 'writeTale',
   initialState,
   reducers: {
-    writeTale_initTale: (state, action) => {
-      console.log('Initialising tale in writeTaleSlice');
-      console.log(action.payload.tale);
+    writeTale_initTale: (
+      state,
+      action: PayloadAction<{
+        tale: Tale;
+      }>,
+    ) => {
       state.metadata = action.payload.tale.metadata;
-      state.itinerary = action.payload.tale.itinerary;
-      state.story = action.payload.tale.story;
+      state.itinerary.metadata = action.payload.tale.itinerary.metadata;
+      state.itinerary.routes = action.payload.tale.itinerary.routes.map(
+        (el: Route) => ({ ...el, isRemote: true }),
+      );
+      state.story = action.payload.tale.story.map((el: StoryItem) => ({
+        ...el,
+        isRemote: true,
+      }));
+      state.mode = 'EDIT';
     },
-    writeTale_setCover: (state, action) => {
-      state.metadata.cover = action.payload;
-    },
-    writeTale_setTitle: (state, action) => {
-      state.metadata.title = action.payload;
-    },
-    writeTale_createTaleItinerary: (state, action) => {
+    writeTale_createTaleItinerary: (
+      state,
+      action: PayloadAction<{
+        creator: GypsieUser;
+      }>,
+    ) => {
       state.itinerary = {
         metadata: {
           id: ulid(),
@@ -83,10 +124,130 @@ const writeTaleSlice = createSlice({
         ],
       };
     },
-    writeTale_setTaleItinerary: (state, action) => {
+    writeTale_setTaleItinerary: (
+      state,
+      action: PayloadAction<{
+        itinerary: Itinerary;
+      }>,
+    ) => {
       state.itinerary = action.payload.itinerary;
     },
+    writeTale_setCover: (
+      state,
+      action: PayloadAction<{
+        cover?: Media;
+      }>,
+    ) => {
+      state.metadata.cover = action.payload.cover;
 
+      if (state.mode === 'EDIT') {
+        if (state.changes.metadata.type !== 'MUTATE') {
+          state.changes.metadata.type = 'MUTATE';
+        }
+      }
+    },
+    writeTale_setTitle: (
+      state,
+      action: PayloadAction<{
+        title: string;
+      }>,
+    ) => {
+      state.metadata.title = action.payload.title;
+    },
+    writeTale_updateRoutesType: (
+      state,
+      action: PayloadAction<{
+        type: 'ONLY_EDITED_ROUTES' | 'MUTATE';
+      }>,
+    ) => {
+      state.changes.routes.type = action.payload.type;
+    },
+    writeTale_updateModified: (
+      state,
+      action: PayloadAction<{
+        type: 'METADATA' | 'ROUTES' | 'STORYITEMS';
+        id?: string;
+        mutateAction?: 'ADD' | 'DELETE';
+      }>,
+    ) => {
+      if (state.mode === 'EDIT') {
+        switch (action.payload.type) {
+          case 'METADATA':
+            if (state.changes.metadata.type === 'NONE') {
+              state.changes.metadata.type = 'ONLY_EDITED_TITLE';
+            }
+            state.changes.metadata.modified = state.metadata;
+            break;
+          case 'ROUTES':
+            if (state.changes.routes.type === 'MUTATE') {
+              if (action.payload.mutateAction === 'DELETE') {
+                if (action.payload.id) {
+                  state.changes.routes.deleted.push(action.payload.id);
+                }
+              }
+
+              state.changes.routes.modified = state.itinerary.routes;
+            } else if (state.changes.routes.type === 'ONLY_EDITED_ROUTES') {
+              const currIndex = state.itinerary.routes.findIndex(
+                (el: Route) => el.id === action.payload.id,
+              );
+
+              if (currIndex === -1) {
+                throw Error('Edits might not have been saved');
+              }
+
+              const selectedRoute = state.itinerary.routes[currIndex];
+
+              // Check if selected route is already in modified
+              const trackedRouteIndex = state.changes.routes.modified.findIndex(
+                (el: Route) => el.id === selectedRoute.id,
+              );
+
+              if (trackedRouteIndex === -1) {
+                state.changes.routes.modified.push(selectedRoute);
+              } else {
+                state.changes.routes.modified[trackedRouteIndex] =
+                  selectedRoute;
+              }
+            }
+            break;
+          case 'STORYITEMS':
+            if (state.changes.storyItems.type !== 'MUTATE') {
+              if (state.changes.storyItems.type === 'NONE') {
+                state.changes.storyItems.type = 'ONLY_EDITED_STORY_TEXT';
+              }
+              const currIndex = state.story.findIndex(
+                el => el.id === action.payload.id,
+              );
+
+              if (currIndex === -1) {
+                throw Error('Edits might not have been saved.');
+              }
+
+              const selectedStoryItem = state.story[
+                currIndex
+              ] as Draft<StoryText>;
+
+              // Check if selected story item is already in modified
+              const trackedStoryItemIndex =
+                state.changes.storyItems.modified.findIndex(
+                  el => el.id === selectedStoryItem.id,
+                );
+              if (trackedStoryItemIndex === -1) {
+                state.changes.storyItems.modified.push(selectedStoryItem);
+              } else {
+                state.changes.storyItems.modified[trackedStoryItemIndex] =
+                  selectedStoryItem;
+              }
+            } else {
+              state.changes.storyItems.modified = state.story;
+            }
+            break;
+          default:
+            break;
+        }
+      }
+    },
     writeTale_addStoryItem: (
       state,
       action: PayloadAction<{
@@ -99,12 +260,28 @@ const writeTaleSlice = createSlice({
         0,
         action.payload.newStoryItem,
       );
+
+      if (state.mode === 'EDIT') {
+        if (state.changes.storyItems.type !== 'MUTATE') {
+          state.changes.storyItems.type = 'MUTATE';
+        }
+      }
     },
-    writeTale_deleteStoryItem: (
+    writeTale_deleteStoryItemByIndex: (
       state,
       action: PayloadAction<{ deleteFromIndex: number }>,
     ) => {
+      const deleted = state.story[action.payload.deleteFromIndex];
       state.story.splice(action.payload.deleteFromIndex, 1);
+
+      if (state.mode === 'EDIT') {
+        if (deleted.isRemote) {
+          state.changes.storyItems.deleted.push(deleted.id);
+        }
+        if (state.changes.storyItems.type !== 'MUTATE') {
+          state.changes.storyItems.type = 'MUTATE';
+        }
+      }
     },
     writeTale_setSelectedStoryItemIndex: (
       state,
@@ -153,12 +330,14 @@ const writeTaleSlice = createSlice({
 
 export const {
   writeTale_initTale,
-  writeTale_setCover,
-  writeTale_setTitle,
   writeTale_createTaleItinerary,
   writeTale_setTaleItinerary,
+  writeTale_setCover,
+  writeTale_setTitle,
+  writeTale_updateRoutesType,
+  writeTale_updateModified,
   writeTale_addStoryItem,
-  writeTale_deleteStoryItem,
+  writeTale_deleteStoryItemByIndex,
   writeTale_setSelectedStoryItemIndex,
   writeTale_reorderStoryItems,
   writeTale_setStoryItemText,

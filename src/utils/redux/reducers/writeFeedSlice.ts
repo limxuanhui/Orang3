@@ -106,31 +106,18 @@ const writeFeedSlice = createSlice({
       }
     },
     writeFeed_editCaption: (state, action) => {
-      // let newItem;
-      // const items = state.items.map((item, index) => {
-      //   if (index === action.payload.id) {
-      //     newItem = { ...item, caption: action.payload.caption };
-      //     return newItem;
-      //   }
-      //   return item;
-      // });
       state.items[action.payload.id].caption = action.payload.caption;
-      // const newItem = state.items.
       if (state.mode === 'EDIT') {
         if (state.changes.type !== 'MUTATE') {
           if (state.changes.type === 'NONE') {
             state.changes.type = 'ONLY_CAPTIONS';
           }
 
-          // if (newItem) {
           state.changes.modified.push(state.items[action.payload.id]);
-          // }
         } else {
           state.changes.modified = state.items;
         }
       }
-
-      // return { ...state, items };
     },
     writeFeed_updateModified: state => {
       if (state.changes.type === 'MUTATE') {

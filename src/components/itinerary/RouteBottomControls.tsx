@@ -1,7 +1,5 @@
 import { useCallback } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { StyleSheet, View } from 'react-native';
 import type { RouteBottomControlsProps } from './types/types';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
@@ -9,9 +7,19 @@ import { useAppDispatch, useAppSelector } from '@redux/hooks';
 import {
   itineraryPlanner_clearRoute,
   itineraryPlanner_deleteRoute,
+  itineraryPlanner_reorderRoutes,
+  itineraryPlanner_setIsRouting,
   itineraryPlanner_setRoute,
   itineraryPlanner_startRouting,
 } from '@redux/reducers/itineraryPlannerSlice';
+import {
+  writeTale_updateModified,
+  writeTale_updateRoutesType,
+} from '@redux/reducers/writeTaleSlice';
+import GypsieButton from '@components/common/buttons/GypsieButton';
+import DeleteOutlineIcon from '@icons/DeleteOutlineIcon';
+import RouteIcon from '@icons/RouteIcon';
+import { sleep } from '@helpers/functions';
 
 const RouteBottomControls = ({
   isRouted,
@@ -19,13 +27,17 @@ const RouteBottomControls = ({
   routeLength,
 }: RouteBottomControlsProps) => {
   const dispatch = useAppDispatch();
-  const selectedRoute = useAppSelector(state =>
-    state.itineraryPlanner.itinerary.routes.find(
-      route => route.id === state.itineraryPlanner.selectedRouteId,
-    ),
+  const { mode, changes } = useAppSelector(state => state.writeTale);
+  const { itinerary, selectedRouteId, isRouting } = useAppSelector(
+    state => state.itineraryPlanner,
   );
-  const clearButtonIsDisabled = oneRouteLeft && routeLength === 0;
-  const routeButtonIsDisabled = routeLength <= 1 || isRouted;
+
+  const selectedRoute = itinerary.routes.find(
+    route => route.id === selectedRouteId,
+  );
+  const clearButtonIsDisabled =
+    isRouting || (oneRouteLeft && routeLength === 0);
+  const routeButtonIsDisabled = isRouting || routeLength <= 1 || isRouted;
   const clearButtonColor = clearButtonIsDisabled
     ? PALETTE.LIGHTGREY
     : PALETTE.RED;
@@ -35,14 +47,41 @@ const RouteBottomControls = ({
 
   const onDeleteRoute = useCallback(() => {
     dispatch(itineraryPlanner_deleteRoute());
-  }, [dispatch]);
+    dispatch(itineraryPlanner_reorderRoutes());
+
+    if (mode === 'EDIT') {
+      if (changes.routes.type !== 'MUTATE') {
+        dispatch(writeTale_updateRoutesType({ type: 'MUTATE' }));
+      }
+
+      dispatch(
+        writeTale_updateModified({
+          type: 'ROUTES',
+          id: selectedRoute?.id,
+          mutateAction: 'DELETE',
+        }),
+      );
+    }
+  }, [changes.routes.type, dispatch, mode, selectedRoute?.id]);
+
   const onClearRoute = useCallback(() => {
     dispatch(itineraryPlanner_clearRoute());
-  }, [dispatch]);
+
+    if (mode === 'EDIT') {
+      if (changes.routes.type === 'NONE') {
+        dispatch(writeTale_updateRoutesType({ type: 'ONLY_EDITED_ROUTES' }));
+      }
+      dispatch(
+        writeTale_updateModified({ type: 'ROUTES', id: selectedRoute?.id }),
+      );
+    }
+  }, [changes.routes.type, dispatch, mode, selectedRoute?.id]);
 
   const onStartRouting = useCallback(async () => {
     if (selectedRoute) {
       console.log('Starting to route...');
+      dispatch(itineraryPlanner_setIsRouting({ isRouting: true }));
+      await sleep(2000);
       try {
         const routedRoute = await dispatch(
           itineraryPlanner_startRouting(selectedRoute),
@@ -54,33 +93,29 @@ const RouteBottomControls = ({
       } catch (err) {
         console.error('An error occured while routing: ', err);
       }
+      dispatch(itineraryPlanner_setIsRouting({ isRouting: false }));
     }
   }, [selectedRoute, dispatch]);
 
   return (
     <View style={styles.bottomControls}>
-      <Pressable
-        style={({ pressed }) => [
+      <GypsieButton
+        customButtonStyles={[
           styles.bottomControl,
           {
-            opacity: pressed ? 0.7 : 1,
             borderTopRightRadius: 0,
             borderBottomRightRadius: 0,
           },
         ]}
+        customIconStyles={{ fontSize: 24, color: clearButtonColor }}
+        Icon={DeleteOutlineIcon}
         onPress={routeLength === 0 ? onDeleteRoute : onClearRoute}
-        disabled={clearButtonIsDisabled}>
-        <MaterialCommunityIcons
-          name="delete-outline"
-          size={24}
-          color={clearButtonColor}
-        />
-      </Pressable>
-      <Pressable
-        style={({ pressed }) => [
+        disabled={clearButtonIsDisabled}
+      />
+      <GypsieButton
+        customButtonStyles={[
           styles.bottomControl,
           {
-            opacity: pressed ? 0.7 : 1,
             borderTopLeftRadius: 0,
             borderBottomLeftRadius: 0,
             borderLeftWidth: 0,
@@ -89,10 +124,12 @@ const RouteBottomControls = ({
               : PALETTE.ORANGE,
           },
         ]}
+        customIconStyles={{ fontSize: 24, color: routeButtonColor }}
+        Icon={RouteIcon}
         onPress={onStartRouting}
-        disabled={routeButtonIsDisabled}>
-        <FontAwesome5 name="route" size={24} color={routeButtonColor} />
-      </Pressable>
+        disabled={routeButtonIsDisabled}
+        loading={isRouting}
+      />
     </View>
   );
 };

@@ -8,21 +8,41 @@ import {
 } from 'react-native';
 import { PALETTE } from '@constants/palette';
 import { DIMENSION } from '@constants/dimensions';
+import GypsieButton from './buttons/GypsieButton';
 
 type MessageDisplayProps = {
-  message: string;
+  message?: string;
+  handler?: () => void;
+  handlerText?: string;
   containerStyle?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
+  buttonStyle?: StyleProp<ViewStyle>;
+  buttonTextStyle?: StyleProp<TextStyle>;
+  buttonIconStyle?: StyleProp<ViewStyle>;
 };
 
 const MessageDisplay = ({
   message,
+  handler,
+  handlerText,
   containerStyle,
   textStyle,
+  buttonStyle,
+  buttonTextStyle,
+  buttonIconStyle,
 }: MessageDisplayProps) => {
   return (
     <View style={[styles.container, containerStyle]}>
-      <Text style={[styles.text, textStyle]}>{message}</Text>
+      {message ? <Text style={[styles.text, textStyle]}>{message}</Text> : null}
+      {handler ? (
+        <GypsieButton
+          customButtonStyles={[styles.handlerButton, buttonStyle]}
+          customTextStyles={[styles.handlerText, buttonTextStyle]}
+          customIconStyles={[styles.handlerIcon, buttonIconStyle]}
+          text={handlerText}
+          onPress={handler}
+        />
+      ) : null}
     </View>
   );
 };
@@ -38,13 +58,21 @@ const styles = StyleSheet.create({
   },
   text: {
     width: DIMENSION.NINETY_PERCENT,
-    // width: '95%',
     fontFamily: 'Futura',
     fontSize: 24,
     fontWeight: 'bold',
     color: PALETTE.LIGHTGREY,
     textAlign: 'center',
   },
+  handlerButton: {
+    height: 40,
+    width: '20%',
+    backgroundColor: 'white',
+  },
+  handlerText: {
+    fontFamily: 'Futura',
+  },
+  handlerIcon: {},
 });
 
 export default MessageDisplay;

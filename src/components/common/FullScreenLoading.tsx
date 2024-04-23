@@ -1,11 +1,17 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import { ActivityIndicator } from 'react-native-paper';
 import { PALETTE } from '@constants/palette';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
 
-const FullScreenLoading = () => {
+type FullScreenLoadingProps = {
+  customContainerStyle?: StyleProp<ViewStyle>;
+};
+
+const FullScreenLoading = ({
+  customContainerStyle,
+}: FullScreenLoadingProps) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, customContainerStyle]}>
       <ActivityIndicator size={48} color={PALETTE.ORANGE} />
     </View>
   );

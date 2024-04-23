@@ -6,6 +6,8 @@ export type DataKey =
   | 'feeds-by-userid'
   | 'feeds-metadata-by-userid'
   | 'tale-by-taleid'
+  | 'tale-new'
+  | 'tale-edit'
   | 'tales-metadata'
   | 'tales-metadata-by-userid'
   | 'users';

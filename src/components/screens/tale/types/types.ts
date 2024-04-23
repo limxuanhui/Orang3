@@ -9,10 +9,7 @@ export type TaleStackNavigatorParamList = {
 };
 
 // --------------------------- ItineraryScreen ---------------------------
-export type ItineraryScreenParams = {
-  // id?: string;
-  // creatorId: string;
-};
+export type ItineraryScreenParams = {};
 
 export type ItineraryScreenProps = {
   navigation: ItineraryNavigationProp;

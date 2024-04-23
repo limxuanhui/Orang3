@@ -5,7 +5,7 @@ import { MediaMimeType } from '@components/feed/types/types';
 import { RouteNodeCoord } from '@components/itinerary/types/types';
 import { LatLngTuple, decode, encode } from '@googlemaps/polyline-codec';
 
-export const printPrettyJson = (text: object) => {
+export const printPrettyJson = (text: object | null | undefined) => {
   console.info(JSON.stringify(text, null, 4));
 };
 

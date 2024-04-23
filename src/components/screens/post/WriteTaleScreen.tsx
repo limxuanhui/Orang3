@@ -41,12 +41,12 @@ import { StoryItem } from '@components/post/types/types';
 import { Feed } from '@components/feed/types/types';
 import { FeedItemThumbnailsDisplayFormat } from '@components/tale/types/types';
 import { AWS_CLOUDFRONT_URL_RAW } from '@env';
+import FullScreenLoading from '@components/common/FullScreenLoading';
 
 const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
   const insets = useSafeAreaInsets();
   const scrollViewRef = useRef<KeyboardAwareScrollView>(null);
   const { taleId } = route.params;
-  console.log('TALE ID:', taleId);
 
   const {
     bottomSheetRef,
@@ -56,6 +56,7 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
     // itinerary,
     story,
     posting,
+    postButtonIsDisabled,
     // data,
     isLoading,
     feedsThumbnails,
@@ -66,26 +67,21 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
     onPressAddCover,
     onPressClearCover,
     onTitleChange,
+    onTitleChangeEnded,
     onStoryItemTextChange,
     onPressAddTitle,
     onPressAddParagraph,
     onPressShowLinkedFeeds,
     onPressAddLinkedFeed,
-    onPressDeleteStoryItem,
+    onPressDeleteStoryItemByIndex,
     onSubmitPost,
   } = useWriteTaleManager(taleId);
 
-  return isLoading ? (
-    <View
-      style={[
-        styles.flexCenter,
-        {
-          backgroundColor: PALETTE.GREYISHBLUE,
-        },
-      ]}>
-      <ActivityIndicator size={48} color={PALETTE.ORANGE} />
-    </View>
-  ) : (
+  if (isLoading) {
+    return <FullScreenLoading />;
+  }
+
+  return (
     <KeyboardAccessoryView
       style={styles.accessoryView}
       renderScrollable={(panHandlers: GestureResponderHandlers) => (
@@ -172,19 +168,19 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
                 placeholderTextColor={PALETTE.LIGHTERGREY}
                 maxLength={100}
                 onChangeText={onTitleChange}
-                onBlur={() => {
-                  console.warn('clicked out');
-                }}
+                onBlur={onTitleChangeEnded}
                 scrollEnabled={false}
               />
               <ItineraryMapOverview canEdit />
-              <View style={{}}>
+              <View>
                 {story.map((el: StoryItem, index: number) => (
                   <NewStoryItem
                     key={el.id}
                     item={el}
                     onStoryItemTextChange={onStoryItemTextChange}
-                    onPressDeleteStoryItem={() => onPressDeleteStoryItem(index)}
+                    onPressDeleteStoryItem={() =>
+                      onPressDeleteStoryItemByIndex(index)
+                    }
                   />
                 ))}
               </View>
@@ -214,9 +210,11 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
                     }}
                     showsVerticalScrollIndicator={false}>
                     {feedsThumbnails.map((feed: Feed, index: number) => {
-                      const alreadyAdded: boolean = !!story.find(
-                        (el: StoryItem) => el.id === feed.metadata.id,
-                      );
+                      const alreadyAdded: boolean =
+                        feed.metadata.taleId !== '' ||
+                        !!story.find(
+                          (el: StoryItem) => el.id === feed.metadata.id,
+                        );
                       return (
                         <View
                           style={styles.feedItemThumbnailsList}
@@ -271,18 +269,21 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
           customIconStyles={{ fontSize: 24, color: PALETTE.GREYISHBLUE }}
           Icon={TitleIcon}
           onPress={onPressAddTitle}
+          disabled={posting}
         />
         <GypsieButton
           customButtonStyles={styles.bottomControl}
           customIconStyles={{ fontSize: 24, color: PALETTE.GREYISHBLUE }}
           Icon={ParagraphIcon}
           onPress={onPressAddParagraph}
+          disabled={posting}
         />
         <GypsieButton
           customButtonStyles={styles.bottomControl}
           customIconStyles={{ fontSize: 24, color: PALETTE.GREYISHBLUE }}
           Icon={FolderImagesIcon}
           onPress={onPressShowLinkedFeeds}
+          disabled={posting}
         />
         {keyboardIsVisible ? (
           <GypsieButton
@@ -297,23 +298,17 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
               styles.bottomControl,
               {
                 width: 'auto',
-                backgroundColor:
-                  posting || metadata.title === ''
-                    ? PALETTE.GREY
-                    : PALETTE.ORANGE,
+                backgroundColor: postButtonIsDisabled
+                  ? PALETTE.GREY
+                  : PALETTE.ORANGE,
                 borderRadius: 6,
               },
             ]}
-            customTextStyles={{
-              fontSize: 16,
-              fontWeight: 'bold',
-              color: PALETTE.OFFWHITE,
-            }}
-            // Icon={posting &&  ActivityIndicator}
+            customTextStyles={styles.postButtonText}
             text={posting ? 'Posting' : 'Post'}
             onPress={onSubmitPost}
             loading={posting}
-            disabled={posting || metadata.title === ''}
+            disabled={postButtonIsDisabled}
           />
         )}
       </View>
@@ -372,6 +367,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
+    height: 'auto',
     width: DIMENSION.HUNDRED_PERCENT,
     padding: 8,
     borderTopWidth: 1,
@@ -404,6 +400,11 @@ const styles = StyleSheet.create({
   addLinkedFeedIcon: {
     fontSize: 32,
     color: PALETTE.ORANGE,
+  },
+  postButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: PALETTE.OFFWHITE,
   },
   feedItemThumbnailsList: {
     flexDirection: 'row',

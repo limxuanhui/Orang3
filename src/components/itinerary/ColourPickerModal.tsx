@@ -1,18 +1,18 @@
 import { useState, useCallback } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { DIMENSION } from '../../utils/constants/dimensions';
-import { PALETTE } from '../../utils/constants/palette';
-import { useAppDispatch, useAppSelector } from '../../utils/redux/hooks';
-import {
-  itineraryPlanner_closeModal,
-  itineraryPlanner_confirmRouteNodeColour,
-} from '../../utils/redux/reducers/itineraryPlannerSlice';
-import LocationPinIcon from '../common/icons/LocationPinIcon';
 import ColorPicker, {
   Swatches,
   returnedResults,
 } from 'reanimated-color-picker';
-import { useWorkletCallback } from 'react-native-reanimated';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
+import { useAppDispatch, useAppSelector } from '@redux/hooks';
+import {
+  itineraryPlanner_closeModal,
+  itineraryPlanner_confirmRouteNodeColour,
+} from '@redux/reducers/itineraryPlannerSlice';
+import LocationPinIcon from '@icons/LocationPinIcon';
+import { writeTale_updateRoutesType } from '@redux/reducers/writeTaleSlice';
 
 type ColourPickerModalProps = {
   initialColour: string;
@@ -38,21 +38,19 @@ type ColourPickerModalProps = {
 // #9e9e9eff
 // #607d8bff
 
-const ColourPickerModal = ({
-  // routeNodeId
-  initialColour,
-}: ColourPickerModalProps) => {
+const ColourPickerModal = ({ initialColour }: ColourPickerModalProps) => {
   const [colour, setColour] = useState<string>(initialColour || '#f44336ff');
   const dispatch = useAppDispatch();
+  const { mode, changes } = useAppSelector(state => state.writeTale);
   const { selectedRouteNodeId } = useAppSelector(
     state => state.itineraryPlanner,
   );
 
   //   Note: 👇 This can be a `worklet` function.
-  const onSelectColor = useWorkletCallback(
+  const onSelectColor = useCallback(
     (colors: returnedResults) => {
+      'worklet';
       setColour(colors.hex);
-      console.log(colors.hex);
     },
     [setColour],
   );
@@ -64,8 +62,14 @@ const ColourPickerModal = ({
         colour,
       }),
     );
+
+    if (mode === 'EDIT') {
+      if (changes.routes.type === 'NONE') {
+        dispatch(writeTale_updateRoutesType({ type: 'ONLY_EDITED_ROUTES' }));
+      }
+    }
     dispatch(itineraryPlanner_closeModal());
-  }, [dispatch, selectedRouteNodeId, colour]);
+  }, [dispatch, selectedRouteNodeId, colour, mode, changes.routes.type]);
 
   const onCancel = useCallback(() => {
     dispatch(itineraryPlanner_closeModal());
@@ -76,15 +80,7 @@ const ColourPickerModal = ({
   return (
     <View style={styles.container}>
       <View style={styles.modalCard}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'space-evenly',
-            alignItems: 'center',
-            backgroundColor: PALETTE.GREYISHBLUE,
-            borderTopLeftRadius: 16,
-            borderTopRightRadius: 16,
-          }}>
+        <View style={styles.modalCardInner}>
           <LocationPinIcon style={{ color: colour, fontSize: 80 }} />
           <ColorPicker
             style={{ width: '80%' }}
@@ -142,6 +138,14 @@ const styles = StyleSheet.create({
     shadowColor: PALETTE.BLACK,
     shadowOpacity: 0.1,
     shadowOffset: { height: 2, width: 0 },
+  },
+  modalCardInner: {
+    flex: 1,
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    backgroundColor: PALETTE.GREYISHBLUE,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
   },
   modalControls: {
     flexDirection: 'row',

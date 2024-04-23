@@ -1,5 +1,3 @@
-// import type { StyleProp, TextStyle } from 'react-native';
-
 // Feed
 export type WriteFeedSideControlsProps = {
   onPressAdd: () => void;
@@ -26,6 +24,7 @@ export type StoryText = {
     style: StoryTextStyle;
   };
   order: number;
+  isRemote?: boolean;
 };
 
 export type StoryMedia = {
@@ -35,6 +34,7 @@ export type StoryMedia = {
     feedId: string;
   };
   order: number;
+  isRemote?: boolean;
 };
 
 export enum StoryItemType {

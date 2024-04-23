@@ -82,13 +82,11 @@ const useWriteFeedManager = (feedId?: string) => {
           } as FeedItem;
         });
         dispatch(writeFeed_addItems({ id: currIndex, items: newFeedItems }));
-
+        dispatch(writeFeed_reorderFeedItems());
+        dispatch(writeFeed_updateModified());
         if (!(currIndex === 0 && items.length === 0)) {
           dispatch(writeFeed_setSelectedItemId({ id: currIndex + 1 }));
         }
-
-        dispatch(writeFeed_reorderFeedItems());
-        dispatch(writeFeed_updateModified());
       }
     });
   }, [currIndex, dispatch, feedId, items.length]);
@@ -181,6 +179,7 @@ const useWriteFeedManager = (feedId?: string) => {
         id: newFeedId,
         creator: user,
         thumbnail: thumbnailSrc.thumbnail,
+        taleId: '',
       },
       feedItems: feedData,
     };

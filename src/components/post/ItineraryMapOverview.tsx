@@ -14,7 +14,6 @@ const ItineraryMapOverview = ({ canEdit }: ItineraryMapOverviewProps) => {
     navigation.push('Modal', {
       screen: 'Itinerary',
       params: {},
-      // params: { id: itineraryId, creatorId: '' },
     });
   }, [navigation]);
 

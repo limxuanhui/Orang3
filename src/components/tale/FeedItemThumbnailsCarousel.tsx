@@ -22,7 +22,10 @@ const FeedItemThumbnailsCarousel = ({
   const { data, isLoading } = useDataManager<Feed>('feed-by-feedid', feedId);
 
   const onPressLinkedFeed = useCallback(() => {
-    closeBottomSheet();
+    // TODO: Find a better way to manage the use of closeBottomSheet, since TaleViewScreen does not use it.
+    if (closeBottomSheet) {
+      closeBottomSheet();
+    }
     navigation.navigate('Modal', {
       screen: 'Feed',
       params: { feedId },

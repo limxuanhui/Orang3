@@ -42,7 +42,7 @@ import {
   FeedItemThumbnailsDisplayFormat,
   Tale,
 } from '@components/tale/types/types';
-import { decodePolyline, printPrettyJson } from '@helpers/functions';
+import { decodePolyline } from '@helpers/functions';
 import { Itinerary, Route } from '@components/itinerary/types/types';
 import { AuthContext } from '@contexts/AuthContext';
 import MessageDisplay from '@components/common/MessageDisplay';
@@ -82,6 +82,7 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
       caption: '',
       thumbnail: data.tale.metadata.thumbnail || SUNDAY_FEED_THUMBNAIL,
       feedId: '',
+      order: 0,
     };
     const coverFeed: BaseFeed = {
       metadata: {
@@ -167,7 +168,7 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
           return decodedRoute;
         }),
       };
-      printPrettyJson(itinerary);
+
       dispatch(itineraryPlanner_initItinerary({ itinerary }));
     }
     return () => {
@@ -176,7 +177,6 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
   }, [data, dispatch]);
 
   if (isLoading) {
-    console.log('Is loading in taleview');
     return <FullScreenLoading />;
   }
 

@@ -1,5 +1,11 @@
-import { memo, useCallback } from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
+import { useCallback } from 'react';
+import {
+  NativeSyntheticEvent,
+  StyleSheet,
+  TextInput,
+  TextInputFocusEventData,
+  View,
+} from 'react-native';
 import GypsieButton from '@components/common/buttons/GypsieButton';
 import FeedItemThumbnailsCarousel from '@components/tale/FeedItemThumbnailsCarousel';
 import { type StoryItem, StoryItemType } from './types/types';
@@ -7,8 +13,11 @@ import { PALETTE } from '@constants/palette';
 import { DIMENSION } from '@constants/dimensions';
 import CrossIcon from '@icons/CrossIcon';
 import { useAppDispatch, useAppSelector } from '@redux/hooks';
-import { writeTale_setSelectedStoryItemIndex } from '@redux/reducers/writeTaleSlice';
-import { printPrettyJson } from '@helpers/functions';
+import {
+  writeTale_setSelectedStoryItemIndex,
+  writeTale_updateModified,
+} from '@redux/reducers/writeTaleSlice';
+// import { printPrettyJson } from '@helpers/functions';
 import { FeedItemThumbnailsDisplayFormat } from '@components/tale/types/types';
 import { STORY_TEXT_STYLES } from '@constants/text';
 
@@ -24,9 +33,11 @@ const NewStoryItem = ({
   onPressDeleteStoryItem,
 }: NewStoryItemProps) => {
   console.log('Investigate why is this component rendering 3 times');
-  printPrettyJson(item);
+  // printPrettyJson(item);
   const dispatch = useAppDispatch();
-  const { selectedStoryItemIndex } = useAppSelector(state => state.writeTale);
+  const { mode, selectedStoryItemIndex } = useAppSelector(
+    state => state.writeTale,
+  );
 
   const onTextInputFocus = useCallback(() => {
     dispatch(
@@ -35,6 +46,17 @@ const NewStoryItem = ({
       }),
     );
   }, [dispatch, item.order]);
+
+  const onEditEnded = useCallback(
+    (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      if (mode === 'EDIT') {
+        console.log('onBlur event:');
+        console.log(e.nativeEvent.text);
+        dispatch(writeTale_updateModified({ type: 'STORYITEMS', id: item.id }));
+      }
+    },
+    [dispatch, item.id, mode],
+  );
 
   if (item.type === StoryItemType.Text) {
     return (
@@ -61,9 +83,11 @@ const NewStoryItem = ({
             }
           }}
           onFocus={onTextInputFocus}
+          onBlur={onEditEnded}
           value={item.data.text}
+          // defaultValue={item.data.text}
           onChangeText={text => onStoryItemTextChange(item.id, text)}
-          autoFocus
+          autoFocus={selectedStoryItemIndex === item.order}
           multiline
           selectionColor={PALETTE.ORANGE}
           scrollEnabled={false}
@@ -126,4 +150,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(NewStoryItem);
+export default NewStoryItem;

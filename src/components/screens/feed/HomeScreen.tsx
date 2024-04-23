@@ -14,8 +14,15 @@ import { Feed } from '@components/feed/types/types';
 const HomeScreen = ({}: HomeScreenProps) => {
   const [homeScreenIsFocused, setHomeScreenIsFocused] = useState<boolean>(true);
   const [activePostIndex, setActivePostIndex] = useState<number>(0);
-  const { data, isLoading, isRefetching, onEndReached, onRefresh } =
-    useInfiniteDataManager<Feed[]>('feeds');
+  const {
+    data,
+    error,
+    isError,
+    isLoading,
+    isRefetching,
+    onEndReached,
+    onRefresh,
+  } = useInfiniteDataManager<Feed[]>('feeds');
 
   const onViewableItemsChanged = useCallback(
     // Change type to more suitable one
@@ -36,7 +43,6 @@ const HomeScreen = ({}: HomeScreenProps) => {
   );
 
   const dataIsFetched = data && !!data.pages;
-  // const dataFetchedIsEmpty = dataIsFetched && data?.pages[0].items.length === 0;
   const dataFetchedIsEmpty = dataIsFetched && data?.pages[0].items.length === 0;
   const dataFetchedIsNotEmpty =
     dataIsFetched && data.pages.length > 0 && data?.pages[0].items.length > 0;
@@ -52,6 +58,10 @@ const HomeScreen = ({}: HomeScreenProps) => {
     return <FullScreenLoading />;
   }
 
+  if (isError) {
+    <MessageDisplay message={error?.name + ' ' + error?.message} />;
+  }
+
   return (
     <View style={styles.container}>
       {dataFetchedIsEmpty ? (
@@ -59,8 +69,8 @@ const HomeScreen = ({}: HomeScreenProps) => {
       ) : dataFetchedIsNotEmpty ? (
         <FlatList
           // initialNumToRender={2}
-          data={data.pages.flatMap(el => el.items)}
           // data={data.pages[0].items}
+          data={data.pages.flatMap(el => el.items)}
           renderItem={({ item, index }) => (
             <FeedDisplay
               data={item}

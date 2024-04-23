@@ -9,5 +9,6 @@ export const FEEDS_BY_USERID_URL: string = '/feeds/user';
 
 export const TALES_URL: string = '/tales';
 export const NEW_TALE_URL: string = '/tales/new';
+export const EDIT_TALE_URL: string = '/tales/edit';
 export const TALES_METADATA_URL: string = '/tales/metadata';
 export const TALES_METADATA_BY_USERID_URL: string = '/tales/metadata/user';

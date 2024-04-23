@@ -1,10 +1,12 @@
 import { DataKey } from '@data/types/types';
 import {
   EDIT_FEED_URL,
+  EDIT_TALE_URL,
   FEEDS_BY_USERID_URL,
   FEEDS_METADATA_BY_USERID_URL,
   FEEDS_URL,
   NEW_FEED_URL,
+  NEW_TALE_URL,
   TALES_METADATA_BY_USERID_URL,
   TALES_METADATA_URL,
   TALES_URL,
@@ -93,17 +95,23 @@ export const urlFactory = (
       }
       throw Error(`Key ${key} requires a valid id.`);
 
+    case 'tales-metadata':
+      if (options?.base64Key) {
+        return `${TALES_METADATA_URL}?base64Key=${options.base64Key}`;
+      }
+      return TALES_METADATA_URL;
+
     case 'tales-metadata-by-userid':
       if (options && options.id) {
         return `${TALES_METADATA_BY_USERID_URL}/${options.id}`;
       }
       throw Error(`Key ${key} requires a valid id.`);
 
-    case 'tales-metadata':
-      if (options?.base64Key) {
-        return `${TALES_METADATA_URL}?base64Key=${options.base64Key}`;
-      }
-      return TALES_METADATA_URL;
+    case 'tale-new':
+      return NEW_TALE_URL;
+
+    case 'tale-edit':
+      return EDIT_TALE_URL;
 
     case 'tale-by-taleid':
       if (options && options.id) {

@@ -60,8 +60,6 @@ const ItineraryPlanner = ({}: ItineraryPlannerProps) => {
 
   useEffect(() => {
     // Add animation to a certain location without places added
-    console.log('Selected route: ', selectedRoute);
-
     if (selectedRoute?.routeNodes.length === 1) {
       // Modify to use average of all routeNodes as region
       const { latitude, longitude } = selectedRoute.routeNodes[0].coord;
