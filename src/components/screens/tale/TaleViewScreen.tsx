@@ -49,6 +49,7 @@ import MessageDisplay from '@components/common/MessageDisplay';
 import EditIcon from '@icons/EditIcon';
 import AuxiliaryControls from '@components/common/AuxiliaryControls';
 import FullScreenLoading from '@components/common/FullScreenLoading';
+import { useFocusEffect } from '@react-navigation/native';
 
 export type TaleView = { tale: Tale; feedList: Feed[] };
 const SUNDAY_FEED_THUMBNAIL: Media = {
@@ -60,6 +61,7 @@ const SUNDAY_FEED_THUMBNAIL: Media = {
   width: 200,
 };
 const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
+  const [screenIsFocused, setScreenIsFocused] = useState<boolean>(true);
   const { user } = useContext(AuthContext);
   const { id, creator } = route.params;
   const loggedInUserIsCreator: boolean = user?.id === creator.id;
@@ -152,6 +154,13 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
     navigation.push('WriteTale', { taleId: id });
   }, [id, navigation]);
 
+  useFocusEffect(
+    useCallback(() => {
+      setScreenIsFocused(true);
+      return () => setScreenIsFocused(false);
+    }, [setScreenIsFocused]),
+  );
+
   /**
    * This useEffect is for pre-setting itineraryPlannerSlice data if tale data has been loaded, and resets the slice on unmount.
    */
@@ -208,7 +217,7 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
               <FeedCarousel
                 handle={creator.handle}
                 items={item.feedItems}
-                inView={index === activePostIndex}
+                inView={screenIsFocused && index === activePostIndex}
               />
             )}
             // ListEmptyComponent={<Text>Loading tale data...</Text>}

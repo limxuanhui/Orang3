@@ -13,7 +13,7 @@ const SplashScreen = ({}: SplashScreenProps) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sunday</Text>
+      <Text style={styles.title}>Happir</Text>
       <GypsieButton
         customButtonStyles={styles.googleSigninButton}
         customTextStyles={styles.googleText}
@@ -47,18 +47,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     height: 40,
-    width: '50%',
+    width: '60%',
     marginVertical: 8,
     backgroundColor: GYPSIE_THEME.GOOGLE_SECONDARY,
   },
   googleText: {
     color: GYPSIE_THEME.GOOGLE_PRIMARY,
+    fontFamily: 'Futura',
     fontSize: 14,
     fontWeight: '700',
   },
   googleIcon: {
     color: GYPSIE_THEME.GOOGLE_PRIMARY,
-    fontWeight: '500',
+    fontSize: 14,
   },
 });
 

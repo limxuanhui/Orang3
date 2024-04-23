@@ -81,6 +81,13 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
     return <FullScreenLoading />;
   }
 
+  const x: string | undefined =
+    taleId && metadata.cover && !metadata.cover?.uri.startsWith('file://')
+      ? `${AWS_CLOUDFRONT_URL_RAW}/${metadata.cover.uri}`
+      : metadata.cover?.uri;
+  console.log('x url: ', x);
+  console.log('metadata:', metadata);
+
   return (
     <KeyboardAccessoryView
       style={styles.accessoryView}
@@ -103,9 +110,10 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
                     <Video
                       style={styles.cover}
                       source={{
-                        uri: taleId
-                          ? `${AWS_CLOUDFRONT_URL_RAW}/${metadata.cover.uri}`
-                          : metadata.cover.uri,
+                        uri:
+                          taleId && !metadata.cover.uri.startsWith('file://')
+                            ? `${AWS_CLOUDFRONT_URL_RAW}/${metadata.cover.uri}`
+                            : metadata.cover.uri,
                       }}
                       controls
                       repeat
@@ -115,9 +123,10 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
                     <Image
                       style={styles.cover}
                       source={{
-                        uri: taleId
-                          ? `${AWS_CLOUDFRONT_URL_RAW}/${metadata.cover.uri}`
-                          : metadata.cover.uri,
+                        uri:
+                          taleId && !metadata.cover.uri.startsWith('file://')
+                            ? `${AWS_CLOUDFRONT_URL_RAW}/${metadata.cover.uri}`
+                            : metadata.cover.uri,
                       }}
                       resizeMode="cover"
                     />
