@@ -11,8 +11,6 @@ const AuthStackNavigator = () => {
       initialRouteName="Splash"
       screenOptions={SCREEN_OPTIONS}>
       <AuthStack.Screen name="Splash" component={SplashScreen} />
-      {/* <AuthStack.Screen name="login" component={LoginScreen} />
-      <AuthStack.Screen name="signup" component={SignupScreen} /> */}
     </AuthStack.Navigator>
   );
 };

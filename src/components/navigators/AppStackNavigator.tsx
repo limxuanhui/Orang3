@@ -11,7 +11,6 @@ const AppStackNavigator = () => {
   console.log(
     '@@@@@@@@@@@@@@@@@ AppStackNavigator rerendered @@@@@@@@@@@@@@@@@',
   );
-  // const x = useMemo(() => ModalNavigator, [ModalNavigator]);
 
   const screenOptions = useMemo(() => SCREEN_OPTIONS, []);
   return (

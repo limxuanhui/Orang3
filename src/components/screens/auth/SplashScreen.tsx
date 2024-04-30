@@ -1,19 +1,19 @@
 import { useContext } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import GypsieButton from '@components/common/buttons/GypsieButton';
 import { AuthContext } from '@contexts/AuthContext';
-import Sun from '@components/common/splash/Sun';
 import GoogleIcon from '@icons/GoogleIcon';
 import type { SplashScreenProps } from './types/types';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
 import { GYPSIE_THEME, PALETTE } from '@constants/palette';
+import Logo from '../../../../assets/images/orang3-logo.svg';
 
 const SplashScreen = ({}: SplashScreenProps) => {
   const { loading, googleSigninHandler } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Happir</Text>
+      <Logo width={160} height={80} />
       <GypsieButton
         customButtonStyles={styles.googleSigninButton}
         customTextStyles={styles.googleText}
@@ -23,7 +23,6 @@ const SplashScreen = ({}: SplashScreenProps) => {
         onPress={googleSigninHandler}
         loading={loading}
       />
-      <Sun />
     </View>
   );
 };
@@ -37,7 +36,7 @@ const styles = StyleSheet.create({
     backgroundColor: PALETTE.OFFWHITE,
   },
   title: {
-    margin: 16,
+    // margin: 16,
     fontFamily: 'Futura',
     fontSize: 50,
     fontWeight: '700',
@@ -48,7 +47,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     height: 40,
     width: '60%',
-    marginVertical: 8,
+    marginVertical: 16,
     backgroundColor: GYPSIE_THEME.GOOGLE_SECONDARY,
   },
   googleText: {

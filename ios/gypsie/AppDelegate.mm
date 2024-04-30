@@ -1,6 +1,7 @@
 #import "AppDelegate.h"
 
 #import <React/RCTBundleURLProvider.h>
+#import <React/RCTRootView.h>
 
 // Custom import
 #import <GoogleMaps/GoogleMaps.h>
@@ -17,7 +18,17 @@
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
 
-  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+  bool didFinish = [super application:application didFinishLaunchingWithOptions:launchOptions];
+  if (didFinish) {
+    RCTRootView *rootView = (RCTRootView *)self.window.rootViewController.view;
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"LaunchScreen" bundle:nil];
+    [rootView setLoadingView:[[storyboard instantiateInitialViewController] view]];
+    rootView.loadingViewFadeDelay = 0.5;
+    rootView.loadingViewFadeDuration = 0.2;
+  }
+
+  return didFinish;
+  // return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge

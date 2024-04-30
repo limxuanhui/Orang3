@@ -16,8 +16,22 @@ const RootStackNavigator = () => {
   );
   const { isLoggedIn } = useContext(AuthContext);
 
+  // return (
+  //   <View
+  //     style={{
+  //       flex: 1,
+  //       justifyContent: 'center',
+  //       alignItems: 'center',
+  //       backgroundColor: PALETTE.GREYISHBLUE,
+  //     }}>
+  //     <Image style={{ width: 80, height: 80 }} source={Assets.AppLogo} />
+  //   </View>
+  // );
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      onReady={() => {
+        console.warn('App is ready:)');
+      }}>
       <PortalProvider>
         <RootStack.Navigator screenOptions={SCREEN_OPTIONS}>
           {isLoggedIn ? (
