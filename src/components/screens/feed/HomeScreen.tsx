@@ -10,8 +10,10 @@ import { VIEWABILITY_CONFIG } from '@constants/feed';
 import FullScreenLoading from '@components/common/FullScreenLoading';
 import MessageDisplay from '@components/common/MessageDisplay';
 import { Feed } from '@components/feed/types/types';
+import useGlobals from '@hooks/useGlobals';
 
 const HomeScreen = ({}: HomeScreenProps) => {
+  const { appStateVisible } = useGlobals();
   const [homeScreenIsFocused, setHomeScreenIsFocused] = useState<boolean>(true);
   const [activePostIndex, setActivePostIndex] = useState<number>(0);
   const {
@@ -74,7 +76,11 @@ const HomeScreen = ({}: HomeScreenProps) => {
           renderItem={({ item, index }) => (
             <FeedDisplay
               data={item}
-              inView={homeScreenIsFocused && index === activePostIndex}
+              inView={
+                appStateVisible === 'active' &&
+                homeScreenIsFocused &&
+                index === activePostIndex
+              }
             />
           )}
           showsVerticalScrollIndicator={false}
