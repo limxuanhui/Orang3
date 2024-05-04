@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import TalesOverviewScreen from '@screens/tale/TalesOverviewScreen';
 import type { TaleStackNavigatorParamList } from '@screens/tale/types/types';
 import { PALETTE } from '@constants/palette';
+import Logo from '../../../assets/images/orang3-logo.svg';
 
 const TaleStack = createStackNavigator<TaleStackNavigatorParamList>();
 
@@ -10,15 +11,16 @@ const Title = () => {
   return (
     <View style={styles.titleContainer}>
       <Text style={styles.titleText}>Explore </Text>
-      <Text
+      <Logo width={80} />
+      {/* <Text
         style={[
           styles.titleText,
           {
             color: PALETTE.ORANGE,
           },
         ]}>
-        Sunday
-      </Text>
+        Orang3
+      </Text> */}
     </View>
   );
 };
@@ -49,6 +51,7 @@ const TaleStackNavigator = () => {
 const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
+    alignItems: 'center',
   },
   titleText: {
     fontFamily: 'Lilita One',
