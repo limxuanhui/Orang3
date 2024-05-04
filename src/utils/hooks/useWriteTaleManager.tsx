@@ -514,6 +514,9 @@ const useWriteTaleManager = (taleId?: string) => {
       await createNewTale();
     }
 
+    dispatch(writeTale_setPosting(false));
+    dispatch(writeTale_resetWriteTaleSlice());
+    dispatch(itineraryPlanner_resetItineraryPlannerSlice());
     await queryClient.invalidateQueries({
       queryKey: keyFactory('tales-metadata'),
     });
@@ -526,9 +529,6 @@ const useWriteTaleManager = (taleId?: string) => {
     await queryClient.invalidateQueries({
       queryKey: keyFactory('feeds'),
     });
-    dispatch(writeTale_setPosting(false));
-    dispatch(writeTale_resetWriteTaleSlice());
-    dispatch(itineraryPlanner_resetItineraryPlannerSlice());
     navigation.goBack();
   }, [
     dispatch,
@@ -594,12 +594,13 @@ const useWriteTaleManager = (taleId?: string) => {
     bottomSheetRef,
     snapPoints,
     keyboardIsVisible,
+    mode,
     metadata,
-    itinerary,
+    // data,
+    // itinerary,
     story,
     posting,
     postButtonIsDisabled,
-    data,
     isLoading,
     feedsThumbnails: feedsThumbnails?.pages[0].items,
     feedsThumbnailsIsLoading,

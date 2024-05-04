@@ -151,7 +151,6 @@ const useWriteFeedManager = (feedId?: string) => {
 
     // If success from Promise.all, proceed, else try to check for uploaded media files, and delete them.
     if (uploadMediaFilesResponse) {
-      console.log('FUCKed');
       console.log(JSON.stringify(uploadMediaFilesResponse, null, 4));
     }
 
@@ -364,6 +363,8 @@ const useWriteFeedManager = (feedId?: string) => {
     }
 
     // Dispatch resetWriteFeedSlice, invalidate query cache for feeds, feeds-md, then go back to previous screen
+    dispatch(writeFeed_setPosting(false));
+    dispatch(writeFeed_resetWriteFeedSlice());
     await queryClient.invalidateQueries({ queryKey: keyFactory('feeds') });
     await queryClient.invalidateQueries({
       queryKey: keyFactory('feeds-by-userid', user?.id),
@@ -371,8 +372,6 @@ const useWriteFeedManager = (feedId?: string) => {
     await queryClient.invalidateQueries({
       queryKey: keyFactory('feeds-metadata-by-userid', user?.id),
     });
-    dispatch(writeFeed_setPosting(false));
-    dispatch(writeFeed_resetWriteFeedSlice());
     navigation.goBack();
   }, [
     dispatch,

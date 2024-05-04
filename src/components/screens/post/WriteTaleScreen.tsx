@@ -52,12 +52,11 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
     bottomSheetRef,
     snapPoints,
     keyboardIsVisible,
+    mode,
     metadata,
-    // itinerary,
     story,
     posting,
     postButtonIsDisabled,
-    // data,
     isLoading,
     feedsThumbnails,
     feedsThumbnailsIsLoading,
@@ -81,13 +80,6 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
     return <FullScreenLoading />;
   }
 
-  const x: string | undefined =
-    taleId && metadata.cover && !metadata.cover?.uri.startsWith('file://')
-      ? `${AWS_CLOUDFRONT_URL_RAW}/${metadata.cover.uri}`
-      : metadata.cover?.uri;
-  console.log('x url: ', x);
-  console.log('metadata:', metadata);
-
   return (
     <KeyboardAccessoryView
       style={styles.accessoryView}
@@ -99,10 +91,11 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
             contentContainerStyle={styles.scrollView}
             showsVerticalScrollIndicator={false}
             keyboardDismissMode="none"
+            scrollEventThrottle={60}
+            {...panHandlers}
             // onContentSizeChange={onContentSizeChange}
             // onScrollBeginDrag={onScroll}
-            scrollEventThrottle={60}
-            {...panHandlers}>
+          >
             <View style={styles.coverContainer}>
               {metadata.cover ? (
                 <>
@@ -132,24 +125,16 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
                     />
                   )}
                   <AuxiliaryControls
-                    customStyle={{
-                      height: '50%',
-                    }}
+                    customStyle={styles.auxiliaryControls}
                     orientation="vertical"
                     position="bottom-right">
                     <GypsieButton
-                      customIconStyles={{
-                        color: PALETTE.OFFWHITE,
-                        fontSize: 24,
-                      }}
+                      customIconStyles={styles.auxiliaryIcon}
                       Icon={DeleteOutlineIcon}
                       onPress={onPressClearCover}
                     />
                     <GypsieButton
-                      customIconStyles={{
-                        color: PALETTE.OFFWHITE,
-                        fontSize: 24,
-                      }}
+                      customIconStyles={styles.auxiliaryIcon}
                       Icon={ChangeSwapIcon}
                       onPress={onPressAddCover}
                     />
@@ -282,37 +267,40 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
       )}>
       <View style={styles.bottomControls}>
         <GypsieButton
-          customButtonStyles={styles.bottomControl}
-          customIconStyles={{ fontSize: 24, color: PALETTE.GREYISHBLUE }}
+          customButtonStyles={styles.bottomControlButton}
+          customIconStyles={styles.bottomControlIcon}
           Icon={TitleIcon}
           onPress={onPressAddTitle}
           disabled={posting}
         />
         <GypsieButton
-          customButtonStyles={styles.bottomControl}
-          customIconStyles={{ fontSize: 24, color: PALETTE.GREYISHBLUE }}
+          customButtonStyles={styles.bottomControlButton}
+          customIconStyles={styles.bottomControlIcon}
           Icon={ParagraphIcon}
           onPress={onPressAddParagraph}
           disabled={posting}
         />
         <GypsieButton
-          customButtonStyles={styles.bottomControl}
-          customIconStyles={{ fontSize: 24, color: PALETTE.GREYISHBLUE }}
+          customButtonStyles={styles.bottomControlButton}
+          customIconStyles={styles.bottomControlIcon}
           Icon={FolderImagesIcon}
           onPress={onPressShowLinkedFeeds}
           disabled={posting}
         />
         {keyboardIsVisible ? (
           <GypsieButton
-            customButtonStyles={styles.bottomControl}
-            customIconStyles={{ fontSize: 24, color: PALETTE.ORANGE }}
+            customButtonStyles={styles.bottomControlButton}
+            customIconStyles={[
+              styles.bottomControlIcon,
+              { color: PALETTE.ORANGE },
+            ]}
             Icon={CheckIcon}
             onPress={closeKeyboard}
           />
         ) : (
           <GypsieButton
             customButtonStyles={[
-              styles.bottomControl,
+              styles.bottomControlButton,
               {
                 width: 'auto',
                 backgroundColor: postButtonIsDisabled
@@ -322,7 +310,7 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
               },
             ]}
             customTextStyles={styles.postButtonText}
-            text={posting ? 'Posting' : 'Post'}
+            text={mode === 'NEW' ? 'Post' : 'Save'}
             onPress={onSubmitPost}
             loading={posting}
             disabled={postButtonIsDisabled}
@@ -366,26 +354,32 @@ const styles = StyleSheet.create({
     shadowOffset: { height: 0, width: 0 },
   },
   addCoverIcon: { fontSize: 64, color: PALETTE.OFFWHITE },
+  auxiliaryControls: {
+    height: DIMENSION.FIFTY_PERCENT,
+  },
+  auxiliaryIcon: {
+    fontSize: 24,
+    color: PALETTE.OFFWHITE,
+  },
   blogContainer: {
     backgroundColor: PALETTE.OFFWHITE,
   },
   titleInput: {
     width: DIMENSION.HUNDRED_PERCENT,
     paddingTop: 20,
-    paddingBottom: 16,
+    paddingBottom: 20,
     paddingHorizontal: 8,
     borderBottomWidth: 1,
     borderBottomColor: PALETTE.LIGHTERGREY,
-    fontFamily: 'Futura',
+    fontFamily: 'Avenir',
     fontSize: 40,
     fontWeight: 'bold',
     color: PALETTE.GREYISHBLUE,
   },
   titleInputCounter: {
     position: 'absolute',
-    bottom: 0,
-    right: 0,
-    margin: 4,
+    bottom: 4,
+    right: 10,
     fontFamily: 'Futura',
     fontSize: 12,
     fontWeight: 'bold',
@@ -409,12 +403,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 2,
   },
-  bottomControl: {
+  bottomControlButton: {
     height: 32,
     width: 40,
     paddingVertical: 4,
     paddingHorizontal: 8,
   },
+  bottomControlIcon: { fontSize: 24, color: PALETTE.GREYISHBLUE },
   addLinkedFeedButton: {
     marginHorizontal: 8,
     height: 32,
@@ -446,10 +441,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   flexCenterDescription: {
-    color: PALETTE.GREY,
     fontFamily: 'Futura',
     fontSize: 24,
     fontWeight: 'bold',
+    color: PALETTE.GREY,
     textAlign: 'center',
   },
 });

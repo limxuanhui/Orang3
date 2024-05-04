@@ -14,11 +14,15 @@ const WriteFeedSideControls = ({
   onPressEdit,
   onPressPost,
 }: WriteFeedSideControlsProps) => {
-  const { items, posting, mode } = useAppSelector(state => state.writeFeed);
-  const isValidPost = items.length > 0;
+  const { mode, items, posting, changes } = useAppSelector(
+    state => state.writeFeed,
+  );
+
+  const postButtonIsDisabled: boolean =
+    posting || items.length < 1 || (mode === 'EDIT' && changes.type === 'NONE');
 
   return (
-    <AuxiliaryControls customStyle={{ borderWidth: 1, borderColor: 'red' }}>
+    <AuxiliaryControls>
       <GypsieButton
         customButtonStyles={styles.button}
         customIconStyles={styles.icon}
@@ -28,34 +32,32 @@ const WriteFeedSideControls = ({
       />
       <GypsieButton
         customButtonStyles={styles.button}
-        customIconStyles={[
-          styles.icon,
-          { color: isValidPost ? PALETTE.WHITE : PALETTE.GREY },
-        ]}
+        customIconStyles={styles.icon}
         Icon={EditIcon}
-        disabled={!isValidPost || posting}
+        disabled={posting}
         onPress={onPressEdit}
       />
       <GypsieButton
         customButtonStyles={styles.button}
-        customIconStyles={[
-          styles.icon,
-          { color: isValidPost ? PALETTE.WHITE : PALETTE.GREY },
-        ]}
+        customIconStyles={styles.icon}
         Icon={DeleteOutlineIcon}
-        disabled={!isValidPost || posting}
+        disabled={posting}
         onPress={onPressDelete}
       />
       {
         <GypsieButton
           customButtonStyles={[
             styles.postButton,
-            { backgroundColor: isValidPost ? PALETTE.ORANGE : PALETTE.GREY },
+            {
+              backgroundColor: postButtonIsDisabled
+                ? PALETTE.GREY
+                : PALETTE.ORANGE,
+            },
           ]}
           customTextStyles={styles.postButtonText}
           text={mode === 'NEW' ? 'Post' : 'Save'}
           loading={posting}
-          disabled={!isValidPost || posting}
+          disabled={postButtonIsDisabled}
           onPress={onPressPost}
         />
       }

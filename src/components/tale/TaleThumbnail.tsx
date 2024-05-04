@@ -130,14 +130,7 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
           />
         )
       ) : (
-        <View
-          style={styles.feedCardMedia}
-          // source={{
-          //   uri: '/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png',
-          // }}
-          // progressiveRenderingEnabled
-          // resizeMode="contain"
-        >
+        <View style={styles.feedCardMedia}>
           <Logo width={CARD_WIDTH * 0.6} />
         </View>
       )}
@@ -173,7 +166,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: DIMENSION.HUNDRED_PERCENT,
-    backgroundColor: PALETTE.GREYISHBLUE,
+    backgroundColor: PALETTE.OFFWHITE,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     aspectRatio: 1,
