@@ -10,6 +10,7 @@ import { PALETTE } from '@constants/palette';
 import GypsieAvatar from '@components/common/GypsieAvatar';
 import GypsieSkeleton from '@components/common/GypsieSkeleton';
 import { AWS_CLOUDFRONT_URL_THUMBNAIL } from '@env';
+import Logo from '../../../assets/images/orang3-logo.svg';
 
 const CARD_WIDTH = DEVICE_WIDTH / 2 - 8;
 
@@ -73,7 +74,6 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
   const onPressTaleThumbnail = useCallback(() => {
     navigation.push('Modal', {
       screen: 'TaleView',
-      // params: { id: data.taleId, creator: data.creator },
       params: { id: data.id, creator: data.creator },
     });
   }, [navigation, data]);
@@ -85,10 +85,6 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
   if (!data) {
     return <SkeletonThumbnail />;
   }
-
-  console.log('==== Tale thumbnail ==== ');
-  console.log(data);
-  console.log('========================');
 
   return (
     <Pressable
@@ -124,24 +120,26 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
               { aspectRatio: data.thumbnail.width / data.thumbnail.height },
             ]}
             source={{ uri: data.thumbnail.uri }}
-            // posterResizeMode="contain"
             resizeMode="contain"
-            // onLoadStart={() => console.log("Video thumbnail is loading@components.")}
-            // onLoad={onVideoLoad}
             repeat
             paused={paused}
             volume={0}
+            // posterResizeMode="contain"
+            // onLoadStart={() => console.log("Video thumbnail is loading@components.")}
+            // onLoad={onVideoLoad}
           />
         )
       ) : (
-        <Image
+        <View
           style={styles.feedCardMedia}
-          source={{
-            uri: '/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png',
-          }}
-          progressiveRenderingEnabled
-          resizeMode="contain"
-        />
+          // source={{
+          //   uri: '/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png',
+          // }}
+          // progressiveRenderingEnabled
+          // resizeMode="contain"
+        >
+          <Logo width={CARD_WIDTH * 0.6} />
+        </View>
       )}
       <View style={styles.feedCardFooter}>
         <GypsieAvatar uri={data.creator.avatar?.uri || PLACEHOLDER_IMAGE_URI} />
@@ -172,7 +170,10 @@ const styles = StyleSheet.create({
     margin: 3,
   },
   feedCardMedia: {
+    justifyContent: 'center',
+    alignItems: 'center',
     width: DIMENSION.HUNDRED_PERCENT,
+    backgroundColor: PALETTE.GREYISHBLUE,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     aspectRatio: 1,
