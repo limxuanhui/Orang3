@@ -50,6 +50,7 @@ import EditIcon from '@icons/EditIcon';
 import AuxiliaryControls from '@components/common/AuxiliaryControls';
 import FullScreenLoading from '@components/common/FullScreenLoading';
 import { useFocusEffect } from '@react-navigation/native';
+import LinearGradient from 'react-native-linear-gradient';
 
 export type TaleView = { tale: Tale; feedList: Feed[] };
 const SUNDAY_FEED_THUMBNAIL: Media = {
@@ -65,7 +66,6 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
   const { user } = useContext(AuthContext);
   const { id, creator } = route.params;
   const loggedInUserIsCreator: boolean = user?.id === creator.id;
-  console.log(loggedInUserIsCreator);
   const insets = useSafeAreaInsets();
   const dispatch = useAppDispatch();
   const { data, isLoading } = useDataManager<TaleView>('tale-by-taleid', id);
@@ -110,7 +110,7 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
     [setActivePostIndex],
   );
   const { bottomSheetRef, snapPoints } = useBottomSheetHandlers({
-    snapPointsArr: ['50%', '100%'],
+    snapPointsArr: ['30%', '100%'],
   });
   const onPressExpandBottomSheet = useCallback(() => {
     bottomSheetRef.current?.snapToIndex(0);
@@ -132,15 +132,22 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
             disappearsOnIndex={-1}
             appearsOnIndex={0}>
             {data.tale.metadata.title && (
-              <View style={styles.headerTextBox}>
-                <Text style={styles.headerText}>
-                  {data.tale.metadata.title}
-                </Text>
-                <NewItineraryPostHandleBar
-                  name={data.tale.metadata.creator.handle || ''}
-                  avatarUri={data.tale.metadata.creator.avatar?.uri || ''}
-                />
-              </View>
+              <LinearGradient
+                style={styles.linearGradient}
+                colors={['#00000011', '#00000022', '#00000033']}>
+                <View style={styles.headerTextBox}>
+                  <Text
+                    style={styles.headerText}
+                    numberOfLines={8}
+                    ellipsizeMode="tail">
+                    {data.tale.metadata.title}
+                  </Text>
+                  <NewItineraryPostHandleBar
+                    name={data.tale.metadata.creator.handle || ''}
+                    avatarUri={data.tale.metadata.creator.avatar?.uri || ''}
+                  />
+                </View>
+              </LinearGradient>
             )}
           </BottomSheetBackdrop>
         );
@@ -195,17 +202,11 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
         <>
           {loggedInUserIsCreator ? (
             <AuxiliaryControls
-              customStyle={{
-                top: 50,
-                justifyContent: 'flex-start',
-              }}
+              customStyle={styles.auxiliary}
               position="top-right">
               <GypsieButton
-                customButtonStyles={{
-                  width: 32,
-                  height: 32,
-                }}
-                customIconStyles={{ color: PALETTE.ORANGE, fontSize: 24 }}
+                customButtonStyles={styles.editButton}
+                customIconStyles={styles.editIcon}
                 Icon={EditIcon}
                 onPress={onPressEdit}
               />
@@ -220,16 +221,19 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
                 inView={screenIsFocused && index === activePostIndex}
               />
             )}
-            // ListEmptyComponent={<Text>Loading tale data...</Text>}
             showsVerticalScrollIndicator={false}
             snapToInterval={DEVICE_HEIGHT}
             snapToAlignment="start"
             decelerationRate={'fast'}
             viewabilityConfig={VIEWABILITY_CONFIG}
             onViewableItemsChanged={onViewableFeedChanged}
+            // ListEmptyComponent={<Text>Loading tale data...</Text>}
           />
           <GypsieButton
-            customButtonStyles={{ position: 'absolute', bottom: insets.bottom }}
+            customButtonStyles={[
+              styles.expandButton,
+              { bottom: insets.bottom },
+            ]}
             customIconStyles={{ color: 'orange', fontSize: 40 }}
             Icon={ChevronsUpIcon}
             onPress={onPressExpandBottomSheet}
@@ -303,6 +307,15 @@ const styles = StyleSheet.create({
     width: DEVICE_WIDTH,
     backgroundColor: PALETTE.GREYISHBLUE,
   },
+  auxiliary: {
+    top: 50,
+    justifyContent: 'flex-start',
+  },
+  editButton: {
+    height: 32,
+    width: 32,
+  },
+  editIcon: { color: PALETTE.ORANGE, fontSize: 24 },
   bottomSheet: {
     height: 'auto',
     // paddingVertical: 8,
@@ -310,20 +323,28 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 40,
     backgroundColor: PALETTE.OFFWHITE,
   },
-  headerTextBox: {
-    position: 'absolute',
-    justifyContent: 'center',
-    bottom: 0.5 * DEVICE_HEIGHT,
-    minHeight: 60,
-    width: DIMENSION.HUNDRED_PERCENT,
-    paddingHorizontal: 16,
+  expandButton: { position: 'absolute' },
+  linearGradient: {
+    // height: DIMENSION.HUNDRED_PERCENT,
+    // width: DIMENSION.HUNDRED_PERCENT,
+    flex: 1,
     backgroundColor: '#00000044',
   },
+  headerTextBox: {
+    position: 'absolute',
+    bottom: 0.3 * DEVICE_HEIGHT,
+    justifyContent: 'center',
+    width: DIMENSION.HUNDRED_PERCENT,
+    paddingHorizontal: 16,
+  },
   headerText: {
-    color: PALETTE.WHITE,
+    // fontFamily: 'Futura',
+    // fontFamily: 'Lilita One',
+    fontFamily: 'Avenir',
     fontSize: 40,
-    lineHeight: 40,
-    fontFamily: 'Lilita One',
+    fontWeight: 'bold',
+    color: PALETTE.WHITE,
+    lineHeight: 48,
   },
   storyText: {
     marginVertical: 8,

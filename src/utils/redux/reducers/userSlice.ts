@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { GypsieUser } from '@components/navigators/types/types';
 
 export type UserState = Readonly<{
-  user: GypsieUser;
+  user: GypsieUser | null;
 }>;
 
 const initialState: UserState = {

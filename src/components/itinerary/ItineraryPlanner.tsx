@@ -1,7 +1,6 @@
 import { useCallback, useRef, useEffect } from 'react';
-import { Modal, StyleSheet, Text, View } from 'react-native';
+import { Modal, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ActivityIndicator } from 'react-native-paper';
 import MapView, {
   Polyline,
   PROVIDER_GOOGLE,
@@ -134,30 +133,6 @@ const ItineraryPlanner = ({}: ItineraryPlannerProps) => {
           selectedRoute={selectedRoute}
         />
       </BottomSheet>
-      <View
-        style={{
-          position: 'absolute',
-          right: '5%',
-          top: '5%',
-          alignItems: 'flex-end',
-          // backgroundColor: "red",
-        }}>
-        <ActivityIndicator
-          size={24}
-          color={PALETTE.ORANGE}
-          style={{ right: '5%', top: '5%' }}
-        />
-        <Text
-          style={{
-            color: PALETTE.OFFWHITE,
-            fontSize: 12,
-            fontWeight: 'bold',
-            right: '5%',
-            top: '5%',
-          }}>
-          Saved
-        </Text>
-      </View>
     </View>
   );
 };
@@ -178,3 +153,30 @@ const styles = StyleSheet.create({
 });
 
 export default ItineraryPlanner;
+
+{
+  /* <View
+  style={{
+    position: 'absolute',
+    right: '5%',
+    top: '5%',
+    alignItems: 'flex-end',
+    // backgroundColor: "red",
+  }}>
+  <ActivityIndicator
+    size={24}
+    color={PALETTE.ORANGE}
+    style={{ right: '5%', top: '5%' }}
+  />
+  <Text
+    style={{
+      color: PALETTE.OFFWHITE,
+      fontSize: 12,
+      fontWeight: 'bold',
+      right: '5%',
+      top: '5%',
+    }}>
+    Saved
+  </Text>
+</View>; */
+}

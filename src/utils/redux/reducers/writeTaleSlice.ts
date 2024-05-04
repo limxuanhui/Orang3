@@ -53,19 +53,22 @@ const initialState: WriteTaleState = {
   changes: {
     metadata: {
       type: 'NONE',
-      modified: {
-        id: '',
-        creator: {
+      modified: [
+        {
           id: '',
-          name: '',
-          handle: '',
-          email: '',
-          avatar: undefined,
+          creator: {
+            id: '',
+            name: '',
+            handle: '',
+            email: '',
+            avatar: undefined,
+          },
+          cover: undefined,
+          thumbnail: undefined,
+          title: '',
         },
-        cover: undefined,
-        thumbnail: undefined,
-        title: '',
-      },
+      ],
+      deleted: [],
     },
     routes: {
       type: 'NONE',
@@ -90,6 +93,7 @@ const writeTaleSlice = createSlice({
         tale: Tale;
       }>,
     ) => {
+      state.mode = 'EDIT';
       state.metadata = action.payload.tale.metadata;
       state.itinerary.metadata = action.payload.tale.itinerary.metadata;
       state.itinerary.routes = action.payload.tale.itinerary.routes.map(
@@ -99,7 +103,9 @@ const writeTaleSlice = createSlice({
         ...el,
         isRemote: true,
       }));
-      state.mode = 'EDIT';
+      state.changes.metadata.modified[0].id = action.payload.tale.metadata.id;
+      state.changes.metadata.modified[0].creator =
+        action.payload.tale.metadata.creator;
     },
     writeTale_createTaleItinerary: (
       state,
@@ -139,12 +145,6 @@ const writeTaleSlice = createSlice({
       }>,
     ) => {
       state.metadata.cover = action.payload.cover;
-
-      if (state.mode === 'EDIT') {
-        if (state.changes.metadata.type !== 'MUTATE') {
-          state.changes.metadata.type = 'MUTATE';
-        }
-      }
     },
     writeTale_setTitle: (
       state,
@@ -154,6 +154,14 @@ const writeTaleSlice = createSlice({
     ) => {
       state.metadata.title = action.payload.title;
     },
+    writeTale_updateMetadataType: (
+      state,
+      action: PayloadAction<{
+        type: 'ONLY_EDITED_TITLE' | 'MUTATE';
+      }>,
+    ) => {
+      state.changes.metadata.type = action.payload.type;
+    },
     writeTale_updateRoutesType: (
       state,
       action: PayloadAction<{
@@ -161,6 +169,14 @@ const writeTaleSlice = createSlice({
       }>,
     ) => {
       state.changes.routes.type = action.payload.type;
+    },
+    writeTale_updateStoryItemsType: (
+      state,
+      action: PayloadAction<{
+        type: 'ONLY_EDITED_STORY_TEXT' | 'MUTATE';
+      }>,
+    ) => {
+      state.changes.storyItems.type = action.payload.type;
     },
     writeTale_updateModified: (
       state,
@@ -173,10 +189,28 @@ const writeTaleSlice = createSlice({
       if (state.mode === 'EDIT') {
         switch (action.payload.type) {
           case 'METADATA':
-            if (state.changes.metadata.type === 'NONE') {
-              state.changes.metadata.type = 'ONLY_EDITED_TITLE';
+            if (state.changes.metadata.type === 'MUTATE') {
+              if (action.payload.mutateAction === 'DELETE') {
+                if (
+                  action.payload.id &&
+                  !state.changes.metadata.deleted.includes(action.payload.id)
+                ) {
+                  state.changes.metadata.deleted.push(action.payload.id);
+                }
+              }
+              console.log('state.metadata.cover:', state.metadata.cover);
+              state.changes.metadata.modified[0].cover = state.metadata.cover;
+              state.changes.metadata.modified[0].title = state.metadata.title;
+            } else if (state.changes.metadata.type === 'ONLY_EDITED_TITLE') {
+              state.changes.metadata.modified[0].title = state.metadata.title;
             }
-            state.changes.metadata.modified = state.metadata;
+
+            // if (state.changes.metadata.modified.length === 0) {
+            //   state.changes.metadata.modified.push(state.metadata);
+            // } else {
+            //   // any metadata change (title or cover) will copy entire state.metadata to changes
+            //   state.changes.metadata.modified[0] = state.metadata;
+            // }
             break;
           case 'ROUTES':
             if (state.changes.routes.type === 'MUTATE') {
@@ -334,7 +368,9 @@ export const {
   writeTale_setTaleItinerary,
   writeTale_setCover,
   writeTale_setTitle,
+  writeTale_updateMetadataType,
   writeTale_updateRoutesType,
+  writeTale_updateStoryItemsType,
   writeTale_updateModified,
   writeTale_addStoryItem,
   writeTale_deleteStoryItemByIndex,

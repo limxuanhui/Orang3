@@ -17,32 +17,8 @@ GoogleSignin.configure({
 
 enableFreeze(true);
 
-// const AnimatedLottieView = Animated.createAnimatedComponent(LottieView);
-
 const App = (): JSX.Element => {
   const authInfo = useAuthManager();
-
-  // const [animationIsVisible, setAnimationIsVisible] = useState(true);
-  // const ref = useRef<LottieView>(null);
-  // const progress = useSharedValue(0);
-  // const opacity = useSharedValue(1);
-
-  // useEffect(() => {
-  // RNBootSplash.hide({ fade: false });
-  // progress.value = withTiming(1, {
-  //   duration: 2500,
-  // });
-  // ref.current?.play();
-  // }, []);
-
-  // const animatedOpacity = useAnimatedStyle(() => {
-  //   opacity.value = withTiming(0, {
-  //     duration: 250,
-  //   });
-  //   return {
-  //     opacity: opacity.value,
-  //   };
-  // });
 
   return (
     <KeyboardProvider>
@@ -61,47 +37,8 @@ const App = (): JSX.Element => {
 
 export default App;
 
-// {
-//   animationIsVisible && (
-//     <Animated.View
-//       style={[
-//         StyleSheet.absoluteFill,
-//         // eslint-disable-next-line react-native/no-inline-styles
-//         {
-//           backgroundColor: '#000',
-//           alignItems: 'center',
-//           justifyContent: 'center',
-//           opacity: opacity.value,
-//         },
-//       ]}>
-//       <AnimatedLottieView
-//         ref={ref}
-//         source={require('/Users/limxuanhui/bluextech/gypsie/assets/lottie_animation.json')}
-//         loop={false}
-//         progress={progress.value}
-//         resizeMode="contain"
-//         style={{ height: 300, width: 300 }}
-//         onAnimationLoaded={() => {
-//           console.warn('Animating');
-//         }}
-//         onAnimationFinish={(isCancelled: boolean) => {
-//           if (!isCancelled) {
-//             opacity.value = withTiming(0, {
-//               duration: 250,
-//             });
-//             setAnimationIsVisible(false);
-//           }
-//         }}
-//       />
-//     </Animated.View>
-//   );
-// }
-
 {
-  /* <StatusBar
-                barStyle={isDarkMode ? "light-content" : "dark-content"}
-                hidden
-              /> */
+  /* <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} hidden /> */
 }
 
 // const { isConnected } = useNetInfo();

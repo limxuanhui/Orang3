@@ -18,6 +18,7 @@ import {
   writeTale_reorderStoryItems,
   writeTale_setSelectedStoryItemIndex,
   writeTale_updateModified,
+  writeTale_updateMetadataType,
 } from '@redux/reducers/writeTaleSlice';
 import useMediaHandlers from '@hooks/useMediaHandlers';
 import {
@@ -31,7 +32,11 @@ import useBottomSheetHandlers from '@hooks/useBottomSheetHandlers';
 import { Draft, nanoid } from '@reduxjs/toolkit';
 import { Feed, Media, MediaMimeType } from '@components/feed/types/types';
 
-import { TaleDto, UpdateTaleDto } from '@components/tale/types/types';
+import {
+  TaleDto,
+  TaleMetadata,
+  UpdateTaleDto,
+} from '@components/tale/types/types';
 import {
   itineraryPlanner_createItinerary,
   itineraryPlanner_resetItineraryPlannerSlice,
@@ -118,14 +123,33 @@ const useWriteTaleManager = (taleId?: string) => {
         width: pickedAsset.width || -1,
       };
       dispatch(writeTale_setCover({ cover }));
-      dispatch(writeTale_updateModified({ type: 'METADATA' }));
+
+      if (mode === 'EDIT') {
+        if (changes.metadata.type !== 'MUTATE') {
+          dispatch(writeTale_updateMetadataType({ type: 'MUTATE' }));
+        }
+        dispatch(writeTale_updateModified({ type: 'METADATA' }));
+      }
     }
-  }, [dispatch, openGallery]);
+  }, [changes.metadata.type, dispatch, mode, openGallery]);
 
   const onPressClearCover = useCallback(() => {
+    const deletedId = metadata.cover?.id;
     dispatch(writeTale_setCover({ cover: undefined }));
-    dispatch(writeTale_updateModified({ type: 'METADATA' }));
-  }, [dispatch]);
+
+    if (mode === 'EDIT') {
+      if (changes.metadata.type !== 'MUTATE') {
+        dispatch(writeTale_updateMetadataType({ type: 'MUTATE' }));
+      }
+      dispatch(
+        writeTale_updateModified({
+          type: 'METADATA',
+          id: deletedId,
+          mutateAction: 'DELETE',
+        }),
+      );
+    }
+  }, [changes.metadata.type, dispatch, metadata.cover?.id, mode]);
 
   const onTitleChange = useCallback(
     (text: string) => {
@@ -135,8 +159,13 @@ const useWriteTaleManager = (taleId?: string) => {
   );
 
   const onTitleChangeEnded = useCallback(() => {
-    dispatch(writeTale_updateModified({ type: 'METADATA' }));
-  }, [dispatch]);
+    if (mode === 'EDIT') {
+      if (changes.metadata.type === 'NONE') {
+        dispatch(writeTale_updateMetadataType({ type: 'ONLY_EDITED_TITLE' }));
+      }
+      dispatch(writeTale_updateModified({ type: 'METADATA' }));
+    }
+  }, [changes.metadata.type, dispatch, mode]);
 
   const onStoryItemTextChange = useCallback(
     (id: string, text: string) => {
@@ -301,14 +330,16 @@ const useWriteTaleManager = (taleId?: string) => {
 
       const isVideo: boolean = metadata.cover.type.startsWith('video');
       const key = uploadCoverDetailsList[0].key;
+      const keyUuid = key.split('.')[0];
       newTale.metadata.cover = {
         ...metadata.cover,
+        id: keyUuid,
         uri: key,
       };
       newTale.metadata.thumbnail = {
-        id: metadata.id,
+        id: keyUuid,
         type: isVideo ? 'image/gif' : metadata.cover.type,
-        uri: isVideo ? `${key.split('.')[0]}.gif` : key,
+        uri: isVideo ? `${keyUuid}.gif` : key,
         width: 200,
         height: (metadata.cover.height / metadata.cover.width) * 200,
       };
@@ -323,7 +354,7 @@ const useWriteTaleManager = (taleId?: string) => {
     } catch (err) {
       console.error(err);
     }
-  }, [itinerary, metadata.cover, metadata.id, metadata.title, story, user]);
+  }, [itinerary, metadata.cover, metadata.title, story, user]);
 
   const updateExistingTale = useCallback(async () => {
     if (!user || !taleId) {
@@ -333,17 +364,8 @@ const useWriteTaleManager = (taleId?: string) => {
     let requestData: UpdateTaleDto = {
       taleId,
       metadata: {
-        id: '',
-        creator: {
-          id: '',
-          name: '',
-          handle: '',
-          email: '',
-          avatar: undefined,
-        },
-        cover: undefined,
-        thumbnail: undefined,
-        title: '',
+        modified: [],
+        deleted: [],
       },
       routes: {
         modified: [],
@@ -358,11 +380,68 @@ const useWriteTaleManager = (taleId?: string) => {
       case 'NONE':
         break;
       case 'ONLY_EDITED_TITLE':
-        requestData.metadata = changes.metadata.modified;
+        console.log('FUckl me now title: ');
+        printPrettyJson(changes.metadata);
+        requestData.metadata.modified = changes.metadata.modified;
         break;
       case 'MUTATE':
-        requestData.metadata = changes.metadata.modified;
-        // save cover media to s3?
+        console.log('FUckl me now mutate: ');
+        printPrettyJson(changes.metadata);
+        requestData.metadata.modified = changes.metadata.modified;
+        requestData.metadata.deleted = changes.metadata.deleted;
+
+        if (requestData.metadata.modified[0].cover) {
+          const modifiedMetadata: TaleMetadata =
+            requestData.metadata.modified[0];
+          // Save new cover if it exists
+          let blobs: Blob[];
+          let uploadCoverDetailsList: UploadMediaDetails[];
+          if (modifiedMetadata.cover) {
+            blobs = await getBlobsFromLocalUris([modifiedMetadata.cover.uri]);
+            uploadCoverDetailsList = await getPresignedUrls([
+              modifiedMetadata.cover.type,
+            ]);
+
+            if (
+              blobs.length === 0 ||
+              uploadCoverDetailsList.length === 0 ||
+              !blobs[0] ||
+              !uploadCoverDetailsList[0]
+            ) {
+              // TODO: show an error notification
+              return;
+            }
+
+            const uploadCoverResponse: AxiosResponse[] | null =
+              await uploadMediaFiles(
+                [uploadCoverDetailsList[0].presignedUrl],
+                blobs,
+              );
+
+            if (uploadCoverResponse) {
+              printPrettyJson(uploadCoverResponse[0]);
+            }
+
+            const isVideo: boolean =
+              modifiedMetadata.cover.type.startsWith('video');
+            const key = uploadCoverDetailsList[0].key;
+            const keyUuid = key.split('.')[0];
+            modifiedMetadata.cover = {
+              ...modifiedMetadata.cover,
+              id: keyUuid,
+              uri: key,
+            };
+            modifiedMetadata.thumbnail = {
+              id: keyUuid,
+              type: isVideo ? 'image/gif' : modifiedMetadata.cover.type,
+              uri: isVideo ? `${keyUuid}.gif` : key,
+              width: 200,
+              height:
+                (modifiedMetadata.cover.height / modifiedMetadata.cover.width) *
+                200,
+            };
+          }
+        }
         break;
       default:
         break;
@@ -411,7 +490,17 @@ const useWriteTaleManager = (taleId?: string) => {
     await queryClient.invalidateQueries({
       queryKey: keyFactory('tale-by-taleid', taleId),
     });
-  }, [changes, taleId, user]);
+  }, [
+    changes.metadata,
+    changes.routes.deleted,
+    changes.routes.modified,
+    changes.routes.type,
+    changes.storyItems.deleted,
+    changes.storyItems.modified,
+    changes.storyItems.type,
+    taleId,
+    user,
+  ]);
 
   /**
    * Check if we are creating a new tale or editing a tale.
@@ -459,26 +548,13 @@ const useWriteTaleManager = (taleId?: string) => {
       if (data) {
         // if taleId is passed into useWriteTaleManager => edit existing tale
         console.log('Initialising tale...');
-        printPrettyJson(data);
-
-        // const itinerary: Itinerary = {
-        //   metadata: data.tale.itinerary.metadata,
-        //   routes: data.tale.itinerary.routes.map((route: Route) => {
-        //     const decodedRoute = {
-        //       ...route,
-        //       polyline: decodePolyline(route.encodedPolyline),
-        //     };
-        //     return decodedRoute;
-        //   }),
-        // };
         dispatch(writeTale_initTale({ tale: data.tale }));
-        // dispatch(itineraryPlanner_initItinerary({ itinerary }));
       }
     }
 
     return () => {
+      dispatch(itineraryPlanner_setMode({ mode: 'VIEW' }));
       dispatch(writeTale_resetWriteTaleSlice());
-      // dispatch(itineraryPlanner_resetItineraryPlannerSlice());
     };
   }, [taleId, user, data, dispatch]);
 
@@ -507,8 +583,6 @@ const useWriteTaleManager = (taleId?: string) => {
 
   useEffect(() => {
     if (itinerary) {
-      console.log('tale itinerary updated in useEffect');
-      console.log(itinerary);
       // This update might use selectedRouteId (ONLY_EDITED_ROUTES) or might not (MUTATE)
       dispatch(
         writeTale_updateModified({ type: 'ROUTES', id: selectedRouteId }),

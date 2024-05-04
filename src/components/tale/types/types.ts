@@ -37,12 +37,9 @@ export type TaleDto = {
 export type UpdateTaleDto = {
   taleId: string;
   metadata: {
-    id: string;
-    creator: GypsieUser;
-    cover?: Media;
-    thumbnail?: Media;
-    title: string;
-  } | null;
+    modified: TaleMetadata[];
+    deleted: string[];
+  };
   routes: {
     modified: RouteDto[];
     deleted: string[];
@@ -61,7 +58,8 @@ export type WriteTale = Tale & {
   changes: {
     metadata: {
       type: 'NONE' | 'ONLY_EDITED_TITLE' | 'MUTATE';
-      modified: TaleMetadata;
+      modified: TaleMetadata[];
+      deleted: string[];
     };
     routes: {
       type: 'NONE' | 'ONLY_EDITED_ROUTES' | 'MUTATE';

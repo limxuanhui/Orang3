@@ -48,10 +48,8 @@ const NewStoryItem = ({
   }, [dispatch, item.order]);
 
   const onEditEnded = useCallback(
-    (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+    (_e: NativeSyntheticEvent<TextInputFocusEventData>) => {
       if (mode === 'EDIT') {
-        console.log('onBlur event:');
-        console.log(e.nativeEvent.text);
         dispatch(writeTale_updateModified({ type: 'STORYITEMS', id: item.id }));
       }
     },

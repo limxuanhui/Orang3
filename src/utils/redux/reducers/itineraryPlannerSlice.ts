@@ -1,4 +1,9 @@
-import { createAsyncThunk, createSlice, nanoid } from '@reduxjs/toolkit';
+import {
+  PayloadAction,
+  createAsyncThunk,
+  createSlice,
+  nanoid,
+} from '@reduxjs/toolkit';
 import { decode, encode } from '@googlemaps/polyline-codec';
 import { ulid } from 'ulid';
 import {
@@ -167,7 +172,10 @@ const itineraryPlannerSlice = createSlice({
       };
       state.selectedRouteId = initialRouteId;
     },
-    itineraryPlanner_setMode: (state, action) => {
+    itineraryPlanner_setMode: (
+      state,
+      action: PayloadAction<{ mode: ItineraryPlannerMode }>,
+    ) => {
       state.mode = action.payload.mode;
     },
     itineraryPlanner_setIsRouting: (state, action) => {

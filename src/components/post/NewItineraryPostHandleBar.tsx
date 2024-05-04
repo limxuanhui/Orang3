@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { PALETTE } from '@constants/palette';
 import { DIMENSION } from '@constants/dimensions';
@@ -13,13 +12,7 @@ const NewItineraryPostHandleBar = ({
   name,
 }: NewItineraryPostHandleBarProps) => {
   // const onPressFollow = useCallback(() => {}, []);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-  }, [isLoading]);
   return (
     <View style={styles.container}>
       <View style={styles.avatarBox}>
@@ -46,11 +39,10 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    alignItems: 'center',
     width: DIMENSION.HUNDRED_PERCENT,
     height: 90,
     borderRadius: 16,
-    // backgroundColor: PALETTE.LIGHTERGREY,
-    alignItems: 'center',
     padding: 16,
   },
   avatarBox: {

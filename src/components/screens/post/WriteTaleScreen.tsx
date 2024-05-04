@@ -158,7 +158,7 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
               ) : (
                 <GypsieButton
                   customButtonStyles={styles.addCoverButton}
-                  customIconStyles={{ fontSize: 64, color: PALETTE.OFFWHITE }}
+                  customIconStyles={styles.addCoverIcon}
                   Icon={CameraOutlineIcon}
                   onPress={onPressAddCover}
                 />
@@ -169,17 +169,25 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
                 styles.blogContainer,
                 { marginBottom: 100 + insets.bottom },
               ]}>
-              <TextInput
-                style={styles.titleInput}
-                value={metadata.title}
-                multiline
-                placeholder="Write a title"
-                placeholderTextColor={PALETTE.LIGHTERGREY}
-                maxLength={100}
-                onChangeText={onTitleChange}
-                onBlur={onTitleChangeEnded}
-                scrollEnabled={false}
-              />
+              <View>
+                <TextInput
+                  style={styles.titleInput}
+                  value={metadata.title}
+                  multiline
+                  placeholder="Write a title"
+                  placeholderTextColor={PALETTE.LIGHTERGREY}
+                  numberOfLines={8} // android
+                  maxLength={100}
+                  scrollEnabled={false}
+                  selectionColor={PALETTE.ORANGE}
+                  onChangeText={onTitleChange}
+                  onBlur={onTitleChangeEnded}
+                />
+                <Text
+                  style={
+                    styles.titleInputCounter
+                  }>{`${metadata.title.length} / 100`}</Text>
+              </View>
               <ItineraryMapOverview canEdit />
               <View>
                 {story.map((el: StoryItem, index: number) => (
@@ -335,7 +343,6 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     backgroundColor: PALETTE.OFFWHITE,
-    // backgroundColor: PALETTE.GREYISHBLUE,
   },
   scrollView: { flexGrow: 1, backgroundColor: PALETTE.OFFWHITE },
   coverContainer: {
@@ -358,19 +365,31 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowOffset: { height: 0, width: 0 },
   },
+  addCoverIcon: { fontSize: 64, color: PALETTE.OFFWHITE },
   blogContainer: {
     backgroundColor: PALETTE.OFFWHITE,
   },
   titleInput: {
     width: DIMENSION.HUNDRED_PERCENT,
-    paddingTop: 16,
-    paddingBottom: 4,
+    paddingTop: 20,
+    paddingBottom: 16,
     paddingHorizontal: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: PALETTE.LIGHTERGREY,
     fontFamily: 'Futura',
     fontSize: 40,
     fontWeight: 'bold',
-    borderBottomWidth: 1,
-    borderBottomColor: PALETTE.LIGHTERGREY,
+    color: PALETTE.GREYISHBLUE,
+  },
+  titleInputCounter: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    margin: 4,
+    fontFamily: 'Futura',
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: PALETTE.LIGHTGREY,
   },
   bottomControls: {
     flexDirection: 'row',
