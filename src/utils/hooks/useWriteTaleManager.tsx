@@ -313,7 +313,6 @@ const useWriteTaleManager = (taleId?: string) => {
     if (metadata.cover) {
       blobs = await getBlobsFromLocalUris([metadata.cover.uri]);
       uploadCoverDetailsList = await getPresignedUrls([metadata.cover.type]);
-      const { presignedUrl, key } = uploadCoverDetailsList[0];
       if (
         blobs.length === 0 ||
         uploadCoverDetailsList.length === 0 ||
@@ -324,6 +323,7 @@ const useWriteTaleManager = (taleId?: string) => {
         return;
       }
 
+      const { presignedUrl, key } = uploadCoverDetailsList[0];
       const uploadCoverResponse: AxiosResponse[] | null =
         await uploadMediaFiles([presignedUrl], blobs);
 
@@ -382,13 +382,9 @@ const useWriteTaleManager = (taleId?: string) => {
       case 'NONE':
         break;
       case 'ONLY_EDITED_TITLE':
-        console.log('FUckl me now title: ');
-        printPrettyJson(changes.metadata);
         requestData.metadata.modified = changes.metadata.modified;
         break;
       case 'MUTATE':
-        console.log('FUckl me now mutate: ');
-        printPrettyJson(changes.metadata);
         requestData.metadata.modified = changes.metadata.modified;
         requestData.metadata.deleted = changes.metadata.deleted;
 
@@ -414,11 +410,9 @@ const useWriteTaleManager = (taleId?: string) => {
               return;
             }
 
+            const { presignedUrl, key } = uploadCoverDetailsList[0];
             const uploadCoverResponse: AxiosResponse[] | null =
-              await uploadMediaFiles(
-                [uploadCoverDetailsList[0].presignedUrl],
-                blobs,
-              );
+              await uploadMediaFiles([presignedUrl], blobs);
 
             if (uploadCoverResponse) {
               printPrettyJson(uploadCoverResponse[0]);
@@ -426,8 +420,8 @@ const useWriteTaleManager = (taleId?: string) => {
 
             const isVideo: boolean =
               modifiedMetadata.cover.type.startsWith('video');
-            const key = uploadCoverDetailsList[0].key;
-            const keyUuid = key.split('.')[0];
+            const keyWithoutExt = key.split('.')[0];
+            const keyUuid = keyWithoutExt.split('/')[1];
             modifiedMetadata.cover = {
               ...modifiedMetadata.cover,
               id: keyUuid,
@@ -436,7 +430,7 @@ const useWriteTaleManager = (taleId?: string) => {
             modifiedMetadata.thumbnail = {
               id: keyUuid,
               type: isVideo ? 'image/gif' : modifiedMetadata.cover.type,
-              uri: isVideo ? `${keyUuid}.gif` : key,
+              uri: isVideo ? `${keyWithoutExt}.gif` : key,
               width: 200,
               height:
                 (modifiedMetadata.cover.height / modifiedMetadata.cover.width) *
