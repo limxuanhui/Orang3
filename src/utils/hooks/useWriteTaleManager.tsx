@@ -111,8 +111,11 @@ const useWriteTaleManager = (taleId?: string) => {
 
   const onPressAddCover = useCallback(async () => {
     const coverResponse: ImagePickerResponse = await openGallery();
-    let pickedAsset: Asset;
+    if (coverResponse.didCancel) {
+      return;
+    }
 
+    let pickedAsset: Asset;
     if (coverResponse.assets && coverResponse.assets.length > 0) {
       pickedAsset = coverResponse.assets[0];
       const cover: Media = {
@@ -310,7 +313,7 @@ const useWriteTaleManager = (taleId?: string) => {
     if (metadata.cover) {
       blobs = await getBlobsFromLocalUris([metadata.cover.uri]);
       uploadCoverDetailsList = await getPresignedUrls([metadata.cover.type]);
-
+      const { presignedUrl, key } = uploadCoverDetailsList[0];
       if (
         blobs.length === 0 ||
         uploadCoverDetailsList.length === 0 ||
@@ -322,15 +325,15 @@ const useWriteTaleManager = (taleId?: string) => {
       }
 
       const uploadCoverResponse: AxiosResponse[] | null =
-        await uploadMediaFiles([uploadCoverDetailsList[0].presignedUrl], blobs);
+        await uploadMediaFiles([presignedUrl], blobs);
 
       if (uploadCoverResponse) {
         printPrettyJson(uploadCoverResponse[0]);
       }
 
       const isVideo: boolean = metadata.cover.type.startsWith('video');
-      const key = uploadCoverDetailsList[0].key;
-      const keyUuid = key.split('.')[0];
+      const keyWithoutExt = key.split('.')[0];
+      const keyUuid = keyWithoutExt.split('/')[1];
       newTale.metadata.cover = {
         ...metadata.cover,
         id: keyUuid,
@@ -339,14 +342,13 @@ const useWriteTaleManager = (taleId?: string) => {
       newTale.metadata.thumbnail = {
         id: keyUuid,
         type: isVideo ? 'image/gif' : metadata.cover.type,
-        uri: isVideo ? `${keyUuid}.gif` : key,
+        uri: isVideo ? `${keyWithoutExt}.gif` : key,
         width: 200,
         height: (metadata.cover.height / metadata.cover.width) * 200,
       };
     }
 
-    // Post request for saving blog data
-    console.log('====== New tale ======');
+    console.log('====== Create tale ======');
     printPrettyJson(newTale);
     try {
       const response = await axiosClient.post(urlFactory('tale-new'), newTale);

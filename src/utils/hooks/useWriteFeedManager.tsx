@@ -2,10 +2,10 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { Keyboard } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import {
+  Asset,
   ImageLibraryOptions,
-  launchImageLibrary,
+  ImagePickerResponse,
 } from 'react-native-image-picker';
-import { v4 as uuidv4 } from 'uuid';
 import { ulid } from 'ulid';
 import { AxiosResponse } from 'axios';
 import {
@@ -41,6 +41,8 @@ import { useMutation } from '@tanstack/react-query';
 import useDataManager from '@hooks/useDataManager';
 import { MEDIA_THUMBNAIL_MAX_WIDTH } from '@constants/constants';
 import { keyFactory, urlFactory } from '@helpers/factory';
+import useMediaHandlers from './useMediaHandlers';
+import { nanoid } from '@reduxjs/toolkit';
 
 const imageLibraryOptions: ImageLibraryOptions = {
   mediaType: 'mixed',
@@ -51,6 +53,7 @@ const imageLibraryOptions: ImageLibraryOptions = {
 const useWriteFeedManager = (feedId?: string) => {
   const { user } = useContext(AuthContext);
   const { modalIsOpen, closeModal, openModal } = useModalHandlers();
+  const { openGallery } = useMediaHandlers(imageLibraryOptions);
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const [captionWritten, setCaptionWritten] = useState<string>('');
   const dispatch = useAppDispatch();
@@ -63,34 +66,6 @@ const useWriteFeedManager = (feedId?: string) => {
   } = useAppSelector(state => state.writeFeed);
   const { data, isLoading } = useDataManager<Feed>('feed-by-feedid', feedId);
 
-  const openGallery = useCallback(async () => {
-    await launchImageLibrary(imageLibraryOptions, res => {
-      let newFeedItems = [];
-      if (res.assets) {
-        newFeedItems = res.assets.map(el => {
-          return {
-            id: ulid(),
-            media: {
-              id: uuidv4(),
-              type: el.type,
-              uri: el.uri,
-              height: el.height,
-              width: el.width,
-            },
-            caption: '',
-            feedId,
-          } as FeedItem;
-        });
-        dispatch(writeFeed_addItems({ id: currIndex, items: newFeedItems }));
-        dispatch(writeFeed_reorderFeedItems());
-        dispatch(writeFeed_updateModified());
-        if (!(currIndex === 0 && items.length === 0)) {
-          dispatch(writeFeed_setSelectedItemId({ id: currIndex + 1 }));
-        }
-      }
-    });
-  }, [currIndex, dispatch, feedId, items.length]);
-
   const onChangeCaption = useCallback(
     (text: string) => {
       setCaptionWritten(text);
@@ -98,9 +73,36 @@ const useWriteFeedManager = (feedId?: string) => {
     [setCaptionWritten],
   );
 
-  const onPressAdd = useCallback(() => {
-    openGallery();
-  }, [openGallery]);
+  const onPressAdd = useCallback(async () => {
+    const assetsResponse: ImagePickerResponse = await openGallery();
+    if (assetsResponse.didCancel) {
+      return;
+    }
+
+    let newFeedItems: FeedItem[];
+    if (assetsResponse.assets && assetsResponse.assets.length > 0) {
+      newFeedItems = assetsResponse.assets.map((el: Asset) => {
+        return {
+          id: ulid(),
+          media: {
+            id: nanoid(), // temporary id
+            type: el.type,
+            uri: el.uri,
+            height: el.height,
+            width: el.width,
+          },
+          caption: '',
+          feedId,
+        } as FeedItem;
+      });
+      dispatch(writeFeed_addItems({ id: currIndex, items: newFeedItems }));
+      dispatch(writeFeed_reorderFeedItems());
+      dispatch(writeFeed_updateModified());
+      if (!(currIndex === 0 && items.length === 0)) {
+        dispatch(writeFeed_setSelectedItemId({ id: currIndex + 1 }));
+      }
+    }
+  }, [currIndex, dispatch, feedId, items.length, openGallery]);
 
   const onPressDelete = useCallback(() => {
     const deleteIndex = currIndex;
@@ -158,13 +160,18 @@ const useWriteFeedManager = (feedId?: string) => {
     const newFeedId: string = ulid();
     const feedData: FeedItem[] = items.map((el: FeedItem, index: number) => {
       const isVideo = el.media.type.startsWith('video');
+      // e.g. key: images/ceba4430-5436-4aec-9746-37c3e781f147.jpg
+      const key = keys[index];
+      const keyWithoutExt = key.split('.')[0];
+      const keyUuid = keyWithoutExt.split('/')[1];
+
       return {
         ...el,
-        media: { ...el.media, uri: keys[index] },
+        media: { ...el.media, id: keyUuid, uri: key },
         thumbnail: {
-          ...el.media,
+          id: keyUuid,
           type: isVideo ? 'image/gif' : el.media.type,
-          uri: isVideo ? `${keys[index].split('.')[0]}.gif` : keys[index],
+          uri: isVideo ? `${keyWithoutExt}.gif` : key,
           width: MEDIA_THUMBNAIL_MAX_WIDTH,
           height:
             (el.media.height / el.media.width) * MEDIA_THUMBNAIL_MAX_WIDTH,
@@ -182,12 +189,9 @@ const useWriteFeedManager = (feedId?: string) => {
       },
       feedItems: feedData,
     };
-    console.log(
-      'Feed data to be saved in backend:',
-      JSON.stringify(requestData, null, 4),
-    );
 
-    // Upload feed to backend url at /api/v1/feeds with axios.post (or axios.put/patch)
+    console.log('====== Create feed ======');
+    printPrettyJson(requestData);
     try {
       const uploadMetadataResponse = await axiosClient.post(
         urlFactory('feed-new'),
@@ -281,18 +285,20 @@ const useWriteFeedManager = (feedId?: string) => {
             const changedIndex = newlyAddedFeedItems.findIndex(
               item => item.id === el.id,
             );
+            const key = keys[changedIndex];
+            const keyWithoutExt = key.split('.')[0];
+            const keyUuid = keyWithoutExt.split('/')[1];
             return {
               ...el,
               media: {
                 ...el.media,
-                uri: keys[changedIndex],
+                id: keyUuid,
+                uri: key,
               },
               thumbnail: {
-                ...changes.modified[changedIndex].media,
+                id: keyUuid,
                 type: isVideo ? 'image/gif' : el.media.type,
-                uri: isVideo
-                  ? `${keys[changedIndex].split('.')[0]}.gif`
-                  : keys[changedIndex],
+                uri: isVideo ? `${keyWithoutExt}.gif` : key,
                 width: MEDIA_THUMBNAIL_MAX_WIDTH,
                 height:
                   (el.media.height / el.media.width) *
@@ -319,9 +325,9 @@ const useWriteFeedManager = (feedId?: string) => {
           modified: modifiedFeedItems,
           deleted: changes.deleted,
         };
-        console.log('Data to be sent to backend');
-        printPrettyJson(requestData);
 
+        console.log('====== Update feed ======');
+        printPrettyJson(requestData);
         try {
           const uploadMetadataResponse = await axiosClient.put(
             urlFactory('feed-edit'),

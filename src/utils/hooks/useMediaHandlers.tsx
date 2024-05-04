@@ -6,10 +6,6 @@ import {
   launchImageLibrary,
 } from 'react-native-image-picker';
 
-// type useMediaHandlersProps = {
-//   imageLibraryOptions?: ImageLibraryOptions;
-// };
-
 type ImageSize = { height: number; width: number };
 
 const defaultImageLibraryOptions: ImageLibraryOptions = {
