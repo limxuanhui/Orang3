@@ -18,8 +18,9 @@ const WriteFeedSideControls = ({
     state => state.writeFeed,
   );
 
+  const isValidPost = items.length > 0;
   const postButtonIsDisabled: boolean =
-    posting || items.length < 1 || (mode === 'EDIT' && changes.type === 'NONE');
+    posting || !isValidPost || (mode === 'EDIT' && changes.type === 'NONE');
 
   return (
     <AuxiliaryControls>
@@ -32,16 +33,22 @@ const WriteFeedSideControls = ({
       />
       <GypsieButton
         customButtonStyles={styles.button}
-        customIconStyles={styles.icon}
+        customIconStyles={[
+          styles.icon,
+          { color: !isValidPost ? PALETTE.GREY : PALETTE.WHITE },
+        ]}
         Icon={EditIcon}
-        disabled={posting}
+        disabled={!isValidPost || posting}
         onPress={onPressEdit}
       />
       <GypsieButton
         customButtonStyles={styles.button}
-        customIconStyles={styles.icon}
+        customIconStyles={[
+          styles.icon,
+          { color: !isValidPost ? PALETTE.GREY : PALETTE.WHITE },
+        ]}
         Icon={DeleteOutlineIcon}
-        disabled={posting}
+        disabled={!isValidPost || posting}
         onPress={onPressDelete}
       />
       {
