@@ -7,17 +7,25 @@ import type { RouteNode, SearchPlaceButtonProps } from './types/types';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
 import { itineraryPlanner_addPlace } from '@redux/reducers/itineraryPlannerSlice';
-import { useAppDispatch } from '@redux/hooks';
+import { useAppDispatch, useAppSelector } from '@redux/hooks';
+import { writeTale_updateRoutesType } from '@redux/reducers/writeTaleSlice';
 
 const SearchPlaceButton = ({}: SearchPlaceButtonProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const dispatch = useAppDispatch();
+  const { mode, changes } = useAppSelector(state => state.writeTale);
 
   const onAddPlace = useCallback(
     (routeNode: RouteNode) => {
       dispatch(itineraryPlanner_addPlace({ routeNode }));
+
+      if (mode === 'EDIT') {
+        if (changes.routes.type === 'NONE') {
+          dispatch(writeTale_updateRoutesType({ type: 'ONLY_EDITED_ROUTES' }));
+        }
+      }
     },
-    [dispatch],
+    [changes.routes.type, dispatch, mode],
   );
 
   const onPressSearchPlace = useCallback(() => {

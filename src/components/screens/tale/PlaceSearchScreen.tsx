@@ -11,7 +11,6 @@ import type { ModalNavigatorNavigationProp } from '@navigators/types/types';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
-import { printPrettyJson } from '@helpers/functions';
 
 const PlaceSearchScreen = ({ route }: PlaceSearchScreenProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
@@ -39,7 +38,7 @@ const PlaceSearchScreen = ({ route }: PlaceSearchScreenProps) => {
         order: undefined,
         // openNow: details.opening_hours?.open_now,
       };
-      printPrettyJson(newRouteNode);
+
       onAddPlace(newRouteNode);
       onExit();
     },

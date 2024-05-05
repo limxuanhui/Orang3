@@ -198,19 +198,12 @@ const writeTaleSlice = createSlice({
                   state.changes.metadata.deleted.push(action.payload.id);
                 }
               }
-              console.log('state.metadata.cover:', state.metadata.cover);
+
               state.changes.metadata.modified[0].cover = state.metadata.cover;
               state.changes.metadata.modified[0].title = state.metadata.title;
             } else if (state.changes.metadata.type === 'ONLY_EDITED_TITLE') {
               state.changes.metadata.modified[0].title = state.metadata.title;
             }
-
-            // if (state.changes.metadata.modified.length === 0) {
-            //   state.changes.metadata.modified.push(state.metadata);
-            // } else {
-            //   // any metadata change (title or cover) will copy entire state.metadata to changes
-            //   state.changes.metadata.modified[0] = state.metadata;
-            // }
             break;
           case 'ROUTES':
             if (state.changes.routes.type === 'MUTATE') {

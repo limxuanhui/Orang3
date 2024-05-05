@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     top: DEVICE_HEIGHT,
-    padding: 20,
+    padding: 16,
     paddingBottom: 0,
     backgroundColor: '#ffffff',
     shadowColor: '#888888',

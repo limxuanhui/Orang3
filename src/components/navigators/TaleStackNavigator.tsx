@@ -11,7 +11,7 @@ const Title = () => {
   return (
     <View style={styles.titleContainer}>
       <Text style={styles.titleText}>Explore </Text>
-      <Logo width={80} />
+      <Logo width={80} height={40} />
       {/* <Text
         style={[
           styles.titleText,

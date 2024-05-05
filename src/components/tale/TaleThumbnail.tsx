@@ -94,8 +94,6 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
       ]}
       onTouchStart={onPauseToggle}
       onTouchEnd={onPauseToggle}
-      // onTouchStart={() => setPaused(false)}
-      // onTouchEnd={() => setPaused(true)}
       onPress={onPressTaleThumbnail}>
       {data.thumbnail ? (
         data.thumbnail.type.startsWith('image') ? (

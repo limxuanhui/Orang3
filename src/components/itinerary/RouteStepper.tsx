@@ -28,8 +28,8 @@ const RouteStepper = ({ route }: RouteStepperProps) => {
 
 const styles = StyleSheet.create({
   routeStepper: {
-    maxHeight: '100%',
-    width: '100%',
+    maxHeight: DIMENSION.HUNDRED_PERCENT,
+    width: DIMENSION.HUNDRED_PERCENT,
   },
   contentContainerStyle: {
     // flex: 1,

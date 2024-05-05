@@ -11,8 +11,8 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		2D29CDD92B304C51FE906C89 /* libPods-gypsie-gypsieTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AA2DDA6950735B5CCA0208A /* libPods-gypsie-gypsieTests.a */; };
 		50B2947BD1C14C818D228DFA /* Satisfy-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27CC348C97E446D7982C03C9 /* Satisfy-Regular.ttf */; };
-		660C94275D6BF6F8631EE7AB /* libPods-gypsie-gypsieTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F5E0709C288E5BDC957D1F05 /* libPods-gypsie-gypsieTests.a */; };
 		80730D57DD92458798AD2B1F /* LilitaOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F8AF291EE7AA4030B88A1E3E /* LilitaOne-Regular.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		9EEEDCDC2B23A34D007408AE /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9EEEDCBF2B23A2E6007408AE /* AntDesign.ttf */; };
@@ -34,7 +34,7 @@
 		9EEEDCEC2B23A34D007408AE /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9EEEDCC52B23A2E6007408AE /* Octicons.ttf */; };
 		9EEEDCED2B23A34D007408AE /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9EEEDCBE2B23A2E6007408AE /* SimpleLineIcons.ttf */; };
 		9EEEDCEE2B23A34D007408AE /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9EEEDCC12B23A2E6007408AE /* Zocial.ttf */; };
-		E9BCE192CF4AB5B9917568D5 /* libPods-gypsie.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F11CB6B22A2A5EB711575B2 /* libPods-gypsie.a */; };
+		A6898ECDF9D90243E9A45F0A /* libPods-gypsie.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6023B28BEEADFA3D663D9CAF /* libPods-gypsie.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,7 +51,7 @@
 		00E356EE1AD99517003FC87E /* gypsieTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = gypsieTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* gypsieTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = gypsieTests.m; sourceTree = "<group>"; };
-		0DD569CC1A0256F1E19E6E27 /* Pods-gypsie-gypsieTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gypsie-gypsieTests.release.xcconfig"; path = "Target Support Files/Pods-gypsie-gypsieTests/Pods-gypsie-gypsieTests.release.xcconfig"; sourceTree = "<group>"; };
+		0176E2EDE6BDC1FF263B116B /* Pods-gypsie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gypsie.debug.xcconfig"; path = "Target Support Files/Pods-gypsie/Pods-gypsie.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* gypsie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gypsie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = gypsie/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = gypsie/AppDelegate.mm; sourceTree = "<group>"; };
@@ -59,10 +59,11 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = gypsie/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = gypsie/main.m; sourceTree = "<group>"; };
 		27CC348C97E446D7982C03C9 /* Satisfy-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satisfy-Regular.ttf"; path = "../assets/fonts/Satisfy-Regular.ttf"; sourceTree = "<group>"; };
-		72B2CD4759F56A580805F4A2 /* Pods-gypsie-gypsieTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gypsie-gypsieTests.debug.xcconfig"; path = "Target Support Files/Pods-gypsie-gypsieTests/Pods-gypsie-gypsieTests.debug.xcconfig"; sourceTree = "<group>"; };
-		7DCDDF1DBD314A6B0D6BBAC1 /* Pods-gypsie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gypsie.release.xcconfig"; path = "Target Support Files/Pods-gypsie/Pods-gypsie.release.xcconfig"; sourceTree = "<group>"; };
+		56C21CAF94B1A7BFA7416044 /* Pods-gypsie-gypsieTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gypsie-gypsieTests.debug.xcconfig"; path = "Target Support Files/Pods-gypsie-gypsieTests/Pods-gypsie-gypsieTests.debug.xcconfig"; sourceTree = "<group>"; };
+		5AA2DDA6950735B5CCA0208A /* libPods-gypsie-gypsieTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-gypsie-gypsieTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6023B28BEEADFA3D663D9CAF /* libPods-gypsie.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-gypsie.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = gypsie/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		8F11CB6B22A2A5EB711575B2 /* libPods-gypsie.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-gypsie.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		94E865E6562AD7F552C4F4EB /* Pods-gypsie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gypsie.release.xcconfig"; path = "Target Support Files/Pods-gypsie/Pods-gypsie.release.xcconfig"; sourceTree = "<group>"; };
 		9EEEDCB62B23A2E5007408AE /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		9EEEDCB72B23A2E5007408AE /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		9EEEDCB82B23A2E5007408AE /* Ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
@@ -82,9 +83,8 @@
 		9EEEDCC62B23A2E6007408AE /* Feather.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		9EEEDCC72B23A2E6007408AE /* FontAwesome6_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome6_Brands.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome6_Brands.ttf"; sourceTree = "<group>"; };
 		9EEEDCC82B23A2E6007408AE /* Foundation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
-		B97FCEA08DD30B9AAF68E47D /* Pods-gypsie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gypsie.debug.xcconfig"; path = "Target Support Files/Pods-gypsie/Pods-gypsie.debug.xcconfig"; sourceTree = "<group>"; };
+		EA0E445BF483ED8A6F1DAF00 /* Pods-gypsie-gypsieTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-gypsie-gypsieTests.release.xcconfig"; path = "Target Support Files/Pods-gypsie-gypsieTests/Pods-gypsie-gypsieTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F5E0709C288E5BDC957D1F05 /* libPods-gypsie-gypsieTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-gypsie-gypsieTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F8AF291EE7AA4030B88A1E3E /* LilitaOne-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LilitaOne-Regular.ttf"; path = "../assets/fonts/LilitaOne-Regular.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -93,7 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				660C94275D6BF6F8631EE7AB /* libPods-gypsie-gypsieTests.a in Frameworks */,
+				2D29CDD92B304C51FE906C89 /* libPods-gypsie-gypsieTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,7 +101,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E9BCE192CF4AB5B9917568D5 /* libPods-gypsie.a in Frameworks */,
+				A6898ECDF9D90243E9A45F0A /* libPods-gypsie.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,8 +142,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				8F11CB6B22A2A5EB711575B2 /* libPods-gypsie.a */,
-				F5E0709C288E5BDC957D1F05 /* libPods-gypsie-gypsieTests.a */,
+				6023B28BEEADFA3D663D9CAF /* libPods-gypsie.a */,
+				5AA2DDA6950735B5CCA0208A /* libPods-gypsie-gypsieTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -183,10 +183,10 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				B97FCEA08DD30B9AAF68E47D /* Pods-gypsie.debug.xcconfig */,
-				7DCDDF1DBD314A6B0D6BBAC1 /* Pods-gypsie.release.xcconfig */,
-				72B2CD4759F56A580805F4A2 /* Pods-gypsie-gypsieTests.debug.xcconfig */,
-				0DD569CC1A0256F1E19E6E27 /* Pods-gypsie-gypsieTests.release.xcconfig */,
+				0176E2EDE6BDC1FF263B116B /* Pods-gypsie.debug.xcconfig */,
+				94E865E6562AD7F552C4F4EB /* Pods-gypsie.release.xcconfig */,
+				56C21CAF94B1A7BFA7416044 /* Pods-gypsie-gypsieTests.debug.xcconfig */,
+				EA0E445BF483ED8A6F1DAF00 /* Pods-gypsie-gypsieTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -226,12 +226,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "gypsieTests" */;
 			buildPhases = (
-				2A40B02DAE8F01BB46ECD8E7 /* [CP] Check Pods Manifest.lock */,
+				ADA536B01A9660D5C59C0EC1 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				651A96E09513F29D46364423 /* [CP] Embed Pods Frameworks */,
-				944298A7FC98861747594A12 /* [CP] Copy Pods Resources */,
+				DBBC6D88155283B41B048FC8 /* [CP] Embed Pods Frameworks */,
+				488C7CBE2453622B689B5C16 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -247,14 +247,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "gypsie" */;
 			buildPhases = (
-				C2161D62ECF1064A38279587 /* [CP] Check Pods Manifest.lock */,
+				05F45BE23C00C1BBAC214079 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				3F626F1FDA35F95B1D4B5A5F /* [CP] Embed Pods Frameworks */,
-				D1CA77796F1DFBAAC921D3E4 /* [CP] Copy Pods Resources */,
+				201B6DBB422A36D9778187A5 /* [CP] Embed Pods Frameworks */,
+				E7744FA1C56FA2F8F120A3E1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -358,80 +358,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		2A40B02DAE8F01BB46ECD8E7 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-gypsie-gypsieTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		3F626F1FDA35F95B1D4B5A5F /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-gypsie/Pods-gypsie-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-gypsie/Pods-gypsie-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-gypsie/Pods-gypsie-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		651A96E09513F29D46364423 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-gypsie-gypsieTests/Pods-gypsie-gypsieTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-gypsie-gypsieTests/Pods-gypsie-gypsieTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-gypsie-gypsieTests/Pods-gypsie-gypsieTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		944298A7FC98861747594A12 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-gypsie-gypsieTests/Pods-gypsie-gypsieTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-gypsie-gypsieTests/Pods-gypsie-gypsieTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-gypsie-gypsieTests/Pods-gypsie-gypsieTests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C2161D62ECF1064A38279587 /* [CP] Check Pods Manifest.lock */ = {
+		05F45BE23C00C1BBAC214079 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -453,7 +380,80 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D1CA77796F1DFBAAC921D3E4 /* [CP] Copy Pods Resources */ = {
+		201B6DBB422A36D9778187A5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-gypsie/Pods-gypsie-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-gypsie/Pods-gypsie-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-gypsie/Pods-gypsie-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		488C7CBE2453622B689B5C16 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-gypsie-gypsieTests/Pods-gypsie-gypsieTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-gypsie-gypsieTests/Pods-gypsie-gypsieTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-gypsie-gypsieTests/Pods-gypsie-gypsieTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		ADA536B01A9660D5C59C0EC1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-gypsie-gypsieTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DBBC6D88155283B41B048FC8 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-gypsie-gypsieTests/Pods-gypsie-gypsieTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-gypsie-gypsieTests/Pods-gypsie-gypsieTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-gypsie-gypsieTests/Pods-gypsie-gypsieTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E7744FA1C56FA2F8F120A3E1 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -522,7 +522,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 72B2CD4759F56A580805F4A2 /* Pods-gypsie-gypsieTests.debug.xcconfig */;
+			baseConfigurationReference = 56C21CAF94B1A7BFA7416044 /* Pods-gypsie-gypsieTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -549,7 +549,7 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0DD569CC1A0256F1E19E6E27 /* Pods-gypsie-gypsieTests.release.xcconfig */;
+			baseConfigurationReference = EA0E445BF483ED8A6F1DAF00 /* Pods-gypsie-gypsieTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -573,7 +573,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B97FCEA08DD30B9AAF68E47D /* Pods-gypsie.debug.xcconfig */;
+			baseConfigurationReference = 0176E2EDE6BDC1FF263B116B /* Pods-gypsie.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
@@ -601,7 +601,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7DCDDF1DBD314A6B0D6BBAC1 /* Pods-gypsie.release.xcconfig */;
+			baseConfigurationReference = 94E865E6562AD7F552C4F4EB /* Pods-gypsie.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;

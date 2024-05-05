@@ -1,8 +1,13 @@
 import { StyleSheet, View } from 'react-native';
 import { Slider } from '@miblanchard/react-native-slider';
 import type { VlogPlayerSliderProps } from './types/types';
+import { PALETTE } from '@constants/palette';
 
-const VlogPlayerSlider = ({ value, maxValue }: VlogPlayerSliderProps) => {
+const VlogPlayerSlider = ({
+  value,
+  maxValue,
+  scrubVideo,
+}: VlogPlayerSliderProps) => {
   // const BOTTOM_TAB_BAR_HEIGHT = useBottomTabBarHeight();
   const BOTTOM_TAB_BAR_HEIGHT = 80;
 
@@ -11,12 +16,13 @@ const VlogPlayerSlider = ({ value, maxValue }: VlogPlayerSliderProps) => {
       <Slider
         containerStyle={styles.container}
         trackStyle={styles.track}
+        thumbStyle={styles.thumb}
         value={value}
         maximumValue={maxValue}
-        minimumTrackTintColor="orange"
-        maximumTrackTintColor="grey"
-        thumbStyle={styles.thumb}
+        maximumTrackTintColor={PALETTE.DARKGREY}
+        minimumTrackTintColor={PALETTE.ORANGE}
         trackClickable
+        onValueChange={scrubVideo}
       />
     </View>
   );
@@ -28,9 +34,7 @@ const styles = StyleSheet.create({
     width: '100%',
     zIndex: 999999,
   },
-  track: {
-    borderColor: 'blue',
-  },
+  track: {},
   thumb: {
     height: 15,
     width: 15,

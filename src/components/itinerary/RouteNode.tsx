@@ -10,8 +10,8 @@ import {
   itineraryPlanner_openModal,
   itineraryPlanner_setSelectedRouteNodeId,
 } from '@redux/reducers/itineraryPlannerSlice';
-import GypsieButton from '../common/buttons/GypsieButton';
-import CopyIcon from '../common/icons/CopyIcon';
+import GypsieButton from '@components/common/buttons/GypsieButton';
+import CopyIcon from '@icons/CopyIcon';
 import Clipboard from '@react-native-clipboard/clipboard';
 
 const RouteNode = ({ routeNode }: RouteNodeProps) => {
@@ -96,23 +96,24 @@ const RouteNode = ({ routeNode }: RouteNodeProps) => {
 
 const styles = StyleSheet.create({
   routeNode: {
-    minHeight: 55,
-    // height: 55,
     justifyContent: 'center',
+    minHeight: 55,
     width: DIMENSION.HUNDRED_PERCENT,
     marginBottom: 4,
     padding: 8,
     paddingLeft: 16,
     borderWidth: 1,
-    borderRadius: 4,
     borderColor: PALETTE.LIGHTGREY,
+    borderRadius: 4,
     backgroundColor: PALETTE.WHITE,
     overflow: 'hidden',
   },
   colourTab: {
     position: 'absolute',
-    height: '100%',
+    left: 0,
+    height: DIMENSION.HUNDRED_PERCENT,
     width: 8,
+    borderWidth: 0,
     borderTopRightRadius: 4,
     borderBottomRightRadius: 4,
   },

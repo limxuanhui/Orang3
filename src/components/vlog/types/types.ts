@@ -14,4 +14,5 @@ export enum VlogPlayerStatus {
 export type VlogPlayerSliderProps = {
   value: number;
   maxValue: number;
+  scrubVideo: (value: number | number[]) => void;
 };

@@ -13,6 +13,7 @@ import { PALETTE } from '@constants/palette';
 import LinearGradient from 'react-native-linear-gradient';
 import ChevronDownIcon from '@icons/ChevronDown';
 import ChevronUpIcon from '@icons/ChevronUp';
+import { DIMENSION } from '@constants/dimensions';
 
 type RouteViewerProps = {
   route: Route;
@@ -61,13 +62,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: DEVICE_WIDTH * 0.05,
-    width: DEVICE_WIDTH * 0.9,
-    padding: 8,
     minHeight: 80,
+    width: DEVICE_WIDTH * 0.95,
+    marginHorizontal: DEVICE_WIDTH * 0.025,
+    padding: 16,
     borderRadius: 12,
   },
-  scrollView: { width: '100%' },
+  scrollView: { width: DIMENSION.HUNDRED_PERCENT },
   scrollViewContent: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
   },
   collapsible: {
     bottom: 0,
-    width: '100%',
+    width: DIMENSION.HUNDRED_PERCENT,
     justifyContent: 'center',
     alignItems: 'center',
   },
