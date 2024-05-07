@@ -15,9 +15,6 @@ export type ProfileScreenParams = {
 
 export type ProfileStackNavigatorParamList = {
   Profile: ProfileScreenParams;
-  Settings: undefined;
-  Account: undefined;
-  Privacy: undefined;
 };
 
 // --------------------------- ProfileScreen ---------------------------
@@ -34,36 +31,6 @@ export type ProfileScreenNavigationProp = CompositeNavigationProp<
 export type ProfileScreenRouteProp = RouteProp<
   ProfileStackNavigatorParamList,
   'Profile'
->;
-
-// --------------------------- SettingsScreen ---------------------------
-export type SettingsScreenProps = {
-  navigation: SettingsScreenNavigationProp;
-};
-
-type SettingsScreenNavigationProp = StackNavigationProp<
-  ProfileStackNavigatorParamList,
-  'Settings'
->;
-
-// --------------------------- AccountScreen ---------------------------
-export type AccountScreenProps = {
-  navigation: AccountScreenNavigationProp;
-};
-
-type AccountScreenNavigationProp = StackNavigationProp<
-  ProfileStackNavigatorParamList,
-  'Account'
->;
-
-// --------------------------- PrivacyScreen ---------------------------
-export type PrivacyScreenProps = {
-  navigation: PrivacyScreenNavigationProp;
-};
-
-type PrivacyScreenNavigationProp = StackNavigationProp<
-  ProfileStackNavigatorParamList,
-  'Privacy'
 >;
 
 // --------------------------- AvatarScreen ---------------------------

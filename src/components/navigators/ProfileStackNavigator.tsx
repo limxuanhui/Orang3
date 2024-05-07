@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import AccountScreen from '@screens/profile/AccountScreen';
-import PrivacyScreen from '@screens/profile/PrivacyScreen';
+// import AccountScreen from 'components/screens/settings/AccountScreen';
+// import PrivacyScreen from 'components/screens/settings/PrivacyScreen';
+// import SettingsScreen from 'components/screens/settings/SettingsScreen';
 import ProfileScreen from '@screens/profile/ProfileScreen';
-import SettingsScreen from '@screens/profile/SettingsScreen';
 import { AuthContext } from '@contexts/AuthContext';
 import type { ProfileStackNavigatorParamList } from '@screens/profile/types/types';
 import { PALETTE } from '@constants/palette';
@@ -22,48 +22,9 @@ const ProfileStackNavigator = () => {
         component={ProfileScreen}
         initialParams={{ user }}
         options={{
-          // headerShown: true,
           headerBackTitleVisible: true,
           headerTitle: 'profile',
-          // headerStyle: { backgroundColor: PALETTE.BLACK },
           headerTintColor: PALETTE.BLACK,
-          // headerShadowVisible: false,
-        }}
-      />
-      <ProfileStack.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          headerShown: true,
-          headerBackTitleVisible: false,
-          headerTitle: '',
-          headerStyle: { backgroundColor: PALETTE.OFFWHITE },
-          headerTintColor: PALETTE.BLACK,
-          headerShadowVisible: false,
-        }}
-      />
-      <ProfileStack.Screen
-        name="Account"
-        component={AccountScreen}
-        options={{
-          headerShown: true,
-          headerBackTitleVisible: false,
-          headerTitle: 'Account',
-          headerStyle: { backgroundColor: PALETTE.OFFWHITE },
-          headerTintColor: PALETTE.BLACK,
-          headerShadowVisible: false,
-        }}
-      />
-      <ProfileStack.Screen
-        name="Privacy"
-        component={PrivacyScreen}
-        options={{
-          headerShown: true,
-          headerBackTitleVisible: false,
-          headerTitle: 'Privacy',
-          headerStyle: { backgroundColor: PALETTE.OFFWHITE },
-          headerTintColor: PALETTE.BLACK,
-          headerShadowVisible: false,
         }}
       />
     </ProfileStack.Navigator>

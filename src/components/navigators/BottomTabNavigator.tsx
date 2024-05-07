@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react';
+import { ReactNode, useCallback, useContext } from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -21,7 +21,74 @@ const BottomTabNavigator = () => {
     return null;
   }, []);
 
-  // if (user) {
+  const homeTabBarIcon = useCallback(
+    ({
+      focused,
+    }: {
+      focused: boolean;
+      color: string;
+      size: number;
+    }): ReactNode => (
+      <MaterialCommunityIcons
+        name="flower"
+        size={24}
+        color={focused ? PALETTE.ORANGE : PALETTE.GREY}
+      />
+    ),
+    [],
+  );
+
+  const taleStackTabBarIcon = useCallback(
+    ({
+      focused,
+    }: {
+      focused: boolean;
+      color: string;
+      size: number;
+    }): ReactNode => {
+      if (focused) {
+        return <BookOpenIcon style={{ fontSize: 24, color: PALETTE.ORANGE }} />;
+      } else {
+        return <BookIcon style={{ fontSize: 24, color: PALETTE.GREY }} />;
+      }
+    },
+    [],
+  );
+
+  const newPostTabBarIcon = useCallback(() => <NewPostOptions />, []);
+
+  const profileStackTabBarIcon = useCallback(
+    ({
+      focused,
+    }: {
+      focused: boolean;
+      color: string;
+      size: number;
+    }): ReactNode =>
+      user?.avatar ? (
+        <Image
+          style={[
+            styles.avatar,
+            {
+              borderColor: focused ? PALETTE.ORANGE : PALETTE.LIGHTGREY,
+              height: focused ? 32 : 24,
+              width: focused ? 32 : 24,
+            },
+          ]}
+          source={{
+            uri: user.avatar?.uri,
+          }}
+        />
+      ) : (
+        <MaterialCommunityIcons
+          name="brain"
+          size={24}
+          color={focused ? PALETTE.ORANGE : PALETTE.GREY}
+        />
+      ),
+    [user?.avatar],
+  );
+
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
@@ -35,7 +102,8 @@ const BottomTabNavigator = () => {
               route.name === 'TaleStack' ||
               route.name === 'DriverStack'
                 ? PALETTE.GREYISHBLUE
-                : PALETTE.TRANSPARENT,
+                : // PALETTE.TRANSPARENT
+                  PALETTE.TRANSPARENT,
             position: 'absolute',
             bottom: 0,
 
@@ -58,13 +126,7 @@ const BottomTabNavigator = () => {
         component={HomeScreen}
         options={{
           tabBarShowLabel: false,
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="flower"
-              size={24}
-              color={focused ? PALETTE.ORANGE : PALETTE.GREY}
-            />
-          ),
+          tabBarIcon: homeTabBarIcon,
         }}
       />
       <BottomTab.Screen
@@ -72,15 +134,7 @@ const BottomTabNavigator = () => {
         component={TaleStackNavigator}
         options={{
           tabBarShowLabel: false,
-          tabBarIcon: ({ focused }) => {
-            if (focused) {
-              return (
-                <BookOpenIcon style={{ fontSize: 24, color: PALETTE.ORANGE }} />
-              );
-            } else {
-              return <BookIcon style={{ fontSize: 24, color: PALETTE.GREY }} />;
-            }
-          },
+          tabBarIcon: taleStackTabBarIcon,
         }}
       />
       <BottomTab.Screen
@@ -88,7 +142,7 @@ const BottomTabNavigator = () => {
         component={Placeholder}
         options={{
           tabBarShowLabel: false,
-          tabBarButton: () => <NewPostOptions />,
+          tabBarButton: newPostTabBarIcon,
         }}
       />
       <BottomTab.Screen
@@ -96,34 +150,12 @@ const BottomTabNavigator = () => {
         component={ProfileStackNavigator}
         options={{
           tabBarShowLabel: false,
-          tabBarIcon: ({ focused }) =>
-            user?.avatar ? (
-              <Image
-                style={[
-                  styles.avatar,
-                  {
-                    borderColor: focused ? PALETTE.ORANGE : PALETTE.LIGHTGREY,
-                    height: focused ? 32 : 24,
-                    width: focused ? 32 : 24,
-                  },
-                ]}
-                source={{
-                  uri: user.avatar?.uri,
-                }}
-              />
-            ) : (
-              <MaterialCommunityIcons
-                name="brain"
-                size={24}
-                color={focused ? PALETTE.ORANGE : PALETTE.GREY}
-              />
-            ),
+          tabBarIcon: profileStackTabBarIcon,
         }}
       />
     </BottomTab.Navigator>
   );
 };
-// };
 
 const styles = StyleSheet.create({
   avatar: {

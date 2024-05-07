@@ -5,14 +5,15 @@ import {
 } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EncryptedStorage from 'react-native-encrypted-storage';
-import { AuthorizeResult, authorize } from 'react-native-app-auth';
+// import { AuthorizeResult, authorize } from 'react-native-app-auth';
 import jwtDecode from 'jwt-decode';
 import { v4 as uuidv4 } from 'uuid';
 import type { GypsieUser } from '@navigators/types/types';
 import { printPrettyJson } from '@helpers/functions';
-import { GOOGLE_IOS_CLIENT_ID, GOOGLE_ISSUER_URL, REDIRECT_URL } from '@env';
+// import { GOOGLE_IOS_CLIENT_ID, GOOGLE_ISSUER_URL, REDIRECT_URL } from '@env';
 import { axiosClient } from '@helpers/singletons';
 import { AUTH_SIGNIN_URL } from '@constants/urls';
+import { urlFactory } from '@helpers/factory';
 
 type GoogleIdToken = {
   iss: string;
@@ -236,43 +237,42 @@ const useAuthManager = () => {
     setLoading(false);
   }, [decodeIdToken, storeUserIdToken, storeUserData]);
 
-  const googleAuthHandler = async () => {
-    const config = {
-      issuer: GOOGLE_ISSUER_URL,
-      clientId: GOOGLE_IOS_CLIENT_ID, // configure to use android client id if platform is android
-      redirectUrl: REDIRECT_URL,
-      scopes: ['openid', 'profile', 'write'],
-    };
-
-    try {
-      const authRes: AuthorizeResult = await authorize(config);
-      console.log('====== Authorize Result ======');
-      console.log(JSON.stringify(authRes, null, 4));
-      console.log('==============================');
-
-      if (authRes.idToken) {
-        const decodedIdToken = decodeIdToken(authRes.idToken);
-        console.log('====== decodedIdToken ======');
-        console.log(decodedIdToken);
+  const deactivateUserHandler = useCallback(async () => {
+    console.log('Deactivating user...', user?.id);
+    if (user?.id) {
+      try {
+        // 111685005251737181201
+        console.log('Starting deactivation of user...');
+        // const response = await axiosClient.post(
+        //   urlFactory('user-account-deactivate-by-userid', { id: userId }),
+        // );
+        console.log('Deactivated user...');
+        // printPrettyJson(response.data);
+      } catch (err) {
+        console.error(err);
       }
-      // await storeUserIdToken();
-      // await storeUserData(authUser);
-
-      // setUser(authUser);
-      // setIsLoggedIn(true);
-    } catch (e) {
-      console.error(e);
     }
-  };
+  }, [user?.id]);
 
-  const googleSignoutHandler = async () => {
-    try {
-      // await signOut({ global: true });
-      await logoutHandler();
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const deleteUserHandler = useCallback(
+    async (userId: string) => {
+      console.log('Deleting user...', userId, user?.id);
+      if (userId === user?.id) {
+        try {
+          // 111685005251737181201
+          console.log('Starting deletion of user...');
+          const response = await axiosClient.delete(
+            urlFactory('user-account-delete-by-userid', { id: userId }),
+          );
+          console.log('Deleted user...');
+          printPrettyJson(response.data);
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    },
+    [user?.id],
+  );
 
   useEffect(() => {
     console.log('useAuthManager useEffect called...');
@@ -311,8 +311,10 @@ const useAuthManager = () => {
     loading,
     googleSigninHandler,
     logoutHandler,
-    googleAuthHandler,
-    googleSignoutHandler,
+    deactivateUserHandler,
+    deleteUserHandler,
+    // googleAuthHandler,
+    // googleSignoutHandler,
   };
 };
 

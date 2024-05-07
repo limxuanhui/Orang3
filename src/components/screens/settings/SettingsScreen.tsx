@@ -1,18 +1,21 @@
 import { useCallback, useContext } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { AuthContext } from '@contexts/AuthContext';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
 import { PALETTE } from '@constants/palette';
 import type { SettingsScreenProps } from './types/types';
+import GypsieButton from '@components/common/buttons/GypsieButton';
+import UserIcon from '@components/common/icons/UserIcon';
+import LogoutIcon from '@icons/LogoutIcon';
+import { DIMENSION } from '@constants/dimensions';
 
-const SettingsScreen = ({}: SettingsScreenProps) => {
+const SettingsScreen = ({ navigation }: SettingsScreenProps) => {
   const { logoutHandler } = useContext(AuthContext);
 
-  // const onPressAccount = useCallback(() => {
-  //   navigation.push('Account');
-  // }, [navigation]);
+  const onPressAccount = useCallback(() => {
+    navigation.push('Account');
+  }, [navigation]);
 
   // const onPressPrivacy = useCallback(() => {
   //   navigation.push('Privacy');
@@ -25,61 +28,56 @@ const SettingsScreen = ({}: SettingsScreenProps) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Account settings</Text>
+      <Text style={styles.title}>Settings</Text>
       <ScrollView>
-        {/* <View style={styles.section}>
-          <Text style={styles.subtitle}>Account</Text>
-          <View style={styles.sectionItems}>
-            <Pressable
-              style={({ pressed }) => [
-                styles.sectionItem,
-                {
-                  backgroundColor: pressed ? PALETTE.OFFWHITE : PALETTE.WHITE,
-                },
-              ]}
-              onPress={onPressAccount}>
-              <FontAwesome name="user" color={PALETTE.DARKGREY} size={16} />
-              <Text style={styles.sectionItemTitle}>Account</Text>
-              <Ionicons
-                style={styles.rightChevron}
-                name="chevron-forward"
-                color={PALETTE.DARKGREY}
-                size={16}
-              />
-            </Pressable>
-            <Pressable
-              style={({ pressed }) => [
-                styles.sectionItem,
-                {
-                  backgroundColor: pressed ? PALETTE.OFFWHITE : PALETTE.WHITE,
-                },
-              ]}
-              onPress={onPressPrivacy}>
-              <FontAwesome name="lock" color={PALETTE.DARKGREY} size={16} />
-              <Text style={styles.sectionItemTitle}>Privacy</Text>
-              <Ionicons
-                style={styles.rightChevron}
-                name="chevron-forward"
-                color={PALETTE.DARKGREY}
-                size={16}
-              />
-            </Pressable>
-          </View>
-        </View> */}
         <View style={styles.section}>
           <Text style={styles.subtitle}>Account</Text>
           <View style={styles.sectionItems}>
-            <Pressable
-              style={({ pressed }) => [
+            <GypsieButton
+              customButtonStyles={({ pressed }) => [
                 styles.sectionItem,
                 {
                   backgroundColor: pressed ? PALETTE.OFFWHITE : PALETTE.WHITE,
                 },
               ]}
-              onPress={onPressLogout}>
-              <MaterialIcons name="logout" color={PALETTE.DARKGREY} size={16} />
-              <Text style={styles.sectionItemTitle}>Log out</Text>
-            </Pressable>
+              customIconStyles={styles.sectionItemIcon}
+              customTextStyles={styles.sectionItemTitle}
+              Icon={UserIcon}
+              text="Account"
+              onPress={onPressAccount}
+            />
+            {/* <Divider />
+            <GypsieButton
+              customButtonStyles={({ pressed }) => [
+                styles.sectionItem,
+                {
+                  backgroundColor: pressed ? PALETTE.OFFWHITE : PALETTE.WHITE,
+                },
+              ]}
+              customIconStyles={styles.sectionItemIcon}
+              customTextStyles={styles.sectionItemTitle}
+              Icon={LockIcon}
+              text="Privacy"
+              onPress={onPressPrivacy}
+            /> */}
+          </View>
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.subtitle}>Log in</Text>
+          <View style={styles.sectionItems}>
+            <GypsieButton
+              customButtonStyles={({ pressed }) => [
+                styles.sectionItem,
+                {
+                  backgroundColor: pressed ? PALETTE.OFFWHITE : PALETTE.WHITE,
+                },
+              ]}
+              customIconStyles={styles.sectionItemIcon}
+              customTextStyles={styles.sectionItemTitle}
+              Icon={LogoutIcon}
+              text="Log out"
+              onPress={onPressLogout}
+            />
           </View>
         </View>
       </ScrollView>
@@ -94,32 +92,34 @@ const styles = StyleSheet.create({
     backgroundColor: PALETTE.OFFWHITE,
   },
   title: {
-    marginLeft: 16,
+    marginLeft: 24,
     fontFamily: 'Futura',
     fontSize: 24,
-    fontWeight: '800',
-    letterSpacing: 0,
+    fontWeight: 'bold',
   },
   subtitle: {
-    marginHorizontal: 16,
-    marginVertical: 8,
+    margin: 8,
     fontSize: 14,
     fontWeight: 'bold',
     color: PALETTE.DARKGREY,
   },
-  section: { marginVertical: 8 },
+  section: { marginVertical: 8, paddingHorizontal: 16 },
   sectionItems: {
     alignSelf: 'center',
-    width: DEVICE_WIDTH - 16,
+    width: DIMENSION.HUNDRED_PERCENT,
     backgroundColor: PALETTE.WHITE,
   },
   sectionItem: {
-    flexDirection: 'row',
-    padding: 8,
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    padding: 8,
+    opacity: 1,
+  },
+  sectionItemIcon: {
+    fontSize: 16,
+    color: PALETTE.DARKGREY,
   },
   sectionItemTitle: { marginLeft: 8, fontWeight: 'bold', fontSize: 16 },
-  rightChevron: { position: 'absolute', right: 8 },
 });
 
 export default SettingsScreen;

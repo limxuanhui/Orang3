@@ -20,6 +20,7 @@ export const PALETTE = {
   NAVYBLUE: '#000080',
   GREYISHBLUE: '#192d36',
   ORANGE: '#ffa500',
+  REDPINK: '#fe2858',
 };
 
 export const SHADOW = {

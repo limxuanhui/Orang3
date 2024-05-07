@@ -64,4 +64,11 @@ export type ModalNavigatorParamList = {
   Avatar: AvatarScreenParams;
   PlaceSearch: PlaceSearchScreenParams;
   Profile: ProfileScreenParams;
+  Settings: undefined;
+  Account: undefined;
+  UserInfo: undefined;
+  DeleteOrDeactivate: undefined;
+  Delete: undefined;
+  Deactivate: undefined;
+  Privacy: undefined;
 };

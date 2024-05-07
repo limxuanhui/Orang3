@@ -10,6 +10,8 @@ import {
   TALES_METADATA_BY_USERID_URL,
   TALES_METADATA_URL,
   TALES_URL,
+  USER_ACCOUNT_DEACTIVATE_URL,
+  USER_ACCOUNT_DELETE_URL,
 } from '@constants/urls';
 
 export const keyFactory = (key: DataKey, id?: string) => {
@@ -60,6 +62,18 @@ export const urlFactory = (
   options?: { id?: string; base64Key?: string },
 ) => {
   switch (key) {
+    case 'user-account-deactivate-by-userid':
+      if (options && options.id) {
+        return `${USER_ACCOUNT_DEACTIVATE_URL}/${options.id}`;
+      }
+      throw Error(`Key ${key} requires a valid id`);
+
+    case 'user-account-delete-by-userid':
+      if (options && options.id) {
+        return `${USER_ACCOUNT_DELETE_URL}/${options.id}`;
+      }
+      throw Error(`Key ${key} requires a valid id`);
+
     case 'feeds':
       if (options && options.base64Key) {
         return `${FEEDS_URL}?base64Key=${options.base64Key}`;

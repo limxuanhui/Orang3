@@ -10,7 +10,9 @@ export type DataKey =
   | 'tale-edit'
   | 'tales-metadata'
   | 'tales-metadata-by-userid'
-  | 'users';
+  | 'users'
+  | 'user-account-deactivate-by-userid'
+  | 'user-account-delete-by-userid';
 
 // type DataAction =
 //   | 'GET_NEXT_FEEDS_PAGE'

@@ -7,6 +7,8 @@ type Auth = {
   loading: boolean;
   googleSigninHandler: () => void;
   logoutHandler: () => void;
+  deactivateUserHandler: () => void;
+  deleteUserHandler: (userId: string) => void;
 };
 
 export const AuthContext = createContext<Auth>({
@@ -15,4 +17,6 @@ export const AuthContext = createContext<Auth>({
   loading: false,
   googleSigninHandler: () => {},
   logoutHandler: () => {},
+  deactivateUserHandler: () => {},
+  deleteUserHandler: () => {},
 });

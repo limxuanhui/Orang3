@@ -1,18 +1,18 @@
 import { useCallback, useState } from 'react';
 import { ScrollView, StyleSheet, Text } from 'react-native';
-import { Route, RouteNode as RouteNodeInfo } from './types/types';
-import { DEVICE_WIDTH } from '@constants/constants';
+import LinearGradient from 'react-native-linear-gradient';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import type { Route, RouteNode as RouteNodeInfo } from './types/types';
 import RouteNode from './RouteNode';
 import GypsieButton from '@components/common/buttons/GypsieButton';
+import ChevronDownIcon from '@icons/ChevronDownIcon';
+import ChevronUpIcon from '@icons/ChevronUpIcon';
 import { PALETTE } from '@constants/palette';
-import LinearGradient from 'react-native-linear-gradient';
-import ChevronDownIcon from '@icons/ChevronDown';
-import ChevronUpIcon from '@icons/ChevronUp';
+import { DEVICE_WIDTH } from '@constants/constants';
 import { DIMENSION } from '@constants/dimensions';
 
 type RouteViewerProps = {

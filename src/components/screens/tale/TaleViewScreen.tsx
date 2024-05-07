@@ -35,7 +35,7 @@ import {
   itineraryPlanner_resetItineraryPlannerSlice,
 } from '@redux/reducers/itineraryPlannerSlice';
 
-import ChevronsUpIcon from '@icons/ChevronsUp';
+import ChevronsUpIcon from '@icons/ChevronsUpIcon';
 import useDataManager from '@hooks/useDataManager';
 import { STORY_TEXT_STYLES } from '@constants/text';
 import {

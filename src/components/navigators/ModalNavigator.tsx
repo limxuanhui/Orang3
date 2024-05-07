@@ -6,10 +6,17 @@ import ItineraryScreen from '@screens/tale/ItineraryScreen';
 import PlaceSearchScreen from '@screens/tale/PlaceSearchScreen';
 import ProfileScreen from '@screens/profile/ProfileScreen';
 import TaleViewScreen from '@screens/tale/TaleViewScreen';
-import { PALETTE } from '@constants/palette';
 import WriteFeedScreen from '@screens/post/WriteFeedScreen';
 import WriteTaleScreen from '@screens/post/WriteTaleScreen';
+import UserInfoScreen from '@screens/settings/UserInfoScreen';
+import DeleteOrDeactivateScreen from '@screens/settings/DeleteOrDeactivateScreen';
+import DeleteScreen from '@screens/settings/DeleteScreen';
+import DeactivateScreen from '@screens/settings/DeactivateScreen';
+import PrivacyScreen from '@screens/settings/PrivacyScreen';
+import AccountScreen from '@screens/settings/AccountScreen';
+import SettingsScreen from '@screens/settings/SettingsScreen';
 import type { ModalNavigatorParamList } from './types/types';
+import { PALETTE } from '@constants/palette';
 
 const Modal = createStackNavigator<ModalNavigatorParamList>();
 
@@ -17,16 +24,6 @@ const ModalNavigator = () => {
   console.log(
     '@@@@@@@@@@@@@@@@@@@ ModalNavigator rerendered @@@@@@@@@@@@@@@@@@@\n',
   );
-  // const config = useMemo(
-  //   () => ({
-  //     stiffness: 800,
-  //     damping: 50,
-  //     mass: 1,
-  //     overshootClamping: true,
-  //     velocity: { x: 100, y: 150 },
-  //   }),
-  //   [],
-  // );
 
   const options = useMemo(
     () => ({
@@ -36,14 +33,10 @@ const ModalNavigator = () => {
       headerTransparent: true,
       headerTintColor: PALETTE.GREY,
       headerShadowVisible: false,
-      useNativeDriver: true,
+      // useNativeDriver: true,
     }),
     [],
   );
-
-  // const onPressOptions = useCallback(() => {
-  //   console.log('Open share options');
-  // }, []);
 
   useEffect(() => {
     console.log('ModalNavigator mounted');
@@ -69,33 +62,11 @@ const ModalNavigator = () => {
       <Modal.Screen
         name="WriteTale"
         component={WriteTaleScreen}
-        options={{
-          ...options,
-          // headerTransparent: false,
-          // headerTintColor: PALETTE.GREY,
-          // headerRight: () => (
-          //   <GypsieButton
-          //     customButtonStyles={{
-          //       backgroundColor: "transparent",
-          //       width: "auto",
-          //       right: 16,
-          //     }}
-          //     customIconStyles={{ fontSize: 24, color: PALETTE.GREY }}
-          //     Icon={OptionsIcon}
-          //     onPress={onPressOptions}
-          //   />
-          // ),
-        }}
+        options={options}
       />
       <Modal.Screen
         name="TaleView"
         component={TaleViewScreen}
-        options={options}
-      />
-      <Modal.Screen name="Avatar" component={AvatarScreen} options={options} />
-      <Modal.Screen
-        name="Profile"
-        component={ProfileScreen}
         options={options}
       />
       <Modal.Screen
@@ -109,6 +80,108 @@ const ModalNavigator = () => {
         component={PlaceSearchScreen}
         options={options}
       />
+      <Modal.Screen name="Avatar" component={AvatarScreen} options={options} />
+      <Modal.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={options}
+      />
+      <Modal.Group>
+        <Modal.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{
+            ...options,
+            headerTransparent: false,
+            headerStyle: { backgroundColor: PALETTE.OFFWHITE },
+          }}
+        />
+        <Modal.Screen
+          name="Account"
+          component={AccountScreen}
+          options={{
+            ...options,
+            headerTransparent: false,
+            headerTitle: 'Account',
+            headerTitleStyle: {
+              fontFamily: 'Futura',
+              fontSize: 16,
+              fontWeight: 'bold',
+              color: PALETTE.BLACK,
+            },
+            headerStyle: { backgroundColor: PALETTE.OFFWHITE },
+          }}
+        />
+        <Modal.Screen
+          name="UserInfo"
+          component={UserInfoScreen}
+          options={{
+            ...options,
+            headerTransparent: false,
+            headerTitle: 'User Information',
+            headerTitleStyle: {
+              fontFamily: 'Futura',
+              fontSize: 16,
+              fontWeight: 'bold',
+              color: PALETTE.BLACK,
+            },
+            headerStyle: { backgroundColor: PALETTE.OFFWHITE },
+          }}
+        />
+        <Modal.Screen
+          name="DeleteOrDeactivate"
+          component={DeleteOrDeactivateScreen}
+          options={{
+            ...options,
+            headerTransparent: false,
+            headerTitle: '',
+            headerTitleStyle: {
+              fontFamily: 'Futura',
+              fontSize: 16,
+              fontWeight: 'bold',
+              color: PALETTE.BLACK,
+            },
+            headerStyle: { backgroundColor: PALETTE.OFFWHITE },
+          }}
+        />
+        <Modal.Screen
+          name="Delete"
+          component={DeleteScreen}
+          options={{
+            ...options,
+            headerTransparent: false,
+            headerTitle: '',
+            headerTitleStyle: {
+              fontFamily: 'Futura',
+              fontSize: 16,
+              fontWeight: 'bold',
+              color: PALETTE.BLACK,
+            },
+            headerStyle: { backgroundColor: PALETTE.OFFWHITE },
+          }}
+        />
+        <Modal.Screen
+          name="Deactivate"
+          component={DeactivateScreen}
+          options={{
+            ...options,
+            headerTransparent: false,
+            headerTitle: '',
+            headerTitleStyle: {
+              fontFamily: 'Futura',
+              fontSize: 16,
+              fontWeight: 'bold',
+              color: PALETTE.BLACK,
+            },
+            headerStyle: { backgroundColor: PALETTE.OFFWHITE },
+          }}
+        />
+        <Modal.Screen
+          name="Privacy"
+          component={PrivacyScreen}
+          options={options}
+        />
+      </Modal.Group>
     </Modal.Navigator>
   );
 };

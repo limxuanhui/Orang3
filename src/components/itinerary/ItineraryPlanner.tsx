@@ -20,13 +20,13 @@ import {
   LATITUDE_DELTA,
   LONGITUDE_DELTA,
   MAP_SCREEN_BOTTOM_SHEET_CONSTANTS,
-} from '../../utils/constants/constants';
-import { PALETTE } from '../../utils/constants/palette';
-import { useAppDispatch, useAppSelector } from '../../utils/redux/hooks';
-import { itineraryPlanner_closeModal } from '../../utils/redux/reducers/itineraryPlannerSlice';
+} from '@constants/constants';
+import { PALETTE } from '@constants/palette';
+import { useAppDispatch, useAppSelector } from '@redux/hooks';
+import { itineraryPlanner_closeModal } from '@redux/reducers/itineraryPlannerSlice';
 import ColourPickerModal from './ColourPickerModal';
 import GypsieButton from '../common/buttons/GypsieButton';
-import ChevronsUpIcon from '../common/icons/ChevronsUp';
+import ChevronsUpIcon from '@icons/ChevronsUpIcon';
 
 type ItineraryPlannerProps = {};
 

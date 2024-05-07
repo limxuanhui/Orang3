@@ -1,13 +1,17 @@
 import { useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { type ProfileScreenNavigationProp } from '@screens/profile/types/types';
-import { type GypsieUser } from '@navigators/types/types';
+import {
+  ModalNavigatorNavigationProp,
+  type GypsieUser,
+} from '@navigators/types/types';
 import { type TaleMetadata } from '@components/tale/types/types';
 import { type FeedMetadata } from '@components/feed/types/types';
 import useInfiniteDataManager from '@hooks/useInfiniteDataManager';
 
 const useProfileManager = (user: GypsieUser) => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
+  const modalNavigation = useNavigation<ModalNavigatorNavigationProp>();
 
   const onPressAvatar = useCallback(() => {
     if (user.avatar) {
@@ -19,8 +23,8 @@ const useProfileManager = (user: GypsieUser) => {
   }, [navigation, user.avatar]);
 
   const onPressSettings = useCallback(() => {
-    navigation.push('Settings');
-  }, [navigation]);
+    modalNavigation.push('Modal', { screen: 'Settings' });
+  }, [modalNavigation]);
 
   const { data: feedsMetadata, onRefresh: onRefreshFeedsMetadata } =
     useInfiniteDataManager<FeedMetadata[]>(
