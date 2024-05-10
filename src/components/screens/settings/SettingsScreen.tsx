@@ -98,12 +98,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   subtitle: {
-    margin: 8,
+    marginHorizontal: 16,
+    marginVertical: 8,
     fontSize: 14,
     fontWeight: 'bold',
     color: PALETTE.DARKGREY,
   },
-  section: { marginVertical: 8, paddingHorizontal: 16 },
+  section: { marginVertical: 8, paddingHorizontal: 8 },
   sectionItems: {
     alignSelf: 'center',
     width: DIMENSION.HUNDRED_PERCENT,
@@ -112,7 +113,8 @@ const styles = StyleSheet.create({
   sectionItem: {
     justifyContent: 'flex-start',
     alignItems: 'center',
-    padding: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
     opacity: 1,
   },
   sectionItemIcon: {

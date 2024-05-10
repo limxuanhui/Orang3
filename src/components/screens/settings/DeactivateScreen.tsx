@@ -7,7 +7,7 @@ import { AuthContext } from '@contexts/AuthContext';
 import GypsieBulletText from '@components/common/GypsieBulletText';
 
 const DeactivateScreen = () => {
-  const { user, deactivateUserHandler } = useContext(AuthContext);
+  const { user, loading, deactivateUserHandler } = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
@@ -43,9 +43,14 @@ const DeactivateScreen = () => {
         />
       </View>
       <GypsieButton
-        customButtonStyles={styles.deactivateButton}
+        customButtonStyles={[
+          styles.deactivateButton,
+          { backgroundColor: loading ? PALETTE.GREY : PALETTE.REDPINK },
+        ]}
         customTextStyles={styles.deactivateText}
         text="Deactivate"
+        loading={loading}
+        disabled={loading}
         onPress={deactivateUserHandler}
       />
     </View>
@@ -80,7 +85,6 @@ const styles = StyleSheet.create({
     height: 40,
     width: DEVICE_WIDTH - 64,
     borderRadius: 8,
-    backgroundColor: PALETTE.REDPINK,
   },
   deactivateText: {
     fontFamily: 'Futura',

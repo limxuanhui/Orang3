@@ -22,6 +22,10 @@ const UserInfoScreen = () => {
           <Text style={styles.title}>Email</Text>
           <Text style={styles.text}>{user?.email}</Text>
         </View>
+        <View style={styles.textContainer}>
+          <Text style={styles.title}>Joined at</Text>
+          <Text style={styles.text}>{user?.createdAt?.slice(0, 10)}</Text>
+        </View>
       </View>
     </View>
   );

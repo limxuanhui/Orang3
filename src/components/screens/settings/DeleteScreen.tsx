@@ -1,33 +1,23 @@
 import { useCallback, useContext } from 'react';
 import { Modal, StyleSheet, Text, View } from 'react-native';
-import { useQueryClient } from '@tanstack/react-query';
 import GypsieButton from '@components/common/buttons/GypsieButton';
+import GypsieBulletText from '@components/common/GypsieBulletText';
 import DeleteAccountModal from '@components/profile/DeleteAccountModal';
-import { PALETTE } from '@constants/palette';
 import { AuthContext } from '@contexts/AuthContext';
 import useModalHandlers from '@hooks/useModalHandlers';
 import { DEVICE_WIDTH } from '@constants/constants';
-import GypsieBulletText from '@components/common/GypsieBulletText';
+import { PALETTE } from '@constants/palette';
 
 const DeleteScreen = () => {
-  const { user, logoutHandler, deleteUserHandler } = useContext(AuthContext);
-  const queryClient = useQueryClient();
+  const { user, deleteUserHandler } = useContext(AuthContext);
   const { modalIsOpen, closeModal, openModal } = useModalHandlers();
 
   const onConfirmDelete = useCallback(
     async (userId: string) => {
-      console.warn(userId);
-      // Delete account with userid
-      deleteUserHandler(userId);
-
-      // Clear cache
-      queryClient.clear();
-
-      // Clear tokens
-      logoutHandler();
+      await deleteUserHandler(userId);
       closeModal();
     },
-    [closeModal, deleteUserHandler, logoutHandler, queryClient],
+    [closeModal, deleteUserHandler],
   );
 
   const onPressDelete = useCallback(() => {

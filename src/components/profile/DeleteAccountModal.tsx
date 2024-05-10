@@ -2,7 +2,6 @@ import { useCallback, useContext, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
-  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -11,6 +10,7 @@ import {
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
 import { AuthContext } from '@contexts/AuthContext';
+import GypsieButton from '@components/common/buttons/GypsieButton';
 
 type DeleteAccountModalProps = {
   onConfirm: (text: string) => void;
@@ -21,9 +21,9 @@ const DeleteAccountModal = ({
   onConfirm,
   onCancel,
 }: DeleteAccountModalProps) => {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
   const [enteredUserId, setEnteredUserId] = useState<string>('');
-  const confirmButtonIsDisabled = enteredUserId !== user?.id;
+  const confirmButtonIsDisabled = enteredUserId !== user?.id || loading;
 
   const onPressConfirm = useCallback(() => {
     onConfirm(enteredUserId);
@@ -53,32 +53,35 @@ const DeleteAccountModal = ({
             onChangeText={text => setEnteredUserId(text)}
           />
           <View style={styles.modalControls}>
-            <Pressable
-              style={({ pressed }) => [
+            <GypsieButton
+              customButtonStyles={({ pressed }) => [
                 styles.modalControl,
                 styles.cancelButton,
                 {
-                  opacity: pressed ? 0.9 : 1,
+                  opacity: pressed ? 0.5 : 1,
                 },
               ]}
-              onPress={onCancel}>
-              <Text style={styles.cancelButtonText}>Cancel</Text>
-            </Pressable>
-            <Pressable
-              style={({ pressed }) => [
+              customTextStyles={styles.cancelButtonText}
+              text="Cancel"
+              onPress={onCancel}
+            />
+            <GypsieButton
+              customButtonStyles={({ pressed }) => [
                 styles.modalControl,
                 styles.confirmButton,
                 {
                   opacity: pressed ? 0.9 : 1,
                   backgroundColor: confirmButtonIsDisabled
-                    ? PALETTE.LIGHTGREY
-                    : PALETTE.RED,
+                    ? PALETTE.GREY
+                    : PALETTE.REDPINK,
                 },
               ]}
+              customTextStyles={styles.confirmButtonText}
+              text="Delete my account"
+              loading={loading}
+              disabled={confirmButtonIsDisabled}
               onPress={onPressConfirm}
-              disabled={confirmButtonIsDisabled}>
-              <Text style={styles.confirmButtonText}>Delete my account</Text>
-            </Pressable>
+            />
           </View>
         </View>
       </View>
@@ -101,7 +104,7 @@ const styles = StyleSheet.create({
   modalCard: {
     justifyContent: 'space-between',
     alignSelf: 'center',
-    height: 200,
+    height: 250,
     width: 360,
     borderRadius: 16,
     backgroundColor: PALETTE.WHITE,
@@ -156,6 +159,7 @@ const styles = StyleSheet.create({
     padding: 6,
   },
   cancelButton: {
+    borderRadius: 0,
     borderBottomLeftRadius: 16,
     backgroundColor: PALETTE.WHITE,
   },
@@ -165,6 +169,7 @@ const styles = StyleSheet.create({
     color: PALETTE.REDPINK,
   },
   confirmButton: {
+    borderRadius: 0,
     borderBottomRightRadius: 16,
     backgroundColor: PALETTE.ORANGE,
   },

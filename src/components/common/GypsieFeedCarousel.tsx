@@ -87,10 +87,12 @@ const GypsieFeedCarousel = ({
                   <Image
                     style={[
                       styles.image,
+                      // { aspectRatio: 1 },
                       { aspectRatio: item.media.width / item.media.height },
                     ]}
                     source={{
                       uri: item.media.uri,
+                      // uri: '/Users/limxuanhui/bluextech/gypsie/assets/images/1024.png',
                     }}
                     resizeMode="contain"
                   />
@@ -135,8 +137,8 @@ const styles = StyleSheet.create({
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
     // flex: 1,
-    // borderWidth:4,
-    // borderColor:'red'
+    // borderWidth: 4,
+    // borderColor: 'red',
   },
   image: {
     // height: DEVICE_HEIGHT,

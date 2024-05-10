@@ -29,6 +29,8 @@ export type GypsieUser = {
   handle: string;
   email: string;
   avatar?: Media;
+  createdAt?: string;
+  isDeactivated: boolean;
 };
 
 export type RootStackNavigatorParamList = {

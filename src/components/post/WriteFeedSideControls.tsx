@@ -23,10 +23,14 @@ const WriteFeedSideControls = ({
     posting || !isValidPost || (mode === 'EDIT' && changes.type === 'NONE');
 
   return (
-    <AuxiliaryControls>
+    <AuxiliaryControls customStyle={styles.container}>
       <GypsieButton
         customButtonStyles={styles.button}
-        customIconStyles={styles.icon}
+        // customIconStyles={styles.icon}
+        customIconStyles={[
+          styles.icon,
+          { color: posting ? PALETTE.GREY : PALETTE.WHITE },
+        ]}
         Icon={AddMoreIcon}
         disabled={posting}
         onPress={onPressAdd}
@@ -35,7 +39,7 @@ const WriteFeedSideControls = ({
         customButtonStyles={styles.button}
         customIconStyles={[
           styles.icon,
-          { color: !isValidPost ? PALETTE.GREY : PALETTE.WHITE },
+          { color: !isValidPost || posting ? PALETTE.GREY : PALETTE.WHITE },
         ]}
         Icon={EditIcon}
         disabled={!isValidPost || posting}
@@ -45,7 +49,7 @@ const WriteFeedSideControls = ({
         customButtonStyles={styles.button}
         customIconStyles={[
           styles.icon,
-          { color: !isValidPost ? PALETTE.GREY : PALETTE.WHITE },
+          { color: !isValidPost || posting ? PALETTE.GREY : PALETTE.WHITE },
         ]}
         Icon={DeleteOutlineIcon}
         disabled={!isValidPost || posting}
@@ -73,14 +77,19 @@ const WriteFeedSideControls = ({
 };
 
 const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    width: 'auto',
+    paddingHorizontal: 4,
+    backgroundColor: '#00000022',
+    borderRadius: 16,
+  },
   button: { width: 40, height: 40 },
   icon: { fontSize: 24, color: PALETTE.WHITE },
   postButton: {
     width: 60,
-    // width: 80,
     height: 36,
-    marginRight: 20,
-    // paddingHorizontal: 8,
+    // marginRight: 20,
     zIndex: 101,
   },
   postButtonText: {

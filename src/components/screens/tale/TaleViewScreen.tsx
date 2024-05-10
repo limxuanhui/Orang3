@@ -196,6 +196,15 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
     return <FullScreenLoading />;
   }
 
+  if (!data?.tale.metadata.creator.isDeactivated) {
+    return (
+      <MessageDisplay
+        containerStyle={styles.container}
+        message="This user has deactivated their account :("
+      />
+    );
+  }
+
   return (
     <View style={styles.container}>
       {data ? (
