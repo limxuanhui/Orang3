@@ -5,6 +5,7 @@ import {
   FEEDS_BY_USERID_URL,
   FEEDS_METADATA_BY_USERID_URL,
   FEEDS_URL,
+  ITINERARY_ROUTING_URL,
   NEW_FEED_URL,
   NEW_TALE_URL,
   TALES_METADATA_BY_USERID_URL,
@@ -132,6 +133,9 @@ export const urlFactory = (
         return `${TALES_URL}/${options.id}`;
       }
       throw Error(`Key ${key} requires a valid id.`);
+
+    case 'itinerary-routing':
+      return ITINERARY_ROUTING_URL;
 
     default:
       throw Error(`Key ${key} is not supported.`);

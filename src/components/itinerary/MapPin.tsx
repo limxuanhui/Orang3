@@ -23,7 +23,7 @@ const MapPin = ({ routeNode }: MapPinProps) => {
       <View style={styles.routeNodePinWrapper}>
         <LocationPinIcon style={{ color: routeNode.colour, fontSize: 48 }} />
         <View style={styles.routeNodeNumberCircle}>
-          {routeNode.order ? (
+          {routeNode.order !== -1 ? (
             <Text style={styles.routeNodeNumber}>{routeNode.order}</Text>
           ) : null}
         </View>

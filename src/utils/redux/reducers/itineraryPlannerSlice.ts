@@ -13,8 +13,8 @@ import {
   RouteNode,
   ItineraryPlannerMode,
 } from '@components/itinerary/types/types';
-import { ITINERARY_ROUTING_URL } from '@constants/urls';
 import { axiosClient } from '@helpers/singletons';
+import { urlFactory } from '@helpers/factory';
 
 type ItineraryPlanner = {
   mode: ItineraryPlannerMode;
@@ -25,6 +25,7 @@ type ItineraryPlanner = {
   modalType: 'ROUTE_NAME' | 'COLOUR_PICKER';
   itinerary: Itinerary;
   isRouting: boolean;
+  error: string;
 };
 type ItineraryState = Readonly<ItineraryPlanner>;
 
@@ -44,6 +45,7 @@ const initialState: ItineraryState = {
         handle: '',
         email: '',
         avatar: undefined,
+        isDeactivated: false,
       },
     },
     routes: [
@@ -58,6 +60,7 @@ const initialState: ItineraryState = {
     ],
   },
   isRouting: false,
+  error: '',
 };
 
 export const itineraryPlanner_startRouting = createAsyncThunk(
@@ -76,7 +79,8 @@ export const itineraryPlanner_startRouting = createAsyncThunk(
 
     try {
       const directionsResponse = await axiosClient.post(
-        ITINERARY_ROUTING_URL,
+        urlFactory('itinerary-routing'),
+        // ITINERARY_ROUTING_URL,
         JSON.stringify(data),
         options,
       );
@@ -100,6 +104,10 @@ export const itineraryPlanner_startRouting = createAsyncThunk(
         JSON.stringify(directionsResponse.data.directionsResultList, null, 4),
       );
       console.log('\n');
+      if (directionsResponse.data.directionsResultList.length === 0) {
+        throw new Error('No directions available');
+      }
+
       // Backend will return an array of polylines,
       // where each polyline defines the route between two places
       directionsResponse.data.directionsResultList.forEach(
@@ -129,7 +137,7 @@ export const itineraryPlanner_startRouting = createAsyncThunk(
         encodedPolyline,
       };
     } catch (err: unknown) {
-      console.error(err);
+      throw err;
     }
   },
 );
@@ -153,7 +161,7 @@ const itineraryPlannerSlice = createSlice({
       state.selectedRouteId = state.itinerary.routes[0].id;
     },
     itineraryPlanner_createItinerary: (state, action) => {
-      const initialRouteId = ulid();
+      const initialRouteId = nanoid();
       state.itinerary = {
         metadata: {
           id: ulid(),
@@ -273,9 +281,10 @@ const itineraryPlannerSlice = createSlice({
           return {
             ...route,
             routeNodes: [
-              ...route.routeNodes.map(routeNode => {
-                return { ...routeNode, order: undefined };
-              }),
+              // ...route.routeNodes.map((routeNode: RouteNode, index: number) => {
+              //   return { ...routeNode, order: index + 1 };
+              // }),
+              ...route.routeNodes,
               action.payload.routeNode,
             ],
             encodedPolyline: '',
@@ -295,7 +304,10 @@ const itineraryPlannerSlice = createSlice({
                 (routeNode: RouteNode) =>
                   routeNode.id !== action.payload.routeNodeId,
               )
-              .map(routeNode => ({ ...routeNode, order: undefined })),
+              .map((routeNode: RouteNode, index: number) => ({
+                ...routeNode,
+                order: index + 1,
+              })),
             encodedPolyline: '',
             polyline: [],
           };

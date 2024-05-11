@@ -10,6 +10,7 @@ import store from '@redux/store';
 import { GOOGLE_IOS_CLIENT_ID } from '@env';
 import { queryClient } from '@helpers/singletons';
 import { enableFreeze } from 'react-native-screens';
+import Toast from 'react-native-toast-message';
 
 GoogleSignin.configure({
   iosClientId: GOOGLE_IOS_CLIENT_ID,
@@ -27,6 +28,12 @@ const App = (): JSX.Element => {
           <AuthContext.Provider value={authInfo}>
             <GestureHandlerRootView style={{ flex: 1 }}>
               <RootStackNavigator />
+              <Toast
+                position="bottom"
+                bottomOffset={50}
+                autoHide
+                visibilityTime={3000}
+              />
             </GestureHandlerRootView>
           </AuthContext.Provider>
         </Provider>

@@ -10,6 +10,7 @@ export type DataKey =
   | 'tale-edit'
   | 'tales-metadata'
   | 'tales-metadata-by-userid'
+  | 'itinerary-routing'
   | 'users'
   | 'user-account-deactivate-by-userid'
   | 'user-account-delete-by-userid';

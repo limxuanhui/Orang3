@@ -11,10 +11,15 @@ import type { ModalNavigatorNavigationProp } from '@navigators/types/types';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
+import { useAppSelector } from '@redux/hooks';
 
 const PlaceSearchScreen = ({ route }: PlaceSearchScreenProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const { onAddPlace } = route.params;
+  const { selectedRouteId, itinerary } = useAppSelector(
+    state => state.itineraryPlanner,
+  );
+  const selectedRoute = itinerary.routes.find(r => r.id === selectedRouteId);
 
   const onExit = useCallback(() => {
     navigation.goBack();
@@ -28,21 +33,24 @@ const PlaceSearchScreen = ({ route }: PlaceSearchScreenProps) => {
       }
 
       const location = details.geometry.location;
-      const newRouteNode: RouteNode = {
-        id: nanoid(),
-        placeId: details.place_id,
-        name: details.name,
-        address: details.formatted_address,
-        coord: { latitude: location.lat, longitude: location.lng },
-        colour: '#f44336ff',
-        order: undefined,
-        // openNow: details.opening_hours?.open_now,
-      };
+      if (selectedRoute) {
+        const newRouteNode: RouteNode = {
+          id: nanoid(),
+          placeId: details.place_id,
+          name: details.name,
+          address: details.formatted_address,
+          coord: { latitude: location.lat, longitude: location.lng },
+          colour: '#f44336ff',
+          order: selectedRoute?.routeNodes.length + 1,
+          // openNow: details.opening_hours?.open_now,
+        };
 
-      onAddPlace(newRouteNode);
+        onAddPlace(newRouteNode);
+      }
+
       onExit();
     },
-    [onAddPlace, onExit],
+    [onAddPlace, onExit, selectedRoute],
   );
 
   return (

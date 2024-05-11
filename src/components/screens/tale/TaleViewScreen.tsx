@@ -196,7 +196,7 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
     return <FullScreenLoading />;
   }
 
-  if (!data?.tale.metadata.creator.isDeactivated) {
+  if (data?.tale.metadata.creator.isDeactivated) {
     return (
       <MessageDisplay
         containerStyle={styles.container}

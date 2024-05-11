@@ -26,7 +26,7 @@ export type RouteNode = {
   address: string;
   coord: RouteNodeCoord;
   colour: string;
-  order?: number;
+  order: number;
   openNow?: boolean;
 };
 

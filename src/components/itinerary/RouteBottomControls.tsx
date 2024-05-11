@@ -19,7 +19,8 @@ import {
 import GypsieButton from '@components/common/buttons/GypsieButton';
 import DeleteOutlineIcon from '@icons/DeleteOutlineIcon';
 import RouteIcon from '@icons/RouteIcon';
-import { sleep } from '@helpers/functions';
+import Toast from 'react-native-toast-message';
+import { TOAST_TITLE_STYLE } from '@constants/constants';
 
 const RouteBottomControls = ({
   isRouted,
@@ -81,7 +82,6 @@ const RouteBottomControls = ({
     if (selectedRoute) {
       console.log('Starting to route...');
       dispatch(itineraryPlanner_setIsRouting({ isRouting: true }));
-      await sleep(2000);
       try {
         const routedRoute = await dispatch(
           itineraryPlanner_startRouting(selectedRoute),
@@ -90,8 +90,14 @@ const RouteBottomControls = ({
         if (routedRoute) {
           dispatch(itineraryPlanner_setRoute({ route: routedRoute }));
         }
-      } catch (err) {
-        console.error('An error occured while routing: ', err);
+      } catch (err: unknown) {
+        const error: Error = err as Error;
+        Toast.show({
+          type: 'error',
+          swipeable: true,
+          text1: error.message,
+          text1Style: TOAST_TITLE_STYLE,
+        });
       }
       dispatch(itineraryPlanner_setIsRouting({ isRouting: false }));
     }

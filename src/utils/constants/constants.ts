@@ -1,6 +1,7 @@
-import { Dimensions } from 'react-native';
+import { Dimensions, StyleProp, TextStyle } from 'react-native';
 import type { StackNavigationOptions } from '@react-navigation/stack';
 import { GOOGLE_MAPS_API_KEY } from '@env';
+import { PALETTE } from './palette';
 
 export const { height: DEVICE_HEIGHT, width: DEVICE_WIDTH } =
   Dimensions.get('window');
@@ -220,3 +221,10 @@ export const PLACEHOLDER_IMAGE_URI: string =
   '/Users/limxuanhui/bluextech/gypsie/assets/images/sun_design3.png';
 
 export const MEDIA_THUMBNAIL_MAX_WIDTH: number = 200;
+
+export const TOAST_TITLE_STYLE: StyleProp<TextStyle> = {
+  fontFamily: 'Futura',
+  fontWeight: 'normal',
+  fontSize: 16,
+  color: PALETTE.DARKGREY,
+};

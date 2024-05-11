@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import type { RouteNodeProps } from './types/types';
 import { DIMENSION } from '@constants/dimensions';
@@ -13,6 +13,8 @@ import {
 import GypsieButton from '@components/common/buttons/GypsieButton';
 import CopyIcon from '@icons/CopyIcon';
 import Clipboard from '@react-native-clipboard/clipboard';
+import Toast from 'react-native-toast-message';
+import { TOAST_TITLE_STYLE } from '@constants/constants';
 
 const RouteNode = ({ routeNode }: RouteNodeProps) => {
   const dispatch = useAppDispatch();
@@ -42,6 +44,15 @@ const RouteNode = ({ routeNode }: RouteNodeProps) => {
       }),
     );
   }, [dispatch, routeNode.id, routeNode.colour]);
+
+  const onPressCopy = useCallback(() => {
+    Clipboard.setString(routeNode.address);
+    Toast.show({
+      type: 'success',
+      text1: 'Address copied to clipboard',
+      text1Style: TOAST_TITLE_STYLE,
+    });
+  }, [routeNode.address]);
 
   return (
     <View style={styles.routeNode}>
@@ -78,10 +89,7 @@ const RouteNode = ({ routeNode }: RouteNodeProps) => {
           customButtonStyles={{ width: 20, height: 20 }}
           customIconStyles={{ fontSize: 14, color: PALETTE.DARKGREY }}
           Icon={CopyIcon}
-          onPress={() => {
-            Clipboard.setString(routeNode.address);
-            Alert.alert('Address copied to clipboard');
-          }}
+          onPress={onPressCopy}
         />
       </View>
       <Text style={styles.routeNodeAddress}>{routeNode.address}</Text>
