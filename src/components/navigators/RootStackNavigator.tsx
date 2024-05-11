@@ -16,17 +16,6 @@ const RootStackNavigator = () => {
   );
   const { isLoggedIn } = useContext(AuthContext);
 
-  // return (
-  //   <View
-  //     style={{
-  //       flex: 1,
-  //       justifyContent: 'center',
-  //       alignItems: 'center',
-  //       backgroundColor: PALETTE.GREYISHBLUE,
-  //     }}>
-  //     <Image style={{ width: 80, height: 80 }} source={Assets.AppLogo} />
-  //   </View>
-  // );
   return (
     <NavigationContainer
       onReady={() => {

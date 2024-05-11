@@ -5,9 +5,9 @@ import type { ItineraryMapOverviewProps } from './types/types';
 import type { ModalNavigatorNavigationProp } from '@navigators/types/types';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
+import { Assets } from '@assets/assets';
 
 const ItineraryMapOverview = ({ canEdit }: ItineraryMapOverviewProps) => {
-  // Pass itinerary data into navigation options parameters. If null/empty, then it is new plan
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
 
   const onPressOverview = useCallback(() => {
@@ -30,9 +30,7 @@ const ItineraryMapOverview = ({ canEdit }: ItineraryMapOverviewProps) => {
       onPress={onPressOverview}>
       <Image
         style={styles.mapOverviewBackground}
-        source={{
-          uri: '/Users/limxuanhui/bluextech/gypsie/assets/images/mapoverview.jpeg',
-        }}
+        source={Assets.ItineraryMapOverview}
         resizeMode="cover"
       />
       <View style={styles.footer}>

@@ -6,7 +6,7 @@
     "paths": {
       "*": ["src/*"],
       "tests": ["tests/*"],
-      "@assets/*": ["src/utils/assets/*"],
+      "@resources/*": ["src/utils/resources/*"],
       "@components/*": ["src/components/*"],
       "@screens/*": ["src/components/screens/*"],
       "@navigators/*": ["src/components/navigators/*"],

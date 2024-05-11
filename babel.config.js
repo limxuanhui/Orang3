@@ -24,7 +24,7 @@ module.exports = {
         extensions: ['.ios.js', '.android.js', '.js', '.ts', '.tsx', '.json'],
         alias: {
           tests: './src/tests',
-          '@assets': './src/utils/assets',
+          '@resources': './src/utils/resources',
           '@components': './src/components',
           '@screens': './src/components/screens',
           '@navigators': './src/components/navigators',
