@@ -5,7 +5,7 @@ import type { ItineraryMapOverviewProps } from './types/types';
 import type { ModalNavigatorNavigationProp } from '@navigators/types/types';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
-import { Assets } from '@assets/assets';
+import { Assets } from '@resources/assets';
 
 const ItineraryMapOverview = ({ canEdit }: ItineraryMapOverviewProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
