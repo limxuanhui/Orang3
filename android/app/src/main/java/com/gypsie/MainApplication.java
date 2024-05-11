@@ -1,4 +1,4 @@
-package com.gypsie;
+package com.Orang3;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

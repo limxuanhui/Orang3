@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface gypsieTests : XCTestCase
+@interface Orang3Tests : XCTestCase
 
 @end
 
-@implementation gypsieTests
+@implementation Orang3Tests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {

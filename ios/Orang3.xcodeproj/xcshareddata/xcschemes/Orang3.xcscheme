@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "gypsie.app"
-               BlueprintName = "gypsie"
-               ReferencedContainer = "container:gypsie.xcodeproj">
+               BuildableName = "Orang3.app"
+               BlueprintName = "Orang3"
+               ReferencedContainer = "container:Orang3.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "gypsieTests.xctest"
-               BlueprintName = "gypsieTests"
-               ReferencedContainer = "container:gypsie.xcodeproj">
+               BuildableName = "Orang3Tests.xctest"
+               BlueprintName = "Orang3Tests"
+               ReferencedContainer = "container:Orang3.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "gypsie.app"
-            BlueprintName = "gypsie"
-            ReferencedContainer = "container:gypsie.xcodeproj">
+            BuildableName = "Orang3.app"
+            BlueprintName = "Orang3"
+            ReferencedContainer = "container:Orang3.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "gypsie.app"
-            BlueprintName = "gypsie"
-            ReferencedContainer = "container:gypsie.xcodeproj">
+            BuildableName = "Orang3.app"
+            BlueprintName = "Orang3"
+            ReferencedContainer = "container:Orang3.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

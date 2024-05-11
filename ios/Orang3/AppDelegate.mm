@@ -13,7 +13,7 @@
   // Custom Google API key (must be first call here)
   [GMSServices provideAPIKey:@"AIzaSyDLFxbxQyuOst6hzzaOKl8weOuQ5kKUZPY"];
 
-  self.moduleName = @"gypsie";
+  self.moduleName = @"Orang3";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};

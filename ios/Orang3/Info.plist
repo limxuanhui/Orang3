@@ -47,13 +47,13 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Sunday wants to access your camera.</string>
+	<string>Orang3 wants to access your camera.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Gypsie requires your location to use Google Maps</string>
+	<string>Orang3 requires your location to use Google Maps</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Sunday wants to access your microphone.</string>
+	<string>Orang3 wants to access your microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Sunday wants to access your photo gallery.</string>
+	<string>Orang3 wants to access your photo gallery.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
