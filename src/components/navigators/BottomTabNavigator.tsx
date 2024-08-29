@@ -2,6 +2,7 @@ import { ReactNode, useCallback, useContext } from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Entypo from 'react-native-vector-icons/Entypo';
 import HomeScreen from '@screens/feed/HomeScreen';
 import TaleStackNavigator from '@navigators/TaleStackNavigator';
 import ProfileStackNavigator from '@navigators/ProfileStackNavigator';
@@ -29,8 +30,8 @@ const BottomTabNavigator = () => {
       color: string;
       size: number;
     }): ReactNode => (
-      <MaterialCommunityIcons
-        name="flower"
+      <Entypo
+        name="home"
         size={24}
         color={focused ? PALETTE.ORANGE : PALETTE.GREY}
       />

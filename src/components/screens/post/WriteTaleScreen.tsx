@@ -1,16 +1,12 @@
-import { Image, Text } from 'react-native';
 import { useRef } from 'react';
-import {
-  GestureResponderHandlers,
-  StyleSheet,
-  TextInput,
-  View,
-} from 'react-native';
+import { Image, Text } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 import Video from 'react-native-video';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator } from 'react-native-paper';
-import { KeyboardAccessoryView } from '@flyerhq/react-native-keyboard-accessory-view';
+import Config from 'react-native-config';
+import { KeyboardStickyView } from 'react-native-keyboard-controller';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { Portal } from '@gorhom/portal';
 
@@ -33,14 +29,14 @@ import type { WriteTaleScreenProps } from './types/types';
 
 import NewStoryItem from '@components/post/NewStoryItem';
 
-import { FULL_SCREEN } from '@components/../utils/constants/constants';
-import { DIMENSION } from '@components/../utils/constants/dimensions';
-import { PALETTE } from '@components/../utils/constants/palette';
+import { FULL_SCREEN } from '@constants/constants';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
 import { nanoid } from '@reduxjs/toolkit';
 import { StoryItem } from '@components/post/types/types';
 import { Feed } from '@components/feed/types/types';
 import { FeedItemThumbnailsDisplayFormat } from '@components/tale/types/types';
-import { AWS_CLOUDFRONT_URL_RAW } from '@env';
+
 import FullScreenLoading from '@components/common/FullScreenLoading';
 
 const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
@@ -81,191 +77,186 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
   }
 
   return (
-    <KeyboardAccessoryView
-      style={styles.accessoryView}
-      renderScrollable={(panHandlers: GestureResponderHandlers) => (
-        <View style={styles.container}>
-          <KeyboardAwareScrollView
-            ref={scrollViewRef}
-            style={styles.scrollViewContainer}
-            contentContainerStyle={styles.scrollView}
-            showsVerticalScrollIndicator={false}
-            keyboardDismissMode="none"
-            scrollEventThrottle={60}
-            {...panHandlers}
-            // onContentSizeChange={onContentSizeChange}
-            // onScrollBeginDrag={onScroll}
-          >
-            <View style={styles.coverContainer}>
-              {metadata.cover ? (
-                <>
-                  {metadata.cover.type?.startsWith('video') ? (
-                    <Video
-                      style={styles.cover}
-                      source={{
-                        uri:
-                          taleId && !metadata.cover.uri.startsWith('file://')
-                            ? `${AWS_CLOUDFRONT_URL_RAW}/${metadata.cover.uri}`
-                            : metadata.cover.uri,
-                      }}
-                      controls
-                      repeat
-                      resizeMode="contain"
-                    />
-                  ) : (
-                    <Image
-                      style={styles.cover}
-                      source={{
-                        uri:
-                          taleId && !metadata.cover.uri.startsWith('file://')
-                            ? `${AWS_CLOUDFRONT_URL_RAW}/${metadata.cover.uri}`
-                            : metadata.cover.uri,
-                      }}
-                      resizeMode="cover"
-                    />
-                  )}
-                  <AuxiliaryControls
-                    customStyle={styles.auxiliaryControls}
-                    orientation="vertical"
-                    position="bottom-right">
-                    <GypsieButton
-                      customIconStyles={styles.auxiliaryIcon}
-                      Icon={DeleteOutlineIcon}
-                      onPress={onPressClearCover}
-                    />
-                    <GypsieButton
-                      customIconStyles={styles.auxiliaryIcon}
-                      Icon={ChangeSwapIcon}
-                      onPress={onPressAddCover}
-                    />
-                  </AuxiliaryControls>
-                </>
+    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+      <KeyboardAwareScrollView
+        ref={scrollViewRef}
+        style={styles.scrollViewContainer}
+        contentContainerStyle={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+        keyboardDismissMode="interactive"
+        scrollEventThrottle={60}
+        // automaticallyAdjustContentInsets
+        // automaticallyAdjustKeyboardInsets
+        // extraScrollHeight={100}
+        // endFillColor={PALETTE.REDPINK}
+      >
+        <View style={styles.coverContainer}>
+          {metadata.cover ? (
+            <>
+              {metadata.cover.type?.startsWith('video') ? (
+                <Video
+                  style={styles.cover}
+                  source={{
+                    uri:
+                      taleId && !metadata.cover.uri.startsWith('file://')
+                        ? `${Config.AWS_CLOUDFRONT_URL_RAW}/${metadata.cover.uri}`
+                        : metadata.cover.uri,
+                  }}
+                  controls
+                  repeat
+                  resizeMode="contain"
+                />
               ) : (
+                <Image
+                  style={styles.cover}
+                  source={{
+                    uri:
+                      taleId && !metadata.cover.uri.startsWith('file://')
+                        ? `${Config.AWS_CLOUDFRONT_URL_RAW}/${metadata.cover.uri}`
+                        : metadata.cover.uri,
+                  }}
+                  resizeMode="cover"
+                />
+              )}
+              <AuxiliaryControls
+                customStyle={styles.auxiliaryControls}
+                orientation="vertical"
+                position="bottom-right">
                 <GypsieButton
-                  customButtonStyles={styles.addCoverButton}
-                  customIconStyles={styles.addCoverIcon}
-                  Icon={CameraOutlineIcon}
+                  customIconStyles={styles.auxiliaryIcon}
+                  Icon={DeleteOutlineIcon}
+                  onPress={onPressClearCover}
+                />
+                <GypsieButton
+                  customIconStyles={styles.auxiliaryIcon}
+                  Icon={ChangeSwapIcon}
                   onPress={onPressAddCover}
                 />
-              )}
-            </View>
-            <View
-              style={[
-                styles.blogContainer,
-                { marginBottom: 100 + insets.bottom },
-              ]}>
-              <View>
-                <TextInput
-                  style={styles.titleInput}
-                  value={metadata.title}
-                  multiline
-                  placeholder="Write a title"
-                  placeholderTextColor={PALETTE.LIGHTERGREY}
-                  numberOfLines={8} // android
-                  maxLength={100}
-                  scrollEnabled={false}
-                  selectionColor={PALETTE.ORANGE}
-                  onChangeText={onTitleChange}
-                  onBlur={onTitleChangeEnded}
-                />
-                <Text
-                  style={
-                    styles.titleInputCounter
-                  }>{`${metadata.title.length} / 100`}</Text>
-              </View>
-              <ItineraryMapOverview canEdit />
-              <View>
-                {story.map((el: StoryItem, index: number) => (
-                  <NewStoryItem
-                    key={el.id}
-                    item={el}
-                    onStoryItemTextChange={onStoryItemTextChange}
-                    onPressDeleteStoryItem={() =>
-                      onPressDeleteStoryItemByIndex(index)
-                    }
-                  />
-                ))}
-              </View>
-            </View>
-          </KeyboardAwareScrollView>
-          <Portal>
-            <BottomSheet
-              ref={bottomSheetRef}
-              backdropComponent={renderBackdrop}
-              index={-1}
-              snapPoints={snapPoints}>
-              {feedsThumbnailsIsLoading ? (
-                <View style={styles.flexCenter}>
-                  <ActivityIndicator size={60} color={PALETTE.ORANGE} />
-                </View>
-              ) : feedsThumbnails ? (
-                feedsThumbnails.length === 0 ? (
-                  <View style={styles.flexCenter}>
-                    <Text style={styles.flexCenterDescription}>
-                      You don't have any feeds...
-                    </Text>
-                  </View>
-                ) : (
-                  <BottomSheetScrollView
-                    style={{
-                      padding: 8,
-                    }}
-                    showsVerticalScrollIndicator={false}>
-                    {feedsThumbnails.map((feed: Feed, index: number) => {
-                      const alreadyAdded: boolean =
-                        feed.metadata.taleId !== '' ||
-                        !!story.find(
-                          (el: StoryItem) => el.id === feed.metadata.id,
-                        );
-                      return (
-                        <View
-                          style={styles.feedItemThumbnailsList}
-                          key={nanoid()}>
-                          <FeedItemThumbnailsCarousel
-                            feedId={feed.metadata.id}
-                            displayFormat={
-                              FeedItemThumbnailsDisplayFormat.CAROUSEL
-                            }
-                            closeBottomSheet={closeBottomSheet}
-                          />
-                          <GypsieButton
-                            customButtonStyles={[
-                              styles.addLinkedFeedButton,
-                              {
-                                backgroundColor: alreadyAdded
-                                  ? PALETTE.LIGHTERGREY
-                                  : PALETTE.OFFWHITE,
-                              },
-                            ]}
-                            customIconStyles={[
-                              styles.addLinkedFeedIcon,
-                              {
-                                color: alreadyAdded
-                                  ? PALETTE.WHITE
-                                  : PALETTE.ORANGE,
-                              },
-                            ]}
-                            Icon={AddIcon}
-                            onPress={() => onPressAddLinkedFeed(index)}
-                            disabled={alreadyAdded}
-                          />
-                        </View>
-                      );
-                    })}
-                  </BottomSheetScrollView>
-                )
-              ) : (
-                <View style={styles.flexCenter}>
-                  <Text style={styles.flexCenterDescription}>
-                    Could not find your feeds at the moment...
-                  </Text>
-                </View>
-              )}
-            </BottomSheet>
-          </Portal>
+              </AuxiliaryControls>
+            </>
+          ) : (
+            <GypsieButton
+              customButtonStyles={styles.addCoverButton}
+              customIconStyles={styles.addCoverIcon}
+              Icon={CameraOutlineIcon}
+              onPress={onPressAddCover}
+            />
+          )}
         </View>
-      )}>
-      <View style={styles.bottomControls}>
+        <View
+          style={[
+            styles.blogContainer,
+            {
+              marginBottom: insets.bottom + 100,
+              paddingBottom: insets.bottom,
+            },
+          ]}>
+          <View>
+            <TextInput
+              style={styles.titleInput}
+              value={metadata.title}
+              multiline
+              placeholder="Write a title"
+              placeholderTextColor={PALETTE.LIGHTERGREY}
+              numberOfLines={8} // android
+              maxLength={100}
+              scrollEnabled={false}
+              selectionColor={PALETTE.ORANGE}
+              onChangeText={onTitleChange}
+              onBlur={onTitleChangeEnded}
+            />
+            <Text
+              style={
+                styles.titleInputCounter
+              }>{`${metadata.title.length} / 100`}</Text>
+          </View>
+          <ItineraryMapOverview canEdit />
+          <View>
+            {story.map((el: StoryItem, index: number) => (
+              <NewStoryItem
+                key={el.id}
+                item={el}
+                onStoryItemTextChange={onStoryItemTextChange}
+                onPressDeleteStoryItem={() =>
+                  onPressDeleteStoryItemByIndex(index)
+                }
+              />
+            ))}
+          </View>
+        </View>
+      </KeyboardAwareScrollView>
+      <Portal>
+        <BottomSheet
+          ref={bottomSheetRef}
+          backdropComponent={renderBackdrop}
+          index={-1}
+          snapPoints={snapPoints}>
+          {feedsThumbnailsIsLoading ? (
+            <View style={styles.flexCenter}>
+              <ActivityIndicator size={60} color={PALETTE.ORANGE} />
+            </View>
+          ) : feedsThumbnails ? (
+            feedsThumbnails.length === 0 ? (
+              <View style={styles.flexCenter}>
+                <Text style={styles.flexCenterDescription}>
+                  You don't have any feeds...
+                </Text>
+              </View>
+            ) : (
+              <BottomSheetScrollView
+                style={{
+                  padding: 8,
+                }}
+                showsVerticalScrollIndicator={false}>
+                {feedsThumbnails.map((feed: Feed, index: number) => {
+                  const alreadyAdded: boolean =
+                    feed.metadata.taleId !== '' ||
+                    !!story.find((el: StoryItem) => el.id === feed.metadata.id);
+                  return (
+                    <View style={styles.feedItemThumbnailsList} key={nanoid()}>
+                      <FeedItemThumbnailsCarousel
+                        feedId={feed.metadata.id}
+                        displayFormat={FeedItemThumbnailsDisplayFormat.CAROUSEL}
+                        closeBottomSheet={closeBottomSheet}
+                      />
+                      <GypsieButton
+                        customButtonStyles={[
+                          styles.addLinkedFeedButton,
+                          {
+                            backgroundColor: alreadyAdded
+                              ? PALETTE.LIGHTERGREY
+                              : PALETTE.OFFWHITE,
+                          },
+                        ]}
+                        customIconStyles={[
+                          styles.addLinkedFeedIcon,
+                          {
+                            color: alreadyAdded
+                              ? PALETTE.WHITE
+                              : PALETTE.ORANGE,
+                          },
+                        ]}
+                        Icon={AddIcon}
+                        onPress={() => onPressAddLinkedFeed(index)}
+                        disabled={alreadyAdded}
+                      />
+                    </View>
+                  );
+                })}
+              </BottomSheetScrollView>
+            )
+          ) : (
+            <View style={styles.flexCenter}>
+              <Text style={styles.flexCenterDescription}>
+                Could not find your feeds at the moment...
+              </Text>
+            </View>
+          )}
+        </BottomSheet>
+      </Portal>
+      <KeyboardStickyView
+        style={styles.bottomControls}
+        offset={{ closed: -insets.bottom, opened: 0 }}>
         <GypsieButton
           customButtonStyles={styles.bottomControlButton}
           customIconStyles={styles.bottomControlIcon}
@@ -316,23 +307,23 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
             disabled={postButtonIsDisabled}
           />
         )}
-      </View>
-    </KeyboardAccessoryView>
+      </KeyboardStickyView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  accessoryView: {
-    backgroundColor: PALETTE.OFFWHITE,
-  },
   container: {
     ...FULL_SCREEN,
     backgroundColor: PALETTE.OFFWHITE,
   },
   scrollViewContainer: {
+    backgroundColor: PALETTE.GREYISHBLUE,
+  },
+  scrollView: {
+    flexGrow: 1,
     backgroundColor: PALETTE.OFFWHITE,
   },
-  scrollView: { flexGrow: 1, backgroundColor: PALETTE.OFFWHITE },
   coverContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -386,6 +377,8 @@ const styles = StyleSheet.create({
     color: PALETTE.LIGHTGREY,
   },
   bottomControls: {
+    position: 'absolute',
+    bottom: 0,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
@@ -450,28 +443,3 @@ const styles = StyleSheet.create({
 });
 
 export default WriteTaleScreen;
-
-// const [currScrollPosition, setCurrScrollPosition] = useState<number>(0);
-// const [prevHeight, setPrevHeight] = useState<number>(DEVICE_HEIGHT);
-
-// // Called every scrollEventThrottle ms (60 ms)
-// const onScroll = useCallback(
-//   (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-//     console.log('Scrolling...');
-//     setCurrScrollPosition(e.nativeEvent.contentOffset.y);
-//   },
-//   [setCurrScrollPosition],
-// );
-
-// // Scroll up or down depending on content size change
-// const onContentSizeChange = useCallback((w: number, h: number) => {
-//   console.log('W: ', w, ' | h: ', h);
-//   // if (scrollViewRef !== null)
-//   //   scrollViewRef.current?.scrollToPosition(
-//   //     0,
-//   //     currScrollPosition + h - prevHeight + 10,
-//   //     true,
-//   //   );
-//   // setPrevHeight(h);
-//   // setCurrScrollPosition(h);
-// }, []);

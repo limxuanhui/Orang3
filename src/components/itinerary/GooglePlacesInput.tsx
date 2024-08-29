@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useContext, useRef } from 'react';
 import { StyleSheet } from 'react-native';
 import {
   GooglePlaceData,
@@ -6,6 +6,7 @@ import {
   GooglePlacesAutocomplete,
   GooglePlacesAutocompleteRef,
 } from 'react-native-google-places-autocomplete';
+import { AuthContext } from '@contexts/AuthContext';
 import type { GooglePlacesInputProps } from './types/types';
 import {
   GOOGLE_PLACES_AUTOCOMPLETE_DEBOUNCE_RATE,
@@ -19,6 +20,7 @@ import { PALETTE } from '@constants/palette';
 
 const GooglePlacesInput = ({ onReceiveResults }: GooglePlacesInputProps) => {
   const inputRef = useRef<GooglePlacesAutocompleteRef>(null);
+  const { googlePlacesApiKey } = useContext(AuthContext);
 
   const onPressSuggestion = useCallback(
     (data: GooglePlaceData, details: GooglePlaceDetail | null = null) => {
@@ -36,7 +38,10 @@ const GooglePlacesInput = ({ onReceiveResults }: GooglePlacesInputProps) => {
       ref={inputRef}
       styles={styles}
       placeholder={GOOGLE_PLACES_AUTOCOMPLETE_PLACEHOLDER}
-      query={GOOGLE_PLACES_AUTOCOMPLETE_QUERY_OPTIONS}
+      query={{
+        ...GOOGLE_PLACES_AUTOCOMPLETE_QUERY_OPTIONS,
+        key: googlePlacesApiKey,
+      }}
       debounce={GOOGLE_PLACES_AUTOCOMPLETE_DEBOUNCE_RATE}
       GooglePlacesDetailsQuery={GOOGLE_PLACES_AUTOCOMPLETE_DETAILS_QUERY}
       textInputProps={GOOGLE_PLACES_AUTOCOMPLETE_TEXT_INPUT_PROPS}

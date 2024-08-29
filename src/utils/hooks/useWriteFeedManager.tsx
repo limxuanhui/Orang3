@@ -326,8 +326,6 @@ const useWriteFeedManager = (feedId?: string) => {
           deleted: changes.deleted,
         };
 
-        console.log('====== Update feed ======');
-        printPrettyJson(requestData);
         try {
           const uploadMetadataResponse = await axiosClient.put(
             urlFactory('feed-edit'),

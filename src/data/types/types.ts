@@ -12,13 +12,8 @@ export type DataKey =
   | 'tales-metadata-by-userid'
   | 'itinerary-routing'
   | 'users'
+  | 'user-authentication'
+  | 'user-auth-refresh-tokens'
   | 'user-account-deactivate-by-userid'
-  | 'user-account-delete-by-userid';
-
-// type DataAction =
-//   | 'GET_NEXT_FEEDS_PAGE'
-//   | 'GET_NEXT_FEEDS_METADATA_PAGE_BY_USERID'
-//   | 'GET_FEED_BY_FEEDID'
-//   | 'GET_NEXT_TALES_METADATA_PAGE'
-//   | 'GET_NEXT_TALES_METADATA_PAGE_BY_USERID'
-//   | 'GET_TALE_BY_TALEID';
+  | 'user-account-delete-by-userid'
+  | 'google-places-api-key';

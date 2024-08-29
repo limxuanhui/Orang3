@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { ActivityIndicator } from 'react-native-paper';
+import Config from 'react-native-config';
 import {
   FEED_ITEM_THUMBNAILS_DISPLAY_STYLES,
   type FeedItemThumbnailsCarouselProps,
@@ -8,8 +10,6 @@ import {
 import type { ModalNavigatorNavigationProp } from '@components/navigators/types/types';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
-import { AWS_CLOUDFRONT_URL_THUMBNAIL } from '@env';
-import { ActivityIndicator } from 'react-native-paper';
 import { Feed } from '@components/feed/types/types';
 import useDataManager from '@hooks/useDataManager';
 
@@ -59,7 +59,7 @@ const FeedItemThumbnailsCarousel = ({
           <Image
             style={styles.imageStyle}
             source={{
-              uri: `${AWS_CLOUDFRONT_URL_THUMBNAIL}/${el.item.thumbnail.uri}`,
+              uri: `${Config.AWS_CLOUDFRONT_URL_THUMBNAIL}/${el.item.thumbnail.uri}`,
             }}
           />
         </Pressable>
@@ -97,24 +97,3 @@ const styles = StyleSheet.create({
 });
 
 export default FeedItemThumbnailsCarousel;
-
-// const queryFn = useCallback(
-//   async ({ queryKey }: { queryKey: QueryKey }): Promise<Feed | null> => {
-//     const [key, fid] = queryKey;
-//     try {
-//       const response = await axiosClient.get(`/${key}/${fid}`);
-//       return response.data;
-//     } catch (err) {
-//       console.error(err);
-//       return null;
-//     }
-//   },
-//   [],
-// );
-
-// const { data, isLoading } = useQuery({
-//   queryKey: ['feeds', feedId],
-//   queryFn,
-//   enabled: !!feedId,
-//   staleTime: Infinity,
-// });

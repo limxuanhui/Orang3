@@ -19,7 +19,7 @@ type RouteViewerProps = {
   route: Route;
 };
 
-const colors = ['#ffffffaa', '#ffffffaa'];
+const colors = ['#ffffffdd', '#ffffffdd'];
 
 const RouteViewer = ({ route }: RouteViewerProps) => {
   const [collapsed, setCollapsed] = useState<boolean>(true);
@@ -90,11 +90,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     top: 0,
-    width: 24,
-    height: 24,
+    width: 30,
+    height: 30,
     borderRadius: 12,
   },
-  collapseIcon: { color: PALETTE.OFFWHITE, fontSize: 16 },
+  collapseIcon: { color: PALETTE.GREYISHBLUE, fontSize: 24 },
 });
 
 export default RouteViewer;

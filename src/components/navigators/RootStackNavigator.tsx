@@ -11,9 +11,6 @@ import { SCREEN_OPTIONS } from '@constants/constants';
 const RootStack = createStackNavigator<RootStackNavigatorParamList>();
 
 const RootStackNavigator = () => {
-  console.log(
-    '@@@@@@@@@@@@@@@@@ RootStackNavigator rerendered @@@@@@@@@@@@@@@@@',
-  );
   const { isLoggedIn } = useContext(AuthContext);
 
   return (

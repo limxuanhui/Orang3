@@ -1,7 +1,8 @@
 import { Dimensions, StyleProp, TextStyle } from 'react-native';
 import type { StackNavigationOptions } from '@react-navigation/stack';
-import { GOOGLE_MAPS_API_KEY } from '@env';
+import Config from 'react-native-config';
 import { PALETTE } from './palette';
+import { Query } from 'react-native-google-places-autocomplete';
 
 export const { height: DEVICE_HEIGHT, width: DEVICE_WIDTH } =
   Dimensions.get('window');
@@ -193,9 +194,10 @@ export const CUSTOM_DARK_MAP_STYLE = [
   },
 ];
 
-export const GOOGLE_PLACES_AUTOCOMPLETE_QUERY_OPTIONS = {
-  key: GOOGLE_MAPS_API_KEY,
+export const GOOGLE_PLACES_AUTOCOMPLETE_QUERY_OPTIONS: Query = {
+  key: Config.GOOGLE_PLACES_API_KEY as string, // this is a placeholder, api key will be fetched on log in and set in AuthContext
   language: 'en',
+  // components: 'country:tw'
 };
 
 export const GOOGLE_PLACES_AUTOCOMPLETE_DETAILS_QUERY = {

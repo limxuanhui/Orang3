@@ -1,0 +1,14 @@
+//
+//  Development.xcconfig
+//  Orang3
+//
+//  Created by Lim Xuan Hui on 15/7/24.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include "Pods/Target Support Files/Pods-Orang3/Pods-Orang3.release-dev.xcconfig"
+#include? "tmp.xcconfig"
+
+GOOGLE_MAPS_API_KEY = AIzaSyDLFxbxQyuOst6hzzaOKl8weOuQ5kKUZPY

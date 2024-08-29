@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ActivityIndicator } from 'react-native-paper';
@@ -89,8 +89,8 @@ const TalesOverviewScreen = () => {
 
   const {
     data,
-    hasNextPage,
-    isError,
+    // hasNextPage,
+    // isError,
     isFetching,
     isLoading,
     isRefetching,
@@ -103,21 +103,14 @@ const TalesOverviewScreen = () => {
   const dataFetchedIsNotEmpty =
     dataIsFetched && data.pages.length > 0 && data?.pages[0].items.length > 0;
 
-  console.log('===========================');
-  console.log('taleoverviewscreen data fetched: ', data?.pages[0]);
-  console.log('isFetching: ', isFetching);
-  console.log('isRefetching: ', isRefetching);
-  console.log('isLoading: ', isLoading);
-  console.log('isError: ', isError);
-  console.log('hasNextPage: ', hasNextPage);
-  console.log('===========================\n');
-
-  useEffect(() => {
-    console.log('TalesOverviewScreen Mounted');
-    return () => {
-      console.log('TalesOverviewScreen Unmounted');
-    };
-  }, []);
+  // console.log('===========================');
+  // console.log('taleoverviewscreen data fetched: ', data?.pages[0]);
+  // console.log('isFetching: ', isFetching);
+  // console.log('isRefetching: ', isRefetching);
+  // console.log('isLoading: ', isLoading);
+  // console.log('isError: ', isError);
+  // console.log('hasNextPage: ', hasNextPage);
+  // console.log('===========================\n');
 
   if (isLoading) {
     return (
@@ -132,7 +125,7 @@ const TalesOverviewScreen = () => {
       <View
         style={[
           styles.masonryListContainer,
-          { height, paddingTop: 8, paddingBottom: insets.bottom + 16 },
+          { height, paddingBottom: insets.bottom + 16 },
         ]}>
         {dataFetchedIsEmpty ? (
           <MessageDisplay message="No tales at the moment..." />
@@ -148,7 +141,7 @@ const TalesOverviewScreen = () => {
             ListFooterComponent={
               isLoading || isFetching ? (
                 <ActivityIndicator
-                  style={{ marginVertical: 8 }}
+                  style={styles.endActivityIndicator}
                   size={24}
                   color={PALETTE.ORANGE}
                 />
@@ -156,7 +149,7 @@ const TalesOverviewScreen = () => {
                 <MessageDisplay
                   containerStyle={styles.footerContainer}
                   textStyle={styles.footerText}
-                  message="You've caught up with the latest tales :p"
+                  message="You've caught up with the latest stories!"
                 />
               )
             }
@@ -172,7 +165,7 @@ const TalesOverviewScreen = () => {
             }}
           />
         ) : (
-          <MessageDisplay message="Unable to get tales for you at the moment..." />
+          <MessageDisplay message="Unable to get stories for you at the moment..." />
         )}
       </View>
     </View>
@@ -201,6 +194,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: PALETTE.GREY,
   },
+  endActivityIndicator: { marginVertical: 8 },
 });
 
 export default TalesOverviewScreen;

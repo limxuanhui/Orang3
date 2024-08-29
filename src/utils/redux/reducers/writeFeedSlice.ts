@@ -29,6 +29,8 @@ const initialState: WriteFeedState = {
         height: -1,
         width: -1,
       },
+      isDeactivated: false,
+      createdAt: undefined,
     },
     thumbnail: {
       id: '',

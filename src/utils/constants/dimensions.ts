@@ -1,4 +1,4 @@
-type DimensionValue = number | string | undefined;
+type DimensionValue = `${number}%`;
 
 type DimensionType = {
   TEN_PERCENT: DimensionValue;

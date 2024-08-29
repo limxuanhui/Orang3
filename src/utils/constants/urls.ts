@@ -1,4 +1,6 @@
-export const AUTH_SIGNIN_URL: string = '/users/auth/signin';
+export const GOOGLE_PLACES_API_KEY_URL: string = '/secrets/places';
+export const AUTH_SIGNIN_URL: string = '/auth/signin';
+export const AUTH_REFRESH_TOKENS_URL: string = '/auth/refresh-tokens';
 export const USER_ACCOUNT_DEACTIVATE_URL: string = '/users/deactivate-accounts';
 export const USER_ACCOUNT_DELETE_URL: string = '/users/delete-accounts';
 export const ITINERARY_ROUTING_URL: string = '/directions';

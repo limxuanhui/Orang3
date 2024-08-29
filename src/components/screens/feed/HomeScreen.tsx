@@ -49,13 +49,6 @@ const HomeScreen = ({}: HomeScreenProps) => {
   const dataFetchedIsNotEmpty =
     dataIsFetched && data.pages.length > 0 && data?.pages[0].items.length > 0;
 
-  // console.log('Home screen data fetched: ', data);
-  // console.log('Data fetched is empty: ', dataFetchedIsEmpty);
-  // console.log('Data fetched is not empty: ', dataFetchedIsNotEmpty);
-  // console.log('Data pages: ', data?.pages);
-  // console.log('Number of pages: ', data?.pages.length);
-  // console.log(data?.pages.flat(1));
-
   if (isLoading) {
     return <FullScreenLoading />;
   }
@@ -70,8 +63,6 @@ const HomeScreen = ({}: HomeScreenProps) => {
         <MessageDisplay message="No feeds at the moment..." />
       ) : dataFetchedIsNotEmpty ? (
         <FlatList
-          // initialNumToRender={2}
-          // data={data.pages[0].items}
           data={data.pages.flatMap(el => el.items)}
           renderItem={({ item, index }) => (
             <FeedDisplay

@@ -125,6 +125,11 @@ const useWriteTaleManager = (taleId?: string) => {
         height: pickedAsset.height || -1,
         width: pickedAsset.width || -1,
       };
+
+      const deletedId = metadata.cover?.id;
+      if (deletedId) {
+        
+      }
       dispatch(writeTale_setCover({ cover }));
 
       if (mode === 'EDIT') {
@@ -389,8 +394,7 @@ const useWriteTaleManager = (taleId?: string) => {
         requestData.metadata.deleted = changes.metadata.deleted;
 
         if (requestData.metadata.modified[0].cover) {
-          const modifiedMetadata: TaleMetadata =
-            requestData.metadata.modified[0];
+          let modifiedMetadata: TaleMetadata = requestData.metadata.modified[0];
           // Save new cover if it exists
           let blobs: Blob[];
           let uploadCoverDetailsList: UploadMediaDetails[];
@@ -411,6 +415,7 @@ const useWriteTaleManager = (taleId?: string) => {
             }
 
             const { presignedUrl, key } = uploadCoverDetailsList[0];
+
             const uploadCoverResponse: AxiosResponse[] | null =
               await uploadMediaFiles([presignedUrl], blobs);
 
@@ -422,20 +427,27 @@ const useWriteTaleManager = (taleId?: string) => {
               modifiedMetadata.cover.type.startsWith('video');
             const keyWithoutExt = key.split('.')[0];
             const keyUuid = keyWithoutExt.split('/')[1];
-            modifiedMetadata.cover = {
-              ...modifiedMetadata.cover,
-              id: keyUuid,
-              uri: key,
+
+            modifiedMetadata = {
+              ...modifiedMetadata,
+              cover: {
+                ...modifiedMetadata.cover,
+                id: keyUuid,
+                uri: key,
+              },
+              thumbnail: {
+                id: keyUuid,
+                type: isVideo ? 'image/gif' : modifiedMetadata.cover.type,
+                uri: isVideo ? `${keyWithoutExt}.gif` : key,
+                width: 200,
+                height:
+                  (modifiedMetadata.cover.height /
+                    modifiedMetadata.cover.width) *
+                  200,
+              },
             };
-            modifiedMetadata.thumbnail = {
-              id: keyUuid,
-              type: isVideo ? 'image/gif' : modifiedMetadata.cover.type,
-              uri: isVideo ? `${keyWithoutExt}.gif` : key,
-              width: 200,
-              height:
-                (modifiedMetadata.cover.height / modifiedMetadata.cover.width) *
-                200,
-            };
+            requestData.metadata.modified = [modifiedMetadata];
+            console.log('DELETED: ', requestData.metadata.deleted);
           }
         }
         break;
@@ -471,8 +483,6 @@ const useWriteTaleManager = (taleId?: string) => {
         return;
     }
 
-    console.log('Request data in edit tale to url:', urlFactory('tale-edit'));
-    printPrettyJson(requestData);
     try {
       const response = await axiosClient.put(
         urlFactory('tale-edit'),

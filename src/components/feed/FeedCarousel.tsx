@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
+import Config from 'react-native-config';
 import GypsieFeedCarousel from '../common/GypsieFeedCarousel';
 import type { FeedCarouselProps, FeedItem } from './types/types';
-import { AWS_CLOUDFRONT_URL_RAW } from '@env';
 
 const FeedCarousel = ({ handle, items, inView }: FeedCarouselProps) => {
   const [currIndex, setCurrIndex] = useState<number>(0);
@@ -16,7 +16,7 @@ const FeedCarousel = ({ handle, items, inView }: FeedCarouselProps) => {
   );
 
   const itemsToRender: FeedItem[] = items.map(el => {
-    const uri = `${AWS_CLOUDFRONT_URL_RAW}/${el.media.uri}`;
+    const uri = `${Config.AWS_CLOUDFRONT_URL_RAW}/${el.media.uri}`;
     const item = {
       ...el,
       media: {

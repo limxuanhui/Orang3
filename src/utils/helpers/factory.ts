@@ -1,10 +1,13 @@
 import { DataKey } from '@data/types/types';
 import {
+  AUTH_REFRESH_TOKENS_URL,
+  AUTH_SIGNIN_URL,
   EDIT_FEED_URL,
   EDIT_TALE_URL,
   FEEDS_BY_USERID_URL,
   FEEDS_METADATA_BY_USERID_URL,
   FEEDS_URL,
+  GOOGLE_PLACES_API_KEY_URL,
   ITINERARY_ROUTING_URL,
   NEW_FEED_URL,
   NEW_TALE_URL,
@@ -63,6 +66,15 @@ export const urlFactory = (
   options?: { id?: string; base64Key?: string },
 ) => {
   switch (key) {
+    case 'google-places-api-key':
+      return GOOGLE_PLACES_API_KEY_URL;
+
+    case 'user-authentication':
+      return AUTH_SIGNIN_URL;
+
+    case 'user-auth-refresh-tokens':
+      return AUTH_REFRESH_TOKENS_URL;
+
     case 'user-account-deactivate-by-userid':
       if (options && options.id) {
         return `${USER_ACCOUNT_DEACTIVATE_URL}/${options.id}`;

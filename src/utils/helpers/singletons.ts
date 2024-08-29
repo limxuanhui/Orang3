@@ -1,9 +1,15 @@
-import { BACKEND_BASE_URL } from '@env';
-import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 import axios, { AxiosInstance } from 'axios';
+import Config from 'react-native-config';
+import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 
-export const axiosClient: AxiosInstance = axios.create({
-  baseURL: BACKEND_BASE_URL,
+export const axiosPublic: AxiosInstance = axios.create({
+  baseURL: Config.BACKEND_BASE_URL,
+  timeout: 10000,
+});
+
+export const axiosPrivate: AxiosInstance = axios.create({
+  baseURL: Config.BACKEND_BASE_URL,
+  timeout: 15000,
 });
 
 export const queryClient: QueryClient = new QueryClient({

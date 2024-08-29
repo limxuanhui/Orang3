@@ -8,11 +8,8 @@ import { SCREEN_OPTIONS } from '@constants/constants';
 const AppStack = createStackNavigator<AppStackNavigatorParamList>();
 
 const AppStackNavigator = () => {
-  console.log(
-    '@@@@@@@@@@@@@@@@@ AppStackNavigator rerendered @@@@@@@@@@@@@@@@@',
-  );
-
   const screenOptions = useMemo(() => SCREEN_OPTIONS, []);
+
   return (
     <AppStack.Navigator
       initialRouteName="BottomTabs"

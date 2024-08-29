@@ -4,52 +4,24 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import EncryptedStorage from 'react-native-encrypted-storage';
-import jwtDecode from 'jwt-decode';
 import { v4 as uuidv4 } from 'uuid';
 import type { GypsieUser } from '@navigators/types/types';
 import { printPrettyJson } from '@helpers/functions';
-import { axiosClient, queryClient } from '@helpers/singletons';
-import { AUTH_SIGNIN_URL } from '@constants/urls';
+import { queryClient } from '@helpers/singletons';
 import { urlFactory } from '@helpers/factory';
-
-type GoogleIdToken = {
-  iss: string;
-  azp: string;
-  aud: string;
-  sub: string;
-  email: string;
-  email_verified: boolean;
-  at_hash: string;
-  nonce: string;
-  name: string;
-  picture: string;
-  given_name: string;
-  family_name: string;
-  locale: string;
-  iat: number;
-  exp: number;
-};
+import Toast from 'react-native-toast-message';
+import { TOAST_TITLE_STYLE } from '@constants/constants';
+import useTokensManager from '@hooks/useTokensManager';
+import useAxiosManager from '@hooks/useAxiosManager';
 
 const useAuthManager = () => {
   const [user, setUser] = useState<GypsieUser>();
+  const { removeAllTokens, storeToken, decodeIdToken, checkAllTokensExist } =
+    useTokensManager();
+  const { axiosPublic, axiosPrivate } = useAxiosManager();
+  const [googlePlacesApiKey, setGooglePlacesApiKey] = useState<string>('');
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-
-  const retrieveUserIdToken = useCallback(async () => {
-    console.info('Retrieving user id token...');
-    try {
-      const idToken = await EncryptedStorage.getItem('id_token');
-      if (!idToken) {
-        throw new Error('User id token is null');
-      }
-      return idToken;
-    } catch (error: any) {
-      console.error(
-        'An error occurred while retrieving user id token: ' + error,
-      );
-    }
-  }, []);
 
   const retrieveUserData = useCallback(async () => {
     console.info('Retrieving user data...');
@@ -64,23 +36,6 @@ const useAuthManager = () => {
       console.error('An error occurred while retrieving user data: ' + error);
     }
   }, []);
-
-  const storeUserIdToken = useCallback(
-    async (idToken: string) => {
-      try {
-        await EncryptedStorage.setItem('id_token', idToken);
-        const newIdToken = await retrieveUserIdToken();
-        if (newIdToken === undefined) {
-          throw new Error('User id token is not set properly');
-        }
-      } catch (error: any) {
-        console.error(
-          'An error occurred while storing user id token: ' + error,
-        );
-      }
-    },
-    [retrieveUserIdToken],
-  );
 
   const storeUserData = useCallback(
     async (userData: any) => {
@@ -97,21 +52,6 @@ const useAuthManager = () => {
     [retrieveUserData],
   );
 
-  const removeUserIdToken = useCallback(async () => {
-    console.info('Removing user id token...');
-    try {
-      const idToken = await retrieveUserIdToken();
-      if (idToken === undefined) {
-        // throw new Error("User id token is undefined");
-        console.error('No user id token');
-        return;
-      }
-      await EncryptedStorage.removeItem('id_token');
-    } catch (error: any) {
-      console.error('An error occurred while removing user id token: ' + error);
-    }
-  }, [retrieveUserIdToken]);
-
   const removeUserData = useCallback(async () => {
     console.info('Removing user data...');
     try {
@@ -127,46 +67,23 @@ const useAuthManager = () => {
     }
   }, [retrieveUserData]);
 
-  // const clearStorage = useCallback(async () => {
-  //   console.info('Clearing storage...');
-  //   try {
-  //     await EncryptedStorage.clear();
-  //     await AsyncStorage.clear();
-  //   } catch (error: any) {
-  //     console.error('An error occurred while clearing storage: ' + error);
-  //   }
-  // }, []);
-
-  const logoutHandler = useCallback(async () => {
-    // Remove token
-    await removeUserData();
-    await removeUserIdToken();
-    setUser(undefined);
-    setIsLoggedIn(false);
-    queryClient.clear();
-  }, [removeUserIdToken, removeUserData, setIsLoggedIn, setUser]);
-
-  const decodeIdToken = useCallback((idToken: string): GoogleIdToken => {
-    return jwtDecode(idToken);
-  }, []);
-
-  const checkIfIdTokenIsValid = useCallback(
-    async (idToken: string | undefined) => {
-      console.info('Checking if id token expired...');
-      console.info('idToken: ', idToken);
-      if (idToken) {
-        const decodedIdToken: GoogleIdToken = decodeIdToken(idToken);
-        const currentTime = Math.floor(Date.now() / 1000);
-        console.info('Decoded jwt: ', JSON.stringify(decodedIdToken, null, 4));
-        console.info('Token expires at: ', decodedIdToken.exp);
-        console.info('Time now: ', currentTime);
-        console.info('Time left: ', decodedIdToken.exp - currentTime);
-        return currentTime < decodedIdToken.exp;
+  const initGooglePlacesApiKey = useCallback(async () => {
+    try {
+      const response = await axiosPrivate.get(
+        urlFactory('google-places-api-key'),
+      );
+      const apiKey: string = response.data;
+      if (!apiKey) {
+        throw new Error('Unable to fetch Google Places API key at the moment.');
       }
-      return false;
-    },
-    [decodeIdToken],
-  );
+      await storeToken(apiKey, 'google_places_api_key');
+      setGooglePlacesApiKey(apiKey);
+    } catch (error: any) {
+      console.error(
+        'An error occurred while fetching Google Places API key: ' + error,
+      );
+    }
+  }, [axiosPrivate, storeToken]);
 
   const googleSigninHandler = useCallback(async () => {
     setLoading(true);
@@ -175,10 +92,10 @@ const useAuthManager = () => {
       await GoogleSignin.hasPlayServices();
       console.info('Awaiting Google sign in...');
       const userInfo = await GoogleSignin.signIn();
-      console.info(
-        'Google sign in complete!\nUser info:' +
-          JSON.stringify(userInfo, null, 4),
-      );
+      // console.info(
+      //   'Google sign in complete!\nUser info:' +
+      //     JSON.stringify(userInfo, null, 4),
+      // );
 
       if (userInfo.idToken) {
         const { sub, name, email, picture } = decodeIdToken(userInfo.idToken);
@@ -200,43 +117,80 @@ const useAuthManager = () => {
           idToken: userInfo.idToken,
         };
 
-        const response = await axiosClient.post(
-          AUTH_SIGNIN_URL,
+        const response = await axiosPublic.post(
+          urlFactory('user-authentication'),
           requestBody,
           {},
         );
         if (response.data) {
-          await storeUserIdToken(userInfo.idToken);
-          await storeUserData(response.data);
-          setUser(response.data);
+          console.log('USER from signin response');
+          printPrettyJson(response.data);
+          await storeToken(response.data.accessToken, 'access_token');
+          await storeToken(response.data.refreshToken, 'refresh_token');
+          await storeUserData(response.data.user);
+          await initGooglePlacesApiKey();
+          setUser(response.data.user);
           setIsLoggedIn(true);
         }
-        printPrettyJson(response.data);
       }
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // User cancelled the sign in flow
         console.log('Status Code: SIGN_IN_CANCELLED');
+        Toast.show({
+          type: 'error',
+          swipeable: true,
+          text1: 'Sign in cancelled',
+          text1Style: TOAST_TITLE_STYLE,
+        });
+        setLoading(false);
       } else if (error.code === statusCodes.IN_PROGRESS) {
         // Sign in is in progress
         console.log('Status Code: IN_PROGRESS');
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         // Play services not available
         console.log('Status Code: PLAY_SERVICES_NOT_AVAILABLE');
+        Toast.show({
+          type: 'error',
+          swipeable: true,
+          text1: 'Play services are not available',
+          text1Style: TOAST_TITLE_STYLE,
+        });
       } else {
         // Some other error happened
         console.error(
           'An unknown error occurred: Code:',
           error.code,
           'Error:',
-          error,
+          error.stack,
         );
+        Toast.show({
+          type: 'error',
+          swipeable: true,
+          text1: `An unknown error occurred: ${error}`,
+          text1Style: TOAST_TITLE_STYLE,
+        });
       }
-      setLoading(false);
     }
 
     setLoading(false);
-  }, [decodeIdToken, storeUserIdToken, storeUserData]);
+  }, [
+    axiosPublic,
+    decodeIdToken,
+    initGooglePlacesApiKey,
+    storeToken,
+    storeUserData,
+  ]);
+
+  const logoutHandler = useCallback(async () => {
+    console.log('Logging out!!!!');
+    await removeUserData();
+    await removeAllTokens();
+    setUser(undefined);
+    setIsLoggedIn(false);
+    setGooglePlacesApiKey('');
+    queryClient.clear();
+  }, [removeUserData, removeAllTokens]);
 
   const deactivateUserHandler = useCallback(async () => {
     console.log('Deactivating user...', user?.id);
@@ -244,7 +198,7 @@ const useAuthManager = () => {
     if (user?.id) {
       try {
         console.log('Starting deactivation of user...');
-        const response = await axiosClient.post(
+        const response = await axiosPrivate.post(
           urlFactory('user-account-deactivate-by-userid', { id: user.id }),
         );
         console.log('Deactivated user...');
@@ -256,7 +210,7 @@ const useAuthManager = () => {
       }
     }
     setLoading(false);
-  }, [logoutHandler, user?.id]);
+  }, [axiosPrivate, logoutHandler, user?.id]);
 
   const deleteUserHandler = useCallback(
     async (userId: string) => {
@@ -265,7 +219,7 @@ const useAuthManager = () => {
       if (userId === user?.id) {
         try {
           console.log('Starting deletion of user...');
-          const response = await axiosClient.delete(
+          const response = await axiosPrivate.delete(
             urlFactory('user-account-delete-by-userid', { id: userId }),
           );
           console.log('Deleted user...');
@@ -278,24 +232,23 @@ const useAuthManager = () => {
       }
       setLoading(false);
     },
-    [logoutHandler, user?.id],
+    [axiosPrivate, logoutHandler, user?.id],
   );
 
   useEffect(() => {
     console.log('useAuthManager useEffect called...');
+    // Check if user is logged in when app is newly launched
     const checkUserLoggedIn = async () => {
       // Check for existence of valid id token
-      const idToken = await retrieveUserIdToken();
-      const tokenIsValid = await checkIfIdTokenIsValid(idToken);
-      if (!tokenIsValid) {
-        setUser(undefined);
-        setIsLoggedIn(false);
-        await removeUserIdToken();
-        await removeUserData();
+      // const idToken = await retrieveToken('id_token');
+      // const tokenIsValid = await checkIfIdTokenIsValid(idToken);
+      if (!checkAllTokensExist()) {
+        console.log('@@@@@@@ CHECKING IF ALL TOKENS EXIST FAILED');
+        await logoutHandler();
         return;
       }
+
       const fetchedUser = await retrieveUserData();
-      console.log('fetchedUser: ', fetchedUser);
       if (fetchedUser) {
         setUser(fetchedUser);
         setIsLoggedIn(true);
@@ -303,19 +256,13 @@ const useAuthManager = () => {
     };
 
     checkUserLoggedIn();
-  }, [
-    retrieveUserData,
-    checkIfIdTokenIsValid,
-    removeUserIdToken,
-    removeUserData,
-    setIsLoggedIn,
-    retrieveUserIdToken,
-  ]);
+  }, [checkAllTokensExist, logoutHandler, retrieveUserData]);
 
   return {
     user,
     isLoggedIn,
     loading,
+    googlePlacesApiKey,
     googleSigninHandler,
     logoutHandler,
     deactivateUserHandler,

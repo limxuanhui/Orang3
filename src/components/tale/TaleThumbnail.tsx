@@ -2,6 +2,7 @@ import { memo, useCallback, useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Video from 'react-native-video';
+import Config from 'react-native-config';
 import type { TaleThumbnailProps } from '@components/tale/types/types';
 import type { ModalNavigatorNavigationProp } from '@navigators/types/types';
 import { DEVICE_WIDTH, PLACEHOLDER_IMAGE_URI } from '@constants/constants';
@@ -9,7 +10,6 @@ import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
 import GypsieAvatar from '@components/common/GypsieAvatar';
 import GypsieSkeleton from '@components/common/GypsieSkeleton';
-import { AWS_CLOUDFRONT_URL_THUMBNAIL } from '@env';
 import Logo from '../../../assets/images/orang3-logo.svg';
 
 const CARD_WIDTH = DEVICE_WIDTH / 2 - 8;
@@ -103,7 +103,7 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
               { aspectRatio: data.thumbnail.width / data.thumbnail.height },
             ]}
             source={{
-              uri: `${AWS_CLOUDFRONT_URL_THUMBNAIL}/${data.thumbnail.uri}`,
+              uri: `${Config.AWS_CLOUDFRONT_URL_THUMBNAIL}/${data.thumbnail.uri}`,
             }}
             progressiveRenderingEnabled
             resizeMode="contain"
@@ -188,47 +188,3 @@ const styles = StyleSheet.create({
 });
 
 export default TaleThumbnail;
-
-// const [mediaAspectRatio, setMediaAspectRatio] = useState<number>(0);
-// const { getImageSize, getMediaAspectRatio } = useMediaHandlers();
-
-// const onVideoLoad = useCallback(
-//   ({
-//     naturalSize,
-//   }: {
-//     naturalSize: {
-//       height: number;
-//       width: number;
-//       orientation: "portrait" | "landscape";
-//     };
-//   }) => {
-//     console.log("Video thumbnail finished loading.");
-//     const aspectRatio = naturalSize.width / naturalSize.height;
-//     setMediaAspectRatio(aspectRatio);
-//   },
-//   [setMediaAspectRatio],
-// );
-
-// const getImageAspectRatio = useCallback(
-//   async (imageUri: string): Promise<void> => {
-//     const imageSize = await getImageSize(imageUri);
-//     const imageAspectRatio = getMediaAspectRatio(
-//       imageSize.height,
-//       imageSize.width,
-//     );
-
-//     setMediaAspectRatio(imageAspectRatio);
-//   },
-//   [getImageSize, getMediaAspectRatio, setMediaAspectRatio],
-// );
-
-// useEffect(() => {
-//   if (data.cover && data.cover.type.startsWith("image")) {
-//     getImageAspectRatio(data.cover.uri);
-//   }
-// }, [data, getImageAspectRatio]);
-
-// // Temporarily set aspect ratio to 1 if media aspect ratio is still being calculated
-// if (mediaAspectRatio === 0) {
-//   setMediaAspectRatio(CARD_WIDTH / 200);
-// }

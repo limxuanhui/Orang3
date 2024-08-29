@@ -21,10 +21,6 @@ import { PALETTE } from '@constants/palette';
 const Modal = createStackNavigator<ModalNavigatorParamList>();
 
 const ModalNavigator = () => {
-  console.log(
-    '@@@@@@@@@@@@@@@@@@@ ModalNavigator rerendered @@@@@@@@@@@@@@@@@@@\n',
-  );
-
   const options = useMemo(
     () => ({
       headerShown: true,

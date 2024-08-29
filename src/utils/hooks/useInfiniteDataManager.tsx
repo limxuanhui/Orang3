@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+import { AxiosResponse } from 'axios';
 import {
   InfiniteData,
   QueryFunctionContext,
@@ -8,12 +9,9 @@ import {
   useInfiniteQuery,
   useQueryClient,
 } from '@tanstack/react-query';
+import useAxiosManager from '@hooks/useAxiosManager';
 import type { DataKey } from '@data/types/types';
-import { axiosClient } from '@helpers/singletons';
-import useGlobals from '@hooks/useGlobals';
-import { AxiosResponse } from 'axios';
 import { keyFactory, urlFactory } from '@helpers/factory';
-import { printPrettyJson } from '@helpers/functions';
 
 export type TInfiniteData<T> = {
   items: T;
@@ -42,7 +40,7 @@ const useInfiniteDataManager = <T,>(
     'queryKey' | 'queryFn' | 'getNextPageParam' | 'initialPageParam'
   >,
 ) => {
-  const { mode } = useGlobals();
+  const { axiosPrivate } = useAxiosManager();
   const queryClient = useQueryClient();
   const queryFn = useCallback(
     // @ts-ignore
@@ -54,33 +52,23 @@ const useInfiniteDataManager = <T,>(
       const key = dKey as DataKey;
       const id = dId as string;
       const base64Key = pageParam as string;
-      switch (mode) {
-        case 'production':
-          try {
-            let url;
-            if (pageParam) {
-              url = urlFactory(key, { id, base64Key });
-            } else {
-              url = urlFactory(key, { id });
-            }
-            const response: AxiosResponse = await axiosClient.get(url);
-            printPrettyJson(response.data);
-            return response.data;
-          } catch (err: unknown) {
-            console.error(err);
-            throw new Error('Unable to get content for you at the moment...');
-            // return { items: [] as T, lastEvaluatedKey: null };
-          }
-        case 'testing':
-          return { items: [] as T, lastEvaluatedKey: null };
-        case 'development':
-          return { items: [] as T, lastEvaluatedKey: null };
-        default:
-          console.info(`${mode} mode is not handled.`);
-          return { items: [] as T, lastEvaluatedKey: null };
+      try {
+        let url;
+        if (pageParam) {
+          url = urlFactory(key, { id, base64Key });
+        } else {
+          url = urlFactory(key, { id });
+        }
+        const response: AxiosResponse = await axiosPrivate.get(url);
+        // printPrettyJson(response.data);
+        return response.data;
+      } catch (err: unknown) {
+        console.error(err);
+        throw new Error('Unable to get content for you at the moment...');
+        // return { items: [] as T, lastEvaluatedKey: null };
       }
     },
-    [mode],
+    [],
   );
 
   const options = useMemo(
@@ -88,14 +76,14 @@ const useInfiniteDataManager = <T,>(
       infiniteQueryOptions({
         queryKey: keyFactory(dataKey, dataId),
         queryFn,
-        networkMode: mode === 'production' ? 'online' : 'always',
+        networkMode: 'online', // 'always'
         getNextPageParam: lastPage => {
           return lastPage.lastEvaluatedKey || undefined;
         },
         initialPageParam: null,
         ...dataOptions,
       }),
-    [dataId, dataKey, dataOptions, mode, queryFn],
+    [dataId, dataKey, dataOptions, queryFn],
   );
 
   const {

@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     height: DEVICE_HEIGHT,
     width: DEVICE_WIDTH,
     padding: 30,
-    paddingTop: getStatusBarHeight() + 10,
+    paddingTop: getStatusBarHeight() + 50,
     backgroundColor: PALETTE.WHITE,
   },
   googlePlacesInputBox: {

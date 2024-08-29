@@ -74,7 +74,7 @@ const NewPostOptions = () => {
                 },
               ]}
               onPress={onPressNewTale}>
-              <Text style={[styles.buttonText]}>New tale</Text>
+              <Text style={[styles.buttonText]}>New story</Text>
             </Pressable>
           </BottomSheetView>
         </BottomSheet>

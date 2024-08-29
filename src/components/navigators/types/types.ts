@@ -17,12 +17,6 @@ import {
 } from '@screens/post/types/types';
 import type { Media } from '@components/feed/types/types';
 
-// declare global {
-//   namespace ReactNavigation {
-//     interface RootParamList extends RootStackNavigatorParamList {}
-//   }
-// }
-
 export type GypsieUser = {
   id: string;
   name: string;

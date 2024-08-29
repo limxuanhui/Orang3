@@ -304,7 +304,7 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
           </BottomSheet>
         </>
       ) : (
-        <MessageDisplay message="Unable to display tale..." />
+        <MessageDisplay message="Unable to display story..." />
       )}
     </View>
   );

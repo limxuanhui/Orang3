@@ -58,7 +58,6 @@ const FeedReactionControls = ({
         <Image
           style={styles.avatar}
           source={{
-            // uri: `${AWS_S3_MEDIA_URL}/${creator.avatar?.uri}`,
             uri: creator.avatar?.uri,
           }}
         />

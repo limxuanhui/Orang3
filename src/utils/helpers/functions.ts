@@ -1,11 +1,10 @@
-import { AWS_API_GATEWAY_S3_PRESIGNED_URLS_LIST } from '@env';
+import Config from 'react-native-config';
 import axios, { AxiosResponse } from 'axios';
 import { MediaMimeType } from '@components/feed/types/types';
-// import Polyline from '@mapbox/polyline';
 import { RouteNodeCoord } from '@components/itinerary/types/types';
 import { LatLngTuple, decode, encode } from '@googlemaps/polyline-codec';
 
-export const printPrettyJson = (text: object | null | undefined) => {
+export const printPrettyJson = (text: object | string | null | undefined) => {
   console.info(JSON.stringify(text, null, 4));
 };
 
@@ -38,6 +37,8 @@ export const getPresignedUrls = async (
   items: MediaMimeType[],
 ): Promise<UploadMediaDetails[]> => {
   let getPresignedUrlsResponse: AxiosResponse;
+  const AWS_API_GATEWAY_S3_PRESIGNED_URLS_LIST: string =
+    Config.AWS_API_GATEWAY_S3_PRESIGNED_URLS_LIST as string;
   try {
     getPresignedUrlsResponse = await axios.post(
       AWS_API_GATEWAY_S3_PRESIGNED_URLS_LIST,
@@ -67,13 +68,15 @@ export const uploadMediaFiles = async (
   try {
     // Promise.all for uploading all the media files to s3
     uploadMediaFilesResponse = await Promise.all(
-      presignedUrls.map((url: string, index: number) =>
-        axios.put(url, blobs[index], {
+      presignedUrls.map((url: string, index: number) => {
+        console.log('Saving BLOB: ', blobs[index], ' to url ', url);
+
+        return axios.put(url, blobs[index], {
           // Ensure blob data is not transformed (stringified) by axios in transformRequest
           // Refer to this link for more details: https://github.com/axios/axios/issues/2677
           transformRequest: data => data,
-        }),
-      ),
+        });
+      }),
     );
   } catch (err) {
     console.error('Error uploading media files: ', err);

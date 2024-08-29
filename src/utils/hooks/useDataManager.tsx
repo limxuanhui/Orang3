@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+import { AxiosResponse } from 'axios';
 import {
   QueryFunction,
   QueryKey,
@@ -6,10 +7,8 @@ import {
   queryOptions,
   useQuery,
 } from '@tanstack/react-query';
+import useAxiosManager from '@hooks/useAxiosManager';
 import type { DataKey } from '@data/types/types';
-import { axiosClient } from '@helpers/singletons';
-import useGlobals from './useGlobals';
-import { AxiosResponse } from 'axios';
 import { keyFactory, urlFactory } from '@helpers/factory';
 import { printPrettyJson } from '@helpers/functions';
 
@@ -28,41 +27,28 @@ const useDataManager = <T,>(
     'queryKey' | 'queryFn'
   >,
 ) => {
-  const { mode } = useGlobals();
+  const { axiosPrivate } = useAxiosManager();
 
   const queryFn: QueryFunction<T | null, QueryKey, never> = useCallback(
     async ({ queryKey }: { queryKey: QueryKey }): Promise<T | null> => {
-      // async ({ queryKey }: { queryKey: QueryKey }) => {
       const [dKey, dId] = queryKey;
       const key = dKey as DataKey;
       const id = dId as string;
+      try {
+        const url: string = urlFactory(key, { id });
+        const response: AxiosResponse = await axiosPrivate.get(url);
+        printPrettyJson(response.data);
+        if (response.data.items) {
+          return response.data.items as T;
+        }
 
-      switch (mode) {
-        case 'production':
-          try {
-            const url: string = urlFactory(key, { id });
-            const response: AxiosResponse = await axiosClient.get(url);
-            printPrettyJson(response.data);
-            if (response.data.items) {
-              return response.data.items as T;
-            }
-
-            return response.data;
-          } catch (err) {
-            console.error(err);
-            return null;
-          }
-
-        case 'testing':
-          return null;
-        case 'development':
-          return null;
-        default:
-          console.info(`${mode} mode is not handled.`);
-          return null;
+        return response.data;
+      } catch (err) {
+        console.error(err);
+        return null;
       }
     },
-    [mode],
+    [],
   );
 
   const options = useMemo(() => {

@@ -26,8 +26,7 @@ const useGlobals = () => {
     };
   }, []);
 
-  // return { mode: __DEV__ ? 'development' : 'production', appStateVisible };
-  return { mode: __DEV__ ? 'production' : 'development', appStateVisible };
+  return { appStateVisible };
 };
 
 export default useGlobals;

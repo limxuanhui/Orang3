@@ -1,12 +1,12 @@
 import { memo, useCallback } from 'react';
 import { Image, Pressable, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Config from 'react-native-config';
 import type { FeedThumbnailProps } from './types/types';
 import type { ModalNavigatorNavigationProp } from '@navigators/types/types';
 import { DEVICE_WIDTH } from '@constants/constants';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
-import { AWS_CLOUDFRONT_URL_THUMBNAIL } from '@env';
 
 const FeedThumbnail = memo(({ data }: FeedThumbnailProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
@@ -39,7 +39,7 @@ const FeedThumbnail = memo(({ data }: FeedThumbnailProps) => {
         ]}
         source={{
           uri: data.thumbnail?.type.startsWith('image')
-            ? `${AWS_CLOUDFRONT_URL_THUMBNAIL}/${data.thumbnail.uri}`
+            ? `${Config.AWS_CLOUDFRONT_URL_THUMBNAIL}/${data.thumbnail.uri}`
             : defaultUri,
         }}
         // onLoad={(props) => console.log(props)}
