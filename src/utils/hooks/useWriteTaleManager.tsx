@@ -51,7 +51,7 @@ import {
   printPrettyJson,
   uploadMediaFiles,
 } from '@helpers/functions';
-import { axiosClient, queryClient } from '@helpers/singletons';
+import { queryClient } from '@helpers/singletons';
 import { ModalNavigatorNavigationProp } from '@navigators/types/types';
 import { useNavigation } from '@react-navigation/native';
 import { AxiosResponse } from 'axios';
@@ -60,6 +60,7 @@ import useDataManager from '@hooks/useDataManager';
 import { TaleView } from '@components/screens/tale/TaleViewScreen';
 import useInfiniteDataManager from '@hooks/useInfiniteDataManager';
 import { keyFactory, urlFactory } from '@helpers/factory';
+import useAxiosManager from './useAxiosManager';
 
 const imageLibraryOptions: ImageLibraryOptions = {
   mediaType: 'mixed',
@@ -71,6 +72,7 @@ const useWriteTaleManager = (taleId?: string) => {
   console.log('=== useWriteTaleManager ===');
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const { user } = useContext(AuthContext);
+  const { axiosPrivate } = useAxiosManager();
   const { openGallery } = useMediaHandlers(imageLibraryOptions);
   const { keyboardIsVisible, closeKeyboard } = useKeyboardHandlers();
   const { bottomSheetRef, snapPoints, renderBackdrop } = useBottomSheetHandlers(
@@ -126,10 +128,10 @@ const useWriteTaleManager = (taleId?: string) => {
         width: pickedAsset.width || -1,
       };
 
-      const deletedId = metadata.cover?.id;
-      if (deletedId) {
-        
-      }
+      // const deletedId = metadata.cover?.id;
+      // if (deletedId) {
+
+      // }
       dispatch(writeTale_setCover({ cover }));
 
       if (mode === 'EDIT') {
@@ -356,7 +358,7 @@ const useWriteTaleManager = (taleId?: string) => {
     console.log('====== Create tale ======');
     printPrettyJson(newTale);
     try {
-      const response = await axiosClient.post(urlFactory('tale-new'), newTale);
+      const response = await axiosPrivate.post(urlFactory('tale-new'), newTale);
       printPrettyJson(response);
     } catch (err) {
       console.error(err);
@@ -484,7 +486,7 @@ const useWriteTaleManager = (taleId?: string) => {
     }
 
     try {
-      const response = await axiosClient.put(
+      const response = await axiosPrivate.put(
         urlFactory('tale-edit'),
         requestData,
       );
@@ -497,7 +499,10 @@ const useWriteTaleManager = (taleId?: string) => {
       queryKey: keyFactory('tale-by-taleid', taleId),
     });
   }, [
-    changes.metadata,
+    axiosPrivate,
+    changes.metadata.deleted,
+    changes.metadata.modified,
+    changes.metadata.type,
     changes.routes.deleted,
     changes.routes.modified,
     changes.routes.type,

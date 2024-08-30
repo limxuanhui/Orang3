@@ -1,20 +1,11 @@
-import {
-  PayloadAction,
-  createAsyncThunk,
-  createSlice,
-  nanoid,
-} from '@reduxjs/toolkit';
-import { decode, encode } from '@googlemaps/polyline-codec';
+import { PayloadAction, createSlice, nanoid } from '@reduxjs/toolkit';
 import { ulid } from 'ulid';
 import {
   Itinerary,
   Route,
-  RouteNodeCoord,
   RouteNode,
   ItineraryPlannerMode,
 } from '@components/itinerary/types/types';
-import { axiosClient } from '@helpers/singletons';
-import { urlFactory } from '@helpers/factory';
 
 type ItineraryPlanner = {
   mode: ItineraryPlannerMode;
@@ -62,85 +53,6 @@ const initialState: ItineraryState = {
   isRouting: false,
   error: '',
 };
-
-export const itineraryPlanner_startRouting = createAsyncThunk(
-  'itineraryPlanner/startRouting',
-  async (selectedRoute: Route, _thunkAPI) => {
-    console.log('Data prepared. Beginning to hit api');
-    const data = selectedRoute.routeNodes.map(
-      (routeNode: RouteNode) => routeNode.coord,
-    );
-    const options = {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    };
-
-    try {
-      const directionsResponse = await axiosClient.post(
-        urlFactory('itinerary-routing'),
-        // ITINERARY_ROUTING_URL,
-        JSON.stringify(data),
-        options,
-      );
-
-      let orderedRouteNodes: RouteNode[] = [];
-      directionsResponse.data.order.forEach((id: number) => {
-        const currentNode = selectedRoute.routeNodes[id];
-        if (currentNode) {
-          orderedRouteNodes.push(currentNode);
-        }
-      });
-      console.log(directionsResponse.data.order);
-      orderedRouteNodes = orderedRouteNodes.map((routeNode, index) => ({
-        ...routeNode,
-        order: index + 1,
-      }));
-
-      let polyline: RouteNodeCoord[] = [];
-      console.log('\n======Results======');
-      console.log(
-        JSON.stringify(directionsResponse.data.directionsResultList, null, 4),
-      );
-      console.log('\n');
-      if (directionsResponse.data.directionsResultList.length === 0) {
-        throw new Error('No directions available');
-      }
-
-      // Backend will return an array of polylines,
-      // where each polyline defines the route between two places
-      directionsResponse.data.directionsResultList.forEach(
-        (direction: {
-          routes: { overviewPolyline: { encodedPath: string } }[];
-        }) => {
-          // const directionCoords = Polyline.decode(
-          const directionCoords = decode(
-            direction.routes[0].overviewPolyline.encodedPath,
-          ).map((coord: any[]) => ({
-            latitude: coord[0],
-            longitude: coord[1],
-          }));
-          // polylines.push(directionCoords) --> multiple polylines, each representing the route between 2 places
-          polyline = polyline.concat(directionCoords);
-        },
-      );
-
-      const encodedPolyline = encode(
-        polyline.map(coord => [coord.latitude, coord.longitude]),
-      );
-
-      return {
-        ...selectedRoute,
-        routeNodes: orderedRouteNodes,
-        polyline,
-        encodedPolyline,
-      };
-    } catch (err: unknown) {
-      throw err;
-    }
-  },
-);
 
 const itineraryPlannerSlice = createSlice({
   name: 'itineraryPlanner',

@@ -1,6 +1,11 @@
 import { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
-import type { RouteBottomControlsProps } from './types/types';
+import type {
+  Route,
+  RouteBottomControlsProps,
+  RouteNode,
+  RouteNodeCoord,
+} from './types/types';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
 import { useAppDispatch, useAppSelector } from '@redux/hooks';
@@ -10,7 +15,6 @@ import {
   itineraryPlanner_reorderRoutes,
   itineraryPlanner_setIsRouting,
   itineraryPlanner_setRoute,
-  itineraryPlanner_startRouting,
 } from '@redux/reducers/itineraryPlannerSlice';
 import {
   writeTale_updateModified,
@@ -21,12 +25,16 @@ import DeleteOutlineIcon from '@icons/DeleteOutlineIcon';
 import RouteIcon from '@icons/RouteIcon';
 import Toast from 'react-native-toast-message';
 import { TOAST_TITLE_STYLE } from '@constants/constants';
+import { decode, encode } from '@googlemaps/polyline-codec';
+import { urlFactory } from '@helpers/factory';
+import useAxiosManager from '@hooks/useAxiosManager';
 
 const RouteBottomControls = ({
   isRouted,
   oneRouteLeft,
   routeLength,
 }: RouteBottomControlsProps) => {
+  const { axiosPrivate } = useAxiosManager();
   const dispatch = useAppDispatch();
   const { mode, changes } = useAppSelector(state => state.writeTale);
   const { itinerary, selectedRouteId, isRouting } = useAppSelector(
@@ -78,14 +86,90 @@ const RouteBottomControls = ({
     }
   }, [changes.routes.type, dispatch, mode, selectedRoute?.id]);
 
-  const onStartRouting = useCallback(async () => {
+  const onStartRouting = useCallback(
+    async (currRoute: Route) => {
+      console.log('Data prepared. Beginning to hit api');
+      const data = currRoute.routeNodes.map(
+        (routeNode: RouteNode) => routeNode.coord,
+      );
+      const options = {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      };
+
+      try {
+        const directionsResponse = await axiosPrivate.post(
+          urlFactory('itinerary-routing'),
+          JSON.stringify(data),
+          options,
+        );
+
+        let orderedRouteNodes: RouteNode[] = [];
+        directionsResponse.data.order.forEach((id: number) => {
+          const currentNode = currRoute.routeNodes[id];
+          if (currentNode) {
+            orderedRouteNodes.push(currentNode);
+          }
+        });
+        console.log(directionsResponse.data.order);
+        orderedRouteNodes = orderedRouteNodes.map((routeNode, index) => ({
+          ...routeNode,
+          order: index + 1,
+        }));
+
+        let polyline: RouteNodeCoord[] = [];
+        console.log('\n======Results======');
+        console.log(
+          JSON.stringify(directionsResponse.data.directionsResultList, null, 4),
+        );
+        console.log('\n');
+        if (directionsResponse.data.directionsResultList.length === 0) {
+          throw new Error('No directions available');
+        }
+
+        // Backend will return an array of polylines,
+        // where each polyline defines the route between two places
+        directionsResponse.data.directionsResultList.forEach(
+          (direction: {
+            routes: { overviewPolyline: { encodedPath: string } }[];
+          }) => {
+            // const directionCoords = Polyline.decode(
+            const directionCoords = decode(
+              direction.routes[0].overviewPolyline.encodedPath,
+            ).map((coord: any[]) => ({
+              latitude: coord[0],
+              longitude: coord[1],
+            }));
+            // polylines.push(directionCoords) --> multiple polylines, each representing the route between 2 places
+            polyline = polyline.concat(directionCoords);
+          },
+        );
+
+        const encodedPolyline = encode(
+          polyline.map(coord => [coord.latitude, coord.longitude]),
+        );
+
+        return {
+          ...currRoute,
+          routeNodes: orderedRouteNodes,
+          polyline,
+          encodedPolyline,
+        };
+      } catch (err: unknown) {
+        throw err;
+      }
+    },
+    [axiosPrivate],
+  );
+
+  const onPressRoute = useCallback(async () => {
     if (selectedRoute) {
       console.log('Starting to route...');
       dispatch(itineraryPlanner_setIsRouting({ isRouting: true }));
       try {
-        const routedRoute = await dispatch(
-          itineraryPlanner_startRouting(selectedRoute),
-        ).unwrap();
+        const routedRoute = await onStartRouting(selectedRoute);
 
         if (routedRoute) {
           dispatch(itineraryPlanner_setRoute({ route: routedRoute }));
@@ -101,7 +185,7 @@ const RouteBottomControls = ({
       }
       dispatch(itineraryPlanner_setIsRouting({ isRouting: false }));
     }
-  }, [selectedRoute, dispatch]);
+  }, [selectedRoute, dispatch, onStartRouting]);
 
   return (
     <View style={styles.bottomControls}>
@@ -132,7 +216,7 @@ const RouteBottomControls = ({
         ]}
         customIconStyles={{ fontSize: 24, color: routeButtonColor }}
         Icon={RouteIcon}
-        onPress={onStartRouting}
+        onPress={onPressRoute}
         disabled={routeButtonIsDisabled}
         loading={isRouting}
       />

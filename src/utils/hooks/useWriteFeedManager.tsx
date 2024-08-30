@@ -36,13 +36,14 @@ import {
   printPrettyJson,
   uploadMediaFiles,
 } from '@helpers/functions';
-import { axiosClient, queryClient } from '@helpers/singletons';
+import { queryClient } from '@helpers/singletons';
 import { useMutation } from '@tanstack/react-query';
 import useDataManager from '@hooks/useDataManager';
 import { MEDIA_THUMBNAIL_MAX_WIDTH } from '@constants/constants';
 import { keyFactory, urlFactory } from '@helpers/factory';
 import useMediaHandlers from './useMediaHandlers';
 import { nanoid } from '@reduxjs/toolkit';
+import useAxiosManager from './useAxiosManager';
 
 const imageLibraryOptions: ImageLibraryOptions = {
   mediaType: 'mixed',
@@ -52,6 +53,7 @@ const imageLibraryOptions: ImageLibraryOptions = {
 
 const useWriteFeedManager = (feedId?: string) => {
   const { user } = useContext(AuthContext);
+  const { axiosPrivate } = useAxiosManager();
   const { modalIsOpen, closeModal, openModal } = useModalHandlers();
   const { openGallery } = useMediaHandlers(imageLibraryOptions);
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
@@ -193,7 +195,7 @@ const useWriteFeedManager = (feedId?: string) => {
     console.log('====== Create feed ======');
     printPrettyJson(requestData);
     try {
-      const uploadMetadataResponse = await axiosClient.post(
+      const uploadMetadataResponse = await axiosPrivate.post(
         urlFactory('feed-new'),
         requestData,
       );
@@ -205,7 +207,7 @@ const useWriteFeedManager = (feedId?: string) => {
 
     // If success in uploading feed, proceed
     // Else try to try to check for uploaded media files, and delete them.
-  }, [items, user]);
+  }, [axiosPrivate, items, user]);
 
   const updateExistingFeed = useCallback(async () => {
     if (!user || !feedId) {
@@ -235,7 +237,7 @@ const useWriteFeedManager = (feedId?: string) => {
             modified: modifiedFeedData,
             deleted: [],
           };
-          const response = await axiosClient.put(
+          const response = await axiosPrivate.put(
             urlFactory('feed-edit'),
             requestData,
           );
@@ -327,7 +329,7 @@ const useWriteFeedManager = (feedId?: string) => {
         };
 
         try {
-          const uploadMetadataResponse = await axiosClient.put(
+          const uploadMetadataResponse = await axiosPrivate.put(
             urlFactory('feed-edit'),
             requestData,
           );
@@ -348,6 +350,7 @@ const useWriteFeedManager = (feedId?: string) => {
         return;
     }
   }, [
+    axiosPrivate,
     changes.deleted,
     changes.modified,
     changes.type,

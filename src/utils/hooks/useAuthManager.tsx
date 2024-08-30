@@ -16,8 +16,13 @@ import useAxiosManager from '@hooks/useAxiosManager';
 
 const useAuthManager = () => {
   const [user, setUser] = useState<GypsieUser>();
-  const { removeAllTokens, storeToken, decodeIdToken, checkAllTokensExist } =
-    useTokensManager();
+  const {
+    retrieveToken,
+    removeAllTokens,
+    storeToken,
+    decodeIdToken,
+    checkAllTokensExist,
+  } = useTokensManager();
   const { axiosPublic, axiosPrivate } = useAxiosManager();
   const [googlePlacesApiKey, setGooglePlacesApiKey] = useState<string>('');
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -92,10 +97,7 @@ const useAuthManager = () => {
       await GoogleSignin.hasPlayServices();
       console.info('Awaiting Google sign in...');
       const userInfo = await GoogleSignin.signIn();
-      // console.info(
-      //   'Google sign in complete!\nUser info:' +
-      //     JSON.stringify(userInfo, null, 4),
-      // );
+      console.info('Google sign in complete!');
 
       if (userInfo.idToken) {
         const { sub, name, email, picture } = decodeIdToken(userInfo.idToken);
@@ -123,7 +125,6 @@ const useAuthManager = () => {
           {},
         );
         if (response.data) {
-          console.log('USER from signin response');
           printPrettyJson(response.data);
           await storeToken(response.data.accessToken, 'access_token');
           await storeToken(response.data.refreshToken, 'refresh_token');
@@ -249,14 +250,16 @@ const useAuthManager = () => {
       }
 
       const fetchedUser = await retrieveUserData();
-      if (fetchedUser) {
+      const apiKey = await retrieveToken('google_places_api_key');
+      if (fetchedUser && apiKey) {
         setUser(fetchedUser);
+        setGooglePlacesApiKey(apiKey);
         setIsLoggedIn(true);
       }
     };
 
     checkUserLoggedIn();
-  }, [checkAllTokensExist, logoutHandler, retrieveUserData]);
+  }, [checkAllTokensExist, logoutHandler, retrieveToken, retrieveUserData]);
 
   return {
     user,
