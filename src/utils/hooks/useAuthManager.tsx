@@ -72,23 +72,25 @@ const useAuthManager = () => {
     }
   }, [retrieveUserData]);
 
-  const initGooglePlacesApiKey = useCallback(async () => {
-    try {
-      const response = await axiosPrivate.get(
-        urlFactory('google-places-api-key'),
-      );
-      const apiKey: string = response.data;
-      if (!apiKey) {
-        throw new Error('Unable to fetch Google Places API key at the moment.');
-      }
-      await storeToken(apiKey, 'google_places_api_key');
-      setGooglePlacesApiKey(apiKey);
-    } catch (error: any) {
-      console.error(
-        'An error occurred while fetching Google Places API key: ' + error,
-      );
-    }
-  }, [axiosPrivate, storeToken]);
+  // const initGooglePlacesApiKey = useCallback(async () => {
+  //   console.info('Getting google places api key...');
+  //   try {
+  //     const response = await axiosPrivate.get(
+  //       urlFactory('google-places-api-key'),
+  //     );
+  //     const apiKey: string = response.data;
+  //     console.info('Google places api key: ', apiKey);
+  //     if (!apiKey) {
+  //       throw new Error('Unable to fetch Google Places API key at the moment.');
+  //     }
+  //     await storeToken(apiKey, 'google_places_api_key');
+  //     setGooglePlacesApiKey(apiKey);
+  //   } catch (error: any) {
+  //     console.error(
+  //       'An error occurred while fetching Google Places API key: ' + error,
+  //     );
+  //   }
+  // }, [axiosPrivate, storeToken]);
 
   const googleSigninHandler = useCallback(async () => {
     setLoading(true);
@@ -128,8 +130,12 @@ const useAuthManager = () => {
           printPrettyJson(response.data);
           await storeToken(response.data.accessToken, 'access_token');
           await storeToken(response.data.refreshToken, 'refresh_token');
+          await storeToken(
+            response.data.googlePlacesApiKey,
+            'google_places_api_key',
+          );
           await storeUserData(response.data.user);
-          await initGooglePlacesApiKey();
+          setGooglePlacesApiKey(response.data.googlePlacesApiKey);
           setUser(response.data.user);
           setIsLoggedIn(true);
         }
@@ -175,13 +181,7 @@ const useAuthManager = () => {
     }
 
     setLoading(false);
-  }, [
-    axiosPublic,
-    decodeIdToken,
-    initGooglePlacesApiKey,
-    storeToken,
-    storeUserData,
-  ]);
+  }, [axiosPublic, decodeIdToken, storeToken, storeUserData]);
 
   const logoutHandler = useCallback(async () => {
     console.log('Logging out!!!!');

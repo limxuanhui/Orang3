@@ -1,3 +1,4 @@
+/* eslint-disable dot-notation */
 import { useContext, useEffect } from 'react';
 import { InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 import { urlFactory } from '@helpers/factory';
@@ -13,6 +14,7 @@ const useAxiosManager = () => {
   useEffect(() => {
     axiosPrivate.interceptors.request.use(
       async (config: InternalAxiosRequestConfig<any>) => {
+        console.info('!!!!!!!!!!!!!!!! Request Intercepted outside if block');
         if (!config.headers['Authorization']) {
           console.info('!!!!!!!!!!!!!!!! Request Intercepted !!!!!!!!!!!!!!!!');
           const accessToken = await retrieveToken('access_token');
