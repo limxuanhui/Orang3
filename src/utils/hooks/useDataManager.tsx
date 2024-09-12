@@ -48,7 +48,7 @@ const useDataManager = <T,>(
         return null;
       }
     },
-    [],
+    [axiosPrivate],
   );
 
   const options = useMemo(() => {

@@ -21,6 +21,7 @@ DerivedData
 *.ipa
 *.xcuserstate
 **/.xcode.env.local
+*.xcconfig
 
 # Android/IntelliJ
 #
@@ -72,6 +73,3 @@ assets/
 
 # Data
 *.sql
-
-# react-native-config codegen
-ios/tmp.xcconfig

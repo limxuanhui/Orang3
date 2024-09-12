@@ -68,7 +68,7 @@ const useInfiniteDataManager = <T,>(
         // return { items: [] as T, lastEvaluatedKey: null };
       }
     },
-    [],
+    [axiosPrivate],
   );
 
   const options = useMemo(
