@@ -5,6 +5,7 @@ import Video, {
   OnLoadData,
   OnProgressData,
   OnSeekData,
+  VideoRef,
 } from 'react-native-video';
 import VlogPlayerButton from '@components/vlog/VlogPlayerButton';
 import VlogPlayerSlider from '@components/vlog/VlogPlayerSlider';
@@ -15,7 +16,7 @@ import { PALETTE } from '@constants/palette';
 import { printPrettyJson } from '@helpers/functions';
 
 const VlogPlayer = ({ vlog, shouldPlay }: VlogPlayerProps) => {
-  const videoRef = useRef<Video>(null);
+  const videoRef = useRef<VideoRef>(null);
   const { media } = vlog;
   const [status, setStatus] = useState<VlogPlayerStatus>(
     VlogPlayerStatus.PLAYING,
