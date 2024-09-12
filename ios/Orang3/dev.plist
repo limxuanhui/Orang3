@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>${TARGET_NAME}</string>
+	<string>${PRODUCT_NAME}-dev</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -25,7 +25,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.240016316671-bbb96sgu5i31ahsdro89fi7va1dr50r5</string>
+				<string>$(GOOGLE_CLIENT_IOS_URL_SCHEME)</string>
 			</array>
 		</dict>
 	</array>

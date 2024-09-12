@@ -10,7 +10,7 @@
     "ios:uat-release": "react-native run-ios --scheme Orang3-uat --mode Release-uat -- --reset-cache",
     "ios:prod": "react-native run-ios --scheme Orang3-prod --mode Release -- --reset-cache",
     "ios:deep-clean": "cd ios && rm -rf ~/Library/Caches/CocoaPods ~/Library/Developer/Xcode/DerivedData/* build Pods Podfile.lock && pod deintegrate && pod setup && pod install && cd ..",
-    "ios:shallow-clean": "cd ios && pod deintegrate && pod install && cd ..",
+    "ios:shallow-clean": "cd ios && rm -rf build Pods && pod deintegrate && pod install && cd ..",
     "clean": "react-native-clean-project",
     "start": "react-native start",
     "lint": "eslint .",
