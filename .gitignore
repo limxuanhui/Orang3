@@ -64,7 +64,13 @@ yarn-error.log
 .metro-health-check*
 
 # Assets
-assets/
+assets/avatars/
+assets/images/test-images
+assets/videos/test-videos
+# !assets/
+# !assets/fonts/
+# !assets/
+# assets/images/test-images
 
 # Environment variables
 .env

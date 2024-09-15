@@ -220,7 +220,7 @@ export const SCREEN_OPTIONS: StackNavigationOptions = { headerShown: false };
 
 // TODO: change to relative path
 export const PLACEHOLDER_IMAGE_URI: string =
-  '/Users/limxuanhui/bluextech/gypsie/assets/images/sun_design3.png';
+  '/Users/limxuanhui/bluextech/gypsie/assets/images/sun.png';
 
 export const MEDIA_THUMBNAIL_MAX_WIDTH: number = 200;
 
