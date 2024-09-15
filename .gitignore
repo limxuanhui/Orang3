@@ -64,7 +64,7 @@ yarn-error.log
 .metro-health-check*
 
 # Assets
-assets/avatars/
+assets/avatars
 assets/images/test-images
 assets/videos/test-videos
 # !assets/
