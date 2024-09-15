@@ -23,7 +23,7 @@ const MyTales = memo(({ data, onRefresh }: MyTalesProps) => {
           <ActivityIndicator size={48} color={PALETTE.ORANGE} />
         </View>
       ) : data.length === 0 ? (
-        <MessageDisplay message="No tales to show..." />
+        <MessageDisplay message="No stories to show..." />
       ) : (
         <MasonryList
           contentContainerStyle={styles.masonryListContentContainer}
