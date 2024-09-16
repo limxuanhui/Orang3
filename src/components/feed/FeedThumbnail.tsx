@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react';
-import { Image, Pressable, StyleSheet } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Config from 'react-native-config';
 import type { FeedThumbnailProps } from './types/types';
@@ -7,11 +7,12 @@ import type { ModalNavigatorNavigationProp } from '@navigators/types/types';
 import { DEVICE_WIDTH } from '@constants/constants';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
+import Logo from '../../../assets/images/orang3-logo.svg';
+
+const CARD_WIDTH = DEVICE_WIDTH / 3 - 8;
 
 const FeedThumbnail = memo(({ data }: FeedThumbnailProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
-  const defaultUri =
-    '/Users/limxuanhui/bluextech/gypsie/assets/images/logo-no-background.png';
 
   const onPressThumbnail = useCallback(() => {
     navigation.push('Modal', {
@@ -32,19 +33,23 @@ const FeedThumbnail = memo(({ data }: FeedThumbnailProps) => {
         },
       ]}
       onPress={onPressThumbnail}>
-      <Image
-        style={[
-          styles.image,
-          { aspectRatio: data.thumbnail.width / data.thumbnail.height || 1 },
-        ]}
-        source={{
-          uri: data.thumbnail?.type.startsWith('image')
-            ? `${Config.AWS_CLOUDFRONT_URL_THUMBNAIL}/${data.thumbnail.uri}`
-            : defaultUri,
-        }}
-        // onLoad={(props) => console.log(props)}
-        resizeMode="contain"
-      />
+      {data.thumbnail.type.startsWith('image') ? (
+        <Image
+          style={[
+            styles.image,
+            { aspectRatio: data.thumbnail.width / data.thumbnail.height || 1 },
+          ]}
+          source={{
+            uri: `${Config.AWS_CLOUDFRONT_URL_THUMBNAIL}/${data.thumbnail.uri}`,
+          }}
+          // onLoad={(props) => console.log(props)}
+          resizeMode="contain"
+        />
+      ) : (
+        <View style={styles.thumbnail}>
+          <Logo width={CARD_WIDTH * 0.6} height={80} />
+        </View>
+      )}
     </Pressable>
   );
 });
@@ -53,7 +58,7 @@ const styles = StyleSheet.create({
   thumbnail: {
     justifyContent: 'center',
     alignItems: 'center',
-    width: DEVICE_WIDTH / 3 - 8,
+    width: CARD_WIDTH,
     backgroundColor: PALETTE.OFFWHITE,
     margin: 3,
     borderRadius: 8,

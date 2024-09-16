@@ -11,6 +11,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		35D3B15869F8759A638BE0BB /* libPods-Orang3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 15E868D63DA0075F20FE4523 /* libPods-Orang3.a */; };
 		50B2947BD1C14C818D228DFA /* Satisfy-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 27CC348C97E446D7982C03C9 /* Satisfy-Regular.ttf */; };
 		80730D57DD92458798AD2B1F /* LilitaOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F8AF291EE7AA4030B88A1E3E /* LilitaOne-Regular.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -33,7 +34,6 @@
 		9EEEDCEC2B23A34D007408AE /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9EEEDCC52B23A2E6007408AE /* Octicons.ttf */; };
 		9EEEDCED2B23A34D007408AE /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9EEEDCBE2B23A2E6007408AE /* SimpleLineIcons.ttf */; };
 		9EEEDCEE2B23A34D007408AE /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9EEEDCC12B23A2E6007408AE /* Zocial.ttf */; };
-		B60FBBACCBCFC9EB9F6E6C7C /* libPods-Orang3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 778D13EC953EF1B42FDF214A /* libPods-Orang3.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,11 +43,11 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Orang3/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* prod.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = prod.plist; path = Orang3/prod.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Orang3/main.m; sourceTree = "<group>"; };
+		15E868D63DA0075F20FE4523 /* libPods-Orang3.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Orang3.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D5BCA5653E99C8BAC7B4FCB /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		27CC348C97E446D7982C03C9 /* Satisfy-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Satisfy-Regular.ttf"; path = "../assets/fonts/Satisfy-Regular.ttf"; sourceTree = "<group>"; };
-		6771EC80F7CF23F9DB64513D /* Pods-Orang3.debug-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Orang3.debug-dev.xcconfig"; path = "Target Support Files/Pods-Orang3/Pods-Orang3.debug-dev.xcconfig"; sourceTree = "<group>"; };
-		6A1F7E67AA20EC9A6114DDE4 /* Pods-Orang3.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Orang3.release.xcconfig"; path = "Target Support Files/Pods-Orang3/Pods-Orang3.release.xcconfig"; sourceTree = "<group>"; };
-		778D13EC953EF1B42FDF214A /* libPods-Orang3.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Orang3.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E2CD66E71F56180E12BDCAF /* Pods-Orang3.debug-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Orang3.debug-dev.xcconfig"; path = "Target Support Files/Pods-Orang3/Pods-Orang3.debug-dev.xcconfig"; sourceTree = "<group>"; };
+		690211B6158F25D468DB2C03 /* Pods-Orang3.release-uat.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Orang3.release-uat.xcconfig"; path = "Target Support Files/Pods-Orang3/Pods-Orang3.release-uat.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Orang3/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9E5471C02C62940700D29397 /* Debug-dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug-dev.xcconfig"; sourceTree = "<group>"; };
 		9E5471C12C6294BD00D29397 /* Release-uat.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release-uat.xcconfig"; sourceTree = "<group>"; };
@@ -78,11 +78,11 @@
 		9EF1DC0A2C44F3FA00C7A055 /* Release-dev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Release-dev.xcconfig"; sourceTree = "<group>"; };
 		9EF1DC0B2C44F41B00C7A055 /* Debug-uat.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Debug-uat.xcconfig"; sourceTree = "<group>"; };
 		9EF1DC0C2C44F42B00C7A055 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
-		D24594E04E3E931BCD55E02F /* Pods-Orang3.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Orang3.release-dev.xcconfig"; path = "Target Support Files/Pods-Orang3/Pods-Orang3.release-dev.xcconfig"; sourceTree = "<group>"; };
+		C3B1D523200B4621BA47EE15 /* Pods-Orang3.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Orang3.release.xcconfig"; path = "Target Support Files/Pods-Orang3/Pods-Orang3.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		F643B90B6E8045052FAD8418 /* Pods-Orang3.debug-uat.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Orang3.debug-uat.xcconfig"; path = "Target Support Files/Pods-Orang3/Pods-Orang3.debug-uat.xcconfig"; sourceTree = "<group>"; };
+		EEAEBE69796975EF5B64BC2B /* Pods-Orang3.debug-uat.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Orang3.debug-uat.xcconfig"; path = "Target Support Files/Pods-Orang3/Pods-Orang3.debug-uat.xcconfig"; sourceTree = "<group>"; };
 		F8AF291EE7AA4030B88A1E3E /* LilitaOne-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "LilitaOne-Regular.ttf"; path = "../assets/fonts/LilitaOne-Regular.ttf"; sourceTree = "<group>"; };
-		FDC3E307CDC5B36F137E654E /* Pods-Orang3.release-uat.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Orang3.release-uat.xcconfig"; path = "Target Support Files/Pods-Orang3/Pods-Orang3.release-uat.xcconfig"; sourceTree = "<group>"; };
+		F8F3223D546D797D42A13130 /* Pods-Orang3.release-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Orang3.release-dev.xcconfig"; path = "Target Support Files/Pods-Orang3/Pods-Orang3.release-dev.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B60FBBACCBCFC9EB9F6E6C7C /* libPods-Orang3.a in Frameworks */,
+				35D3B15869F8759A638BE0BB /* libPods-Orang3.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,7 +120,7 @@
 				9ECBCD1E2C5B8D0C00C3AE2C /* hermes.xcframework */,
 				9ECBCD1C2C5AB4D900C3AE2C /* libReact-hermes.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				778D13EC953EF1B42FDF214A /* libPods-Orang3.a */,
+				15E868D63DA0075F20FE4523 /* libPods-Orang3.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -171,11 +171,11 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				6771EC80F7CF23F9DB64513D /* Pods-Orang3.debug-dev.xcconfig */,
-				F643B90B6E8045052FAD8418 /* Pods-Orang3.debug-uat.xcconfig */,
-				D24594E04E3E931BCD55E02F /* Pods-Orang3.release-dev.xcconfig */,
-				FDC3E307CDC5B36F137E654E /* Pods-Orang3.release-uat.xcconfig */,
-				6A1F7E67AA20EC9A6114DDE4 /* Pods-Orang3.release.xcconfig */,
+				5E2CD66E71F56180E12BDCAF /* Pods-Orang3.debug-dev.xcconfig */,
+				EEAEBE69796975EF5B64BC2B /* Pods-Orang3.debug-uat.xcconfig */,
+				F8F3223D546D797D42A13130 /* Pods-Orang3.release-dev.xcconfig */,
+				690211B6158F25D468DB2C03 /* Pods-Orang3.release-uat.xcconfig */,
+				C3B1D523200B4621BA47EE15 /* Pods-Orang3.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -215,13 +215,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Orang3" */;
 			buildPhases = (
-				9151F8DF260511C0BF57D8A2 /* [CP] Check Pods Manifest.lock */,
+				8C8AE26704E0C7CBD06EA548 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				79283350543C6A071B8760CD /* [CP] Embed Pods Frameworks */,
-				4C0EBD9B9705E0A4D035053B /* [CP] Copy Pods Resources */,
+				D59DD172702673693252CF47 /* [CP] Embed Pods Frameworks */,
+				999CA0380C0A7CFD68E9E384 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -315,41 +315,7 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"../node_modules/react-native/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"../node_modules/react-native/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
-		4C0EBD9B9705E0A4D035053B /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Orang3/Pods-Orang3-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Orang3/Pods-Orang3-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Orang3/Pods-Orang3-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		79283350543C6A071B8760CD /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Orang3/Pods-Orang3-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Orang3/Pods-Orang3-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Orang3/Pods-Orang3-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9151F8DF260511C0BF57D8A2 /* [CP] Check Pods Manifest.lock */ = {
+		8C8AE26704E0C7CBD06EA548 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -369,6 +335,40 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		999CA0380C0A7CFD68E9E384 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Orang3/Pods-Orang3-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Orang3/Pods-Orang3-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Orang3/Pods-Orang3-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D59DD172702673693252CF47 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Orang3/Pods-Orang3-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Orang3/Pods-Orang3-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Orang3/Pods-Orang3-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
