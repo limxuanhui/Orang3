@@ -1,3 +1,22 @@
 {
-  "extends": "@tsconfig/react-native/tsconfig.json"
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    // "typeRoots": ["./src/types"],
+    "baseUrl": ".",
+    "paths": {
+      "*": ["src/*"],
+      "tests": ["tests/*"],
+      "@resources/*": ["src/utils/resources/*"],
+      "@components/*": ["src/components/*"],
+      "@screens/*": ["src/components/screens/*"],
+      "@navigators/*": ["src/components/navigators/*"],
+      "@icons/*": ["src/components/common/icons/*"],
+      "@data/*": ["src/data/*"],
+      "@constants/*": ["src/utils/constants/*"],
+      "@hooks/*": ["src/utils/hooks/*"],
+      "@contexts/*": ["src/utils/contexts/*"],
+      "@helpers/*": ["src/utils/helpers/*"],
+      "@redux/*": ["src/utils/redux/*"]
+    }
+  }
 }
