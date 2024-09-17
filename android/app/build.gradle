@@ -93,9 +93,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.gypsie"
+    namespace "com.Orang3"
     defaultConfig {
-        applicationId "com.gypsie"
+        applicationId "com.Orang3"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
