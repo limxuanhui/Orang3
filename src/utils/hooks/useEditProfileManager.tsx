@@ -59,7 +59,7 @@ const useEditProfileManager = (user: GypsieUser) => {
   );
   const canEditName: boolean =
     !user.lastUpdatedNameAt ||
-    Date.parse(user.lastUpdatedNameAt) + ONE_DAY_MS * 0 < Date.now();
+    Date.parse(user.lastUpdatedNameAt) + ONE_DAY_MS * 7 < Date.now();
   const canEditHandle: boolean =
     !user.lastUpdatedHandleAt ||
     Date.parse(user.lastUpdatedHandleAt) + ONE_DAY_MS * 30 < Date.now();
