@@ -49,3 +49,23 @@ type AvatarScreenRouteProp = RouteProp<ModalNavigatorParamList, 'Avatar'>;
 export type AvatarScreenParams = {
   avatarUri: string;
 };
+
+// --------------------------- EditProfileScreen ---------------------------
+export type EditProfileScreenProps = {
+  navigation: EditProfileScreenNavigationProp;
+  route: EditProfileScreenRouteProp;
+};
+
+type EditProfileScreenNavigationProp = StackNavigationProp<
+  ModalNavigatorParamList,
+  'Avatar'
+>;
+
+type EditProfileScreenRouteProp = RouteProp<
+  ModalNavigatorParamList,
+  'EditProfile'
+>;
+
+export type EditProfileScreenParams = {
+  user: GypsieUser;
+};

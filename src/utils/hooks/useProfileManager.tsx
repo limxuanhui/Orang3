@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { type ProfileScreenNavigationProp } from '@screens/profile/types/types';
 import {
@@ -8,19 +8,40 @@ import {
 import { type TaleMetadata } from '@components/tale/types/types';
 import { type FeedMetadata } from '@components/feed/types/types';
 import useInfiniteDataManager from '@hooks/useInfiniteDataManager';
+import { AuthContext } from '@contexts/AuthContext';
+import { getImageUrl } from '@helpers/functions';
 
 const useProfileManager = (user: GypsieUser) => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
   const modalNavigation = useNavigation<ModalNavigatorNavigationProp>();
+  const { user: currentUser } = useContext(AuthContext);
+  const userIsProfileOwner = user.id === currentUser?.id;
+  const avatarThumbnailUri: string = useMemo(
+    () => getImageUrl(user.avatar?.uri as string, 'thumbnail'),
+    [user.avatar?.uri],
+  );
+  const avatarRawUri: string = useMemo(
+    () => getImageUrl(user.avatar?.uri as string, 'raw'),
+    [user.avatar?.uri],
+  );
 
   const onPressAvatar = useCallback(() => {
     if (user.avatar) {
       navigation.push('Modal', {
         screen: 'Avatar',
-        params: { avatarUri: user.avatar.uri },
+        params: { avatarUri: avatarRawUri },
       });
     }
-  }, [navigation, user.avatar]);
+  }, [avatarRawUri, navigation, user.avatar]);
+
+  const onPressEditProfile = useCallback(() => {
+    if (user) {
+      modalNavigation.push('Modal', {
+        screen: 'EditProfile',
+        params: { user },
+      });
+    }
+  }, [modalNavigation, user]);
 
   const onPressSettings = useCallback(() => {
     modalNavigation.push('Modal', { screen: 'Settings' });
@@ -35,12 +56,21 @@ const useProfileManager = (user: GypsieUser) => {
   const { data: talesMetadata, onRefresh: onRefreshTalesMetadata } =
     useInfiniteDataManager<TaleMetadata[]>('tales-metadata-by-userid', user.id);
 
+  useEffect(() => {
+    if (userIsProfileOwner) {
+      navigation.setParams({ user: currentUser });
+    }
+  }, [currentUser, navigation, userIsProfileOwner]);
+
   return {
+    avatarThumbnailUri,
+    userIsProfileOwner,
     feedsMetadata: feedsMetadata?.pages[0].items,
     talesMetadata: talesMetadata?.pages[0].items,
     onRefreshFeedsMetadata,
     onRefreshTalesMetadata,
     onPressAvatar,
+    onPressEditProfile,
     onPressSettings,
   };
 };

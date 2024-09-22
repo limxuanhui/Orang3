@@ -18,6 +18,7 @@ const useAxiosManager = () => {
         if (!config.headers['Authorization']) {
           console.info('!!!!!!!!!!!!!!!! Request Intercepted !!!!!!!!!!!!!!!!');
           const accessToken = await retrieveToken('access_token');
+          console.log('Access token intercepted: ', accessToken);
           config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
         return config;
@@ -34,6 +35,7 @@ const useAxiosManager = () => {
         const prevRequest = error.config;
 
         if (error.response.status === 401 && !prevRequest.sent) {
+          console.log('!!!!!!!!Refreshing!!!!!!!!!!');
           prevRequest.sent = true;
           const refreshToken: string | undefined =
             await retrieveToken('refresh_token');
@@ -71,9 +73,9 @@ const useAxiosManager = () => {
               console.error(`An error occurred when refreshing tokens: ${err}`);
             }
           }
+          userInfo.logoutHandler();
         }
 
-        userInfo.logoutHandler();
         return Promise.reject(error);
       },
     );

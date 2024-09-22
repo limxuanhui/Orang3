@@ -12,6 +12,8 @@ import { AuthContext } from '@contexts/AuthContext';
 import NewPostOptions from '@components/post/NewPostOptions';
 import BookOpenIcon from '@icons/BookOpenIcon';
 import BookIcon from '@icons/BookIcon';
+import { getImageUrl } from '@helpers/functions';
+import { Assets } from '@resources/assets';
 
 const BottomTab = createBottomTabNavigator<BottomTabNavigatorParamList>();
 
@@ -77,8 +79,15 @@ const BottomTabNavigator = () => {
             },
           ]}
           source={{
-            uri: user.avatar?.uri,
+            uri: getImageUrl(user.avatar?.uri, 'thumbnail'),
           }}
+          defaultSource={Assets.AppLogo}
+          // onLoadStart={() => {
+          //   console.log('started loading btm tab');
+          // }}
+          // onLoadEnd={() => {
+          //   console.warn('finished loading btm tab');
+          // }}
         />
       ) : (
         <MaterialCommunityIcons

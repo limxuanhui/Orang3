@@ -69,8 +69,6 @@ export const uploadMediaFiles = async (
     // Promise.all for uploading all the media files to s3
     uploadMediaFilesResponse = await Promise.all(
       presignedUrls.map((url: string, index: number) => {
-        console.log('Saving BLOB: ', blobs[index], ' to url ', url);
-
         return axios.put(url, blobs[index], {
           // Ensure blob data is not transformed (stringified) by axios in transformRequest
           // Refer to this link for more details: https://github.com/axios/axios/issues/2677
@@ -136,4 +134,23 @@ export const sleep = (ms: number) => {
       resolve();
     }, ms);
   });
+};
+
+export const getImageUrl = (uri: string, res: 'raw' | 'thumbnail') => {
+  if (!uri) {
+    throw Error('Invalid image uri provided');
+  }
+
+  if (uri.includes('google')) {
+    return uri;
+  }
+
+  switch (res) {
+    case 'raw':
+      return `${Config.AWS_CLOUDFRONT_URL_RAW}/${uri}`;
+    case 'thumbnail':
+      return `${Config.AWS_CLOUDFRONT_URL_THUMBNAIL}/${uri}`;
+    default:
+      throw Error('Invalid res provided');
+  }
 };

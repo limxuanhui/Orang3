@@ -6,6 +6,7 @@ type Auth = {
   isLoggedIn: boolean;
   loading: boolean;
   googlePlacesApiKey: string;
+  refreshUserData: (user: GypsieUser) => void;
   googleSigninHandler: () => void;
   logoutHandler: () => void;
   deactivateUserHandler: () => void;
@@ -17,6 +18,7 @@ export const AuthContext = createContext<Auth>({
   isLoggedIn: false,
   loading: false,
   googlePlacesApiKey: '',
+  refreshUserData: () => {},
   googleSigninHandler: () => {},
   logoutHandler: () => {},
   deactivateUserHandler: () => {},

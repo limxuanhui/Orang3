@@ -363,7 +363,15 @@ const useWriteTaleManager = (taleId?: string) => {
     } catch (err) {
       console.error(err);
     }
-  }, [itinerary, metadata.cover, metadata.title, story, user]);
+  }, [
+    axiosPrivate,
+    itinerary.metadata,
+    itinerary.routes,
+    metadata.cover,
+    metadata.title,
+    story,
+    user,
+  ]);
 
   const updateExistingTale = useCallback(async () => {
     if (!user || !taleId) {

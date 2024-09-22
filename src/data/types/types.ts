@@ -14,6 +14,7 @@ export type DataKey =
   | 'users'
   | 'user-authentication'
   | 'user-auth-refresh-tokens'
+  | 'user-edit-profile'
   | 'user-account-deactivate-by-userid'
   | 'user-account-delete-by-userid'
   | 'google-places-api-key';

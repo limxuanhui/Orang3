@@ -1,7 +1,6 @@
-import { memo, useContext, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
 import { ActivityIndicator } from 'react-native-paper';
 import MasonryList from '@react-native-seoul/masonry-list';
 import TaleThumbnail from '@components/tale/TaleThumbnail';
@@ -13,8 +12,7 @@ import MessageDisplay from '@components/common/MessageDisplay';
 
 const MyTales = memo(({ data, onRefresh }: MyTalesProps) => {
   const insets = useSafeAreaInsets();
-  const bh = useContext(BottomTabBarHeightContext) || insets.bottom;
-  const height = useMemo(() => (1 - 0.25 - 0.05) * DEVICE_HEIGHT - bh, [bh]);
+  const height = useMemo(() => DEVICE_HEIGHT - 300, []);
 
   return (
     <View style={[styles.container, { height: height }]}>
@@ -23,10 +21,21 @@ const MyTales = memo(({ data, onRefresh }: MyTalesProps) => {
           <ActivityIndicator size={48} color={PALETTE.ORANGE} />
         </View>
       ) : data.length === 0 ? (
-        <MessageDisplay message="No stories to show..." />
+        <MessageDisplay
+          message="No stories to show..."
+          handler={onRefresh}
+          handlerText="Refresh"
+          buttonStyle={{ backgroundColor: PALETTE.LIGHTERGREY }}
+          buttonTextStyle={{ color: PALETTE.GREYISHBLUE }}
+        />
       ) : (
         <MasonryList
-          contentContainerStyle={styles.masonryListContentContainer}
+          containerStyle={styles.masonryListContainer}
+          contentContainerStyle={[
+            styles.masonryListContentContainer,
+            { paddingBottom: 50 + insets.bottom },
+          ]}
+          style={styles.masonryList}
           data={data}
           renderItem={el => <TaleThumbnail data={el.item as TaleMetadata} />}
           numColumns={2}
@@ -47,7 +56,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
-  masonryListContentContainer: { paddingHorizontal: 2 },
+  masonryListContainer: { backgroundColor: PALETTE.OFFWHITE },
+  masonryListContentContainer: {},
+  masonryList: { backgroundColor: PALETTE.OFFWHITE, padding: 2 },
 });
 
 export default MyTales;

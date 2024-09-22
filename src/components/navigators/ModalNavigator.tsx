@@ -5,6 +5,7 @@ import FeedScreen from '@screens/feed/FeedScreen';
 import ItineraryScreen from '@screens/tale/ItineraryScreen';
 import PlaceSearchScreen from '@screens/tale/PlaceSearchScreen';
 import ProfileScreen from '@screens/profile/ProfileScreen';
+import EditProfileScreen from '@screens/profile/EditProfileScreen';
 import TaleViewScreen from '@screens/tale/TaleViewScreen';
 import WriteFeedScreen from '@screens/post/WriteFeedScreen';
 import WriteTaleScreen from '@screens/post/WriteTaleScreen';
@@ -86,6 +87,15 @@ const ModalNavigator = () => {
         <Modal.Screen
           name="Settings"
           component={SettingsScreen}
+          options={{
+            ...options,
+            headerTransparent: false,
+            headerStyle: { backgroundColor: PALETTE.OFFWHITE },
+          }}
+        />
+        <Modal.Screen
+          name="EditProfile"
+          component={EditProfileScreen}
           options={{
             ...options,
             headerTransparent: false,

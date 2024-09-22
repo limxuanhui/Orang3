@@ -7,7 +7,7 @@ import {
   FEEDS_BY_USERID_URL,
   FEEDS_METADATA_BY_USERID_URL,
   FEEDS_URL,
-  GOOGLE_PLACES_API_KEY_URL,
+  // GOOGLE_PLACES_API_KEY_URL,
   ITINERARY_ROUTING_URL,
   NEW_FEED_URL,
   NEW_TALE_URL,
@@ -16,6 +16,7 @@ import {
   TALES_URL,
   USER_ACCOUNT_DEACTIVATE_URL,
   USER_ACCOUNT_DELETE_URL,
+  USER_EDIT_PROFILE_URL,
 } from '@constants/urls';
 
 export const keyFactory = (key: DataKey, id?: string) => {
@@ -66,14 +67,17 @@ export const urlFactory = (
   options?: { id?: string; base64Key?: string },
 ) => {
   switch (key) {
-    case 'google-places-api-key':
-      return GOOGLE_PLACES_API_KEY_URL;
+    // case 'google-places-api-key':
+    //   return GOOGLE_PLACES_API_KEY_URL;
 
     case 'user-authentication':
       return AUTH_SIGNIN_URL;
 
     case 'user-auth-refresh-tokens':
       return AUTH_REFRESH_TOKENS_URL;
+
+    case 'user-edit-profile':
+      return USER_EDIT_PROFILE_URL;
 
     case 'user-account-deactivate-by-userid':
       if (options && options.id) {

@@ -11,6 +11,7 @@ import useAuthManager from '@hooks/useAuthManager';
 import RootStackNavigator from '@navigators/RootStackNavigator';
 import store from '@redux/store';
 import { queryClient } from '@helpers/singletons';
+import { TOAST_CONFIG } from '@constants/constants';
 
 GoogleSignin.configure({
   iosClientId: Config.GOOGLE_IOS_CLIENT_ID,
@@ -30,11 +31,11 @@ const App = (): JSX.Element => {
             <GestureHandlerRootView style={{ flex: 1 }}>
               <RootStackNavigator />
               <Toast
-                // config={{ error: {} }}
                 position="bottom"
                 bottomOffset={50}
                 autoHide
                 visibilityTime={3000}
+                config={TOAST_CONFIG}
               />
             </GestureHandlerRootView>
           </AuthContext.Provider>

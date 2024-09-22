@@ -3,6 +3,7 @@ import type { StackNavigationOptions } from '@react-navigation/stack';
 import Config from 'react-native-config';
 import { PALETTE } from './palette';
 import { Query } from 'react-native-google-places-autocomplete';
+import { BaseToast, ErrorToast, ToastConfig } from 'react-native-toast-message';
 
 export const { height: DEVICE_HEIGHT, width: DEVICE_WIDTH } =
   Dimensions.get('window');
@@ -229,4 +230,46 @@ export const TOAST_TITLE_STYLE: StyleProp<TextStyle> = {
   fontWeight: 'normal',
   fontSize: 16,
   color: PALETTE.DARKGREY,
+};
+
+export const TOAST_CONFIG: ToastConfig = {
+  /*
+    Overwrite 'success' type,
+    by modifying the existing `BaseToast` component
+  */
+  success: props => (
+    <BaseToast
+      {...props}
+      style={{ borderLeftColor: PALETTE.GREEN }}
+      text1Style={TOAST_TITLE_STYLE}
+      // contentContainerStyle={{ paddingHorizontal: 15 }}
+    />
+  ),
+
+  /*
+    Overwrite 'error' type,
+    by modifying the existing `ErrorToast` component
+  */
+  error: props => (
+    <ErrorToast
+      {...props}
+      text1Style={TOAST_TITLE_STYLE}
+      text1NumberOfLines={2}
+      // contentContainerStyle={{ paddingVertical: 16 }}
+      // style={{ paddingVertical: 16 }}
+    />
+  ),
+  /*
+    Or create a completely new type - `tomatoToast`,
+    building the layout from scratch.
+
+    I can consume any custom `props` I want.
+    They will be passed when calling the `show` method (see below)
+  */
+  // tomatoToast: ({ text1, props }) => (
+  //   <View style={{ height: 60, width: '100%', backgroundColor: 'tomato' }}>
+  //     <Text>{text1}</Text>
+  //     <Text>{props.uuid}</Text>
+  //   </View>
+  // )
 };
