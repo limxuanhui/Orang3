@@ -21,6 +21,7 @@ type GypsieTextInputProps = {
   secureTextEntry?: boolean;
   placeholder?: string;
   multiline?: boolean;
+  maxNumberOfLines?: number;
   maxLength?: number;
   showCounter?: boolean;
   prefix?: { type: 'text' | 'icon'; value: string };
@@ -41,6 +42,7 @@ const GypsieTextInput = ({
   secureTextEntry,
   placeholder,
   multiline,
+  maxNumberOfLines,
   maxLength,
   showCounter,
   textInputValue,
@@ -48,7 +50,7 @@ const GypsieTextInput = ({
   errorMessage,
   onChangeText,
 }: GypsieTextInputProps) => {
-  const showError: boolean = !!disabledInput && !!errorMessage;
+  const showError: boolean = !!disabledInput || !!errorMessage;
 
   return (
     <View style={[styles.defaultContainer, customContainerStyles]}>
@@ -85,10 +87,9 @@ const GypsieTextInput = ({
           maxLength={maxLength}
           secureTextEntry={secureTextEntry}
           selectionColor={PALETTE.ORANGE}
-          onChangeText={onChangeText}
           editable={!disabledInput}
-          // onBlur={onTitleChangeEnded}
-          // numberOfLines={8} // android
+          numberOfLines={maxNumberOfLines} // android
+          onChangeText={onChangeText}
         />
         {maxLength && showCounter ? (
           <Text
@@ -132,7 +133,6 @@ const styles = StyleSheet.create({
     // backgroundColor: PALETTE.RED,
   },
   defaultTextInput: {
-    // height: DIMENSION.HUNDRED_PERCENT,
     width: DIMENSION.HUNDRED_PERCENT,
     paddingLeft: 16,
     paddingRight: 32,

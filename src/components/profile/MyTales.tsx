@@ -10,7 +10,7 @@ import { DEVICE_HEIGHT } from '@constants/constants';
 import { PALETTE } from '@constants/palette';
 import MessageDisplay from '@components/common/MessageDisplay';
 
-const MyTales = memo(({ creator, data, onRefresh }: MyTalesProps) => {
+const MyTales = memo(({ data, onRefresh }: MyTalesProps) => {
   const insets = useSafeAreaInsets();
   const height = useMemo(() => DEVICE_HEIGHT - 300, []);
 
@@ -33,13 +33,11 @@ const MyTales = memo(({ creator, data, onRefresh }: MyTalesProps) => {
           containerStyle={styles.masonryListContainer}
           contentContainerStyle={[
             styles.masonryListContentContainer,
-            { paddingBottom: 50 + insets.bottom },
+            { paddingBottom: 100 + insets.bottom },
           ]}
           style={styles.masonryList}
           data={data}
-          renderItem={el => (
-            <TaleThumbnail creator={creator} data={el.item as TaleMetadata} />
-          )}
+          renderItem={el => <TaleThumbnail data={el.item as TaleMetadata} />}
           numColumns={2}
           showsVerticalScrollIndicator={false}
           onRefresh={onRefresh}

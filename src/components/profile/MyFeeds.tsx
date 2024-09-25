@@ -33,7 +33,7 @@ const MyFeeds = memo(({ data, onRefresh }: MyFeedsProps) => {
           containerStyle={styles.masonryListContainer}
           contentContainerStyle={[
             styles.masonryListContentContainer,
-            { paddingBottom: 50 + insets.bottom },
+            { paddingBottom: 100 + insets.bottom },
           ]}
           style={styles.masonryList}
           data={data}

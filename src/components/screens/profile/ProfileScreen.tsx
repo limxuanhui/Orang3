@@ -14,10 +14,9 @@ import type { TaleMetadata } from '@components/tale/types/types';
 import useProfileManager from '@hooks/useProfileManager';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import GypsieButton from '@components/common/buttons/GypsieButton';
-import { GypsieUser } from 'components/navigators/types/types';
 
 const Tab = createMaterialTopTabNavigator();
-const BANNER_HEIGHT: number = 250;
+const BANNER_HEIGHT: number = 280;
 const TAB_BAR_HEIGHT: number = 50;
 
 const ProfileScreen = ({ route }: ProfileScreenProps) => {
@@ -79,11 +78,7 @@ const ProfileScreen = ({ route }: ProfileScreenProps) => {
         </View>
         <View style={styles.bannerInfoContainer}>
           <View style={styles.handleContainer}>
-            <Text
-              style={[
-                styles.handleText,
-                { color: PALETTE.ORANGE, fontSize: 22 },
-              ]}>
+            <Text style={[styles.handleText, { color: PALETTE.ORANGE }]}>
               @
             </Text>
             <Text style={styles.handleText}>{userMetadata?.handle}</Text>
@@ -137,7 +132,6 @@ const ProfileScreen = ({ route }: ProfileScreenProps) => {
           name="mytales"
           children={() => (
             <MyTales
-              creator={userMetadata as GypsieUser}
               data={talesMetadata as TaleMetadata[]}
               onRefresh={onRefreshTalesMetadata}
             />
@@ -204,7 +198,7 @@ const styles = StyleSheet.create({
   },
   handleText: {
     color: PALETTE.BLACK,
-    fontSize: 24,
+    fontSize: 22,
     fontFamily: 'Lilita One',
     fontWeight: 'bold',
   },

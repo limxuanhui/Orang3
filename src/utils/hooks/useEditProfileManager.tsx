@@ -34,11 +34,12 @@ import Toast from 'react-native-toast-message';
 import { TOAST_TITLE_STYLE } from '@constants/constants';
 import { queryClient } from '@helpers/singletons';
 
+const ONE_DAY_MS: number = 1000 * 60 * 60 * 24;
 const CANNOT_UPDATE_NAME_YET_ERROR: string =
   'You may only update your name every 7 days';
 const CANNOT_UPDATE_HANDLE_YET_ERROR: string =
   'You may only update your handle every 30 days';
-const ONE_DAY_MS: number = 1000 * 60 * 60 * 24;
+const MAX_BIO_NUMBER_OF_LINES: number = 4;
 
 const useEditProfileManager = (user: GypsieUser) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
@@ -54,6 +55,12 @@ const useEditProfileManager = (user: GypsieUser) => {
   const { avatar, name, handle, bio, saving } = useAppSelector(
     state => state.editProfile,
   );
+  const bioExceededNumOfLines: boolean =
+    bio.split('\n').length > MAX_BIO_NUMBER_OF_LINES;
+  const bioExceededLinesError: string = bioExceededNumOfLines
+    ? `Max number of lines is ${MAX_BIO_NUMBER_OF_LINES}`
+    : '';
+
   const originalAvatarUri: string = useMemo(
     () => getImageUrl(user.avatar?.uri as string, 'thumbnail'),
     [user.avatar?.uri],
@@ -70,7 +77,8 @@ const useEditProfileManager = (user: GypsieUser) => {
   const bioChanged: boolean = bio !== user.bio;
   const edited: boolean =
     avatarChanged || nameChanged || handleChanged || bioChanged;
-  const saveButtonIsDisabled: boolean = !edited || saving;
+  const saveButtonIsDisabled: boolean =
+    !edited || saving || bioExceededNumOfLines;
 
   const onPressChangeAvatar = useCallback(async () => {
     const assetsResponse: ImagePickerResponse = await openGallery();
@@ -222,6 +230,7 @@ const useEditProfileManager = (user: GypsieUser) => {
     cannotEditNameError: CANNOT_UPDATE_NAME_YET_ERROR,
     canEditHandle,
     cannotEditHandleError: CANNOT_UPDATE_HANDLE_YET_ERROR,
+    bioExceededLinesError: bioExceededLinesError,
     onPressChangeAvatar,
     onNameChange,
     onHandleChange,

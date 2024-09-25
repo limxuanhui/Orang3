@@ -26,6 +26,7 @@ const EditProfileScreen = ({ route }: EditProfileScreenProps) => {
     cannotEditNameError,
     canEditHandle,
     cannotEditHandleError,
+    bioExceededLinesError,
     onPressChangeAvatar,
     onNameChange,
     onHandleChange,
@@ -89,6 +90,7 @@ const EditProfileScreen = ({ route }: EditProfileScreenProps) => {
           showCounter
           multiline
           prefix={{ type: 'text', value: 'Bio' }}
+          errorMessage={bioExceededLinesError}
           onChangeText={onBioChange}
         />
       </KeyboardAwareScrollView>
