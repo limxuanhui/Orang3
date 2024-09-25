@@ -2,15 +2,19 @@ import { memo, useCallback, useState } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Video from 'react-native-video';
-import Config from 'react-native-config';
 import type { TaleThumbnailProps } from '@components/tale/types/types';
-import type { ModalNavigatorNavigationProp } from '@navigators/types/types';
+import type {
+  GypsieUser,
+  ModalNavigatorNavigationProp,
+} from '@navigators/types/types';
 import { DEVICE_WIDTH, PLACEHOLDER_IMAGE_URI } from '@constants/constants';
 import { DIMENSION } from '@constants/dimensions';
 import { PALETTE } from '@constants/palette';
 import GypsieAvatar from '@components/common/GypsieAvatar';
 import GypsieSkeleton from '@components/common/GypsieSkeleton';
 import Logo from '../../../assets/images/orang3-logo.svg';
+import { getImageUrl } from '@helpers/functions';
+import useDataManager from '@hooks/useDataManager';
 
 const CARD_WIDTH = DEVICE_WIDTH / 2 - 8;
 
@@ -70,11 +74,13 @@ const SkeletonThumbnail = memo(() => {
 const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const [paused, setPaused] = useState<boolean>(true);
+  const { data: creator, isLoading: creatorIsLoading } =
+    useDataManager<GypsieUser>('user-by-userid', data.creatorId);
 
   const onPressTaleThumbnail = useCallback(() => {
     navigation.push('Modal', {
       screen: 'TaleView',
-      params: { id: data.id, creator: data.creator },
+      params: { id: data.id, creatorId: data.creatorId },
     });
   }, [navigation, data]);
 
@@ -82,7 +88,7 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
     setPaused(prev => !prev);
   }, [setPaused]);
 
-  if (!data) {
+  if (!data || creatorIsLoading) {
     return <SkeletonThumbnail />;
   }
 
@@ -103,13 +109,10 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
               { aspectRatio: data.thumbnail.width / data.thumbnail.height },
             ]}
             source={{
-              uri: `${Config.AWS_CLOUDFRONT_URL_THUMBNAIL}/${data.thumbnail.uri}`,
+              uri: getImageUrl(data.thumbnail.uri, 'thumbnail'),
             }}
             progressiveRenderingEnabled
             resizeMode="contain"
-            // defaultSource={{
-            //   uri: '/Users/limxuanhui/bluextech/gypsie/assets/images/japan-kyotoshrine.jpeg',
-            // }}
           />
         ) : (
           <Video
@@ -133,7 +136,12 @@ const TaleThumbnail = memo(({ data }: TaleThumbnailProps) => {
         </View>
       )}
       <View style={styles.feedCardFooter}>
-        <GypsieAvatar uri={data.creator.avatar?.uri || PLACEHOLDER_IMAGE_URI} />
+        <GypsieAvatar
+          uri={
+            getImageUrl(creator?.avatar?.uri as string, 'thumbnail') ||
+            PLACEHOLDER_IMAGE_URI
+          }
+        />
         <View style={styles.feedCardTextWrapper}>
           <Text
             style={styles.feedCardText}

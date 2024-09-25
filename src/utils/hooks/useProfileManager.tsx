@@ -10,60 +10,72 @@ import { type FeedMetadata } from '@components/feed/types/types';
 import useInfiniteDataManager from '@hooks/useInfiniteDataManager';
 import { AuthContext } from '@contexts/AuthContext';
 import { getImageUrl } from '@helpers/functions';
+import useDataManager from './useDataManager';
 
-const useProfileManager = (user: GypsieUser) => {
+const useProfileManager = (userId: string) => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
   const modalNavigation = useNavigation<ModalNavigatorNavigationProp>();
   const { user: currentUser } = useContext(AuthContext);
-  const userIsProfileOwner = user.id === currentUser?.id;
-  const avatarThumbnailUri: string = useMemo(
-    () => getImageUrl(user.avatar?.uri as string, 'thumbnail'),
-    [user.avatar?.uri],
+  const userIsProfileOwner = userId === currentUser?.id;
+  const { data: userMetadata } = useDataManager<GypsieUser>(
+    'user-by-userid',
+    userId,
   );
-  const avatarRawUri: string = useMemo(
-    () => getImageUrl(user.avatar?.uri as string, 'raw'),
-    [user.avatar?.uri],
-  );
+  const avatarThumbnailUri: string = useMemo(() => {
+    if (userMetadata) {
+      return getImageUrl(userMetadata.avatar?.uri as string, 'thumbnail');
+    }
+    return '';
+  }, [userMetadata]);
+  const avatarRawUri: string = useMemo(() => {
+    if (userMetadata) {
+      return getImageUrl(userMetadata.avatar?.uri as string, 'raw');
+    }
+    return '';
+  }, [userMetadata]);
 
   const onPressAvatar = useCallback(() => {
-    if (user.avatar) {
+    if (userMetadata) {
       navigation.push('Modal', {
         screen: 'Avatar',
         params: { avatarUri: avatarRawUri },
       });
     }
-  }, [avatarRawUri, navigation, user.avatar]);
+  }, [avatarRawUri, navigation, userMetadata]);
 
   const onPressEditProfile = useCallback(() => {
-    if (user) {
+    if (userId) {
       modalNavigation.push('Modal', {
         screen: 'EditProfile',
-        params: { user },
+        params: { user: userMetadata as GypsieUser },
       });
     }
-  }, [modalNavigation, user]);
+  }, [modalNavigation, userId, userMetadata]);
 
   const onPressSettings = useCallback(() => {
     modalNavigation.push('Modal', { screen: 'Settings' });
   }, [modalNavigation]);
 
   const { data: feedsMetadata, onRefresh: onRefreshFeedsMetadata } =
-    useInfiniteDataManager<FeedMetadata[]>(
-      'feeds-metadata-by-userid',
-      user.id,
-      { gcTime: 0, staleTime: Infinity },
-    );
+    useInfiniteDataManager<FeedMetadata[]>('feeds-metadata-by-userid', userId, {
+      gcTime: 0,
+      staleTime: Infinity,
+    });
   const { data: talesMetadata, onRefresh: onRefreshTalesMetadata } =
-    useInfiniteDataManager<TaleMetadata[]>('tales-metadata-by-userid', user.id);
+    useInfiniteDataManager<TaleMetadata[]>('tales-metadata-by-userid', userId, {
+      gcTime: 0,
+      staleTime: Infinity,
+    });
 
   useEffect(() => {
-    if (userIsProfileOwner) {
-      navigation.setParams({ user: currentUser });
+    if (userId) {
+      navigation.setParams({ userId });
     }
-  }, [currentUser, navigation, userIsProfileOwner]);
+  }, [navigation, userId]);
 
   return {
     avatarThumbnailUri,
+    userMetadata,
     userIsProfileOwner,
     feedsMetadata: feedsMetadata?.pages[0].items,
     talesMetadata: talesMetadata?.pages[0].items,

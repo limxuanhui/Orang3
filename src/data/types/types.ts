@@ -1,4 +1,14 @@
 export type DataKey =
+  | 'user-by-userid'
+  | 'feeds'
+  | 'feed-by-feedid'
+  | 'feeds-by-userid'
+  | 'feeds-metadata-by-userid'
+  | 'tale-by-taleid'
+  | 'tales-metadata'
+  | 'tales-metadata-by-userid';
+
+export type UrlKey =
   | 'feeds'
   | 'feed-new'
   | 'feed-edit'
@@ -11,10 +21,9 @@ export type DataKey =
   | 'tales-metadata'
   | 'tales-metadata-by-userid'
   | 'itinerary-routing'
-  | 'users'
+  | 'user-by-userid'
   | 'user-authentication'
   | 'user-auth-refresh-tokens'
   | 'user-edit-profile'
   | 'user-account-deactivate-by-userid'
-  | 'user-account-delete-by-userid'
-  | 'google-places-api-key';
+  | 'user-account-delete-by-userid';

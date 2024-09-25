@@ -185,7 +185,7 @@ const useWriteFeedManager = (feedId?: string) => {
     const requestData: Feed = {
       metadata: {
         id: newFeedId,
-        creator: user,
+        creatorId: user.id,
         thumbnail: thumbnailSrc.thumbnail,
         taleId: '',
       },

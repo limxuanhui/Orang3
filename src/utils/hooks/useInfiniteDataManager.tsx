@@ -60,7 +60,7 @@ const useInfiniteDataManager = <T,>(
           url = urlFactory(key, { id });
         }
         const response: AxiosResponse = await axiosPrivate.get(url);
-        // printPrettyJson(response.data);
+
         return response.data;
       } catch (err: unknown) {
         console.error(err);
@@ -120,7 +120,6 @@ const useInfiniteDataManager = <T,>(
     await queryClient.invalidateQueries({
       queryKey: keyFactory(dataKey, dataId),
     });
-    // }, [data, dataKey, queryClient]);
   }, [dataId, dataKey, queryClient]);
 
   return {

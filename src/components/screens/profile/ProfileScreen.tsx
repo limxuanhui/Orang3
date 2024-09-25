@@ -22,9 +22,10 @@ const TAB_BAR_HEIGHT: number = 50;
 
 const ProfileScreen = ({ route }: ProfileScreenProps) => {
   const insets = useSafeAreaInsets();
-  const profileUser = route.params.user;
+  const profileUserId = route.params.userId;
   const {
     avatarThumbnailUri,
+    userMetadata,
     userIsProfileOwner,
     feedsMetadata,
     talesMetadata,
@@ -33,7 +34,7 @@ const ProfileScreen = ({ route }: ProfileScreenProps) => {
     onPressAvatar,
     onPressEditProfile,
     onPressSettings,
-  } = useProfileManager(profileUser as GypsieUser);
+  } = useProfileManager(profileUserId);
 
   const myFeedsIcon = useCallback(
     ({ focused }: { focused: boolean; color: string }) => (
@@ -85,11 +86,11 @@ const ProfileScreen = ({ route }: ProfileScreenProps) => {
               ]}>
               @
             </Text>
-            <Text style={styles.handleText}>{profileUser.handle}</Text>
+            <Text style={styles.handleText}>{userMetadata?.handle}</Text>
           </View>
           <Text style={styles.bioText}>
-            {profileUser?.bio
-              ? profileUser.bio
+            {userMetadata?.bio
+              ? userMetadata.bio
               : userIsProfileOwner
                 ? 'Add a short bio...'
                 : ''}
@@ -136,6 +137,7 @@ const ProfileScreen = ({ route }: ProfileScreenProps) => {
           name="mytales"
           children={() => (
             <MyTales
+              creator={userMetadata as GypsieUser}
               data={talesMetadata as TaleMetadata[]}
               onRefresh={onRefreshTalesMetadata}
             />

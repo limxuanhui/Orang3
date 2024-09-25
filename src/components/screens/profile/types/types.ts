@@ -10,7 +10,7 @@ import type {
 } from '@navigators/types/types';
 
 export type ProfileScreenParams = {
-  user: GypsieUser;
+  userId: string;
 };
 
 export type ProfileStackNavigatorParamList = {

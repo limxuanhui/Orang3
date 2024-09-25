@@ -17,7 +17,7 @@ const ProfileStackNavigator = () => {
       <ProfileStack.Screen
         name="Profile"
         component={ProfileScreen}
-        initialParams={{ user }}
+        initialParams={{ userId: user?.id }}
         options={{
           headerBackTitleVisible: true,
           headerTitle: 'profile',

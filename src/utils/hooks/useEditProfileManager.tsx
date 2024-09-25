@@ -28,10 +28,11 @@ import {
   uploadMediaFiles,
 } from '@helpers/functions';
 import useAxiosManager from '@hooks/useAxiosManager';
-import { urlFactory } from '@helpers/factory';
+import { keyFactory, urlFactory } from '@helpers/factory';
 import { AuthContext } from '@contexts/AuthContext';
 import Toast from 'react-native-toast-message';
 import { TOAST_TITLE_STYLE } from '@constants/constants';
+import { queryClient } from '@helpers/singletons';
 
 const CANNOT_UPDATE_NAME_YET_ERROR: string =
   'You may only update your name every 7 days';
@@ -165,8 +166,6 @@ const useEditProfileManager = (user: GypsieUser) => {
 
       refreshUserData(response.data);
     } catch (err: any) {
-      // const error = err;
-      // console.error(err?.name, ' | ', err?.response);
       Toast.show({
         type: 'error',
         swipeable: true,
@@ -177,6 +176,9 @@ const useEditProfileManager = (user: GypsieUser) => {
       return;
     }
 
+    await queryClient.invalidateQueries({
+      queryKey: keyFactory('user-by-userid', user.id),
+    });
     dispatch(editProfile_setSaving({ saving: false }));
     navigation.goBack();
   }, [

@@ -10,7 +10,6 @@ import {
 import useAxiosManager from '@hooks/useAxiosManager';
 import type { DataKey } from '@data/types/types';
 import { keyFactory, urlFactory } from '@helpers/factory';
-import { printPrettyJson } from '@helpers/functions';
 
 /**
  * This hook manages all the data of the app components, except components with infinite scrolling.
@@ -37,7 +36,7 @@ const useDataManager = <T,>(
       try {
         const url: string = urlFactory(key, { id });
         const response: AxiosResponse = await axiosPrivate.get(url);
-        printPrettyJson(response.data);
+        // printPrettyJson(response.data);
         if (response.data.items) {
           return response.data.items as T;
         }
