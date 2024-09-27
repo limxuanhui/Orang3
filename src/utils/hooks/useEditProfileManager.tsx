@@ -67,18 +67,18 @@ const useEditProfileManager = (user: GypsieUser) => {
           ONE_DAY_MS,
       )
     : 0;
-  const canEditName: boolean = !user.lastUpdatedNameAt || nameEditDaysLeft < 0;
+  const canEditName: boolean = !user.lastUpdatedNameAt || nameEditDaysLeft <= 0;
   const cannotEditNameError: string = !canEditName
     ? `You may change your name in ${nameEditDaysLeft} ${nameEditDaysLeft === 1 ? 'day' : 'days'}`
     : '';
-  const handleEditDaysLeft: number = user.lastUpdatedNameAt
+  const handleEditDaysLeft: number = user.lastUpdatedHandleAt
     ? Math.round(
-        (Date.parse(user.lastUpdatedNameAt) + ONE_DAY_MS * 30 - Date.now()) /
+        (Date.parse(user.lastUpdatedHandleAt) + ONE_DAY_MS * 30 - Date.now()) /
           ONE_DAY_MS,
       )
     : 0;
   const canEditHandle: boolean =
-    !user.lastUpdatedHandleAt || handleEditDaysLeft < 0;
+    !user.lastUpdatedHandleAt || handleEditDaysLeft <= 0;
   const cannotEditHandleError: string = !canEditHandle
     ? `You may change your handle in ${handleEditDaysLeft} ${handleEditDaysLeft === 1 ? 'day' : 'days'}`
     : '';
