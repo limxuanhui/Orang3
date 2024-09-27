@@ -81,6 +81,8 @@ const useInfiniteDataManager = <T,>(
           return lastPage.lastEvaluatedKey || undefined;
         },
         initialPageParam: null,
+        staleTime: Infinity,
+        gcTime: 0,
         ...dataOptions,
       }),
     [dataId, dataKey, dataOptions, queryFn],

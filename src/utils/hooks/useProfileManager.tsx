@@ -66,10 +66,6 @@ const useProfileManager = (userId: string) => {
   } = useInfiniteDataManager<FeedMetadata[]>(
     'feeds-metadata-by-userid',
     userId,
-    {
-      gcTime: 0,
-      staleTime: Infinity,
-    },
   );
   const {
     data: talesMetadata,
@@ -79,10 +75,6 @@ const useProfileManager = (userId: string) => {
   } = useInfiniteDataManager<TaleMetadata[]>(
     'tales-metadata-by-userid',
     userId,
-    {
-      gcTime: 0,
-      staleTime: Infinity,
-    },
   );
 
   useEffect(() => {

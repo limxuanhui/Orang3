@@ -18,11 +18,10 @@ const useAxiosManager = () => {
     axiosPrivate.interceptors.request.use(
       async (config: InternalAxiosRequestConfig<any>) => {
         if (!config.headers['Authorization']) {
-          console.info('!!!!!!!!!!!!!!!! Request Intercepted !!!!!!!!!!!!!!!!');
           const accessToken = await retrieveToken('access_token');
-          console.log('Access token intercepted: ', accessToken);
           config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
+
         return config;
       },
       async (error: any) => {

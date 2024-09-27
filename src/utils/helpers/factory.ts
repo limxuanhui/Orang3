@@ -125,8 +125,6 @@ export const urlFactory = (
       throw Error(`Key ${key} requires a valid id.`);
 
     case 'feeds-metadata-by-userid':
-      console.log(`Running factory function to generate ${key}`);
-      console.log(`Options ${options}`);
       if (options && options.id) {
         if (options.base64Key) {
           return `${FEEDS_METADATA_BY_USERID_URL}/${options.id}?base64Key=${options.base64Key}`;

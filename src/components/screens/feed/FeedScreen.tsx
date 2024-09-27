@@ -13,7 +13,10 @@ const FeedScreen = ({ route }: FeedScreenProps) => {
   const { feedId } = route.params;
   const { data, isLoading } = useDataManager<Feed>('feed-by-feedid', feedId);
   const { data: creator, isLoading: creatorIsLoading } =
-    useDataManager<GypsieUser>('user-by-userid', data?.metadata.creatorId);
+    useDataManager<GypsieUser>(
+      'user-by-userid',
+      data?.metadata.creatorId || '',
+    );
 
   if (isLoading || creatorIsLoading) {
     return <FullScreenLoading />;

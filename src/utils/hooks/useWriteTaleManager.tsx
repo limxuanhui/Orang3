@@ -68,8 +68,7 @@ const imageLibraryOptions: ImageLibraryOptions = {
   selectionLimit: 1,
 };
 
-const useWriteTaleManager = (taleId?: string) => {
-  console.log('=== useWriteTaleManager ===');
+const useWriteTaleManager = (taleId: string) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const { user } = useContext(AuthContext);
   const { axiosPrivate } = useAxiosManager();

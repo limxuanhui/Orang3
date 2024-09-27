@@ -16,7 +16,6 @@ import useAxiosManager from '@hooks/useAxiosManager';
 
 const useAuthManager = () => {
   const [user, setUser] = useState<GypsieUser>();
-  console.log('useAuthManager user refreshed: ', user?.bio);
   const {
     retrieveToken,
     removeAllTokens,
@@ -77,7 +76,6 @@ const useAuthManager = () => {
     async (userData: GypsieUser) => {
       await storeUserData(userData);
       setUser(userData);
-      console.log('Refreshed user, should be updated now');
     },
     [storeUserData],
   );

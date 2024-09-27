@@ -39,7 +39,7 @@ export type WriteTaleScreenProps = {
 };
 
 export type WriteTaleScreenParams = {
-  taleId?: string;
+  taleId: string;
 };
 
 // --------------------------- WriteFeedScreen ---------------------------
@@ -58,5 +58,5 @@ export type WriteFeedScreenProps = {
 };
 
 export type WriteFeedScreenParams = {
-  feedId?: string;
+  feedId: string;
 };
