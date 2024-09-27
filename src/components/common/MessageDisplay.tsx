@@ -53,8 +53,6 @@ const styles = StyleSheet.create({
     width: DIMENSION.HUNDRED_PERCENT,
     justifyContent: 'center',
     alignItems: 'center',
-    // borderWidth: 4,
-    // borderColor: PALETTE.RED,
   },
   text: {
     width: DIMENSION.NINETY_PERCENT,
@@ -63,11 +61,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: PALETTE.LIGHTGREY,
     textAlign: 'center',
+    marginBottom: 16,
   },
   handlerButton: {
     height: 40,
-    width: '20%',
-    backgroundColor: 'white',
+    width: 100,
+    backgroundColor: PALETTE.WHITE,
   },
   handlerText: {
     fontFamily: 'Futura',

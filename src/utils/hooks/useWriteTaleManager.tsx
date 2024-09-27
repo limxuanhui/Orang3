@@ -68,8 +68,7 @@ const imageLibraryOptions: ImageLibraryOptions = {
   selectionLimit: 1,
 };
 
-const useWriteTaleManager = (taleId?: string) => {
-  console.log('=== useWriteTaleManager ===');
+const useWriteTaleManager = (taleId: string) => {
   const navigation = useNavigation<ModalNavigatorNavigationProp>();
   const { user } = useContext(AuthContext);
   const { axiosPrivate } = useAxiosManager();
@@ -363,7 +362,15 @@ const useWriteTaleManager = (taleId?: string) => {
     } catch (err) {
       console.error(err);
     }
-  }, [itinerary, metadata.cover, metadata.title, story, user]);
+  }, [
+    axiosPrivate,
+    itinerary.metadata,
+    itinerary.routes,
+    metadata.cover,
+    metadata.title,
+    story,
+    user,
+  ]);
 
   const updateExistingTale = useCallback(async () => {
     if (!user || !taleId) {

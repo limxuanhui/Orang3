@@ -6,13 +6,15 @@ import {
   StyleSheet,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import AuxiliaryControls from '../common/AuxiliaryControls';
-import GypsieButton from '../common/buttons/GypsieButton';
+import AuxiliaryControls from '@components/common/AuxiliaryControls';
+import GypsieButton from '@components/common/buttons/GypsieButton';
 import type { FeedReactionControlsProps } from './types/types';
-import type { ModalNavigatorNavigationProp } from '../navigators/types/types';
-import { DIMENSION } from '../../utils/constants/dimensions';
-import { PALETTE } from '../../utils/constants/palette';
-import LinkIcon from '../common/icons/LinkIcon';
+import type { ModalNavigatorNavigationProp } from '@navigators/types/types';
+import { DIMENSION } from '@constants/dimensions';
+import { PALETTE } from '@constants/palette';
+import LinkIcon from '@icons/LinkIcon';
+import { getImageUrl } from '@helpers/functions';
+import { Assets } from '@resources/assets';
 
 const FeedReactionControls = ({
   creator,
@@ -34,19 +36,21 @@ const FeedReactionControls = ({
   );
 
   const onPressAvatar = useCallback(() => {
-    navigation.push('Modal', {
-      screen: 'Profile',
-      params: { user: creator },
-    });
+    if (creator) {
+      navigation.push('Modal', {
+        screen: 'Profile',
+        params: { userId: creator.id },
+      });
+    }
   }, [creator, navigation]);
 
   const onPressLink = useCallback(() => {
-    if (taleId) {
+    if (taleId && creator) {
       navigation.navigate('Modal', {
         screen: 'TaleView',
         params: {
           id: taleId,
-          creator,
+          creatorId: creator.id,
         },
       });
     }
@@ -58,8 +62,9 @@ const FeedReactionControls = ({
         <Image
           style={styles.avatar}
           source={{
-            uri: creator.avatar?.uri,
+            uri: getImageUrl(creator.avatar?.uri as string, 'thumbnail'),
           }}
+          defaultSource={Assets.AppLogo}
         />
       </Pressable>
       {taleId ? (

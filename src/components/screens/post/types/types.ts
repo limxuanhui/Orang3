@@ -1,9 +1,6 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import type { RouteProp } from '@react-navigation/native';
-import type {
-  GypsieUser,
-  ModalNavigatorParamList,
-} from '@navigators/types/types';
+import type { ModalNavigatorParamList } from '@navigators/types/types';
 
 // --------------------------- TaleViewScreen ---------------------------
 export type TaleViewScreenNavigationProp = StackNavigationProp<
@@ -23,7 +20,7 @@ export type TaleViewScreenProps = {
 
 export type TaleViewScreenParams = {
   id: string;
-  creator: GypsieUser;
+  creatorId: string;
 };
 
 // --------------------------- WriteTaleScreen ---------------------------
@@ -42,7 +39,7 @@ export type WriteTaleScreenProps = {
 };
 
 export type WriteTaleScreenParams = {
-  taleId?: string;
+  taleId: string;
 };
 
 // --------------------------- WriteFeedScreen ---------------------------
@@ -61,5 +58,5 @@ export type WriteFeedScreenProps = {
 };
 
 export type WriteFeedScreenParams = {
-  feedId?: string;
+  feedId: string;
 };

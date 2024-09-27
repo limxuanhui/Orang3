@@ -10,7 +10,7 @@ import type { GypsieUser } from '@navigators/types/types';
 
 export type TaleMetadata = {
   id: string;
-  creator: GypsieUser;
+  creatorId: string;
   cover?: Media;
   thumbnail?: Media;
   title: string;

@@ -10,7 +10,6 @@ import {
 import useAxiosManager from '@hooks/useAxiosManager';
 import type { DataKey } from '@data/types/types';
 import { keyFactory, urlFactory } from '@helpers/factory';
-import { printPrettyJson } from '@helpers/functions';
 
 /**
  * This hook manages all the data of the app components, except components with infinite scrolling.
@@ -21,23 +20,28 @@ import { printPrettyJson } from '@helpers/functions';
  */
 const useDataManager = <T,>(
   dataKey: DataKey,
-  dataId?: string,
+  dataId: string,
   dataOptions?: Omit<
     UndefinedInitialDataOptions<T | null>,
     'queryKey' | 'queryFn'
   >,
 ) => {
   const { axiosPrivate } = useAxiosManager();
+  const qKey = useMemo(
+    () => (dataId ? keyFactory(dataKey, dataId) : []),
+    [dataId, dataKey],
+  );
 
   const queryFn: QueryFunction<T | null, QueryKey, never> = useCallback(
-    async ({ queryKey }: { queryKey: QueryKey }): Promise<T | null> => {
+    async ({ queryKey }: { queryKey: QueryKey }): Promise<T> => {
+      console.log('Query function called: ', queryKey);
       const [dKey, dId] = queryKey;
       const key = dKey as DataKey;
       const id = dId as string;
       try {
         const url: string = urlFactory(key, { id });
         const response: AxiosResponse = await axiosPrivate.get(url);
-        printPrettyJson(response.data);
+
         if (response.data.items) {
           return response.data.items as T;
         }
@@ -45,7 +49,8 @@ const useDataManager = <T,>(
         return response.data;
       } catch (err) {
         console.error(err);
-        return null;
+        throw new Error('Unable to get content for you at the moment...');
+        // return null;
       }
     },
     [axiosPrivate],
@@ -53,14 +58,14 @@ const useDataManager = <T,>(
 
   const options = useMemo(() => {
     return queryOptions<T | null, Error, T | null, QueryKey>({
-      queryKey: dataId ? keyFactory(dataKey, dataId) : [],
+      queryKey: qKey,
       queryFn,
-      enabled: !!dataId,
-      // initialData: null,
-      staleTime: 0,
+      enabled: qKey.length !== 0,
+      staleTime: Infinity,
+      gcTime: 0,
       ...dataOptions,
     });
-  }, [dataId, dataKey, dataOptions, queryFn]);
+  }, [dataOptions, qKey, queryFn]);
 
   const {
     data,

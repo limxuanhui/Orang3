@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useContext } from 'react';
 import Config from 'react-native-config';
 import { useAppDispatch, useAppSelector } from '@redux/hooks';
 import { writeFeed_setSelectedItemId } from '@redux/reducers/writeFeedSlice';
@@ -44,10 +44,6 @@ const WriteFeedCarousel = () => {
     }
     return el;
   });
-
-  useEffect(() => {
-    console.log('WriteFeedCarousel useEffect: currIndex', currIndex);
-  }, [currIndex]);
 
   return (
     <GypsieFeedCarousel

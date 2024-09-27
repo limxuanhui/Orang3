@@ -51,6 +51,7 @@ import AuxiliaryControls from '@components/common/AuxiliaryControls';
 import FullScreenLoading from '@components/common/FullScreenLoading';
 import { useFocusEffect } from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
+import { GypsieUser } from 'components/navigators/types/types';
 
 export type TaleView = { tale: Tale; feedList: Feed[] };
 const SUNDAY_FEED_THUMBNAIL: Media = {
@@ -62,13 +63,15 @@ const SUNDAY_FEED_THUMBNAIL: Media = {
   width: 200,
 };
 const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
-  const [screenIsFocused, setScreenIsFocused] = useState<boolean>(true);
-  const { user } = useContext(AuthContext);
-  const { id, creator } = route.params;
-  const loggedInUserIsCreator: boolean = user?.id === creator.id;
   const insets = useSafeAreaInsets();
+  const { user } = useContext(AuthContext);
+  const [screenIsFocused, setScreenIsFocused] = useState<boolean>(true);
   const dispatch = useAppDispatch();
+  const { id, creatorId } = route.params;
+  const loggedInUserIsCreator: boolean = user?.id === creatorId;
   const { data, isLoading } = useDataManager<TaleView>('tale-by-taleid', id);
+  const { data: creator, isLoading: creatorIsLoading } =
+    useDataManager<GypsieUser>('user-by-userid', creatorId);
 
   let renderedData: Feed[] = data?.feedList || [];
   if (
@@ -89,7 +92,7 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
     const coverFeed: BaseFeed = {
       metadata: {
         id: data.tale.metadata.cover.id,
-        creator: data.tale.metadata.creator,
+        creatorId: data.tale.metadata.creatorId,
         thumbnail: data.tale.metadata.thumbnail || SUNDAY_FEED_THUMBNAIL,
         taleId: '',
       },
@@ -143,8 +146,8 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
                     {data.tale.metadata.title}
                   </Text>
                   <NewItineraryPostHandleBar
-                    name={data.tale.metadata.creator.handle || ''}
-                    avatarUri={data.tale.metadata.creator.avatar?.uri || ''}
+                    name={creator?.handle || ''}
+                    avatarUri={creator?.avatar?.uri || ''}
                   />
                 </View>
               </LinearGradient>
@@ -192,11 +195,11 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
     };
   }, [data, dispatch]);
 
-  if (isLoading) {
+  if (isLoading || creatorIsLoading) {
     return <FullScreenLoading />;
   }
 
-  if (data?.tale.metadata.creator.isDeactivated) {
+  if (creator?.isDeactivated) {
     return (
       <MessageDisplay
         containerStyle={styles.container}
@@ -225,7 +228,7 @@ const TaleViewScreen = ({ navigation, route }: TaleViewScreenProps) => {
             data={renderedData}
             renderItem={({ item, index }) => (
               <FeedCarousel
-                handle={creator.handle}
+                handle={creator?.handle as string}
                 items={item.feedItems}
                 inView={screenIsFocused && index === activePostIndex}
               />

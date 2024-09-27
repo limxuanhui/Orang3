@@ -1,5 +1,6 @@
-import type { FeedMetadata } from '@components/feed/types/types';
+import type { FeedMetadata, Media } from '@components/feed/types/types';
 import type { TaleMetadata } from '@components/tale/types/types';
+import { GypsieUser } from 'components/navigators/types/types';
 
 export type MyTalesProps = {
   data: TaleMetadata[];
@@ -9,4 +10,13 @@ export type MyTalesProps = {
 export type MyFeedsProps = {
   data: FeedMetadata[];
   onRefresh: () => void;
+};
+
+export type EditProfile = {
+  originalUser: GypsieUser;
+  avatar?: Media;
+  name: string;
+  handle: string;
+  bio: string;
+  saving: boolean;
 };

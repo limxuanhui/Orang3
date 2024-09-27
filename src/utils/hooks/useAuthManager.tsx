@@ -72,25 +72,13 @@ const useAuthManager = () => {
     }
   }, [retrieveUserData]);
 
-  // const initGooglePlacesApiKey = useCallback(async () => {
-  //   console.info('Getting google places api key...');
-  //   try {
-  //     const response = await axiosPrivate.get(
-  //       urlFactory('google-places-api-key'),
-  //     );
-  //     const apiKey: string = response.data;
-  //     console.info('Google places api key: ', apiKey);
-  //     if (!apiKey) {
-  //       throw new Error('Unable to fetch Google Places API key at the moment.');
-  //     }
-  //     await storeToken(apiKey, 'google_places_api_key');
-  //     setGooglePlacesApiKey(apiKey);
-  //   } catch (error: any) {
-  //     console.error(
-  //       'An error occurred while fetching Google Places API key: ' + error,
-  //     );
-  //   }
-  // }, [axiosPrivate, storeToken]);
+  const refreshUserData = useCallback(
+    async (userData: GypsieUser) => {
+      await storeUserData(userData);
+      setUser(userData);
+    },
+    [storeUserData],
+  );
 
   const googleSigninHandler = useCallback(async () => {
     setLoading(true);
@@ -109,6 +97,7 @@ const useAuthManager = () => {
             name,
             handle: name.replace(' ', ''),
             email,
+            bio: '',
             avatar: {
               id: uuidv4(),
               type: 'image/unknown',
@@ -240,11 +229,7 @@ const useAuthManager = () => {
     console.log('useAuthManager useEffect called...');
     // Check if user is logged in when app is newly launched
     const checkUserLoggedIn = async () => {
-      // Check for existence of valid id token
-      // const idToken = await retrieveToken('id_token');
-      // const tokenIsValid = await checkIfIdTokenIsValid(idToken);
       if (!checkAllTokensExist()) {
-        console.log('@@@@@@@ CHECKING IF ALL TOKENS EXIST FAILED');
         await logoutHandler();
         return;
       }
@@ -266,6 +251,7 @@ const useAuthManager = () => {
     isLoggedIn,
     loading,
     googlePlacesApiKey,
+    refreshUserData,
     googleSigninHandler,
     logoutHandler,
     deactivateUserHandler,

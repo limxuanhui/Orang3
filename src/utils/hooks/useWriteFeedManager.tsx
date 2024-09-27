@@ -51,7 +51,7 @@ const imageLibraryOptions: ImageLibraryOptions = {
   selectionLimit: 10,
 };
 
-const useWriteFeedManager = (feedId?: string) => {
+const useWriteFeedManager = (feedId: string) => {
   const { user } = useContext(AuthContext);
   const { axiosPrivate } = useAxiosManager();
   const { modalIsOpen, closeModal, openModal } = useModalHandlers();
@@ -185,7 +185,7 @@ const useWriteFeedManager = (feedId?: string) => {
     const requestData: Feed = {
       metadata: {
         id: newFeedId,
-        creator: user,
+        creatorId: user.id,
         thumbnail: thumbnailSrc.thumbnail,
         taleId: '',
       },

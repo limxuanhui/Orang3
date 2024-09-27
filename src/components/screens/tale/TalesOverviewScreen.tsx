@@ -88,9 +88,9 @@ const TalesOverviewScreen = () => {
   const height = DEVICE_HEIGHT - bottomTabBarHeight - getStatusBarHeight();
 
   const {
-    data,
     // hasNextPage,
     // isError,
+    data,
     isFetching,
     isLoading,
     isRefetching,
@@ -125,7 +125,7 @@ const TalesOverviewScreen = () => {
       <View
         style={[
           styles.masonryListContainer,
-          { height, paddingBottom: insets.bottom + 16 },
+          { height, paddingBottom: insets.bottom + 50 },
         ]}>
         {dataFetchedIsEmpty ? (
           <MessageDisplay message="No tales at the moment..." />

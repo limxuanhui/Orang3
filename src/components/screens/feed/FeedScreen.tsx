@@ -7,16 +7,22 @@ import FullScreenLoading from '@components/common/FullScreenLoading';
 import useDataManager from '@hooks/useDataManager';
 import MessageDisplay from '@components/common/MessageDisplay';
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from '@constants/constants';
+import { GypsieUser } from 'components/navigators/types/types';
 
 const FeedScreen = ({ route }: FeedScreenProps) => {
   const { feedId } = route.params;
   const { data, isLoading } = useDataManager<Feed>('feed-by-feedid', feedId);
+  const { data: creator, isLoading: creatorIsLoading } =
+    useDataManager<GypsieUser>(
+      'user-by-userid',
+      data?.metadata.creatorId || '',
+    );
 
-  if (isLoading) {
+  if (isLoading || creatorIsLoading) {
     return <FullScreenLoading />;
   }
 
-  if (data?.metadata.creator.isDeactivated) {
+  if (creator?.isDeactivated) {
     return (
       <MessageDisplay
         containerStyle={styles.container}
@@ -25,7 +31,7 @@ const FeedScreen = ({ route }: FeedScreenProps) => {
     );
   }
 
-  return data ? (
+  return data && creator ? (
     <FeedDisplay data={data as Feed} inView />
   ) : (
     <MessageDisplay

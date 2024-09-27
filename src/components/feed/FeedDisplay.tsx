@@ -8,9 +8,14 @@ import { useCallback, useContext } from 'react';
 import { AuthContext } from '@contexts/AuthContext';
 import GypsieButton from '@components/common/buttons/GypsieButton';
 import { useNavigation } from '@react-navigation/native';
-import { ModalNavigatorNavigationProp } from '@navigators/types/types';
+import {
+  GypsieUser,
+  ModalNavigatorNavigationProp,
+} from '@navigators/types/types';
 import EditIcon from '@icons/EditIcon';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import useDataManager from '@hooks/useDataManager';
+import FullScreenLoading from '@components/common/FullScreenLoading';
 
 const FeedDisplay = ({ data, inView }: FeedDisplayProps) => {
   const insets = useSafeAreaInsets();
@@ -26,7 +31,9 @@ const FeedDisplay = ({ data, inView }: FeedDisplayProps) => {
     bookmarks,
     shares,
   } = data;
-  const viewerIsCreator = user?.id === metadata.creator.id;
+  const { data: creator, isLoading: creatorIsLoading } =
+    useDataManager<GypsieUser>('user-by-userid', metadata.creatorId);
+  const viewerIsCreator = user?.id === metadata.creatorId;
 
   const onPressEdit = useCallback(() => {
     navigation.push('Modal', {
@@ -34,6 +41,10 @@ const FeedDisplay = ({ data, inView }: FeedDisplayProps) => {
       params: { feedId: metadata.id },
     });
   }, [metadata.id, navigation]);
+
+  if (creatorIsLoading) {
+    return <FullScreenLoading />;
+  }
 
   return (
     <View style={styles.container}>
@@ -46,12 +57,12 @@ const FeedDisplay = ({ data, inView }: FeedDisplayProps) => {
         />
       ) : null}
       <FeedCarousel
-        handle={metadata.creator.handle}
+        handle={creator?.handle as string}
         items={feedItems}
         inView={inView}
       />
       <FeedReactionControls
-        creator={metadata.creator}
+        creator={creator as GypsieUser}
         taleId={metadata.taleId}
         isLiked={isLiked}
         isBookmarked={isBookmarked}
@@ -59,7 +70,6 @@ const FeedDisplay = ({ data, inView }: FeedDisplayProps) => {
         comments={comments}
         bookmarks={bookmarks}
         shares={shares}
-        // onPressComments={() => openBottomSheet()}
       />
     </View>
   );
@@ -77,7 +87,6 @@ const styles = StyleSheet.create({
     right: 10,
     width: 'auto',
     zIndex: 1,
-    // backgroundColor: 'red',
   },
   editIcon: {
     fontSize: 24,

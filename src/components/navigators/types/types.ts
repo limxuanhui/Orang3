@@ -8,6 +8,7 @@ import type {
 } from '@screens/tale/types/types';
 import type {
   AvatarScreenParams,
+  EditProfileScreenParams,
   ProfileScreenParams,
 } from '@screens/profile/types/types';
 import {
@@ -23,7 +24,12 @@ export type GypsieUser = {
   handle: string;
   email: string;
   avatar?: Media;
+  bio: string;
   createdAt?: string;
+  lastUpdatedNameAt?: string;
+  lastUpdatedHandleAt?: string;
+  lastUpdatedBioAt?: string;
+  lastUpdatedAvatarAt?: string;
   isDeactivated: boolean;
 };
 
@@ -60,8 +66,9 @@ export type ModalNavigatorParamList = {
   Avatar: AvatarScreenParams;
   PlaceSearch: PlaceSearchScreenParams;
   Profile: ProfileScreenParams;
-  Settings: undefined;
   Account: undefined;
+  EditProfile: EditProfileScreenParams;
+  Settings: undefined;
   UserInfo: undefined;
   DeleteOrDeactivate: undefined;
   Delete: undefined;

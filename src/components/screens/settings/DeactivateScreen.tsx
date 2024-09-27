@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import GypsieButton from '@components/common/buttons/GypsieButton';
 import { PALETTE } from '@constants/palette';
 import { DEVICE_WIDTH } from '@constants/constants';
 import { AuthContext } from '@contexts/AuthContext';
 import GypsieBulletText from '@components/common/GypsieBulletText';
+import GypsieCTAButton from '@components/common/GypsieCTAButton';
 
 const DeactivateScreen = () => {
   const { user, loading, deactivateUserHandler } = useContext(AuthContext);
@@ -42,15 +42,10 @@ const DeactivateScreen = () => {
           using the same login details."
         />
       </View>
-      <GypsieButton
-        customButtonStyles={[
-          styles.deactivateButton,
-          { backgroundColor: loading ? PALETTE.GREY : PALETTE.REDPINK },
-        ]}
-        customTextStyles={styles.deactivateText}
+      <GypsieCTAButton
+        type="danger"
         text="Deactivate"
         loading={loading}
-        disabled={loading}
         onPress={deactivateUserHandler}
       />
     </View>
