@@ -35,10 +35,6 @@ import { TOAST_TITLE_STYLE } from '@constants/constants';
 import { queryClient } from '@helpers/singletons';
 
 const ONE_DAY_MS: number = 1000 * 60 * 60 * 24;
-const CANNOT_UPDATE_NAME_YET_ERROR: string =
-  'You may only update your name every 7 days';
-const CANNOT_UPDATE_HANDLE_YET_ERROR: string =
-  'You may only update your handle every 30 days';
 const MAX_BIO_NUMBER_OF_LINES: number = 4;
 
 const useEditProfileManager = (user: GypsieUser) => {
@@ -65,12 +61,27 @@ const useEditProfileManager = (user: GypsieUser) => {
     () => getImageUrl(user.avatar?.uri as string, 'thumbnail'),
     [user.avatar?.uri],
   );
-  const canEditName: boolean =
-    !user.lastUpdatedNameAt ||
-    Date.parse(user.lastUpdatedNameAt) + ONE_DAY_MS * 7 < Date.now();
+  const nameEditDaysLeft: number = user.lastUpdatedNameAt
+    ? Math.round(
+        (Date.parse(user.lastUpdatedNameAt) + ONE_DAY_MS * 7 - Date.now()) /
+          ONE_DAY_MS,
+      )
+    : 0;
+  const canEditName: boolean = !user.lastUpdatedNameAt || nameEditDaysLeft < 0;
+  const cannotEditNameError: string = !canEditName
+    ? `You may change your name in ${nameEditDaysLeft} ${nameEditDaysLeft === 1 ? 'day' : 'days'}`
+    : '';
+  const handleEditDaysLeft: number = user.lastUpdatedNameAt
+    ? Math.round(
+        (Date.parse(user.lastUpdatedNameAt) + ONE_DAY_MS * 30 - Date.now()) /
+          ONE_DAY_MS,
+      )
+    : 0;
   const canEditHandle: boolean =
-    !user.lastUpdatedHandleAt ||
-    Date.parse(user.lastUpdatedHandleAt) + ONE_DAY_MS * 30 < Date.now();
+    !user.lastUpdatedHandleAt || handleEditDaysLeft < 0;
+  const cannotEditHandleError: string = !canEditHandle
+    ? `You may change your handle in ${handleEditDaysLeft} ${handleEditDaysLeft === 1 ? 'day' : 'days'}`
+    : '';
   const avatarChanged: boolean = avatar?.id !== user.avatar?.id;
   const nameChanged: boolean = name !== user.name;
   const handleChanged: boolean = handle !== user.handle;
@@ -227,9 +238,9 @@ const useEditProfileManager = (user: GypsieUser) => {
     originalAvatarUri,
     avatarChanged,
     canEditName,
-    cannotEditNameError: CANNOT_UPDATE_NAME_YET_ERROR,
+    cannotEditNameError: cannotEditNameError,
     canEditHandle,
-    cannotEditHandleError: CANNOT_UPDATE_HANDLE_YET_ERROR,
+    cannotEditHandleError: cannotEditHandleError,
     bioExceededLinesError: bioExceededLinesError,
     onPressChangeAvatar,
     onNameChange,

@@ -44,7 +44,9 @@ const useProfileManager = (userId: string) => {
   }, [avatarRawUri, navigation, userMetadata]);
 
   const onPressEditProfile = useCallback(() => {
+    console.log('Triggered pressEditProfile: ', userMetadata);
     if (userId) {
+      console.log('Navigating to edit profile screen');
       modalNavigation.push('Modal', {
         screen: 'EditProfile',
         params: { user: userMetadata as GypsieUser },
@@ -56,16 +58,32 @@ const useProfileManager = (userId: string) => {
     modalNavigation.push('Modal', { screen: 'Settings' });
   }, [modalNavigation]);
 
-  const { data: feedsMetadata, onRefresh: onRefreshFeedsMetadata } =
-    useInfiniteDataManager<FeedMetadata[]>('feeds-metadata-by-userid', userId, {
+  const {
+    data: feedsMetadata,
+    error: feedsMetadataError,
+    isError: feedsMetadataIsError,
+    onRefresh: onRefreshFeedsMetadata,
+  } = useInfiniteDataManager<FeedMetadata[]>(
+    'feeds-metadata-by-userid',
+    userId,
+    {
       gcTime: 0,
       staleTime: Infinity,
-    });
-  const { data: talesMetadata, onRefresh: onRefreshTalesMetadata } =
-    useInfiniteDataManager<TaleMetadata[]>('tales-metadata-by-userid', userId, {
+    },
+  );
+  const {
+    data: talesMetadata,
+    error: talesMetadataError,
+    isError: talesMetadataIsError,
+    onRefresh: onRefreshTalesMetadata,
+  } = useInfiniteDataManager<TaleMetadata[]>(
+    'tales-metadata-by-userid',
+    userId,
+    {
       gcTime: 0,
       staleTime: Infinity,
-    });
+    },
+  );
 
   useEffect(() => {
     if (userId) {
@@ -78,7 +96,11 @@ const useProfileManager = (userId: string) => {
     userMetadata,
     userIsProfileOwner,
     feedsMetadata: feedsMetadata?.pages[0].items,
+    feedsMetadataError,
+    feedsMetadataIsError,
     talesMetadata: talesMetadata?.pages[0].items,
+    talesMetadataError,
+    talesMetadataIsError,
     onRefreshFeedsMetadata,
     onRefreshTalesMetadata,
     onPressAvatar,

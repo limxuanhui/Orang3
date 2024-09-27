@@ -29,14 +29,13 @@ const useDataManager = <T,>(
   const { axiosPrivate } = useAxiosManager();
 
   const queryFn: QueryFunction<T | null, QueryKey, never> = useCallback(
-    async ({ queryKey }: { queryKey: QueryKey }): Promise<T | null> => {
+    async ({ queryKey }: { queryKey: QueryKey }): Promise<T> => {
       const [dKey, dId] = queryKey;
       const key = dKey as DataKey;
       const id = dId as string;
       try {
         const url: string = urlFactory(key, { id });
         const response: AxiosResponse = await axiosPrivate.get(url);
-        // printPrettyJson(response.data);
         if (response.data.items) {
           return response.data.items as T;
         }
@@ -44,7 +43,8 @@ const useDataManager = <T,>(
         return response.data;
       } catch (err) {
         console.error(err);
-        return null;
+        throw new Error('Unable to get content for you at the moment...');
+        // return null;
       }
     },
     [axiosPrivate],

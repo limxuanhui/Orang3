@@ -14,6 +14,9 @@ import type { TaleMetadata } from '@components/tale/types/types';
 import useProfileManager from '@hooks/useProfileManager';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import GypsieButton from '@components/common/buttons/GypsieButton';
+import MessageDisplay from '@components/common/MessageDisplay';
+import GridIcon from '@icons/GridIcon';
+import GridOutlineIcon from '@icons/GridOutlineIcon';
 
 const Tab = createMaterialTopTabNavigator();
 const BANNER_HEIGHT: number = 280;
@@ -27,7 +30,11 @@ const ProfileScreen = ({ route }: ProfileScreenProps) => {
     userMetadata,
     userIsProfileOwner,
     feedsMetadata,
+    feedsMetadataError,
+    feedsMetadataIsError,
     talesMetadata,
+    talesMetadataError,
+    talesMetadataIsError,
     onRefreshFeedsMetadata,
     onRefreshTalesMetadata,
     onPressAvatar,
@@ -36,25 +43,58 @@ const ProfileScreen = ({ route }: ProfileScreenProps) => {
   } = useProfileManager(profileUserId);
 
   const myFeedsIcon = useCallback(
-    ({ focused }: { focused: boolean; color: string }) => (
-      <Ionicons
-        name={focused ? 'grid' : 'grid-outline'}
-        size={20}
-        color={focused ? PALETTE.ORANGE : PALETTE.GREYISHBLUE}
-      />
-    ),
+    ({ focused }: { focused: boolean; color: string }) =>
+      focused ? (
+        <GridIcon style={styles.focusedIcon} />
+      ) : (
+        <GridOutlineIcon style={styles.unfocusedIcon} />
+      ),
     [],
   );
 
   const myTalesIcon = useCallback(
     ({ focused }: { focused: boolean; color: string }) =>
       focused ? (
-        <BookOpenIcon style={{ fontSize: 20, color: PALETTE.ORANGE }} />
+        <BookOpenIcon style={styles.focusedIcon} />
       ) : (
-        <BookIcon style={{ fontSize: 20, color: PALETTE.GREYISHBLUE }} />
+        <BookIcon style={styles.unfocusedIcon} />
       ),
     [],
   );
+
+  const myFeeds = useCallback(() => {
+    if (feedsMetadataIsError) {
+      return <MessageDisplay message={feedsMetadataError?.message} />;
+    }
+    return (
+      <MyFeeds
+        data={feedsMetadata as FeedMetadata[]}
+        onRefresh={onRefreshFeedsMetadata}
+      />
+    );
+  }, [
+    feedsMetadata,
+    feedsMetadataError?.message,
+    feedsMetadataIsError,
+    onRefreshFeedsMetadata,
+  ]);
+
+  const myTales = useCallback(() => {
+    if (talesMetadataIsError) {
+      return <MessageDisplay message={talesMetadataError?.message} />;
+    }
+    return (
+      <MyTales
+        data={talesMetadata as TaleMetadata[]}
+        onRefresh={onRefreshTalesMetadata}
+      />
+    );
+  }, [
+    onRefreshTalesMetadata,
+    talesMetadata,
+    talesMetadataError?.message,
+    talesMetadataIsError,
+  ]);
 
   return (
     <View style={styles.container}>
@@ -120,25 +160,13 @@ const ProfileScreen = ({ route }: ProfileScreenProps) => {
         }}>
         <Tab.Screen
           name="myfeeds"
-          children={() => (
-            <MyFeeds
-              data={feedsMetadata as FeedMetadata[]}
-              onRefresh={onRefreshFeedsMetadata}
-            />
-          )}
+          children={myFeeds}
           options={{ tabBarIcon: myFeedsIcon }}
         />
         <Tab.Screen
           name="mytales"
-          children={() => (
-            <MyTales
-              data={talesMetadata as TaleMetadata[]}
-              onRefresh={onRefreshTalesMetadata}
-            />
-          )}
-          options={{
-            tabBarIcon: myTalesIcon,
-          }}
+          children={myTales}
+          options={{ tabBarIcon: myTalesIcon }}
         />
       </Tab.Navigator>
     </View>
@@ -234,6 +262,8 @@ const styles = StyleSheet.create({
     borderColor: PALETTE.OFFWHITE,
     backgroundColor: PALETTE.ORANGE,
   },
+  focusedIcon: { fontSize: 20, color: PALETTE.ORANGE },
+  unfocusedIcon: { fontSize: 20, color: PALETTE.GREYISHBLUE },
 });
 
 export default memo(ProfileScreen);
