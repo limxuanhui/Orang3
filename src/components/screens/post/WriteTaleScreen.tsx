@@ -85,11 +85,7 @@ const WriteTaleScreen = ({ route }: WriteTaleScreenProps) => {
         showsVerticalScrollIndicator={false}
         keyboardDismissMode="interactive"
         scrollEventThrottle={60}
-        // automaticallyAdjustContentInsets
-        // automaticallyAdjustKeyboardInsets
-        // extraScrollHeight={100}
-        // endFillColor={PALETTE.REDPINK}
-      >
+        extraScrollHeight={50}>
         <View style={styles.coverContainer}>
           {metadata.cover ? (
             <>

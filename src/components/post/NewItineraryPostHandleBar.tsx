@@ -1,6 +1,7 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { PALETTE } from '@constants/palette';
 import { DIMENSION } from '@constants/dimensions';
+import { getImageUrl } from '@helpers/functions';
 
 type NewItineraryPostHandleBarProps = {
   avatarUri: string;
@@ -11,26 +12,18 @@ const NewItineraryPostHandleBar = ({
   avatarUri,
   name,
 }: NewItineraryPostHandleBarProps) => {
-  // const onPressFollow = useCallback(() => {}, []);
-
   return (
     <View style={styles.container}>
       <View style={styles.avatarBox}>
         <Image
           style={styles.avatar}
-          source={{ uri: avatarUri }}
+          source={{
+            uri: getImageUrl(avatarUri, 'thumbnail'),
+          }}
           resizeMode="cover"
         />
       </View>
       <Text style={styles.description}>{name}</Text>
-      {/* <GypsieButton
-        customButtonStyles={styles.followButton}
-        customIconStyles={styles.followButtonIcon}
-        customTextStyles={styles.followButtonText}
-        Icon={AddCircleIcon}
-        text="Follow"
-        onPress={onPressFollow}
-      /> */}
     </View>
   );
 };

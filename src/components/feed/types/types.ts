@@ -3,7 +3,7 @@ import { GypsieUser } from '../../navigators/types/types';
 // Data types
 export type FeedMetadata = {
   id: string;
-  creator: GypsieUser;
+  creatorId: string;
   thumbnail: Media;
   taleId?: string;
 };

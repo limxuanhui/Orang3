@@ -3,12 +3,14 @@ import itineraryPlannerReducer from '@redux/reducers/itineraryPlannerSlice';
 import writeFeedReducer from '@redux/reducers/writeFeedSlice';
 import writeTaleReducer from '@redux/reducers/writeTaleSlice';
 import userReducer from '@redux/reducers/userSlice';
+import editProfileSlice from '@redux/reducers/editProfileSlice';
 
 const rootReducer = combineReducers({
   user: userReducer,
   itineraryPlanner: itineraryPlannerReducer,
   writeFeed: writeFeedReducer,
   writeTale: writeTaleReducer,
+  editProfile: editProfileSlice,
 });
 
 const store = configureStore({

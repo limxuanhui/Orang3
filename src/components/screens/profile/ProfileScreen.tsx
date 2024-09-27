@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react';
+import { memo, useCallback } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -12,25 +12,93 @@ import { PALETTE } from '@constants/palette';
 import type { FeedMetadata } from '@components/feed/types/types';
 import type { TaleMetadata } from '@components/tale/types/types';
 import useProfileManager from '@hooks/useProfileManager';
-import { AuthContext } from '@contexts/AuthContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import GypsieButton from '@components/common/buttons/GypsieButton';
+import MessageDisplay from '@components/common/MessageDisplay';
+import GridIcon from '@icons/GridIcon';
+import GridOutlineIcon from '@icons/GridOutlineIcon';
 
 const Tab = createMaterialTopTabNavigator();
+const BANNER_HEIGHT: number = 280;
+const TAB_BAR_HEIGHT: number = 50;
 
 const ProfileScreen = ({ route }: ProfileScreenProps) => {
-  const { user: currentUser } = useContext(AuthContext);
-  const profileUser = route.params.user;
+  const insets = useSafeAreaInsets();
+  const profileUserId = route.params.userId;
   const {
+    avatarThumbnailUri,
+    userMetadata,
+    userIsProfileOwner,
     feedsMetadata,
+    feedsMetadataError,
+    feedsMetadataIsError,
     talesMetadata,
+    talesMetadataError,
+    talesMetadataIsError,
     onRefreshFeedsMetadata,
     onRefreshTalesMetadata,
     onPressAvatar,
+    onPressEditProfile,
     onPressSettings,
-  } = useProfileManager(profileUser);
+  } = useProfileManager(profileUserId);
+
+  const myFeedsIcon = useCallback(
+    ({ focused }: { focused: boolean; color: string }) =>
+      focused ? (
+        <GridIcon style={styles.focusedIcon} />
+      ) : (
+        <GridOutlineIcon style={styles.unfocusedIcon} />
+      ),
+    [],
+  );
+
+  const myTalesIcon = useCallback(
+    ({ focused }: { focused: boolean; color: string }) =>
+      focused ? (
+        <BookOpenIcon style={styles.focusedIcon} />
+      ) : (
+        <BookIcon style={styles.unfocusedIcon} />
+      ),
+    [],
+  );
+
+  const myFeeds = useCallback(() => {
+    if (feedsMetadataIsError) {
+      return <MessageDisplay message={feedsMetadataError?.message} />;
+    }
+    return (
+      <MyFeeds
+        data={feedsMetadata as FeedMetadata[]}
+        onRefresh={onRefreshFeedsMetadata}
+      />
+    );
+  }, [
+    feedsMetadata,
+    feedsMetadataError?.message,
+    feedsMetadataIsError,
+    onRefreshFeedsMetadata,
+  ]);
+
+  const myTales = useCallback(() => {
+    if (talesMetadataIsError) {
+      return <MessageDisplay message={talesMetadataError?.message} />;
+    }
+    return (
+      <MyTales
+        data={talesMetadata as TaleMetadata[]}
+        onRefresh={onRefreshTalesMetadata}
+      />
+    );
+  }, [
+    onRefreshTalesMetadata,
+    talesMetadata,
+    talesMetadataError?.message,
+    talesMetadataIsError,
+  ]);
 
   return (
     <View style={styles.container}>
-      <View style={styles.banner}>
+      <View style={[styles.banner, { paddingTop: insets.top }]}>
         <View style={styles.bannerImageContainer}>
           <Pressable
             style={({ pressed }) => [
@@ -41,7 +109,7 @@ const ProfileScreen = ({ route }: ProfileScreenProps) => {
             <Image
               style={styles.avatar}
               source={{
-                uri: profileUser.avatar?.uri,
+                uri: avatarThumbnailUri,
               }}
               // loadingIndicatorSource={}
               // resizeMode="cover"
@@ -49,14 +117,31 @@ const ProfileScreen = ({ route }: ProfileScreenProps) => {
           </Pressable>
         </View>
         <View style={styles.bannerInfoContainer}>
-          <Text style={[styles.bannerInfoText, { color: PALETTE.ORANGE }]}>
-            @
+          <View style={styles.handleContainer}>
+            <Text style={[styles.handleText, { color: PALETTE.ORANGE }]}>
+              @
+            </Text>
+            <Text style={styles.handleText}>{userMetadata?.handle}</Text>
+          </View>
+          <Text style={styles.bioText}>
+            {userMetadata?.bio
+              ? userMetadata.bio
+              : userIsProfileOwner
+                ? 'Add a short bio...'
+                : ''}
           </Text>
-          <Text style={styles.bannerInfoText}>{profileUser.handle}</Text>
+          {userIsProfileOwner ? (
+            <GypsieButton
+              customButtonStyles={styles.editProfileButton}
+              customTextStyles={styles.editProfileText}
+              text="Edit profile"
+              onPress={onPressEditProfile}
+            />
+          ) : null}
         </View>
       </View>
 
-      {profileUser.id === currentUser?.id ? (
+      {userIsProfileOwner ? (
         <Pressable style={styles.settingsButton} onPress={onPressSettings}>
           <Ionicons name="settings" size={24} color={PALETTE.BLACK} />
         </Pressable>
@@ -68,47 +153,20 @@ const ProfileScreen = ({ route }: ProfileScreenProps) => {
         screenOptions={{
           tabBarStyle: {
             backgroundColor: PALETTE.OFFWHITE,
-            height: '7%',
+            height: TAB_BAR_HEIGHT,
           },
           tabBarShowLabel: false,
           tabBarIndicatorStyle: { backgroundColor: PALETTE.ORANGE },
         }}>
         <Tab.Screen
           name="myfeeds"
-          children={() => (
-            <MyFeeds
-              data={feedsMetadata as FeedMetadata[]}
-              onRefresh={onRefreshFeedsMetadata}
-            />
-          )}
-          options={{
-            tabBarIcon: ({ focused }) => (
-              <Ionicons
-                name={focused ? 'grid' : 'grid-outline'}
-                size={20}
-                color={focused ? PALETTE.ORANGE : PALETTE.GREYISHBLUE}
-              />
-            ),
-          }}
+          children={myFeeds}
+          options={{ tabBarIcon: myFeedsIcon }}
         />
         <Tab.Screen
           name="mytales"
-          children={() => (
-            <MyTales
-              data={talesMetadata as TaleMetadata[]}
-              onRefresh={onRefreshTalesMetadata}
-            />
-          )}
-          options={{
-            tabBarIcon: ({ focused }) =>
-              focused ? (
-                <BookOpenIcon style={{ fontSize: 20, color: PALETTE.ORANGE }} />
-              ) : (
-                <BookIcon
-                  style={{ fontSize: 20, color: PALETTE.GREYISHBLUE }}
-                />
-              ),
-          }}
+          children={myTales}
+          options={{ tabBarIcon: myTalesIcon }}
         />
       </Tab.Navigator>
     </View>
@@ -121,19 +179,15 @@ const styles = StyleSheet.create({
     height: DIMENSION.HUNDRED_PERCENT,
     backgroundColor: PALETTE.OFFWHITE,
   },
-  sceneContainer: {
-    // backgroundColor: PALETTE.GREYISHBLUE,
-    // height:'100%'
-  },
+  sceneContainer: {},
   settingsButton: { position: 'absolute', top: 50, right: 20, zIndex: 3 },
   banner: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-    height: DIMENSION.TWENTYFIVE_PERCENT,
+    height: BANNER_HEIGHT,
     width: DIMENSION.HUNDRED_PERCENT,
-    borderWidth: 0,
-    borderColor: 'blue',
+    padding: 16,
   },
   bannerImageContainer: {
     justifyContent: 'center',
@@ -143,7 +197,7 @@ const styles = StyleSheet.create({
     height: 120,
     width: 120,
     borderRadius: 60,
-    backgroundColor: PALETTE.WHITE,
+    backgroundColor: PALETTE.OFFWHITE,
     shadowOffset: { height: 2, width: 0 },
     shadowColor: PALETTE.BLACK,
     shadowOpacity: 0.2,
@@ -157,19 +211,43 @@ const styles = StyleSheet.create({
     borderRadius: 60,
   },
   bannerInfoContainer: {
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    height: 120,
+    width: DIMENSION.FIFTY_PERCENT,
+    paddingHorizontal: 8,
+  },
+  handleContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    height: DIMENSION.HUNDRED_PERCENT,
-    width: DIMENSION.FIFTY_PERCENT,
-    backgroundColor: PALETTE.OFFWHITE,
+    marginBottom: 16,
+    paddingHorizontal: 8,
   },
-  bannerInfoText: {
-    marginBottom: 8,
+  handleText: {
     color: PALETTE.BLACK,
-    fontSize: 24,
-    fontFamily: 'Futura',
+    fontSize: 22,
+    fontFamily: 'Lilita One',
     fontWeight: 'bold',
+  },
+  bioText: {
+    width: DIMENSION.HUNDRED_PERCENT,
+    marginBottom: 16,
+    fontSize: 12,
+    // fontStyle: 'italic',
+    color: PALETTE.GREYISHBLUE,
+    textAlign: 'center',
+  },
+  editProfileButton: {
+    width: 'auto',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: PALETTE.LIGHTERGREY,
+  },
+  editProfileText: {
+    fontFamily: 'Futura',
+    fontSize: 12,
+    color: PALETTE.GREYISHBLUE,
   },
   changeAvatarButton: {
     position: 'absolute',
@@ -184,6 +262,8 @@ const styles = StyleSheet.create({
     borderColor: PALETTE.OFFWHITE,
     backgroundColor: PALETTE.ORANGE,
   },
+  focusedIcon: { fontSize: 20, color: PALETTE.ORANGE },
+  unfocusedIcon: { fontSize: 20, color: PALETTE.GREYISHBLUE },
 });
 
 export default memo(ProfileScreen);

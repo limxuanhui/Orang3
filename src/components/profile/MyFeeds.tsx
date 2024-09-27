@@ -1,6 +1,5 @@
-import { memo, useContext, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ActivityIndicator } from 'react-native-paper';
 import MasonryList from '@react-native-seoul/masonry-list';
@@ -13,8 +12,7 @@ import MessageDisplay from '@components/common/MessageDisplay';
 
 const MyFeeds = memo(({ data, onRefresh }: MyFeedsProps) => {
   const insets = useSafeAreaInsets();
-  const bh = useContext(BottomTabBarHeightContext) || insets.bottom;
-  const height = useMemo(() => (1 - 0.25 - 0.05) * DEVICE_HEIGHT - bh, [bh]);
+  const height = useMemo(() => DEVICE_HEIGHT - 300, []);
 
   return (
     <View style={[styles.container, { height }]}>
@@ -23,10 +21,21 @@ const MyFeeds = memo(({ data, onRefresh }: MyFeedsProps) => {
           <ActivityIndicator size={48} color={PALETTE.ORANGE} />
         </View>
       ) : data.length === 0 ? (
-        <MessageDisplay message="No feeds to show..." />
+        <MessageDisplay
+          message="No feeds to show..."
+          handler={onRefresh}
+          handlerText="Refresh"
+          buttonStyle={styles.messageDisplayButton}
+          buttonTextStyle={styles.messageDisplayButtonText}
+        />
       ) : (
         <MasonryList
-          contentContainerStyle={styles.masonryListContentContainer}
+          containerStyle={styles.masonryListContainer}
+          contentContainerStyle={[
+            styles.masonryListContentContainer,
+            { paddingBottom: 100 + insets.bottom },
+          ]}
+          style={styles.masonryList}
           data={data}
           renderItem={el => <FeedThumbnail data={el.item as FeedMetadata} />}
           numColumns={3}
@@ -47,7 +56,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
-  masonryListContentContainer: { paddingHorizontal: 2 },
+  masonryListContainer: { backgroundColor: PALETTE.OFFWHITE },
+  masonryListContentContainer: {},
+  masonryList: { backgroundColor: PALETTE.OFFWHITE, padding: 2 },
+  messageDisplayButton: { backgroundColor: PALETTE.LIGHTERGREY },
+  messageDisplayButtonText: { color: PALETTE.GREYISHBLUE },
 });
 
 export default MyFeeds;

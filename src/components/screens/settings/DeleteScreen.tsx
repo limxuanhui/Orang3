@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 import { Modal, StyleSheet, Text, View } from 'react-native';
-import GypsieButton from '@components/common/buttons/GypsieButton';
+import GypsieCTAButton from '@components/common/GypsieCTAButton';
 import GypsieBulletText from '@components/common/GypsieBulletText';
 import DeleteAccountModal from '@components/profile/DeleteAccountModal';
 import { AuthContext } from '@contexts/AuthContext';
@@ -72,9 +72,8 @@ const DeleteScreen = () => {
           text="After 30 days, all your content will be permanently deleted."
         />
       </View>
-      <GypsieButton
-        customButtonStyles={styles.deleteButton}
-        customTextStyles={styles.deleteText}
+      <GypsieCTAButton
+        type="danger"
         text="I want to delete my Orang3 account"
         onPress={onPressDelete}
       />

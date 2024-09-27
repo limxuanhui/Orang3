@@ -27,7 +27,6 @@ const WriteFeedScreen = ({ route }: WriteFeedScreenProps) => {
   const insets = useSafeAreaInsets();
   const { feedId } = route.params;
   const {
-    // data,
     isLoading,
     captionWritten,
     modalIsOpen,
@@ -41,7 +40,6 @@ const WriteFeedScreen = ({ route }: WriteFeedScreenProps) => {
     onSaveEditCaption,
   } = useWriteFeedManager(feedId);
   const dispatch = useAppDispatch();
-  // const { saving } = useAppSelector(state => state.writeFeed);
 
   useEffect(() => {
     console.log('WriteFeedScreen focused');
@@ -84,7 +82,6 @@ const WriteFeedScreen = ({ route }: WriteFeedScreenProps) => {
               customButtonStyles={[styles.auxControlButton, styles.saveButton]}
               customIconStyles={styles.auxControlIcon}
               Icon={CheckIcon}
-              // loading={saving}
               onPress={onSaveEditCaption}
             />
           </AuxiliaryControls>

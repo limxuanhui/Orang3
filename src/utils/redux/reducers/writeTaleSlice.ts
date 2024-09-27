@@ -354,9 +354,6 @@ const writeTaleSlice = createSlice({
     writeTale_setPosting: (state, action) => {
       state.posting = action.payload;
     },
-    // writeTale_setSaving: (state, action) => {
-    //   state.saving = action.payload;
-    // },
     writeTale_resetWriteTaleSlice: () => initialState,
   },
 });
@@ -377,7 +374,6 @@ export const {
   writeTale_reorderStoryItems,
   writeTale_setStoryItemText,
   writeTale_setPosting,
-  // writeTale_setSaving,
   writeTale_resetWriteTaleSlice,
 } = writeTaleSlice.actions;
 export default writeTaleSlice.reducer;
