@@ -44,9 +44,7 @@ const useProfileManager = (userId: string) => {
   }, [avatarRawUri, navigation, userMetadata]);
 
   const onPressEditProfile = useCallback(() => {
-    console.log('Triggered pressEditProfile: ', userMetadata);
-    if (userId) {
-      console.log('Navigating to edit profile screen');
+    if (userId && userMetadata) {
       modalNavigation.push('Modal', {
         screen: 'EditProfile',
         params: { user: userMetadata as GypsieUser },

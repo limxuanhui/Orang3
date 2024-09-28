@@ -37,7 +37,7 @@ const editProfileSlice = createSlice({
       state.avatar = action.payload.user.avatar;
       state.name = action.payload.user.name;
       state.handle = action.payload.user.handle;
-      state.bio = action.payload.user.bio;
+      state.bio = action.payload.user.bio ? action.payload.user.bio : '';
     },
     editProfile_setAvatar: (
       state,

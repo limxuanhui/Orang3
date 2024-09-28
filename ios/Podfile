@@ -6,7 +6,7 @@ require Pod::Executable.execute_command('node', ['-p',
   )', __dir__]).strip
 
 # Required in order to use custom build configurations
-project 'Orang3', 'Debug-dev' => :debug, 'Debug-uat' => :debug
+project 'Orang3', 'Debug-dev' => :debug, 'Debug-uat' => :debug, 'Debug-prod' => :debug
 
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
@@ -34,6 +34,7 @@ target 'Orang3' do
   ENVFILES = {
     'Debug-dev' => '$(PODS_ROOT)/../../.env.dev',
     'Debug-uat' => '$(PODS_ROOT)/../../.env.uat',
+    'Debug-prod' => '$(PODS_ROOT)/../../.env.prod',
     'Release-dev' => '$(PODS_ROOT)/../../.env.dev',
     'Release-uat' => '$(PODS_ROOT)/../../.env.uat',
     'Release' => '$(PODS_ROOT)/../../.env.prod',
